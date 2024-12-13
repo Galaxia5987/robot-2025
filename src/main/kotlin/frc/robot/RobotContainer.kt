@@ -8,14 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.ControllerInputs.driverController
-import frc.robot.generated.TunerConstants
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.drive.GyroIO
-import frc.robot.subsystems.drive.GyroIONavX
-import frc.robot.subsystems.drive.ModuleIO
-import frc.robot.subsystems.drive.ModuleIOSim
-import frc.robot.subsystems.drive.ModuleIOTalonFX
 import frc.robot.subsystems.drive.getGyroIO
 import frc.robot.subsystems.drive.getSwerveModuleIOs
 
@@ -31,7 +25,6 @@ object RobotContainer {
 
     init {
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
-
 
         registerAutoCommands()
         configureButtonBindings()

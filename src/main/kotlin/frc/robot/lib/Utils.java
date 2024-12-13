@@ -1,12 +1,13 @@
 package frc.robot.lib;
 
+import static frc.robot.ConstantsKt.LOOP_TIME;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
-import frc.robot.Constants;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,9 +60,9 @@ public class Utils {
     public static ChassisSpeeds log(final ChassisSpeeds speeds) {
         var transform =
                 new Pose2d(
-                        speeds.vxMetersPerSecond * Constants.LOOP_TIME,
-                        speeds.vyMetersPerSecond * Constants.LOOP_TIME,
-                        new Rotation2d(speeds.omegaRadiansPerSecond * Constants.LOOP_TIME));
+                        speeds.vxMetersPerSecond * LOOP_TIME,
+                        speeds.vyMetersPerSecond * LOOP_TIME,
+                        new Rotation2d(speeds.omegaRadiansPerSecond * LOOP_TIME));
         final double dtheta = transform.getRotation().getRadians();
         final double half_dtheta = 0.5 * dtheta;
         final double cos_minus_one = transform.getRotation().getCos() - 1.0;
@@ -77,9 +78,9 @@ public class Utils {
                         .getTranslation()
                         .rotateBy(new Rotation2d(halftheta_by_tan_of_halfdtheta, -half_dtheta));
         return new ChassisSpeeds(
-                translation_part.getX() / Constants.LOOP_TIME,
-                translation_part.getY() / Constants.LOOP_TIME,
-                dtheta / Constants.LOOP_TIME);
+                translation_part.getX() / LOOP_TIME,
+                translation_part.getY() / LOOP_TIME,
+                dtheta / LOOP_TIME);
     }
 
     public static double distanceToSpeakerVarianceFactor(Translation2d toSpeaker) {

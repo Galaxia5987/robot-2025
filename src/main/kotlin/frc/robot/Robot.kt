@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.Mode.REAL
+import frc.robot.Mode.REPLAY
+import frc.robot.Mode.SIM
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -57,15 +60,15 @@ object Robot : LoggedRobot() {
             }
         )
 
-        when (Constants.CURRENT_MODE) {
-            Constants.Mode.REAL -> {
+        when (CURRENT_MODE) {
+            REAL -> {
                 LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kCTRE)
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
 
-            Constants.Mode.SIM -> Logger.addDataReceiver(NT4Publisher())
-            Constants.Mode.REPLAY -> {
+            SIM -> Logger.addDataReceiver(NT4Publisher())
+            REPLAY -> {
                 setUseTiming(false)
                 val logPath = LogFileUtil.findReplayLog()
                 Logger.setReplaySource(WPILOGReader(logPath))

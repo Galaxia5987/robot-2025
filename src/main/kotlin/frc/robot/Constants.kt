@@ -5,35 +5,33 @@ import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.lib.getTranslationByColor
 import org.littletonrobotics.junction.LoggedRobot
 
-object Constants {
-    const val LOOP_TIME = 0.02 // [s]
-    const val IS_TUNING_MODE = true
+const val LOOP_TIME = 0.02 // [s]
+const val IS_TUNING_MODE = true
 
-    private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
+private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
 
-    val SPEAKER_POSE: Translation2d
-        get() = getTranslationByColor(SPEAKER_POSE_BLUE)
+val SPEAKER_POSE: Translation2d
+    get() = getTranslationByColor(SPEAKER_POSE_BLUE)
 
-    val CURRENT_MODE: Mode
-        get() =
-            if (LoggedRobot.isReal()) {
-                Mode.REAL
+val CURRENT_MODE: Mode
+    get() =
+        if (LoggedRobot.isReal()) {
+            Mode.REAL
+        } else {
+            if (System.getenv()["isReplay"] == "true") {
+                Mode.REPLAY
             } else {
-                if (System.getenv()["isReplay"] == "true") {
-                    Mode.REPLAY
-                } else {
-                    Mode.SIM
-                }
+                Mode.SIM
             }
-    const val ALT_ROBORIO_SERIAL = "033E1B89"
+        }
+const val ALT_ROBORIO_SERIAL = "033E1B89"
 
-    val ROBORIO_SERIAL_NUMBER: String
-        get() = System.getenv("serialnum") ?: "Sim"
+val ROBORIO_SERIAL_NUMBER: String
+    get() = System.getenv("serialnum") ?: "Sim"
 
-    val IS_RED: Boolean
-        get() = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+val IS_RED: Boolean
+    get() = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
-    enum class Mode {
-        REAL, SIM, REPLAY
-    }
+enum class Mode {
+    REAL, SIM, REPLAY
 }
