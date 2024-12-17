@@ -1,21 +1,24 @@
 package frc.robot.subsystems.elevator
 
-import ENCODER_ID
 import MOTOR_ID
-import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs
+import com.ctre.phoenix6.configs.FeedbackConfigs
+import com.ctre.phoenix6.configs.MotorOutputConfigs
+import com.ctre.phoenix6.configs.Slot0Configs
+import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
-import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Distance
+import kotlin.math.PI
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val encoder = CANcoder(ENCODER_ID)
-    private val motorPositionRequest = PositionVoltage(0.0)
+    private val motorPosititonRequest = PositionVoltage(0.0)
+    private val motorPowerRequest = DutyCycleOut(0.0)
 
     init {
         val motorConfig = TalonFXConfiguration().apply {
@@ -25,6 +28,7 @@ class ElevatorIOReal : ElevatorIO {
             }
             Feedback = FeedbackConfigs().apply {
                 RotorToSensorRatio = 1.0
+                SensorToMechanismRatio = GEAR_RATIO * FIRST_STAGE_RATIO
             }
             Slot0 = Slot0Configs().apply {
                 kP = GAINS.kP
@@ -38,30 +42,21 @@ class ElevatorIOReal : ElevatorIO {
                 SupplyCurrentLimit = 40.0
             }
         }
-        motor.configurator.apply(motorConfig)
-
-        var encoderConfig = CANcoderConfiguration().apply {
-            MagnetSensor.MagnetOffset = ENCODER_OFSET
-        }
     }
 
-    override fun setHeight(height: Distance) {
-        val rotationalPosition = Units.Rotations.of(height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
-        motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
+    override fun setHeight(position: Double) {
+        motor.setControl(motorPosititonRequest.withPosition(position))
     }
 
     override fun setPower(percentOutput: Double) {
-        motor.set(percentOutput)
+        motor.setControl(motorPowerRequest.withOutput(percentOutput))
     }
 
-    override fun resetAbsoluteEncoder() {
+    override fun reset() {
         motor.setPosition(0.0)
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
-        inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
-        inputs.absoluteEncoderHeight =
-            Units.Centimeter.of(encoder.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+        inputs.carriageHeight = Units.Meters.of(motor.position.value.magnitude() * (12.13 * 2 * PI))
     }
 }

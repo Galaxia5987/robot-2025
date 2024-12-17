@@ -1,31 +1,42 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
-import java.util.function.DoubleSupplier
 
-class Elevator(private val io: ElevatorIO) : SubsystemBase() {
+class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase() {
 
-    @AutoLogOutput
-    var positionSetpoint: Distance = Units.Millimeters.of(0.0)
+    companion object {
+        @Volatile
+        private var instance: Elevator? = null
 
-    fun setPosition(position: Distance): Command {
-        positionSetpoint = position
-        return run({ io.setHeight(position) })
+        fun initialize(io: ElevatorIO) {
+            synchronized(this) {
+                if (Elevator.instance == null) {
+                    instance = Elevator(io)
+                }
+            }
+        }
+        fun getInstance(): Elevator {
+            return Elevator.instance ?: throw IllegalStateException(
+                "Elevator has not been initialized. Call initialize(io: ElevatorIO) first."
+            )
+        }
     }
 
-    fun setPower(percentOutput: DoubleSupplier): Command {
-        return run({ io.setPower(percentOutput.asDouble) })
+    fun setPosition(position: Double) {
+        io.setHeight(position)
     }
 
-    fun resetAbsoluteEncoder(): Command = runOnce(io::resetAbsoluteEncoder)
+    fun setPower(percentOutput: Double) {
+        io.setPower(percentOutput)
+    }
+
+    fun reset() {
+        io.reset()
+    }
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs(this.name, io.inputs)
+        Logger.processInputs("elevator", io.inputs)
     }
 }
