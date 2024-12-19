@@ -45,9 +45,10 @@ class ElevatorIOReal : ElevatorIO {
         }
     }
 
-    override fun setHeight(position: Double) {
-        motor.setControl(motorPosititonRequest.withPosition(position))
     override fun setHeight(position: Distance) {
+        inputs.heightSetpoint=position
+        val rotationalPosition= Units.Rotations.of(position.`in`(Units.Centimeter)/(2*PI* SPROCKET_RADIUS))
+        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
 
     override fun setPower(percentOutput: Double) {
