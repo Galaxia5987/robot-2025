@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
 import kotlin.math.PI
 
 class ElevatorIOReal : ElevatorIO {
@@ -46,6 +47,7 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun setHeight(position: Double) {
         motor.setControl(motorPosititonRequest.withPosition(position))
+    override fun setHeight(position: Distance) {
     }
 
     override fun setPower(percentOutput: Double) {
