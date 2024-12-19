@@ -43,6 +43,7 @@ class ElevatorIOReal : ElevatorIO {
                 SupplyCurrentLimit = 40.0
             }
         }
+        motor.configurator.apply(motorConfig)
     }
 
     override fun setHeight(position: Distance) {
