@@ -19,7 +19,6 @@ class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
     private val motorPosititonRequest = PositionVoltage(0.0)
-    private val motorPowerRequest = DutyCycleOut(0.0)
 
     init {
         val motorConfig = TalonFXConfiguration().apply {
@@ -53,7 +52,7 @@ class ElevatorIOReal : ElevatorIO {
     }
 
     override fun setPower(percentOutput: Double) {
-        motor.setControl(motorPowerRequest.withOutput(percentOutput))
+        motor.set(percentOutput)
     }
 
     override fun reset() {
