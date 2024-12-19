@@ -1,7 +1,11 @@
 package frc.robot.subsystems.elevator
 
+import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
+import java.util.function.DoubleSupplier
 
 class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase() {
 
@@ -23,16 +27,16 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
         }
     }
 
-    fun setPosition(position: Double) {
-        io.setHeight(position)
+    fun setPosition(position: Distance):Command {
+        return Commands.runOnce({io.setHeight(position)},this)
     }
 
-    fun setPower(percentOutput: Double) {
-        io.setPower(percentOutput)
+    fun setPower(percentOutput: DoubleSupplier) :Command{
+        return Commands.run({io.setPower(percentOutput.asDouble)},this)
     }
 
-    fun reset() {
-        io.reset()
+    fun reset() :Command{
+        return Commands.runOnce({io.reset()},this)
     }
 
     override fun periodic() {
