@@ -13,9 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -55,6 +52,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+
+import static edu.wpi.first.units.Units.*;
 
 public class Drive extends SubsystemBase {
     // TunerConstants doesn't include these constants, so they are declared locally
@@ -100,6 +99,7 @@ public class Drive extends SubsystemBase {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
+    private final SysIdRoutine turnSysId;
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
@@ -173,6 +173,16 @@ public class Drive extends SubsystemBase {
                                         Logger.recordOutput("Drive/SysIdState", state.toString())),
                         new SysIdRoutine.Mechanism(
                                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+        turnSysId =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(
+                                null,
+                                null,
+                                null,
+                                (state) ->
+                                        Logger.recordOutput("Drive/TurnSysIdState", state.toString())),
+                        new SysIdRoutine.Mechanism(
+                                (voltage) -> runTurnCharacterization(voltage.in(Volts)), null, this));
     }
 
     @Override
@@ -268,6 +278,13 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    /** NOTE: DO NOT USE WITH TorqueCurrentFOC */
+    public void runTurnCharacterization(double output) {
+        for (int i = 0; i < 4; i++) {
+            modules[i].runTurnCharacterization(output);
+        }
+    }
+
     /** Stops the drive. */
     public void stop() {
         runVelocity(new ChassisSpeeds());
@@ -298,6 +315,21 @@ public class Drive extends SubsystemBase {
         return run(() -> runCharacterization(0.0))
                 .withTimeout(1.0)
                 .andThen(sysId.dynamic(direction));
+    }
+
+
+    /** Returns a command to run a quasistatic test in the specified direction on the turn modules. */
+    public Command turnSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return run(() -> runTurnCharacterization(0.0))
+                .withTimeout(1.0)
+                .andThen(turnSysId.quasistatic(direction));
+    }
+
+    /** Returns a command to run a dynamic test in the specified direction on the turn modules. */
+    public Command turnSysIdDynamic(SysIdRoutine.Direction direction) {
+        return run(() -> runTurnCharacterization(0.0))
+                .withTimeout(1.0)
+                .andThen(turnSysId.dynamic(direction));
     }
 
     /** Returns the module states (turn angles and drive velocities) for all of the modules. */
