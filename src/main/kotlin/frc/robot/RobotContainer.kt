@@ -48,6 +48,9 @@ object RobotContainer {
             }, swerveDrive)
                 .ignoringDisable(true)
         )
+        driverController().a().onTrue(elevator.reset())
+        driverController().x().whileTrue(elevator.setPosition(Units.Centimeter.of(50.0)))
+        driverController().b().whileTrue(elevator.setPosition(Units.Centimeter.of(100.0)))
     }
 
     fun getAutonomousCommand(): Command = Commands.none()
