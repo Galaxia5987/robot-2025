@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.generated.TunerConstants
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -65,6 +66,7 @@ object Robot : LoggedRobot() {
                 LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kCTRE)
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
+                TunerConstants.init()
             }
 
             SIM -> Logger.addDataReceiver(NT4Publisher())
