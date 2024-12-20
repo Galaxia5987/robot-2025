@@ -28,7 +28,7 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
     }
 
     fun setPosition(position: Distance):Command {
-        return Commands.runOnce({io.setHeight(position)},this)
+        return Commands.run({io.setHeight(position)},this)
     }
 
     fun setPower(percentOutput: DoubleSupplier) :Command{
