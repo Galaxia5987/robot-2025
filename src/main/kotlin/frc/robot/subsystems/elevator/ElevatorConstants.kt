@@ -8,3 +8,8 @@ const val SPROCKET_RADIUS= 12.13
 const val GEAR_RATIO = (1 / 12) * (42 / 48)
 const val FIRST_STAGE_RATIO = 0.5
 val GAINS = selectGainsBasedOnMode(Gains(), Gains())
+    Gains(
+        20.0,
+        kD=1.0
+    ),
+    Gains())
