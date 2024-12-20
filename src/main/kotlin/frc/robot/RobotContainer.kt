@@ -21,6 +21,7 @@ import frc.robot.subsystems.drive.getSwerveModuleIOs
  */
 object RobotContainer {
     private val swerveDrive: Drive
+    private val elevator: Elevator
     private val testController = CommandXboxController(2)
 
     init {
