@@ -25,6 +25,8 @@ object RobotContainer {
     private val testController = CommandXboxController(2)
 
     init {
+        Elevator.initialize(ElevatorIOReal())
+        elevator = Elevator.getInstance()
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
 
         registerAutoCommands()
