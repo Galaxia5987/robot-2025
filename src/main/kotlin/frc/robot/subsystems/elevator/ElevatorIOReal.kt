@@ -28,7 +28,7 @@ class ElevatorIOReal : ElevatorIO {
             }
             Feedback = FeedbackConfigs().apply {
                 RotorToSensorRatio = 1.0
-                SensorToMechanismRatio = GEAR_RATIO * FIRST_STAGE_RATIO
+//                SensorToMechanismRatio = GEAR_RATIO * FIRST_STAGE_RATIO
             }
             Slot0 = Slot0Configs().apply {
                 kP = GAINS.kP
@@ -47,7 +47,7 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun setHeight(position: Distance) {
         inputs.heightSetpoint=position
-        val rotationalPosition= Units.Rotations.of(position.`in`(Units.Centimeter)/(2*PI* SPROCKET_RADIUS))
+        val rotationalPosition= Units.Rotations.of(position.`in`(Units.Centimeter)/(GEAR_RATIO * FIRST_STAGE_RATIO * 2*PI* SPROCKET_RADIUS.`in`(Units.Centimeter)))
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
 
@@ -60,6 +60,6 @@ class ElevatorIOReal : ElevatorIO {
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.carriageHeight = Units.Centimeter.of(motor.position.value.magnitude() * (SPROCKET_RADIUS * 2 * PI))
+        inputs.carriageHeight = Units.Centimeter.of(motor.position.value.magnitude() * GEAR_RATIO * FIRST_STAGE_RATIO * (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI))
     }
 }
