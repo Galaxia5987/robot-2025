@@ -11,7 +11,6 @@ const val FIRST_STAGE_RATIO = 2.0
 val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4/2.0)
 val GAINS = selectGainsBasedOnMode(
     Gains(
-        20.0,
-        kD=1.0
+        11.5
     ),
     Gains())
