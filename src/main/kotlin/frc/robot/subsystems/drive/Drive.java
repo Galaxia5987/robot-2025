@@ -13,6 +13,8 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -42,6 +44,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
@@ -52,8 +55,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
-import static edu.wpi.first.units.Units.*;
 
 public class Drive extends SubsystemBase {
     // TunerConstants doesn't include these constants, so they are declared locally
@@ -180,9 +181,12 @@ public class Drive extends SubsystemBase {
                                 null,
                                 null,
                                 (state) ->
-                                        Logger.recordOutput("Drive/TurnSysIdState", state.toString())),
+                                        Logger.recordOutput(
+                                                "Drive/TurnSysIdState", state.toString())),
                         new SysIdRoutine.Mechanism(
-                                (voltage) -> runTurnCharacterization(voltage.in(Volts)), null, this));
+                                (voltage) -> runTurnCharacterization(voltage.in(Volts)),
+                                null,
+                                this));
     }
 
     @Override
@@ -317,12 +321,21 @@ public class Drive extends SubsystemBase {
                 .andThen(sysId.dynamic(direction));
     }
 
-
-    /** Returns a command to run a quasistatic test in the specified direction on the turn modules. */
+    /**
+     * Returns a command to run a quasistatic test in the specified direction on the turn modules.
+     */
     public Command turnSysIdQuasistatic(SysIdRoutine.Direction direction) {
         return run(() -> runTurnCharacterization(0.0))
                 .withTimeout(1.0)
                 .andThen(turnSysId.quasistatic(direction));
+    }
+
+    public Command runAllTurnSysID() {
+        return Commands.sequence(
+                turnSysIdQuasistatic(SysIdRoutine.Direction.kForward),
+                turnSysIdQuasistatic(SysIdRoutine.Direction.kReverse),
+                turnSysIdDynamic(SysIdRoutine.Direction.kForward),
+                turnSysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /** Returns a command to run a dynamic test in the specified direction on the turn modules. */

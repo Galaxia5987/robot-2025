@@ -49,7 +49,7 @@ object RobotContainer {
         )
     }
 
-    fun getAutonomousCommand(): Command = Commands.none()
+    fun getAutonomousCommand(): Command = swerveDrive.runAllTurnSysID()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) = NamedCommands.registerCommand(name, command)
