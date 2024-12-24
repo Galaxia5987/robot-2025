@@ -3,10 +3,13 @@ package frc.robot.subsystems.elevator
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import org.team9432.annotation.Logged
 
 interface ElevatorIO {
     val inputs: LoggedElevatorInputs
+
+    fun setVoltage(voltage: Voltage) {}
 
     fun setHeight(position:Distance) {}
 
@@ -15,6 +18,9 @@ interface ElevatorIO {
     fun reset() {}
 
     fun updateInputs() {}
+
+    fun updateRoutineLog(log: SysIdRoutineLog) {}
+
 
     @Logged
     open class ElevatorInputs {
