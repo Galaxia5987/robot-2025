@@ -7,16 +7,21 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
+import kotlin.math.PI
 
 class
 ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
+    private val motorVoltageRequest = VoltageOut(0.0)
     private val motorPosititonRequest = PositionVoltage(0.0)
 
     init {
@@ -52,10 +57,19 @@ ElevatorIOReal : ElevatorIO {
     override fun setPower(percentOutput: Double) {
         motor.set(percentOutput)
     }
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(motorVoltageRequest.withOutput(voltage))
+    }
 
     override fun reset() {
         motor.setPosition(0.0)
     }
+    override fun updateRoutineLog(log: SysIdRoutineLog) {
+        log.motor("1")
+            .voltage(inputs.appliedVoltege)
+            .linearPosition(inputs.carriageHeight)
+    }
+
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
         inputs.carriageHeight = Units.Centimeter.of(motor.position.value.magnitude() * ROTATIONS_TO_CENTIMETER)
