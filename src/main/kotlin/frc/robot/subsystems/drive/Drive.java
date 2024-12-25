@@ -52,11 +52,9 @@ import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.generated.TunerConstants;
 import frc.robot.lib.LocalADStarAK;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -108,17 +106,16 @@ public class Drive extends SubsystemBase {
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-    @AutoLogOutput
-    private Rotation2d desiredHeading = new Rotation2d();
+    @AutoLogOutput private Rotation2d desiredHeading = new Rotation2d();
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
-            new SwerveModulePosition[]{
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition()
+            new SwerveModulePosition[] {
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition()
             };
     private SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
@@ -217,8 +214,8 @@ public class Drive extends SubsystemBase {
 
         // Log empty setpoint states when disabled
         if (DriverStation.isDisabled()) {
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[]{});
-            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[]{});
+            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
+            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
         }
 
         // Update odometry
@@ -284,27 +281,21 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
     }
 
-    /**
-     * Runs the drive in a straight line with the specified drive output.
-     */
+    /** Runs the drive in a straight line with the specified drive output. */
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
             modules[i].runCharacterization(output);
         }
     }
 
-    /**
-     * NOTE: DO NOT USE WITH TorqueCurrentFOC
-     */
+    /** NOTE: DO NOT USE WITH TorqueCurrentFOC */
     public void runTurnCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
             modules[i].runTurnCharacterization(output);
         }
     }
 
-    /**
-     * Stops the drive.
-     */
+    /** Stops the drive. */
     public void stop() {
         runVelocity(new ChassisSpeeds());
     }
@@ -322,18 +313,14 @@ public class Drive extends SubsystemBase {
         stop();
     }
 
-    /**
-     * Returns a command to run a quasistatic test in the specified direction.
-     */
+    /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return run(() -> runCharacterization(0.0))
                 .withTimeout(1.0)
                 .andThen(sysId.quasistatic(direction));
     }
 
-    /**
-     * Returns a command to run a dynamic test in the specified direction.
-     */
+    /** Returns a command to run a dynamic test in the specified direction. */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return run(() -> runCharacterization(0.0))
                 .withTimeout(1.0)
@@ -357,18 +344,14 @@ public class Drive extends SubsystemBase {
                 turnSysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
-    /**
-     * Returns a command to run a dynamic test in the specified direction on the turn modules.
-     */
+    /** Returns a command to run a dynamic test in the specified direction on the turn modules. */
     public Command turnSysIdDynamic(SysIdRoutine.Direction direction) {
         return run(() -> runTurnCharacterization(0.0))
                 .withTimeout(1.0)
                 .andThen(turnSysId.dynamic(direction));
     }
 
-    /**
-     * Returns the module states (turn angles and drive velocities) for all of the modules.
-     */
+    /** Returns the module states (turn angles and drive velocities) for all of the modules. */
     @AutoLogOutput(key = "SwerveStates/Measured")
     private SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
@@ -378,9 +361,7 @@ public class Drive extends SubsystemBase {
         return states;
     }
 
-    /**
-     * Returns the module positions (turn angles and drive positions) for all of the modules.
-     */
+    /** Returns the module positions (turn angles and drive positions) for all of the modules. */
     private SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] states = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
@@ -389,17 +370,13 @@ public class Drive extends SubsystemBase {
         return states;
     }
 
-    /**
-     * Returns the measured chassis speeds of the robot.
-     */
+    /** Returns the measured chassis speeds of the robot. */
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
     private ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(getModuleStates());
     }
 
-    /**
-     * Returns the position of each module in radians.
-     */
+    /** Returns the position of each module in radians. */
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
         for (int i = 0; i < 4; i++) {
@@ -408,9 +385,7 @@ public class Drive extends SubsystemBase {
         return values;
     }
 
-    /**
-     * Returns the average velocity of the modules in rotations/sec (Phoenix native units).
-     */
+    /** Returns the average velocity of the modules in rotations/sec (Phoenix native units). */
     public double getFFCharacterizationVelocity() {
         double output = 0.0;
         for (int i = 0; i < 4; i++) {
@@ -419,42 +394,38 @@ public class Drive extends SubsystemBase {
         return output;
     }
 
-    /**
-     * Returns the current odometry pose.
-     */
+    /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /**
-     * Returns the current odometry rotation.
-     */
+    /** Returns the current odometry rotation. */
     public Rotation2d getRotation() {
         return getPose().getRotation();
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
-        return Commands.run(() -> {
-            double desiredDeltaOmega = MathUtil.applyDeadband(omegaAxis.getAsDouble(), 0.15) * TunerConstants.kMaxOmegaVelocity.in(RadiansPerSecond) * ConstantsKt.LOOP_TIME;
-            desiredHeading = desiredHeading.plus(Rotation2d.fromRadians(desiredDeltaOmega));
-        });
+        return Commands.run(
+                () -> {
+                    double desiredDeltaOmega =
+                            MathUtil.applyDeadband(omegaAxis.getAsDouble(), 0.15)
+                                    * TunerConstants.kMaxOmegaVelocity.in(RadiansPerSecond)
+                                    * ConstantsKt.LOOP_TIME;
+                    desiredHeading = desiredHeading.plus(Rotation2d.fromRadians(desiredDeltaOmega));
+                });
     }
 
     public Rotation2d getDesiredHeading() {
         return desiredHeading;
     }
 
-    /**
-     * Resets the current odometry pose.
-     */
+    /** Resets the current odometry pose. */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
-    /**
-     * Adds a new timestamped vision measurement.
-     */
+    /** Adds a new timestamped vision measurement. */
     public void addVisionMeasurement(
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
@@ -463,32 +434,26 @@ public class Drive extends SubsystemBase {
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 
-    /**
-     * Returns the maximum linear speed in meters per sec.
-     */
+    /** Returns the maximum linear speed in meters per sec. */
     public double getMaxLinearSpeedMetersPerSec() {
         return TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     }
 
-    /**
-     * Returns the maximum angular speed in radians per sec.
-     */
+    /** Returns the maximum angular speed in radians per sec. */
     public double getMaxAngularSpeedRadPerSec() {
         return getMaxLinearSpeedMetersPerSec() / DRIVE_BASE_RADIUS;
     }
 
-    /**
-     * Returns an array of module translations.
-     */
+    /** Returns an array of module translations. */
     public static Translation2d[] getModuleTranslations() {
-        return new Translation2d[]{
-                new Translation2d(
-                        TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
-                new Translation2d(
-                        TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
-                new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
-                new Translation2d(
-                        TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
+        return new Translation2d[] {
+            new Translation2d(
+                    TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
+            new Translation2d(
+                    TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
+            new Translation2d(TunerConstants.BackLeft.LocationX, TunerConstants.BackLeft.LocationY),
+            new Translation2d(
+                    TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
     }
 }

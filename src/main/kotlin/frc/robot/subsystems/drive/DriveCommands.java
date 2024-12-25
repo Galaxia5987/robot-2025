@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.generated.TunerConstants;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -122,7 +121,9 @@ public class DriveCommands {
                         0.0,
                         ANGLE_KD,
                         new TrapezoidProfile.Constraints(
-                                TunerConstants.kMaxOmegaVelocity.in(edu.wpi.first.units.Units.RadiansPerSecond), ANGLE_MAX_ACCELERATION));
+                                TunerConstants.kMaxOmegaVelocity.in(
+                                        edu.wpi.first.units.Units.RadiansPerSecond),
+                                ANGLE_MAX_ACCELERATION));
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(ANGLE_TOLERANCE.getRadians());
 

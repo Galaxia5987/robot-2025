@@ -11,7 +11,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
 import frc.robot.ConstantsKt;
 
@@ -218,7 +217,13 @@ public class TunerConstants {
             kBackRightXPos = Meters.of(-0.24);
             kBackRightYPos = Meters.of(-0.24);
         } else {
-            offsets = new double[] {-2.9022916506796332, -1.4910293258248433, 0.1043106935762236, 2.0493983326152168};
+            offsets =
+                    new double[] {
+                        -2.9022916506796332,
+                        -1.4910293258248433,
+                        0.1043106935762236,
+                        2.0493983326152168
+                    };
 
             steerGains =
                     new Slot0Configs()
@@ -230,7 +235,13 @@ public class TunerConstants {
                             .withKA(0.060469)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
-            driveGains = new Slot0Configs().withKP(0.5).withKI(0).withKD(0).withKS(0.21055).withKV(0.68964);
+            driveGains =
+                    new Slot0Configs()
+                            .withKP(0.5)
+                            .withKI(0)
+                            .withKD(0)
+                            .withKS(0.21055)
+                            .withKV(0.68964);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
