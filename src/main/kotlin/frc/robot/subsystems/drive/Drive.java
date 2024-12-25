@@ -450,7 +450,7 @@ public class Drive extends SubsystemBase {
     }
 
     public Command setDesiredHeading(Rotation2d rotation) {
-        return Commands.run(() ->
+        return Commands.runOnce(() ->
                 desiredHeading = rotation
         );
     }
@@ -460,6 +460,7 @@ public class Drive extends SubsystemBase {
      */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        desiredHeading = pose.getRotation();
     }
 
     /**
