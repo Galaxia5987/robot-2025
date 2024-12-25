@@ -46,6 +46,11 @@ object RobotContainer {
             }, swerveDrive)
                 .ignoringDisable(true)
         )
+
+        driverController().povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(0.0)))
+        driverController().povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(90.0)))
+        driverController().povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(180.0)))
+        driverController().povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(-90.0)))
     }
 
     fun getAutonomousCommand(): Command = DriveCommands.wheelRadiusCharacterization(swerveDrive)
