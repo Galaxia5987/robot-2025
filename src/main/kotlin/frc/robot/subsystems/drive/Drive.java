@@ -207,6 +207,7 @@ public class Drive extends SubsystemBase {
         odometryLock.unlock();
 
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+        Logger.recordOutput("Odometry/Robot", getPose());
 
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
