@@ -5,12 +5,12 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.ControllerInputs.driverController
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.drive.getGyroIO
-import frc.robot.subsystems.drive.getSwerveModuleIOs
+import frc.robot.subsystems.getGyroIO
+import frc.robot.subsystems.getSwerveModuleIOs
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,6 +19,8 @@ import frc.robot.subsystems.drive.getSwerveModuleIOs
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 object RobotContainer {
+    private val driverController = CommandXboxController(0)
+    private val operatorController = CommandPS5Controller(1)
     private val swerveDrive: Drive
     private val testController = CommandXboxController(2)
 
@@ -33,24 +35,24 @@ object RobotContainer {
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand = DriveCommands.joystickDriveAtAngle(
             swerveDrive,
-            { driverController().leftY },
-            { driverController().leftX },
+            { driverController.leftY },
+            { driverController.leftX },
             { swerveDrive.desiredHeading }
-        ).alongWith(swerveDrive.updateDesiredHeading { -driverController().rightX })
+        ).alongWith(swerveDrive.updateDesiredHeading { -driverController.rightX })
     }
 
     private fun configureButtonBindings() {
-        driverController().y().onTrue(
+        driverController.y().onTrue(
             Commands.runOnce({
                 swerveDrive.pose = Pose2d(swerveDrive.pose.translation, Rotation2d())
             }, swerveDrive)
                 .ignoringDisable(true)
         )
 
-        driverController().povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(0.0)))
-        driverController().povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(-90.0)))
-        driverController().povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(180.0)))
-        driverController().povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(90.0)))
+        driverController.povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(0.0)))
+        driverController.povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(-90.0)))
+        driverController.povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(180.0)))
+        driverController.povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(90.0)))
     }
 
     fun getAutonomousCommand(): Command = DriveCommands.wheelRadiusCharacterization(swerveDrive)
