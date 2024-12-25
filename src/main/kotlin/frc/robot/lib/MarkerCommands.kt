@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 const val ABNORMAL_EVENT_NAME = "PROBLEM!"
 val alert = Alert(ABNORMAL_EVENT_NAME, Alert.AlertType.kWarning)
 
-fun markEvent(eventName: String): Command = Commands.runOnce({
+private fun markEvent(eventName: String): Command = Commands.runOnce({
     DataLogManager.log(eventName)
     alert.set(true)
 }).withTimeout(5.0).andThen(Commands.runOnce({
