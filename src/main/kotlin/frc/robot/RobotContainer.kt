@@ -32,12 +32,12 @@ object RobotContainer {
     }
 
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand = DriveCommands.joystickDrive(
+        swerveDrive.defaultCommand = DriveCommands.joystickDriveAtAngle(
             swerveDrive,
-            { MathUtil.applyDeadband(driverController().leftY, 0.15) },
-            { MathUtil.applyDeadband(driverController().leftX, 0.15) },
-            { 0.7 * MathUtil.applyDeadband(-driverController().rightX, 0.15) }
-        )
+            { driverController().leftY },
+            { driverController().leftX },
+            { swerveDrive.desiredHeading }
+        ).alongWith(swerveDrive.updateDesiredHeading { -driverController().rightX })
     }
 
     private fun configureButtonBindings() {
@@ -49,7 +49,7 @@ object RobotContainer {
         )
     }
 
-    fun getAutonomousCommand(): Command = swerveDrive.runAllTurnSysID()
+    fun getAutonomousCommand(): Command = DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) = NamedCommands.registerCommand(name, command)
