@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 
-fun rumble(controller: CommandXboxController, rumbleStrength: Double): Command {
+private fun rumble(controller: CommandXboxController, rumbleStrength: Double): Command {
     return Commands.runOnce({
         controller.hid.setRumble(GenericHID.RumbleType.kBothRumble, rumbleStrength)
     })
