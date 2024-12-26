@@ -49,10 +49,10 @@ object RobotContainer {
                 .ignoringDisable(true)
         )
 
-        driverController.povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(0.0)))
-        driverController.povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(-90.0)))
-        driverController.povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(180.0)))
-        driverController.povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.fromDegrees(90.0)))
+        driverController.povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kZero))
+        driverController.povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
+        driverController.povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.k180deg))
+        driverController.povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCW_90deg))
     }
 
     fun getAutonomousCommand(): Command = DriveCommands.wheelRadiusCharacterization(swerveDrive)
