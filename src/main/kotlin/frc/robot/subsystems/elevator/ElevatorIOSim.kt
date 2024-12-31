@@ -20,7 +20,7 @@ class ElevatorIOSim : ElevatorIO {
     override fun setPower(percentOutput: Double) {
         super.setPower(percentOutput)
     }
-    override fun reset() {}
+
     override fun updateInputs() {
         inputs.appliedVoltege=Units.Volts.of(motor.appliedVoltage)
         inputs.carriageHeight=Units.Centimeter.of(motor.position * GEAR_RATIO * FIRST_STAGE_RATIO * (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI))
