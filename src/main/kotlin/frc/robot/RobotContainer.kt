@@ -11,6 +11,9 @@ import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.getGyroIO
 import frc.robot.subsystems.getSwerveModuleIOs
+import frc.robot.subsystems.vision.Vision
+import frc.robot.subsystems.vision.VisionConstants
+import frc.robot.subsystems.vision.VisionIOPhotonVision
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,10 +25,15 @@ object RobotContainer {
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandPS5Controller(1)
     private val swerveDrive: Drive
+    private val vision: Vision
     private val testController = CommandXboxController(2)
 
     init {
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
+        vision = Vision(swerveDrive::addVisionMeasurement,
+            VisionIOPhotonVision(VisionConstants.OV1Name, VisionConstants.robotToOV1),
+            VisionIOPhotonVision(VisionConstants.OV2Name, VisionConstants.robotToOV2),
+            VisionIOPhotonVision(VisionConstants.OV3Name, VisionConstants.robotToOV3))
 
         registerAutoCommands()
         configureButtonBindings()
