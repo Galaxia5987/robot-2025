@@ -15,7 +15,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import kotlin.math.PI
 
-class ElevatorIOReal : ElevatorIO {
+class
+ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
     private val motorPosititonRequest = PositionVoltage(0.0)
