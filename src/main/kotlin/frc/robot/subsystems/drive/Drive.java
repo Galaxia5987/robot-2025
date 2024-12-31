@@ -107,7 +107,7 @@ public class Drive extends SubsystemBase {
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-    @AutoLogOutput private Rotation2d desiredHeading = new Rotation2d();
+    @AutoLogOutput private Rotation2d desiredHeading;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -192,6 +192,9 @@ public class Drive extends SubsystemBase {
                                 (voltage) -> runTurnCharacterization(voltage.in(Volts)),
                                 null,
                                 this));
+
+        gyroIO.updateInputs(gyroInputs);
+        desiredHeading = gyroInputs.yawPosition;
     }
 
     @Override
@@ -281,6 +284,10 @@ public class Drive extends SubsystemBase {
 
         // Log optimized setpoints (runSetpoint mutates each state)
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+    }
+
+    public Rotation2d getYawPosition() {
+        return gyroInputs.yawPosition;
     }
 
     /** Runs the drive in a straight line with the specified drive output. */
@@ -429,7 +436,7 @@ public class Drive extends SubsystemBase {
     /** Resets the current odometry pose. */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
-        desiredHeading = pose.getRotation();
+        desiredHeading = gyroInputs.yawPosition;
     }
 
     /** Adds a new timestamped vision measurement. */

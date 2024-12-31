@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.generated.TunerConstants;
+import org.littletonrobotics.junction.Logger;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -48,7 +50,8 @@ public class DriveCommands {
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
     private static final Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.4);
 
-    private DriveCommands() {}
+    private DriveCommands() {
+    }
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -129,38 +132,38 @@ public class DriveCommands {
 
         // Construct command
         return Commands.run(
-                        () -> {
-                            // Get linear velocity
-                            Translation2d linearVelocity =
-                                    getLinearVelocityFromJoysticks(
-                                            xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                () -> {
+                    // Get linear velocity
+                    Translation2d linearVelocity =
+                            getLinearVelocityFromJoysticks(
+                                    xSupplier.getAsDouble(), ySupplier.getAsDouble());
 
-                            // Calculate angular speed
-                            double omega =
-                                    angleController.calculate(
-                                            drive.getRotation().getRadians(),
-                                            rotationSupplier.get().getRadians());
+                    // Calculate angular speed
+                    double omega =
+                            angleController.calculate(
+                                    drive.getYawPosition().getRadians(),
+                                    rotationSupplier.get().getRadians());
+                    Logger.recordOutput("ERROR", angleController.getPositionError());
+                    // Convert to field relative speeds & send command
+                    ChassisSpeeds speeds =
+                            new ChassisSpeeds(
+                                    linearVelocity.getX()
+                                            * drive.getMaxLinearSpeedMetersPerSec(),
+                                    linearVelocity.getY()
+                                            * drive.getMaxLinearSpeedMetersPerSec(),
+                                    omega);
+                    boolean isFlipped =
+                            DriverStation.getAlliance().isPresent()
+                                    && DriverStation.getAlliance().get() == Alliance.Red;
+                    speeds.toRobotRelativeSpeeds(
+                            isFlipped
+                                    ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                                    : drive.getRotation());
+                    drive.runVelocity(speeds);
+                },
+                drive)
 
-                            // Convert to field relative speeds & send command
-                            ChassisSpeeds speeds =
-                                    new ChassisSpeeds(
-                                            linearVelocity.getX()
-                                                    * drive.getMaxLinearSpeedMetersPerSec(),
-                                            linearVelocity.getY()
-                                                    * drive.getMaxLinearSpeedMetersPerSec(),
-                                            omega);
-                            boolean isFlipped =
-                                    DriverStation.getAlliance().isPresent()
-                                            && DriverStation.getAlliance().get() == Alliance.Red;
-                            speeds.toRobotRelativeSpeeds(
-                                    isFlipped
-                                            ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                                            : drive.getRotation());
-                            drive.runVelocity(speeds);
-                        },
-                        drive)
-
-                // Reset PID controller when command starts
+        // Reset PID controller when command starts
                 .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
     }
 
@@ -231,7 +234,9 @@ public class DriveCommands {
                                 }));
     }
 
-    /** Measures the robot's wheel radius by spinning in a circle. */
+    /**
+     * Measures the robot's wheel radius by spinning in a circle.
+     */
     public static Command wheelRadiusCharacterization(Drive drive) {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -309,8 +314,8 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                                    Units.metersToInches(
-                                                                            wheelRadius))
+                                                            Units.metersToInches(
+                                                                    wheelRadius))
                                                             + " inches");
                                         })));
     }
