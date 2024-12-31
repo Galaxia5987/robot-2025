@@ -1,17 +1,16 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.ControllerInputs.driverController
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.drive.getGyroIO
-import frc.robot.subsystems.drive.getSwerveModuleIOs
+import frc.robot.subsystems.getGyroIO
+import frc.robot.subsystems.getSwerveModuleIOs
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.subsystems.vision.VisionIOPhotonVision
@@ -23,16 +22,20 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 object RobotContainer {
+    private val driverController = CommandXboxController(0)
+    private val operatorController = CommandPS5Controller(1)
     private val swerveDrive: Drive
     private val vision: Vision
     private val testController = CommandXboxController(2)
 
     init {
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
-        vision = Vision(swerveDrive::addVisionMeasurement,
+        vision = Vision(
+            swerveDrive::addVisionMeasurement,
             VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
             VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToRightOV),
-            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV))
+            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV)
+        )
 
         registerAutoCommands()
         configureButtonBindings()
@@ -40,24 +43,29 @@ object RobotContainer {
     }
 
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand = DriveCommands.joystickDrive(
+        swerveDrive.defaultCommand = DriveCommands.joystickDriveAtAngle(
             swerveDrive,
-            { MathUtil.applyDeadband(driverController().leftY, 0.15) },
-            { MathUtil.applyDeadband(driverController().leftX, 0.15) },
-            { 0.7 * MathUtil.applyDeadband(-driverController().rightX, 0.15) }
-        )
+            { driverController.leftY },
+            { driverController.leftX },
+            { swerveDrive.desiredHeading }
+        ).alongWith(swerveDrive.updateDesiredHeading { -driverController.rightX })
     }
 
     private fun configureButtonBindings() {
-        driverController().y().onTrue(
+        driverController.y().onTrue(
             Commands.runOnce({
                 swerveDrive.pose = Pose2d(swerveDrive.pose.translation, Rotation2d())
             }, swerveDrive)
                 .ignoringDisable(true)
         )
+
+        driverController.povUp().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kZero))
+        driverController.povRight().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCW_90deg))
+        driverController.povDown().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.k180deg))
+        driverController.povLeft().whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
     }
 
-    fun getAutonomousCommand(): Command = Commands.none()
+    fun getAutonomousCommand(): Command = DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) = NamedCommands.registerCommand(name, command)

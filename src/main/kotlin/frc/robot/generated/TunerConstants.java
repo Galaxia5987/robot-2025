@@ -32,6 +32,7 @@ public class TunerConstants {
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
     public static LinearVelocity kSpeedAt12Volts;
+    public static AngularVelocity kMaxOmegaVelocity;
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
@@ -120,26 +121,27 @@ public class TunerConstants {
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(330)
-                            .withKI(1)
-                            .withKD(20)
-                            .withKS(0)
-                            .withKV(0)
-                            .withKA(0)
+                            .withKP(22.442)
+                            .withKI(0)
+                            .withKD(1.6859)
+                            .withKS(0.19249)
+                            .withKV(0.22304)
+                            .withKA(0.068728)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(30)
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(2.66447)
-                            .withKV(1.18028);
+                            .withKS(0.22064)
+                            .withKV(0.54210);
 
-            kSteerClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
-            kDriveClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+            kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
+            kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
             kSlipCurrent = Amps.of(80.0);
+            kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -151,7 +153,7 @@ public class TunerConstants {
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.8);
 
             kCoupleRatio = 3.5;
 
@@ -214,26 +216,32 @@ public class TunerConstants {
 
             kBackRightXPos = Meters.of(-0.24);
             kBackRightYPos = Meters.of(-0.24);
-        } else { // TODO: calibrate
-            offsets = new double[] {0.0, 0.0, 0.0, 0.0};
+        } else {
+            offsets =
+                    new double[] {
+                            -2.9329712664373457,
+                            -1.4818254410975293,
+                            0.11351457830353745,
+                            2.0586022173425302
+                    };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(330)
-                            .withKI(1)
-                            .withKD(20)
-                            .withKS(0)
-                            .withKV(0)
-                            .withKA(0)
+                            .withKP(20.256)
+                            .withKI(0)
+                            .withKD(1.5072)
+                            .withKS(0.24997)
+                            .withKV(0.22169)
+                            .withKA(0.060469)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(30)
+                            .withKP(0.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(2.66447)
-                            .withKV(1.18028);
+                            .withKS(0.21055)
+                            .withKV(0.68964);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -250,11 +258,12 @@ public class TunerConstants {
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.8);
+            kMaxOmegaVelocity = RadiansPerSecond.of(5);
 
             kCoupleRatio = 3.5;
 
-            kDriveGearRatio = 4.41;
+            kDriveGearRatio = 1 / ((1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
             kWheelRadius = Centimeter.of(5.1);
 
