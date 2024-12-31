@@ -2,7 +2,12 @@ package frc.robot.subsystems.elevator
 
 import MOTOR_ID
 import com.ctre.phoenix6.hardware.TalonFX
+import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.system.plant.DCMotor
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import frc.robot.lib.motors.TalonFXSim
+import kotlin.math.PI
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -17,6 +22,7 @@ class ElevatorIOSim : ElevatorIO {
     }
     override fun reset() {}
     override fun updateInputs() {
-        super.updateInputs()
+        inputs.appliedVoltege=Units.Volts.of(motor.appliedVoltage)
+        inputs.carriageHeight=Units.Centimeter.of(motor.position * GEAR_RATIO * FIRST_STAGE_RATIO * (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI))
     }
 }
