@@ -121,24 +121,24 @@ public class TunerConstants {
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(330)
-                            .withKI(1)
-                            .withKD(20)
-                            .withKS(0)
-                            .withKV(0)
-                            .withKA(0)
+                            .withKP(22.442)
+                            .withKI(0)
+                            .withKD(1.6859)
+                            .withKS(0.19249)
+                            .withKV(0.22304)
+                            .withKA(0.068728)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(30)
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(2.66447)
-                            .withKV(1.18028);
+                            .withKS(0.22064)
+                            .withKV(0.54210);
 
-            kSteerClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
-            kDriveClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
+            kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
+            kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
             kSlipCurrent = Amps.of(80.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
@@ -153,7 +153,7 @@ public class TunerConstants {
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.8);
 
             kCoupleRatio = 3.5;
 
