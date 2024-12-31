@@ -1,8 +1,9 @@
-package frc.robot.subsystems.drive
+package frc.robot.subsystems
 
 import frc.robot.CURRENT_MODE
 import frc.robot.Mode
 import frc.robot.generated.TunerConstants
+import frc.robot.subsystems.drive.*
 
 fun getSwerveModuleIOs(): Array<ModuleIO> {
     return when (CURRENT_MODE) {

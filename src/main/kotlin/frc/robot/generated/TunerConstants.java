@@ -32,6 +32,7 @@ public class TunerConstants {
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
     public static LinearVelocity kSpeedAt12Volts;
+    public static AngularVelocity kMaxOmegaVelocity;
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
@@ -39,7 +40,6 @@ public class TunerConstants {
     public static SwerveModuleConstants FrontRight;
     public static SwerveModuleConstants BackLeft;
     public static SwerveModuleConstants BackRight;
-
 
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -115,8 +115,8 @@ public class TunerConstants {
         double[] offsets;
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
-                    new double[]{
-                            5.393476450205914, 5.3627968344482015, -3.5619033894704586, -1.1965050145508
+                    new double[] {
+                        5.393476450205914, 5.3627968344482015, -3.5619033894704586, -1.1965050145508
                     };
 
             steerGains =
@@ -141,6 +141,7 @@ public class TunerConstants {
             kDriveClosedLoopOutput = ClosedLoopOutputType.TorqueCurrentFOC;
 
             kSlipCurrent = Amps.of(80.0);
+            kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -215,29 +216,32 @@ public class TunerConstants {
 
             kBackRightXPos = Meters.of(-0.24);
             kBackRightYPos = Meters.of(-0.24);
-        } else { // TODO: calibrate
+        } else {
             offsets =
-                    new double[]{
-                            0.0, 0.0, 0.0, 0.0
+                    new double[] {
+                        -2.9022916506796332,
+                        -1.4910293258248433,
+                        0.1043106935762236,
+                        2.0493983326152168
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(330)
-                            .withKI(1)
-                            .withKD(20)
-                            .withKS(0)
-                            .withKV(0)
-                            .withKA(0)
+                            .withKP(20.256)
+                            .withKI(0)
+                            .withKD(1.5072)
+                            .withKS(0.24997)
+                            .withKV(0.22169)
+                            .withKA(0.060469)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(30)
+                            .withKP(0.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(2.66447)
-                            .withKV(1.18028);
+                            .withKS(0.21055)
+                            .withKV(0.68964);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -254,11 +258,12 @@ public class TunerConstants {
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.8);
+            kMaxOmegaVelocity = RadiansPerSecond.of(5);
 
             kCoupleRatio = 3.5;
 
-            kDriveGearRatio = 4.41;
+            kDriveGearRatio = 1 / ((1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
             kWheelRadius = Centimeter.of(5.1);
 
@@ -319,41 +324,44 @@ public class TunerConstants {
             kBackRightYPos = Meters.of(-0.24);
         }
 
-        DrivetrainConstants = new SwerveDrivetrainConstants()
-                .withCANBusName(kCANBus.getName())
-                .withPigeon2Id(kPigeonId)
-                .withPigeon2Configs(pigeonConfigs);
+        DrivetrainConstants =
+                new SwerveDrivetrainConstants()
+                        .withCANBusName(kCANBus.getName())
+                        .withPigeon2Id(kPigeonId)
+                        .withPigeon2Configs(pigeonConfigs);
 
-        SwerveModuleConstantsFactory ConstantCreator = new SwerveModuleConstantsFactory()
-                .withDriveMotorGearRatio(kDriveGearRatio)
-                .withSteerMotorGearRatio(kSteerGearRatio)
-                .withCouplingGearRatio(kCoupleRatio)
-                .withWheelRadius(kWheelRadius)
-                .withSteerMotorGains(steerGains)
-                .withDriveMotorGains(driveGains)
-                .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
-                .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
-                .withSlipCurrent(kSlipCurrent)
-                .withSpeedAt12Volts(kSpeedAt12Volts)
-                .withFeedbackSource(kSteerFeedbackType)
-                .withDriveMotorInitialConfigs(driveInitialConfigs)
-                .withSteerMotorInitialConfigs(steerInitialConfigs)
-                .withCANcoderInitialConfigs(cancoderInitialConfigs)
-                .withSteerInertia(kSteerInertia)
-                .withDriveInertia(kDriveInertia)
-                .withSteerFrictionVoltage(kSteerFrictionVoltage)
-                .withDriveFrictionVoltage(kDriveFrictionVoltage);
+        SwerveModuleConstantsFactory ConstantCreator =
+                new SwerveModuleConstantsFactory()
+                        .withDriveMotorGearRatio(kDriveGearRatio)
+                        .withSteerMotorGearRatio(kSteerGearRatio)
+                        .withCouplingGearRatio(kCoupleRatio)
+                        .withWheelRadius(kWheelRadius)
+                        .withSteerMotorGains(steerGains)
+                        .withDriveMotorGains(driveGains)
+                        .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
+                        .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
+                        .withSlipCurrent(kSlipCurrent)
+                        .withSpeedAt12Volts(kSpeedAt12Volts)
+                        .withFeedbackSource(kSteerFeedbackType)
+                        .withDriveMotorInitialConfigs(driveInitialConfigs)
+                        .withSteerMotorInitialConfigs(steerInitialConfigs)
+                        .withCANcoderInitialConfigs(cancoderInitialConfigs)
+                        .withSteerInertia(kSteerInertia)
+                        .withDriveInertia(kDriveInertia)
+                        .withSteerFrictionVoltage(kSteerFrictionVoltage)
+                        .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
-        FrontLeft = ConstantCreator.createModuleConstants(
-                kFrontLeftSteerMotorId,
-                kFrontLeftDriveMotorId,
-                kFrontLeftEncoderId,
-                kFrontLeftEncoderOffset,
-                kFrontLeftXPos,
-                kFrontLeftYPos,
-                kInvertLeftSide,
-                kFrontLeftSteerMotorInverted,
-                kFrontLeftCANcoderInverted);
+        FrontLeft =
+                ConstantCreator.createModuleConstants(
+                        kFrontLeftSteerMotorId,
+                        kFrontLeftDriveMotorId,
+                        kFrontLeftEncoderId,
+                        kFrontLeftEncoderOffset,
+                        kFrontLeftXPos,
+                        kFrontLeftYPos,
+                        kInvertLeftSide,
+                        kFrontLeftSteerMotorInverted,
+                        kFrontLeftCANcoderInverted);
 
         FrontRight =
                 ConstantCreator.createModuleConstants(
