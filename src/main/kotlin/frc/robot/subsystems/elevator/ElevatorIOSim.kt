@@ -15,6 +15,13 @@ import kotlin.math.PI
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
+    private val motor = TalonFXSim(
+        1,
+        GEAR_RATIO,
+         0.3,
+        1.0
+    )
+
 
     override fun setHeight(position: Distance) {
         val rotationalPosition=Units.Rotations.of(position.`in`(Units.Centimeter)/(GEAR_RATIO * FIRST_STAGE_RATIO * 2*PI* SPROCKET_RADIUS.`in`(Units.Centimeter)))
