@@ -1,7 +1,6 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.ControllerInputs.driverController
 import frc.robot.subsystems.drive.Drive
-import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.getGyroIO
 import frc.robot.subsystems.drive.getSwerveModuleIOs
 import frc.robot.subsystems.elevator.Elevator
@@ -44,7 +42,7 @@ object RobotContainer {
 //            { MathUtil.applyDeadband(driverController().leftX, 0.15) },
 //            { 0.7 * MathUtil.applyDeadband(-driverController().rightX, 0.15) }
 //        )
-        elevator.defaultCommand= elevator.setPower({driverController().rightTriggerAxis- driverController().leftTriggerAxis})
+        elevator.defaultCommand = elevator.setPower({ driverController().rightTriggerAxis - driverController().leftTriggerAxis })
     }
 
     private fun configureButtonBindings() {

@@ -11,7 +11,7 @@ interface ElevatorIO {
 
     fun setVoltage(voltage: Voltage) {}
 
-    fun setHeight(position:Distance) {}
+    fun setHeight(position: Distance) {}
 
     fun setPower(percentOutput: Double) {}
 
@@ -21,11 +21,10 @@ interface ElevatorIO {
 
     fun updateRoutineLog(log: SysIdRoutineLog) {}
 
-
     @Logged
     open class ElevatorInputs {
         var carriageHeight: Distance = Units.Meters.of(0.0)
-        var heightSetpoint: Distance=Units.Meters.of(0.0)
+        var heightSetpoint: Distance = Units.Meters.of(0.0)
         var appliedVoltege: Voltage = Units.Volts.of(0.0)
     }
 }
