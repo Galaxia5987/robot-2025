@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,6 +63,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
     // TunerConstants doesn't include these constants, so they are declared locally
+    private Timer loopTime = new Timer();
+
     static final double ODOMETRY_FREQUENCY =
             new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
     public static final double DRIVE_BASE_RADIUS =
@@ -143,6 +146,8 @@ public class Drive extends SubsystemBase {
         // Usage reporting for swerve template
         HAL.report(
                 tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
+
+        loopTime.start();
 
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
@@ -441,7 +446,8 @@ public class Drive extends SubsystemBase {
                     double desiredDeltaOmega =
                             MathUtil.applyDeadband(omegaAxis.getAsDouble(), 0.15)
                                     * TunerConstants.kMaxOmegaVelocity.in(RadiansPerSecond)
-                                    * ConstantsKt.LOOP_TIME;
+                                    * loopTime.get();
+                    loopTime.reset();
                     desiredHeading = desiredHeading.plus(Rotation2d.fromRadians(desiredDeltaOmega));
                 });
     }
