@@ -1,6 +1,9 @@
 package frc.robot.subsystems.elevator
 
 import MOTOR_ID
+import com.ctre.phoenix.motorcontrol.ControlMode
+import com.ctre.phoenix6.controls.DutyCycleOut
+import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.system.plant.DCMotor
@@ -18,7 +21,8 @@ class ElevatorIOSim : ElevatorIO {
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
     override fun setPower(percentOutput: Double) {
-        super.setPower(percentOutput)
+        motor.setControl(DutyCycleOut(percentOutput))
+
     }
 
     override fun updateInputs() {
