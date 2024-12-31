@@ -11,7 +11,7 @@ interface ElevatorIO {
 
     fun setVoltage(voltage: Voltage) {}
 
-    fun setHeight(position:Distance) {}
+    fun setHeight(position: Distance) {}
 
     fun setPower(percentOutput: Double) {}
 
@@ -20,7 +20,6 @@ interface ElevatorIO {
     fun updateInputs() {}
 
     fun updateRoutineLog(log: SysIdRoutineLog) {}
-
 
     @Logged
     open class ElevatorInputs {
