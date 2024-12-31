@@ -8,7 +8,7 @@ import org.team9432.annotation.Logged
 interface ElevatorIO {
     val inputs: LoggedElevatorInputs
 
-    fun setHeight(position:Distance) {}
+    fun setHeight(position: Distance) {}
 
     fun setPower(percentOutput: Double) {}
 
@@ -19,7 +19,7 @@ interface ElevatorIO {
     @Logged
     open class ElevatorInputs {
         var carriageHeight: Distance = Units.Meters.of(0.0)
-        var heightSetpoint: Distance=Units.Meters.of(0.0)
+        var heightSetpoint: Distance = Units.Meters.of(0.0)
         var appliedVoltege: Voltage = Units.Volts.of(0.0)
     }
 }
