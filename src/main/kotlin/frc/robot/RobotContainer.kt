@@ -53,7 +53,7 @@ object RobotContainer {
                 .ignoringDisable(true)
         )
         driverController().a().onTrue(elevator.reset())
-        driverController().x().whileTrue(elevator.setPosition(Units.Centimeter.of(50.0)))
+        driverController().x().onTrue(elevator.setPosition(Units.Centimeter.of(50.0)))
         driverController().b().whileTrue(elevator.setPosition(Units.Centimeter.of(100.0)))
     }
 
