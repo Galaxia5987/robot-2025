@@ -131,11 +131,11 @@ public class TunerConstants {
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(0.5)
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0)
-                            .withKV(0);
+                            .withKS(0.22064)
+                            .withKV(0.54210);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -153,7 +153,7 @@ public class TunerConstants {
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.8);
 
             kCoupleRatio = 3.5;
 
