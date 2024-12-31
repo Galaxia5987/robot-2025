@@ -41,6 +41,6 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs("elevator", io.inputs)
+        Logger.processInputs(this.name, io.inputs)
     }
 }
