@@ -14,7 +14,7 @@ import kotlin.math.PI
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
-    private val motor = TalonFX(MOTOR_ID)
+    private val motorPosititonRequest = PositionVoltage(0.0)
     private val motor = TalonFXSim(
         1,
         GEAR_RATIO,
