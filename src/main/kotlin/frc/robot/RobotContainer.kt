@@ -30,10 +30,12 @@ object RobotContainer {
 
     init {
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
-        vision = Vision(swerveDrive::addVisionMeasurement,
+        vision = Vision(
+            swerveDrive::addVisionMeasurement,
             VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
             VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToRightOV),
-            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV))
+            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV)
+        )
 
         registerAutoCommands()
         configureButtonBindings()
