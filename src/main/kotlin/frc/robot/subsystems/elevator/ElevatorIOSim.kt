@@ -5,7 +5,6 @@ import com.ctre.phoenix6.controls.PositionVoltage
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.motors.TalonFXSim
-import kotlin.math.PI
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
