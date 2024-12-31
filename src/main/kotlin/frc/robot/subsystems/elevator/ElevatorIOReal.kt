@@ -6,7 +6,6 @@ import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
@@ -47,8 +46,8 @@ ElevatorIOReal : ElevatorIO {
     }
 
     override fun setHeight(position: Distance) {
-        inputs.heightSetpoint=position
-        val rotationalPosition= Units.Rotations.of(position.`in`(Units.Centimeter)/(GEAR_RATIO * FIRST_STAGE_RATIO * 2*PI* SPROCKET_RADIUS.`in`(Units.Centimeter)))
+        inputs.heightSetpoint = position
+        val rotationalPosition = Units.Rotations.of(position.`in`(Units.Centimeter) / (GEAR_RATIO * FIRST_STAGE_RATIO * 2 * PI * SPROCKET_RADIUS.`in`(Units.Centimeter)))
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
 

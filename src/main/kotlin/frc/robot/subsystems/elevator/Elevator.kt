@@ -27,16 +27,16 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
         }
     }
 
-    fun setPosition(position: Distance):Command {
-        return Commands.run({io.setHeight(position)},this)
+    fun setPosition(position: Distance): Command {
+        return Commands.run({ io.setHeight(position) }, this)
     }
 
-    fun setPower(percentOutput: DoubleSupplier) :Command{
-        return Commands.run({io.setPower(percentOutput.asDouble)},this)
+    fun setPower(percentOutput: DoubleSupplier): Command {
+        return Commands.run({ io.setPower(percentOutput.asDouble) }, this)
     }
 
-    fun reset() :Command{
-        return Commands.runOnce({io.reset()},this)
+    fun reset(): Command {
+        return Commands.runOnce({ io.reset() }, this)
     }
 
     override fun periodic() {
