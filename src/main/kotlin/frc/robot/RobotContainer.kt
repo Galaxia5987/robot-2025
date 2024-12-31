@@ -42,7 +42,7 @@ object RobotContainer {
 //            { MathUtil.applyDeadband(driverController().leftX, 0.15) },
 //            { 0.7 * MathUtil.applyDeadband(-driverController().rightX, 0.15) }
 //        )
-        elevator.defaultCommand = elevator.setPower({ driverController().rightTriggerAxis - driverController().leftTriggerAxis })
+        elevator.defaultCommand = elevator.setPower { driverController().rightTriggerAxis - driverController().leftTriggerAxis }
     }
 
     private fun configureButtonBindings() {
