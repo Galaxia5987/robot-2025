@@ -28,7 +28,7 @@ ElevatorIOReal : ElevatorIO {
             }
             Feedback = FeedbackConfigs().apply {
                 RotorToSensorRatio = 1.0
-//                SensorToMechanismRatio = GEAR_RATIO * FIRST_STAGE_RATIO
+
             }
             Slot0 = Slot0Configs().apply {
                 kP = GAINS.kP
