@@ -9,7 +9,8 @@ class ElevatorIOSim : ElevatorIO {
     private val motor = TalonFX(MOTOR_ID)
 
     override fun setHeight(position: Distance) {
-        super.setHeight(position)
+        val rotationalPosition=Units.Rotations.of(position.`in`(Units.Centimeter)/(GEAR_RATIO * FIRST_STAGE_RATIO * 2*PI* SPROCKET_RADIUS.`in`(Units.Centimeter)))
+        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
     override fun setPower(percentOutput: Double) {
         super.setPower(percentOutput)
