@@ -32,7 +32,7 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
     }
 
     fun setPower(percentOutput: DoubleSupplier): Command {
-        return Commands.run({ io.setPower(percentOutput.asDouble) })
+        return run({ io.setPower(percentOutput.asDouble) })
     }
 
     fun reset(): Command {
