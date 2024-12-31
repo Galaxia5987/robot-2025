@@ -24,18 +24,18 @@ public class VisionConstants {
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String OV1Name = "frontOV";
-    public static String OV2Name = "leftOV";
-    public static String OV3Name = "rightOV";
+    public static String FrontOVName = "frontOV";
+    public static String RightOVName = "rightOV";
+    public static String LeftOVName = "leftOV";
 
     // Robot to camera transforms
     // (Not used by Limelight, configure in web UI instead)
-    public static Transform3d robotToOV1 =
-            new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-    public static Transform3d robotToOV2 =
-            new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
-    public static Transform3d robotToOV3 =
-            new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+    public static Transform3d robotToFrontOV =
+            new Transform3d(-0.01637, 0.0, 0.64085, new Rotation3d(0.0, -Math.toRadians(25.0), 0.0));
+    public static Transform3d robotToRightOV =
+            new Transform3d( -0.06982, 0.07982, 0.61834, new Rotation3d(0.0, -Math.toRadians(25.0), Math.toRadians(225.0)));
+    public static Transform3d robotToLeftOV =
+            new Transform3d(-0.06232, -0.03966, 0.61186, new Rotation3d(0.0, -Math.toRadians(25.0), Math.toRadians(180.0)));
 
     // Basic filtering thresholds
     public static double maxAmbiguity = 0.3;
