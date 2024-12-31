@@ -12,7 +12,6 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
-import kotlin.math.PI
 
 class
 ElevatorIOReal : ElevatorIO {
@@ -28,7 +27,6 @@ ElevatorIOReal : ElevatorIO {
             }
             Feedback = FeedbackConfigs().apply {
                 RotorToSensorRatio = 1.0
-
             }
             Slot0 = Slot0Configs().apply {
                 kP = GAINS.kP
