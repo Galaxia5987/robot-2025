@@ -55,6 +55,8 @@ object RobotContainer {
         driverController.y().onTrue(
             Commands.runOnce({
                 swerveDrive.pose = Pose2d(swerveDrive.pose.translation, Rotation2d())
+                DriveCommands.angleController.reset(0.0)
+                DriveCommands.angleController.setGoal(0.0)
             }, swerveDrive)
                 .ignoringDisable(true)
         )
