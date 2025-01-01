@@ -50,6 +50,8 @@ public class DriveCommands {
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
     private static final Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.4);
 
+    public static ProfiledPIDController angleController;
+
     private DriveCommands() {
     }
 
@@ -118,7 +120,7 @@ public class DriveCommands {
             Supplier<Rotation2d> rotationSupplier) {
 
         // Create PID controller
-        ProfiledPIDController angleController =
+        angleController =
                 new ProfiledPIDController(
                         ANGLE_KP,
                         0.0,
