@@ -11,6 +11,9 @@ import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.getGyroIO
 import frc.robot.subsystems.getSwerveModuleIOs
+import frc.robot.subsystems.vision.Vision
+import frc.robot.subsystems.vision.VisionConstants
+import frc.robot.subsystems.vision.VisionIOPhotonVision
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,10 +25,17 @@ object RobotContainer {
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandPS5Controller(1)
     private val swerveDrive: Drive
+    private val vision: Vision
     private val testController = CommandXboxController(2)
 
     init {
         swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
+        vision = Vision(
+            swerveDrive::addVisionMeasurement,
+            VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
+            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToRightOV),
+            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV)
+        )
 
         registerAutoCommands()
         configureButtonBindings()
@@ -45,6 +55,8 @@ object RobotContainer {
         driverController.y().onTrue(
             Commands.runOnce({
                 swerveDrive.pose = Pose2d(swerveDrive.pose.translation, Rotation2d())
+                DriveCommands.angleController.reset(0.0)
+                DriveCommands.angleController.setGoal(0.0)
             }, swerveDrive)
                 .ignoringDisable(true)
         )
