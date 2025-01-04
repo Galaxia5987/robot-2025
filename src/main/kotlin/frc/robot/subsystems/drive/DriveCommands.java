@@ -27,8 +27,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import org.littletonrobotics.junction.Logger;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -114,9 +112,7 @@ public class DriveCommands {
             DoubleSupplier ySupplier,
             Supplier<Rotation2d> rotationSupplier) {
 
-        PIDController angleController = new PIDController(
-            ANGLE_KP, 0.0, ANGLE_KD
-        );
+        PIDController angleController = new PIDController(ANGLE_KP, 0.0, ANGLE_KD);
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(ANGLE_TOLERANCE.getRadians());

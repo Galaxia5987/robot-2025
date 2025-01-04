@@ -434,7 +434,7 @@ public class Drive extends SubsystemBase {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
-    public void resetGyro(){
+    public void resetGyro() {
         gyroIO.zeroGyro();
         desiredHeading = new Rotation2d();
     }
