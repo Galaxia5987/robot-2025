@@ -166,9 +166,7 @@ public class DriveCommands {
                 drive)
 
         // Reset PID controller when command starts
-                .beforeStarting(() ->
-                {angleController.reset(drive.getYawPosition().getRadians());
-                angleController.setGoal(0.0);});
+                .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
     }
 
     /**
