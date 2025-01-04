@@ -53,9 +53,7 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController.y().onTrue(
-            Commands.runOnce({
-                swerveDrive.pose = Pose2d(swerveDrive.pose.translation, Rotation2d())
-            }, swerveDrive)
+            Commands.runOnce( swerveDrive::resetGyro, swerveDrive )
                 .ignoringDisable(true)
         )
 
