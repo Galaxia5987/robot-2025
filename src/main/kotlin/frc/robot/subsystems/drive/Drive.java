@@ -405,9 +405,9 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** Returns the current odometry rotation. */
+    /** Returns the current gyro rotation. */
     public Rotation2d getRotation() {
-        return getPose().getRotation();
+        return gyroInputs.yawPosition;
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
