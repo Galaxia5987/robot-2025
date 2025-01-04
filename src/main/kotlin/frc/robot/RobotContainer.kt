@@ -33,8 +33,8 @@ object RobotContainer {
         vision = Vision(
             swerveDrive::addVisionMeasurement,
             VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
-            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToRightOV),
-            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToLeftOV)
+            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV),
+            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToRightOV)
         )
 
         registerAutoCommands()
