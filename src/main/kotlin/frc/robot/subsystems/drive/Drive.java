@@ -107,7 +107,7 @@ public class Drive extends SubsystemBase {
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-    @AutoLogOutput private Rotation2d desiredHeading = new Rotation2d();
+    @AutoLogOutput private Rotation2d desiredHeading;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -192,6 +192,9 @@ public class Drive extends SubsystemBase {
                                 (voltage) -> runTurnCharacterization(voltage.in(Volts)),
                                 null,
                                 this));
+
+        gyroIO.updateInputs(gyroInputs);
+        desiredHeading = gyroInputs.yawPosition;
     }
 
     @Override
