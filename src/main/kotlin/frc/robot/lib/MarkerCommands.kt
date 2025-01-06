@@ -12,10 +12,10 @@ const val ABNORMAL_EVENT_NAME = "PROBLEM!"
 @AutoLogOutput
 private var marked = false
 
-private fun markEvent(eventName: String): Command = Commands.runOnce({
+private fun markEvent(eventName: String): Command = Commands.sequence(Commands.runOnce({
     DataLogManager.log(eventName)
     marked = true
-}).withTimeout(5.0).andThen(Commands.runOnce({
+}), Commands.waitSeconds(5.0), Commands.runOnce({
     marked = false
 }))
 
