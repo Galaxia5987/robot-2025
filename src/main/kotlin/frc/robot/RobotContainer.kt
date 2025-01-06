@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.getGyroIO
-import frc.robot.subsystems.getSwerveModuleIOs
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.subsystems.vision.VisionIOPhotonVision
@@ -23,12 +21,13 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision
 object RobotContainer {
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandPS5Controller(1)
-    private val swerveDrive: Drive
-    private val vision: Vision
     private val testController = CommandXboxController(2)
 
+    private val swerveDrive: Drive
+    private val vision: Vision
+
     init {
-        swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
+        swerveDrive = getSwerve()
         vision = Vision(
             swerveDrive::addVisionMeasurement,
             VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
