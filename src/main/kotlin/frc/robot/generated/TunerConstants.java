@@ -36,10 +36,18 @@ public class TunerConstants {
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
-    public static SwerveModuleConstants FrontLeft;
-    public static SwerveModuleConstants FrontRight;
-    public static SwerveModuleConstants BackLeft;
-    public static SwerveModuleConstants BackRight;
+    public static SwerveModuleConstants<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            FrontLeft;
+    public static SwerveModuleConstants<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            FrontRight;
+    public static SwerveModuleConstants<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            BackLeft;
+    public static SwerveModuleConstants<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            BackRight;
 
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -51,6 +59,8 @@ public class TunerConstants {
         boolean kInvertLeftSide;
         boolean kInvertRightSide;
         int kPigeonId;
+        SwerveModuleConstants.DriveMotorArrangement kDriveMotorType;
+        SwerveModuleConstants.SteerMotorArrangement kSteerMotorType;
         // These are only used for simulation
         double kSteerInertia;
         double kDriveInertia;
@@ -93,10 +103,11 @@ public class TunerConstants {
         boolean kBackRightCANcoderInverted;
         Distance kBackRightXPos;
         Distance kBackRightYPos;
-        TalonFXConfiguration steerInitialConfigs;
         // Initial configs for the drive and steer motors and the CANcoder; these cannot be null.
         // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
+        TalonFXConfiguration steerInitialConfigs;
         TalonFXConfiguration driveInitialConfigs;
+        CANcoderConfiguration encoderInitialConfigs;
         // The stator current at which the wheels start to slip;
         // This needs to be tuned to your individual robot
         Current kSlipCurrent;
@@ -150,10 +161,14 @@ public class TunerConstants {
                                     new CurrentLimitsConfigs()
                                             .withStatorCurrentLimit(60)
                                             .withStatorCurrentLimitEnable(true));
+            encoderInitialConfigs = new CANcoderConfiguration();
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.8);
+
+            kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
+            kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
 
             kCoupleRatio = 3.5;
 
@@ -255,11 +270,15 @@ public class TunerConstants {
                                     new CurrentLimitsConfigs()
                                             .withStatorCurrentLimit(60)
                                             .withStatorCurrentLimitEnable(true));
+            encoderInitialConfigs = new CANcoderConfiguration();
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.8);
             kMaxOmegaVelocity = RadiansPerSecond.of(5);
+
+            kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
+            kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
 
             kCoupleRatio = 3.5;
 
@@ -330,26 +349,33 @@ public class TunerConstants {
                         .withPigeon2Id(kPigeonId)
                         .withPigeon2Configs(pigeonConfigs);
 
-        SwerveModuleConstantsFactory ConstantCreator =
-                new SwerveModuleConstantsFactory()
-                        .withDriveMotorGearRatio(kDriveGearRatio)
-                        .withSteerMotorGearRatio(kSteerGearRatio)
-                        .withCouplingGearRatio(kCoupleRatio)
-                        .withWheelRadius(kWheelRadius)
-                        .withSteerMotorGains(steerGains)
-                        .withDriveMotorGains(driveGains)
-                        .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
-                        .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
-                        .withSlipCurrent(kSlipCurrent)
-                        .withSpeedAt12Volts(kSpeedAt12Volts)
-                        .withFeedbackSource(kSteerFeedbackType)
-                        .withDriveMotorInitialConfigs(driveInitialConfigs)
-                        .withSteerMotorInitialConfigs(steerInitialConfigs)
-                        .withCANcoderInitialConfigs(cancoderInitialConfigs)
-                        .withSteerInertia(kSteerInertia)
-                        .withDriveInertia(kDriveInertia)
-                        .withSteerFrictionVoltage(kSteerFrictionVoltage)
-                        .withDriveFrictionVoltage(kDriveFrictionVoltage);
+        SwerveModuleConstantsFactory<
+                        TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+                ConstantCreator =
+                        new SwerveModuleConstantsFactory<
+                                        TalonFXConfiguration,
+                                        TalonFXConfiguration,
+                                        CANcoderConfiguration>()
+                                .withDriveMotorGearRatio(kDriveGearRatio)
+                                .withSteerMotorGearRatio(kSteerGearRatio)
+                                .withCouplingGearRatio(kCoupleRatio)
+                                .withWheelRadius(kWheelRadius)
+                                .withSteerMotorGains(steerGains)
+                                .withDriveMotorGains(driveGains)
+                                .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
+                                .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
+                                .withSlipCurrent(kSlipCurrent)
+                                .withSpeedAt12Volts(kSpeedAt12Volts)
+                                .withDriveMotorType(kDriveMotorType)
+                                .withSteerMotorType(kSteerMotorType)
+                                .withFeedbackSource(kSteerFeedbackType)
+                                .withDriveMotorInitialConfigs(driveInitialConfigs)
+                                .withSteerMotorInitialConfigs(steerInitialConfigs)
+                                .withEncoderInitialConfigs(encoderInitialConfigs)
+                                .withSteerInertia(kSteerInertia)
+                                .withDriveInertia(kDriveInertia)
+                                .withSteerFrictionVoltage(kSteerFrictionVoltage)
+                                .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
         FrontLeft =
                 ConstantCreator.createModuleConstants(

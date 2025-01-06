@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -47,7 +47,9 @@ import java.util.Queue;
  * <p>Device configuration and other behaviors not exposed by TunerConstants can be customized here.
  */
 public class ModuleIOTalonFX implements ModuleIO {
-    private final SwerveModuleConstants constants;
+    private final SwerveModuleConstants<
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            constants;
 
     // Hardware objects
     private final TalonFX driveTalon;
@@ -89,14 +91,15 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
     private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
 
-    public ModuleIOTalonFX(SwerveModuleConstants constants) {
+    public ModuleIOTalonFX(
+            SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+                    constants) {
         this.constants = constants;
         driveTalon =
                 new TalonFX(constants.DriveMotorId, TunerConstants.DrivetrainConstants.CANBusName);
         turnTalon =
                 new TalonFX(constants.SteerMotorId, TunerConstants.DrivetrainConstants.CANBusName);
-        cancoder =
-                new CANcoder(constants.CANcoderId, TunerConstants.DrivetrainConstants.CANBusName);
+        cancoder = new CANcoder(constants.EncoderId, TunerConstants.DrivetrainConstants.CANBusName);
 
         // Configure drive motor
         var driveConfig = constants.DriveMotorInitialConfigs;
@@ -121,7 +124,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         var turnConfig = new TalonFXConfiguration();
         turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnConfig.Slot0 = constants.SteerMotorGains;
-        turnConfig.Feedback.FeedbackRemoteSensorID = constants.CANcoderId;
+        turnConfig.Feedback.FeedbackRemoteSensorID = constants.EncoderId;
         turnConfig.Feedback.FeedbackSensorSource =
                 switch (constants.FeedbackSource) {
                     case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
@@ -142,10 +145,10 @@ public class ModuleIOTalonFX implements ModuleIO {
         tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
 
         // Configure CANCoder
-        CANcoderConfiguration cancoderConfig = constants.CANcoderInitialConfigs;
-        cancoderConfig.MagnetSensor.MagnetOffset = constants.CANcoderOffset;
+        CANcoderConfiguration cancoderConfig = constants.EncoderInitialConfigs;
+        cancoderConfig.MagnetSensor.MagnetOffset = constants.EncoderOffset;
         cancoderConfig.MagnetSensor.SensorDirection =
-                constants.CANcoderInverted
+                constants.EncoderInverted
                         ? SensorDirectionValue.Clockwise_Positive
                         : SensorDirectionValue.CounterClockwise_Positive;
         cancoder.getConfigurator().apply(cancoderConfig);
