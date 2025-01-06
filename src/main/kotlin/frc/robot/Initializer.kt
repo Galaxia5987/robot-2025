@@ -7,6 +7,11 @@ import frc.robot.subsystems.drive.GyroIONavX
 import frc.robot.subsystems.drive.ModuleIO
 import frc.robot.subsystems.drive.ModuleIOSim
 import frc.robot.subsystems.drive.ModuleIOTalonFX
+import frc.robot.subsystems.vision.Vision
+import frc.robot.subsystems.vision.VisionConstants
+import frc.robot.subsystems.vision.VisionIO
+import frc.robot.subsystems.vision.VisionIOPhotonVision
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim
 
 private fun getSwerveModuleIOs(): Array<ModuleIO> {
     return when (CURRENT_MODE) {
@@ -39,4 +44,28 @@ private fun getGyroIO(): GyroIO = when (CURRENT_MODE) {
 
 fun getSwerve(): Drive {
     return Drive(getGyroIO(), getSwerveModuleIOs())
+}
+
+private fun getVisionIOs(): Array<VisionIO> {
+    return when(CURRENT_MODE){
+        Mode.REAL -> arrayOf(
+            VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
+            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV),
+            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToRightOV)
+        )
+        Mode.SIM -> arrayOf(
+            VisionIOPhotonVisionSim(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV, getSwerve()::getPose),
+            VisionIOPhotonVisionSim(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV, getSwerve()::getPose),
+            VisionIOPhotonVisionSim(VisionConstants.RightOVName, VisionConstants.robotToRightOV, getSwerve()::getPose)
+        )
+        Mode.REPLAY -> arrayOf(
+            object : VisionIO {},
+            object : VisionIO {},
+            object : VisionIO {}
+        )
+    }
+}
+
+fun getVision(): Vision {
+    return Vision(getSwerve()::addVisionMeasurement, *getVisionIOs())
 }

@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.vision.Vision
-import frc.robot.subsystems.vision.VisionConstants
-import frc.robot.subsystems.vision.VisionIOPhotonVision
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,12 +26,7 @@ object RobotContainer {
 
     init {
         swerveDrive = getSwerve()
-        vision = Vision(
-            swerveDrive::addVisionMeasurement,
-            VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
-            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV),
-            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToRightOV)
-        )
+        vision = getVision()
 
         registerAutoCommands()
         configureButtonBindings()
