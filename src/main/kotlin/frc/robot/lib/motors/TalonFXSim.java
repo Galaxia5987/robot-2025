@@ -16,8 +16,9 @@ public class TalonFXSim extends SimMotor {
             LinearSystem<N2, N1, N2> model,
             int numMotors,
             double gearing,
-            double conversionFactor) {
-        super(model, DCMotor.getFalcon500(numMotors), gearing, conversionFactor);
+            double conversionFactor,
+            TalonType motorType) {
+        super(model, TalonType.getDCMotor(motorType, numMotors), gearing, conversionFactor);
     }
 
     public TalonFXSim(
@@ -26,8 +27,16 @@ public class TalonFXSim extends SimMotor {
     }
 
     public TalonFXSim(
-            int numMotors, double gearing, double jKgMetersSquared, double conversionFactor) {
-        super(DCMotor.getFalcon500(numMotors), jKgMetersSquared, gearing, conversionFactor);
+            int numMotors,
+            double gearing,
+            double jKgMetersSquared,
+            double conversionFactor,
+            TalonType talonType) {
+        super(
+                TalonType.getDCMotor(talonType, numMotors),
+                jKgMetersSquared,
+                gearing,
+                conversionFactor);
     }
 
     @Override
