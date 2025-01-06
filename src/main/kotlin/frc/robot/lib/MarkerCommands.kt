@@ -8,7 +8,6 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 const val ABNORMAL_EVENT_NAME = "PROBLEM!"
-val alert = Alert(ABNORMAL_EVENT_NAME, Alert.AlertType.kWarning)
 
 @AutoLogOutput
 private var marked = false
