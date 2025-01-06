@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.getGyroIO
-import frc.robot.subsystems.getSwerveModuleIOs
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,11 +19,12 @@ import frc.robot.subsystems.getSwerveModuleIOs
 object RobotContainer {
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandPS5Controller(1)
-    private val swerveDrive: Drive
     private val testController = CommandXboxController(2)
 
+    private val swerveDrive: Drive
+
     init {
-        swerveDrive = Drive(getGyroIO(), getSwerveModuleIOs())
+        swerveDrive = getSwerve()
 
         registerAutoCommands()
         configureButtonBindings()

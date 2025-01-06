@@ -1,11 +1,14 @@
-package frc.robot.subsystems
+package frc.robot
 
-import frc.robot.CURRENT_MODE
-import frc.robot.Mode
 import frc.robot.generated.TunerConstants
-import frc.robot.subsystems.drive.*
+import frc.robot.subsystems.drive.Drive
+import frc.robot.subsystems.drive.GyroIO
+import frc.robot.subsystems.drive.GyroIONavX
+import frc.robot.subsystems.drive.ModuleIO
+import frc.robot.subsystems.drive.ModuleIOSim
+import frc.robot.subsystems.drive.ModuleIOTalonFX
 
-fun getSwerveModuleIOs(): Array<ModuleIO> {
+private fun getSwerveModuleIOs(): Array<ModuleIO> {
     return when (CURRENT_MODE) {
         Mode.REAL -> arrayOf(
             ModuleIOTalonFX(TunerConstants.FrontLeft),
@@ -28,8 +31,12 @@ fun getSwerveModuleIOs(): Array<ModuleIO> {
     }
 }
 
-fun getGyroIO(): GyroIO = when (CURRENT_MODE) {
+private fun getGyroIO(): GyroIO = when (CURRENT_MODE) {
     Mode.REAL -> GyroIONavX()
     Mode.SIM -> object : GyroIO {}
     Mode.REPLAY -> object : GyroIO {}
+}
+
+fun getSwerve(): Drive {
+    return Drive(getGyroIO(), getSwerveModuleIOs())
 }
