@@ -18,10 +18,7 @@ public class TalonFXSim extends SimMotor {
             double gearing,
             double conversionFactor,
             TalonType motorType) {
-        super(
-                model,
-                TalonType.getDCMotor(motorType, numMotors),
-                gearing, conversionFactor);
+        super(model, TalonType.getDCMotor(motorType, numMotors), gearing, conversionFactor);
     }
 
     public TalonFXSim(
@@ -29,8 +26,17 @@ public class TalonFXSim extends SimMotor {
         super(motor, jKgMetersSquared, gearing, conversionFactor);
     }
 
-    public TalonFXSim(int numMotors, double gearing, double jKgMetersSquared, double conversionFactor, TalonType talonType) {
-        super(TalonType.getDCMotor(talonType, numMotors), jKgMetersSquared, gearing, conversionFactor);
+    public TalonFXSim(
+            int numMotors,
+            double gearing,
+            double jKgMetersSquared,
+            double conversionFactor,
+            TalonType talonType) {
+        super(
+                TalonType.getDCMotor(talonType, numMotors),
+                jKgMetersSquared,
+                gearing,
+                conversionFactor);
     }
 
     @Override
@@ -98,4 +104,3 @@ public class TalonFXSim extends SimMotor {
         return voltageRequest.getAsDouble();
     }
 }
-
