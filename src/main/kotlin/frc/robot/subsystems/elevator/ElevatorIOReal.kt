@@ -58,6 +58,6 @@ ElevatorIOReal : ElevatorIO {
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.carriageHeight = Units.Centimeter.of(motor.position.value.magnitude() * ROTATIONS_TO_CENTIMETER)
+        inputs.carriageHeight = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
     }
 }
