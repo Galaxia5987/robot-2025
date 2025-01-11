@@ -174,9 +174,9 @@ public class TunerConstants {
             kDriveFrictionVoltage = Volts.of(0.25);
 
             // Front Left
-            kFrontLeftDriveMotorId = 2;
-            kFrontLeftSteerMotorId = 1;
-            kFrontLeftEncoderId = 10;
+            kFrontLeftDriveMotorId = AltSwervePorts.FRONT_LEFT_DRIVE_MOTOR_ID;
+            kFrontLeftSteerMotorId = AltSwervePorts.FRONT_LEFT_ANGLE_MOTOR_ID;
+            kFrontLeftEncoderId = AltSwervePorts.FRONT_LEFT_ENCODER_ID;
             kFrontLeftEncoderOffset = Radians.of(-offsets[0]);
             kFrontLeftSteerMotorInverted = true;
             kFrontLeftCANcoderInverted = false;
@@ -185,9 +185,9 @@ public class TunerConstants {
             kFrontLeftYPos = Meters.of(0.24);
 
             // Front Right
-            kFrontRightDriveMotorId = 4;
-            kFrontRightSteerMotorId = 3;
-            kFrontRightEncoderId = 20;
+            kFrontRightDriveMotorId = AltSwervePorts.FRONT_RIGHT_DRIVE_MOTOR_ID;
+            kFrontRightSteerMotorId = AltSwervePorts.FRONT_RIGHT_ANGLE_MOTOR_ID;
+            kFrontRightEncoderId = AltSwervePorts.FRONT_RIGHT_ENCODER_ID;
             kFrontRightEncoderOffset = Radians.of(-offsets[1]);
             kFrontRightSteerMotorInverted = true;
             kFrontRightCANcoderInverted = false;
@@ -196,9 +196,9 @@ public class TunerConstants {
             kFrontRightYPos = Meters.of(-0.24);
 
             // Back Left
-            kBackLeftDriveMotorId = 6;
-            kBackLeftSteerMotorId = 5;
-            kBackLeftEncoderId = 30;
+            kBackLeftDriveMotorId = AltSwervePorts.REAR_LEFT_DRIVE_MOTOR_ID;
+            kBackLeftSteerMotorId = AltSwervePorts.REAR_LEFT_ANGLE_MOTOR_ID;
+            kBackLeftEncoderId = AltSwervePorts.REAR_LEFT_ENCODER_ID;
             kBackLeftEncoderOffset = Radians.of(-offsets[2]);
             kBackLeftSteerMotorInverted = true;
             kBackLeftCANcoderInverted = false;
@@ -207,9 +207,9 @@ public class TunerConstants {
             kBackLeftYPos = Meters.of(0.24);
 
             // Back Right
-            kBackRightDriveMotorId = 8;
-            kBackRightSteerMotorId = 7;
-            kBackRightEncoderId = 40;
+            kBackRightDriveMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
+            kBackRightSteerMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
+            kBackRightEncoderId = AltSwervePorts.REAR_RIGHT_ENCODER_ID;
             kBackRightEncoderOffset = Radians.of(-offsets[3]);
             kBackRightSteerMotorInverted = true;
             kBackRightCANcoderInverted = false;
@@ -280,9 +280,9 @@ public class TunerConstants {
             kDriveFrictionVoltage = Volts.of(0.25);
 
             // Front Left
-            kFrontLeftDriveMotorId = 2;
-            kFrontLeftSteerMotorId = 1;
-            kFrontLeftEncoderId = 10;
+            kFrontLeftDriveMotorId = SwervePorts.FRONT_LEFT_DRIVE_MOTOR_ID;
+            kFrontLeftSteerMotorId = SwervePorts.FRONT_LEFT_ANGLE_MOTOR_ID;
+            kFrontLeftEncoderId = SwervePorts.FRONT_LEFT_ENCODER_ID;
             kFrontLeftEncoderOffset = Radians.of(-offsets[0]);
             kFrontLeftSteerMotorInverted = true;
             kFrontLeftCANcoderInverted = false;
@@ -291,9 +291,9 @@ public class TunerConstants {
             kFrontLeftYPos = Meters.of(0.24);
 
             // Front Right
-            kFrontRightDriveMotorId = 4;
-            kFrontRightSteerMotorId = 3;
-            kFrontRightEncoderId = 20;
+            kFrontRightDriveMotorId = SwervePorts.FRONT_RIGHT_DRIVE_MOTOR_ID;
+            kFrontRightSteerMotorId = SwervePorts.FRONT_RIGHT_ANGLE_MOTOR_ID;
+            kFrontRightEncoderId = SwervePorts.FRONT_RIGHT_ENCODER_ID;
             kFrontRightEncoderOffset = Radians.of(-offsets[1]);
             kFrontRightSteerMotorInverted = true;
             kFrontRightCANcoderInverted = false;
@@ -302,9 +302,9 @@ public class TunerConstants {
             kFrontRightYPos = Meters.of(-0.24);
 
             // Back Left
-            kBackLeftDriveMotorId = 6;
-            kBackLeftSteerMotorId = 5;
-            kBackLeftEncoderId = 30;
+            kBackLeftDriveMotorId = SwervePorts.REAR_LEFT_DRIVE_MOTOR_ID;
+            kBackLeftSteerMotorId = SwervePorts.REAR_LEFT_ANGLE_MOTOR_ID;
+            kBackLeftEncoderId = SwervePorts.REAR_LEFT_ENCODER_ID;
             kBackLeftEncoderOffset = Radians.of(-offsets[2]);
             kBackLeftSteerMotorInverted = true;
             kBackLeftCANcoderInverted = false;
@@ -313,9 +313,9 @@ public class TunerConstants {
             kBackLeftYPos = Meters.of(0.24);
 
             // Back Right
-            kBackRightDriveMotorId = 8;
-            kBackRightSteerMotorId = 7;
-            kBackRightEncoderId = 40;
+            kBackRightDriveMotorId = SwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
+            kBackRightSteerMotorId = SwervePorts.REAR_RIGHT_ANGLE_MOTOR_ID;
+            kBackRightEncoderId = SwervePorts.REAR_RIGHT_ENCODER_ID;
             kBackRightEncoderOffset = Radians.of(-offsets[3]);
             kBackRightSteerMotorInverted = true;
             kBackRightCANcoderInverted = false;
