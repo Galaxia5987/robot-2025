@@ -46,20 +46,10 @@ fun getSwerve(): Drive {
     return Drive(getGyroIO(), getSwerveModuleIOs())
 }
 
-private fun getVisionIOs(): Array<VisionIO> {
-    return when(CURRENT_MODE){
-        Mode.REAL -> arrayOf(
-            VisionIOPhotonVision(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV),
-            VisionIOPhotonVision(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV),
-            VisionIOPhotonVision(VisionConstants.RightOVName, VisionConstants.robotToRightOV)
-        )
-        Mode.SIM -> arrayOf(
-            VisionIOPhotonVisionSim(VisionConstants.FrontOVName, VisionConstants.robotToFrontOV, getSwerve()::getPose),
-            VisionIOPhotonVisionSim(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV, getSwerve()::getPose),
-            VisionIOPhotonVisionSim(VisionConstants.RightOVName, VisionConstants.robotToRightOV, getSwerve()::getPose)
-        )
-        Mode.REPLAY -> arrayOf()
-    }
+private fun getVisionIOs(): Array<VisionIO> = when (CURRENT_MODE) {
+    Mode.REAL -> VisionConstants.OVNameToTransform.map { VisionIOPhotonVision(it.key, it.value) }.toTypedArray()
+    Mode.SIM -> VisionConstants.OVNameToTransform.map { VisionIOPhotonVisionSim(it.key, it.value, getSwerve()::getPose) }.toTypedArray()
+    Mode.REPLAY -> emptyArray()
 }
 
 fun getVision(): Vision {
