@@ -69,7 +69,7 @@ fun getVision(): Vision {
     return vision ?: throw IllegalStateException("Vision has npt been initialized.")
 }
 
-fun initializeSubsystems(){
+fun initializeSubsystems() {
     initSwerve()
     initVision()
 }
