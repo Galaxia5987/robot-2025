@@ -1,5 +1,6 @@
 package frc.robot.lib
 
+import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -64,3 +65,9 @@ fun Pose2d.toPose3d(): Pose3d = Pose3d(
     0.0,
     Rotation3d(0.0, 0.0, rotation.radians)
 )
+
+fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
+
+fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
+
+fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
