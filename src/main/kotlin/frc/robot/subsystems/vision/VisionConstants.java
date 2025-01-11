@@ -18,6 +18,10 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class VisionConstants {
     // AprilTag layout
     public static AprilTagFieldLayout aprilTagLayout =
@@ -45,6 +49,12 @@ public class VisionConstants {
                     -0.03966,
                     0.61186,
                     new Rotation3d(0.0, -Math.toRadians(25.0), Math.toRadians(180.0)));
+
+    public static Map<String, Transform3d> OVNameToTransform = new HashMap<>(){{
+       put(FrontOVName, robotToFrontOV);
+       put(RightOVName, robotToRightOV);
+       put(LeftOVName, robotToLeftOV);
+    }};
 
     // Basic filtering thresholds
     public static double maxAmbiguity = 0.3;
