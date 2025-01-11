@@ -25,6 +25,7 @@ object RobotContainer {
     private val vision: Vision
 
     init {
+        initializeSubsystems()
         swerveDrive = getSwerve()
         vision = getVision()
 
