@@ -1,6 +1,6 @@
 package frc.robot
 
-import frc.robot.generated.TunerConstants
+import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.GyroIO
 import frc.robot.subsystems.drive.GyroIONavX
