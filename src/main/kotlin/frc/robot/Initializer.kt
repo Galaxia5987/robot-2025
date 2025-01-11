@@ -58,11 +58,7 @@ private fun getVisionIOs(): Array<VisionIO> {
             VisionIOPhotonVisionSim(VisionConstants.LeftOVName, VisionConstants.robotToLeftOV, getSwerve()::getPose),
             VisionIOPhotonVisionSim(VisionConstants.RightOVName, VisionConstants.robotToRightOV, getSwerve()::getPose)
         )
-        Mode.REPLAY -> arrayOf(
-            object : VisionIO {},
-            object : VisionIO {},
-            object : VisionIO {}
-        )
+        Mode.REPLAY -> arrayOf()
     }
 }
 
