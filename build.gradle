@@ -253,6 +253,11 @@ spotless {
     kotlin {
         targetExclude('build/')
 
-        ktlint()
+        ktfmt().googleStyle().configure {
+            it.setBlockIndent(4)
+            it.setContinuationIndent(4)
+            it.setMaxWidth(80)
+            it.setRemoveUnusedImport(true)
+        }
     }
 }
