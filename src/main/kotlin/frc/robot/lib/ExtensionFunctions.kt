@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.WrapperCommand
+import frc.robot.IS_RED
 import org.littletonrobotics.junction.LogTable
 import kotlin.math.hypot
 
@@ -68,6 +69,12 @@ fun Pose2d.toPose3d(): Pose3d = Pose3d(
 
 fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
 
+fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
+
 fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
 
+fun Translation2d.flipIfNeeded(): Translation2d = if (IS_RED) this.flip() else this
+
 fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
+
+fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
