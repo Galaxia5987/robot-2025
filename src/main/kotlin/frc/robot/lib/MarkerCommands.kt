@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
-const val ABNORMAL_EVENT_NAME = "PROBLEM!"
+const val ABNORMAL_EVENT_NAME = "### [Error] DRIVER PROBLEM REPORTED ###"
 
 @AutoLogOutput
 private var marked = false
