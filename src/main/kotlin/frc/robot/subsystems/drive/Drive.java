@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -67,7 +67,7 @@ public class Drive extends SubsystemBase {
                     Math.max(
                             Math.hypot(
                                     TunerConstants.FrontLeft.LocationX,
-                                    TunerConstants.FrontRight.LocationY),
+                                    TunerConstants.FrontLeft.LocationY),
                             Math.hypot(
                                     TunerConstants.FrontRight.LocationX,
                                     TunerConstants.FrontRight.LocationY)),
@@ -266,13 +266,13 @@ public class Drive extends SubsystemBase {
      */
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
-        speeds.discretize(0.02);
-        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(speeds);
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", speeds);
+        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
         Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
