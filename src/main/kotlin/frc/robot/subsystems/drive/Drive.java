@@ -14,6 +14,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.ConstantsKt.LOOP_TIME;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -44,14 +45,12 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
-import frc.robot.generated.TunerConstants;
 import frc.robot.lib.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -61,8 +60,6 @@ import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
     // TunerConstants doesn't include these constants, so they are declared locally
-    private Timer loopTime = new Timer();
-
     static final double ODOMETRY_FREQUENCY =
             new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
     public static final double DRIVE_BASE_RADIUS =
@@ -109,7 +106,7 @@ public class Drive extends SubsystemBase {
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
 
-    @AutoLogOutput private Rotation2d desiredHeading = new Rotation2d();
+    @AutoLogOutput private Rotation2d desiredHeading;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -143,8 +140,6 @@ public class Drive extends SubsystemBase {
         // Usage reporting for swerve template
         HAL.report(
                 tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
-
-        loopTime.start();
 
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
@@ -196,6 +191,9 @@ public class Drive extends SubsystemBase {
                                 (voltage) -> runTurnCharacterization(voltage.in(Volts)),
                                 null,
                                 this));
+
+        gyroIO.updateInputs(gyroInputs);
+        desiredHeading = gyroInputs.yawPosition;
     }
 
     @Override
@@ -406,9 +404,9 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** Returns the current odometry rotation. */
+    /** Returns the current gyro rotation. */
     public Rotation2d getRotation() {
-        return getPose().getRotation();
+        return gyroInputs.yawPosition;
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -417,8 +415,7 @@ public class Drive extends SubsystemBase {
                     double desiredDeltaOmega =
                             MathUtil.applyDeadband(omegaAxis.getAsDouble(), 0.15)
                                     * TunerConstants.kMaxOmegaVelocity.in(RadiansPerSecond)
-                                    * loopTime.get();
-                    loopTime.reset();
+                                    * LOOP_TIME;
                     desiredHeading = desiredHeading.plus(Rotation2d.fromRadians(desiredDeltaOmega));
                 });
     }
@@ -434,7 +431,11 @@ public class Drive extends SubsystemBase {
     /** Resets the current odometry pose. */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
-        desiredHeading = pose.getRotation();
+    }
+
+    public void resetGyro() {
+        gyroIO.zeroGyro();
+        desiredHeading = new Rotation2d();
     }
 
     /** Adds a new timestamped vision measurement. */
