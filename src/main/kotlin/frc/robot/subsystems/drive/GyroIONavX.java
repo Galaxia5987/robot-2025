@@ -31,6 +31,11 @@ public class GyroIONavX implements GyroIO {
     }
 
     @Override
+    public void zeroGyro() {
+        navX.zeroYaw();
+    }
+
+    @Override
     public void updateInputs(GyroIOInputs inputs) {
         inputs.connected = navX.isConnected();
         inputs.yawPosition = Rotation2d.fromDegrees(-navX.getYaw());
