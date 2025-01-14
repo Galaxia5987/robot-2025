@@ -36,7 +36,7 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
     }
 
     fun reset(): Command {
-        return runOnce({ io.reset() })
+        return runOnce( io::reset)
     }
 
     override fun periodic() {
