@@ -14,21 +14,19 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.generated.TunerConstants;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -114,16 +112,8 @@ public class DriveCommands {
             DoubleSupplier ySupplier,
             Supplier<Rotation2d> rotationSupplier) {
 
-        // Create PID controller
-        ProfiledPIDController angleController =
-                new ProfiledPIDController(
-                        ANGLE_KP,
-                        0.0,
-                        ANGLE_KD,
-                        new TrapezoidProfile.Constraints(
-                                TunerConstants.kMaxOmegaVelocity.in(
-                                        edu.wpi.first.units.Units.RadiansPerSecond),
-                                ANGLE_MAX_ACCELERATION));
+        PIDController angleController = new PIDController(ANGLE_KP, 0.0, ANGLE_KD);
+
         angleController.enableContinuousInput(-Math.PI, Math.PI);
         angleController.setTolerance(ANGLE_TOLERANCE.getRadians());
 
@@ -161,7 +151,7 @@ public class DriveCommands {
                         drive)
 
                 // Reset PID controller when command starts
-                .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+                .beforeStarting(angleController::reset);
     }
 
     /**

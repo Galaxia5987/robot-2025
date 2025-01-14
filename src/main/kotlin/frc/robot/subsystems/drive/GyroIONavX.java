@@ -17,17 +17,24 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
+
 import java.util.Queue;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
-    private final AHRS navX = new AHRS(SPI.Port.kMXP, (byte) Drive.ODOMETRY_FREQUENCY);
+    private final AHRS navX = new AHRS(SerialPort.Port.kUSB, AHRS.SerialDataType.kProcessedData, (byte) Drive.ODOMETRY_FREQUENCY);
     private final Queue<Double> yawPositionQueue;
     private final Queue<Double> yawTimestampQueue;
 
     public GyroIONavX() {
         yawTimestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
         yawPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(navX::getYaw);
+    }
+
+    @Override
+    public void zeroGyro() {
+        navX.zeroYaw();
     }
 
     @Override
