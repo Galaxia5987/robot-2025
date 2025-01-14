@@ -1,6 +1,5 @@
 package frc.robot
 
-import frc.robot.generated.TunerConstants
 import frc.robot.subsystems.drive.*
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
