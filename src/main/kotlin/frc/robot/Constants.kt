@@ -30,8 +30,12 @@ val ROBORIO_SERIAL_NUMBER: String
     get() = System.getenv("serialnum") ?: "Sim"
 
 val IS_RED: Boolean
-    get() = DriverStation.getAlliance().isPresent && DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+    get() =
+        DriverStation.getAlliance().isPresent &&
+            DriverStation.getAlliance().get() == DriverStation.Alliance.Red
 
 enum class Mode {
-    REAL, SIM, REPLAY
+    REAL,
+    SIM,
+    REPLAY
 }

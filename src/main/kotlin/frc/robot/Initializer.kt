@@ -8,17 +8,19 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim
 
 private val swerveModuleIOs =
     arrayOf(
-        TunerConstants.FrontLeft,
-        TunerConstants.FrontRight,
-        TunerConstants.BackLeft,
-        TunerConstants.BackRight
-    ).map { module ->
-        when (CURRENT_MODE) {
-            Mode.REAL -> ModuleIOTalonFX(module)
-            Mode.SIM -> ModuleIOSim(module)
-            Mode.REPLAY -> object : ModuleIO {}
+            TunerConstants.FrontLeft,
+            TunerConstants.FrontRight,
+            TunerConstants.BackLeft,
+            TunerConstants.BackRight
+        )
+        .map { module ->
+            when (CURRENT_MODE) {
+                Mode.REAL -> ModuleIOTalonFX(module)
+                Mode.SIM -> ModuleIOSim(module)
+                Mode.REPLAY -> object : ModuleIO {}
+            }
         }
-    }.toTypedArray()
+        .toTypedArray()
 
 private val gyroIO =
     when (CURRENT_MODE) {
