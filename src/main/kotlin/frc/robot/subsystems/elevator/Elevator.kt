@@ -35,9 +35,7 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
         return run({ io.setPower(percentOutput.asDouble) })
     }
 
-    fun reset(): Command {
-        return runOnce( io::reset)
-    }
+    fun reset(): Command = Commands.runOnce(io::reset)
 
     override fun periodic() {
         io.updateInputs()
