@@ -2,7 +2,10 @@ package frc.robot.subsystems.climber
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
+import frc.robot.lib.Gains
+import frc.robot.lib.selectGainsBasedOnMode
 
 const val UNFOLD_POWER = 1
 const val FOLD_POWER = 1
@@ -14,3 +17,14 @@ const val GEAR_RATIO = 1.0
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.0)
 var DISTANCE_THRESHOLD = Units.Centimeter.of(0.4)
 var LATCH_TOLERANCE = 0.03
+var Gains = selectGainsBasedOnMode(
+    Gains(
+        0.0,
+        0.0,
+    ), Gains(
+        0.0,
+        0.0,
+    )
+)
+
+
