@@ -19,6 +19,14 @@ class ClimberIOSim : ClimberIO {
 
     }
 
+    override fun lock() {
+        //TODO
+    }
+
+    override fun unlock() {
+        //TODO
+    }
+
     override fun setPower(power:Double) {
         motor.setControl(dutyCycle.withOutput(power))
     }
