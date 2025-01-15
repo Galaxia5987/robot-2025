@@ -9,7 +9,7 @@ interface WristIO {
 
     fun setAngle(angle: Angle) {}
     fun setPower(power: Double) {}
-    fun resetAbsoluteEncoder() {}
+    fun resetAbsoluteEncoder(angle: Angle) {}
     fun updateInputs() {}
 
     @Logged

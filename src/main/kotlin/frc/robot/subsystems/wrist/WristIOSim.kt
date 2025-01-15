@@ -30,7 +30,7 @@ class WristIOSim : WristIO {
         motor.setControl(dutyCycle.withOutput(power))
     }
 
-    override fun resetAbsoluteEncoder() {}
+    override fun resetAbsoluteEncoder(angle: Angle) {}
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
