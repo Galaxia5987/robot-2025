@@ -28,6 +28,7 @@ class Elevator private constructor(private val io: ElevatorIO) : SubsystemBase()
     }
 
     fun setPosition(position: Distance): Command {
+        Logger.recordOutput("Elevator/positionSetpoint",position )
         return run({ io.setHeight(position) })
     }
 
