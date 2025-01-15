@@ -28,9 +28,9 @@ class Roller private constructor(private val io: RollerIO) : SubsystemBase() {
     private fun setPower(power: Double): Command =
         Commands.runOnce({ io.setPower(power) })
 
-    fun intake(): Command = setPower(INTAKE_POWER)
+    fun intake() = setPower(INTAKE_POWER)
 
-    fun outtake(): Command = setPower(OUTTAKE_POWER)
+    fun outtake() = setPower(OUTTAKE_POWER)
 
-    fun farOuttake(): Command = setPower(FAR_OUTTAKE_POWER)
+    fun farOuttake() = setPower(FAR_OUTTAKE_POWER)
 }
