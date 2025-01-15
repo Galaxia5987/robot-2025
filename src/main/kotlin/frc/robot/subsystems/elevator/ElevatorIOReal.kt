@@ -43,7 +43,7 @@ class levatorIOReal : ElevatorIO {
     }
 
     override fun setHeight(position: Distance) {
-        inputs.Setpoint = position
+        inputs.setpoint = position
         val rotationalPosition = Units.Rotations.of(position.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
@@ -57,6 +57,6 @@ class levatorIOReal : ElevatorIO {
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.Height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+        inputs.height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
     }
 }
