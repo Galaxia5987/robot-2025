@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator
 
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -8,8 +9,10 @@ import java.util.function.DoubleSupplier
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
+    var positionSetpoint: Distance = Units.Millimeters.of(0.0)
+
     fun setPosition(position: Distance): Command {
-        Logger.recordOutput("Elevator/positionSetpoint",position )
+        positionSetpoint = position
         return run({ io.setHeight(position) })
     }
 
