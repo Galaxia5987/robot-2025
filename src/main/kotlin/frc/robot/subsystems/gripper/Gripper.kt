@@ -6,8 +6,7 @@ import org.littletonrobotics.junction.Logger
 
 class Gripper private constructor(private val io: GripperIO) : SubsystemBase() {
     companion object {
-        @Volatile
-        private var instance: Gripper? = null
+        @Volatile private var instance: Gripper? = null
 
         fun initialize(io: GripperIO) {
             synchronized(this) {
@@ -18,12 +17,12 @@ class Gripper private constructor(private val io: GripperIO) : SubsystemBase() {
         }
 
         fun getInstance(): Gripper {
-            return instance ?: throw IllegalArgumentException(
-                "Gripper has not been initialized. Call initialize(io: GripperIO) first."
-            )
+            return instance
+                ?: throw IllegalArgumentException(
+                    "Gripper has not been initialized. Call initialize(io: GripperIO) first."
+                )
         }
     }
-
 
     fun intake(): Command =
         runOnce { io.setPower(INTAKE_POWER) }.withName("GripperIntake")
