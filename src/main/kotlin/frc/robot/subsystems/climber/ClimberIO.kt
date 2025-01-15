@@ -20,5 +20,6 @@ interface ClimberIO {
         var appliedVoltage: Voltage = Units.Volts.zero()
         var angle: Angle = Units.Degree.zero()
         var latchPosition: Distance = Units.Centimeter.zero()
+        var sensorDistance:Distance = Units.Centimeter.zero()
     }
 }
