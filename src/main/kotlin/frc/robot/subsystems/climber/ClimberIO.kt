@@ -11,6 +11,7 @@ interface ClimberIO {
     fun setLatchPosition(position:Distance) {}
     fun setPower(power:Double) {}
     fun setAngle(angle: Angle) {}
+    fun updateInput(){}
 
     @Logged
     open class InputClimber {
