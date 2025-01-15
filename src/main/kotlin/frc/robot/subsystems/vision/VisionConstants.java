@@ -17,6 +17,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,10 +70,10 @@ public class VisionConstants {
     // Standard deviation multipliers for each camera
     // (Adjust to trust some cameras more than others)
     public static double[] cameraStdDevFactors =
-            new double[] {
-                1.0, // OV1
-                1.0, // OV2
-                1.0 // OV3
+            new double[]{
+                    1.0, // OV1
+                    1.0, // OV2
+                    1.0 // OV3
             };
 
     // Multipliers to apply for MegaTag 2 observations

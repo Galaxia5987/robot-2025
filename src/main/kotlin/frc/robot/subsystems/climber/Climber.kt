@@ -6,12 +6,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 
-class Climber private constructor(private val io:ClimberIO):SubsystemBase(){
+class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
+
     @AutoLogOutput
-    private var isTouching = Trigger{inputs.sensorDistance.lt(distanceThreshold)}
-    private val hasClimbed = Trigger{inputs.angle.lt(FOLDED_ANGLE)}
-    private var isLatchClosed = Trigger {inputs.latchPosition.lt(latchTolerance)}
+    private var isTouching = Trigger { inputs.sensorDistance.lt(distanceThreshold) }
+    private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
+    private var isLatchClosed = Trigger { inputs.latchPosition.lt(latchTolerance) }
     private var isAttached = Trigger(isLatchClosed.and(isTouching))
 
     companion object {
@@ -32,7 +33,8 @@ class Climber private constructor(private val io:ClimberIO):SubsystemBase(){
             )
         }
     }
-    fun closeLatch():Command = Commands.runOnce({io.setLatchPosition(CLOSE_LATCH_POSITION)})
-    fun openLatch():Command = Commands.runOnce({io.setLatchPosition(OPEN_LATCH_POSITION)})
+
+    fun closeLatch(): Command = Commands.runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
+    fun openLatch(): Command = Commands.runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
 
 }
