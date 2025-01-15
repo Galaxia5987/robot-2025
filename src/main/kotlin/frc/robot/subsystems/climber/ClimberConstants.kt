@@ -12,8 +12,8 @@ import frc.robot.lib.selectGainsBasedOnMode
 
 const val UNFOLD_POWER = 1
 const val FOLD_POWER = 1
-val OPEN_LATCH_POSITION: Distance = Units.Centimeter.of(0.8)
-val CLOSE_LATCH_POSITION: Distance = Units.Centimeter.of(0.2)
+const val OPEN_LATCH_POSITION = 0.8
+const val CLOSE_LATCH_POSITION = 0.2
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(60.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(30.0)
 const val GEAR_RATIO = 1.0
