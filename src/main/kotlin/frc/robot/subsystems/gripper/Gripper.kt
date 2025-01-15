@@ -23,4 +23,10 @@ class Gripper private constructor(private val io: GripperIO) : SubsystemBase() {
             )
         }
     }
+
+    fun intake(): Command =
+        runOnce { io.setPower(INTAKE_POWER) }.withName("GripperIntake")
+    fun outtake(): Command =
+        runOnce { io.setPower(OUTTAKE_POWER) }.withName("GripperOuttake")
+    
 }
