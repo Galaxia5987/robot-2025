@@ -10,9 +10,9 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
-    private var isTouching = Trigger { inputs.sensorDistance.lt(distanceThreshold) }
+    private var isTouching = Trigger { inputs.sensorDistance.lt(DISTANCE_THRESHOLD) }
     private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
-    private var isLatchClosed = Trigger { inputs.latchPosition.lt(latchTolerance) }
+    private var isLatchClosed = Trigger { inputs.latchPosition.lt(LATCH_TOLERANCE) }
     private var isAttached = Trigger(isLatchClosed.and(isTouching))
 
     companion object {
