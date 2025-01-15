@@ -1,5 +1,8 @@
 package frc.robot.subsystems.wrist
 
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
@@ -44,6 +47,13 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
+        Logger.recordOutput(
+            "Pose",
+            Pose3d(
+                Translation3d(),
+                Rotation3d(0.0, -io.inputs.angle.`in`(Units.Radians), 0.0)
+            )
+        )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
     }
 }
