@@ -13,3 +13,5 @@ val UNFOLDED_ANGLE:Angle = Units.Degree.of(60.0)
 val FOLDED_ANGLE:Angle = Units.Degree.of(30.0)
 const val gearRation = 1.0
 val momentOfInertia:MomentOfInertia = Units.KilogramSquareMeters.of(0.0)
+var distanceThreshold: Distance = Units.Centimeter.of(0.4)
+var latchTolerance: Distance = Units.Centimeter.of(0.4)
