@@ -26,6 +26,6 @@ class ElevatorIOSim : ElevatorIO {
 
     override fun updateInputs() {
         inputs.appliedVoltege = Units.Volts.of(motor.appliedVoltage)
-        inputs.Height = Units.Centimeter.of(motor.position * ROTATIONS_TO_CENTIMETER)
+        inputs.height = Units.Centimeter.of(motor.position * ROTATIONS_TO_CENTIMETER)
     }
 }
