@@ -2,6 +2,8 @@ package frc.robot.subsystems.elevator
 
 import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
+import edu.wpi.first.math.system.plant.DCMotor
+import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.motors.TalonFXSim
@@ -10,10 +12,8 @@ class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motorPosititonRequest = PositionVoltage(0.0)
     private val motor = TalonFXSim(
-        1,
-        GEAR_RATIO,
-        0.3,
-        1.0
+        LinearSystemId.createElevatorSystem(DCMotor.getKrakenX60(2), WEIGHT, 36.4 / 2, GEAR_RATIO), 2,
+        GEAR_RATIO, 1.0
     )
 
     override fun setHeight(position: Distance) {
