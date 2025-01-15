@@ -12,6 +12,8 @@ interface ExtenderIO {
 
     fun setPower(power: Double) {}
 
+    fun reset() {}
+
     fun updateInputs() {}
 
     @Logged
