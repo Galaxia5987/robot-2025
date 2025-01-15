@@ -1,5 +1,8 @@
 package frc.robot.subsystems.wrist
 
+import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -11,6 +14,10 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     private var atSetpoint: Trigger = Trigger {
         setpoint.angle.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
+    @AutoLogOutput private val mechanism = Mechanism2d(2.0, 3.0)
+    private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
+    private val ligament2d =
+        root.append(MechanismLigament2d("WristLigament", 0.21, 0.0))
 
     @AutoLogOutput private var setpoint = Angles.ZERO
 
@@ -37,5 +44,6 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
+        ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
     }
 }
