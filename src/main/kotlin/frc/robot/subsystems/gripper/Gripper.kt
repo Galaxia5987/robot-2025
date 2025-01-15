@@ -5,11 +5,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
+    private fun setPower(power: Double): Command = runOnce {
+        io.setPower(power)
+    }
 
-    fun intake(): Command =
-        runOnce { io.setPower(INTAKE_POWER) }.withName("GripperIntake")
-    fun outtake(): Command =
-        runOnce { io.setPower(OUTTAKE_POWER) }.withName("GripperOuttake")
+    fun intake(): Command = setPower(INTAKE_POWER).withName("GripperIntake")
+    fun outtake(): Command = setPower(OUTTAKE_POWER).withName("GripperOuttake")
 
     override fun periodic() {
         io.updateInputs()
