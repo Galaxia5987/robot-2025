@@ -1,11 +1,7 @@
 package frc.robot.subsystems.elevator
 
 import MOTOR_ID
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs
-import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
@@ -51,7 +47,7 @@ class ElevatorIOReal : ElevatorIO {
         motor.set(percentOutput)
     }
 
-    override fun reset() {
+    override fun resetAbsoluteEncoder() {
         motor.setPosition(0.0)
     }
     override fun updateInputs() {
