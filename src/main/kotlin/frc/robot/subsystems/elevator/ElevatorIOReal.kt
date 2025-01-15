@@ -13,7 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 
-class levatorIOReal : ElevatorIO {
+class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
     private val motorPosititonRequest = PositionVoltage(0.0)
@@ -43,7 +43,6 @@ class levatorIOReal : ElevatorIO {
     }
 
     override fun setHeight(height: Distance) {
-        inputs.setpoint = height
         val rotationalPosition = Units.Rotations.of(height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
