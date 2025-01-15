@@ -3,9 +3,16 @@ package frc.robot.subsystems.climber
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.littletonrobotics.junction.AutoLogOutput
 
 class Climber private constructor(private val io:ClimberIO):SubsystemBase(){
     var inputs = io.inputs
+    @AutoLogOutput
+    private var isTouching = Trigger{inputs.sensorDistance.lt(distanceThreshold)}
+    private val hasClimbed = Trigger{inputs.angle.lt(FOLDED_ANGLE)}
+    private var isLatchClosed = Trigger {inputs.latchPosition.lt(latchTolerance)}
+    private var isAttached = Trigger(isLatchClosed.and(isTouching))
 
     companion object {
         @Volatile
