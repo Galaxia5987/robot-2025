@@ -8,9 +8,9 @@ import org.team9432.annotation.Logged
 
 interface ClimberIO {
     var inputs:LoggedInputClimber
-    fun setLatchPosition() {}
-    fun setPower() {}
-    fun setAngle() {}
+    fun setLatchPosition(position:Distance) {}
+    fun setPower(power:Double) {}
+    fun setAngle(angle: Angle) {}
 
     @Logged
     open class InputClimber {
