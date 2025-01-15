@@ -60,5 +60,8 @@ class ElevatorIOReal : ElevatorIO {
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
         inputs.height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+        inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
+        inputs.absoluteEncoderHeight =
+            Units.Centimeter.of(encoder.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
     }
 }
