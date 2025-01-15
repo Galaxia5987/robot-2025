@@ -1,8 +1,10 @@
 package frc.robot.subsystems.elevator
 
+import ENCODER_ID
 import MOTOR_ID
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
@@ -13,6 +15,7 @@ class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
     private val motorPosititonRequest = PositionVoltage(0.0)
+    private val encoder = CANcoder(ENCODER_ID)
 
     init {
         val motorConfig = TalonFXConfiguration().apply {
@@ -40,7 +43,7 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun setHeight(height: Distance) {
         val rotationalPosition = Units.Rotations.of(height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
-        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
+        motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
     }
 
     override fun setPower(percentOutput: Double) {
