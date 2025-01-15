@@ -1,8 +1,10 @@
 package frc.robot.subsystems.elevator
 
+import ENCODER_ID
 import MOTOR_ID
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
@@ -12,35 +14,46 @@ import edu.wpi.first.units.measure.Distance
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val motorPosititonRequest = PositionVoltage(0.0)
+    private val encoder = CANcoder(ENCODER_ID)
+    private val motorPositionRequest = PositionVoltage(0.0)
 
     init {
-        val motorConfig = TalonFXConfiguration().apply {
-            MotorOutput = MotorOutputConfigs().apply {
-                NeutralMode = NeutralModeValue.Brake
-                Inverted = InvertedValue.Clockwise_Positive
+        val motorConfig =
+            TalonFXConfiguration().apply {
+                MotorOutput =
+                    MotorOutputConfigs().apply {
+                        NeutralMode = NeutralModeValue.Brake
+                        Inverted = InvertedValue.Clockwise_Positive
+                    }
+                Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
+                Slot0 =
+                    Slot0Configs().apply {
+                        kP = GAINS.kP
+                        kI = GAINS.kI
+                        kD = GAINS.kD
+                    }
+                CurrentLimits =
+                    CurrentLimitsConfigs().apply {
+                        StatorCurrentLimitEnable = true
+                        SupplyCurrentLimitEnable = true
+                        StatorCurrentLimit = 80.0
+                        SupplyCurrentLimit = 40.0
+                    }
             }
-            Feedback = FeedbackConfigs().apply {
-                RotorToSensorRatio = 1.0
-            }
-            Slot0 = Slot0Configs().apply {
-                kP = GAINS.kP
-                kI = GAINS.kI
-                kD = GAINS.kD
-            }
-            CurrentLimits = CurrentLimitsConfigs().apply {
-                StatorCurrentLimitEnable = true
-                SupplyCurrentLimitEnable = true
-                StatorCurrentLimit = 80.0
-                SupplyCurrentLimit = 40.0
-            }
-        }
         motor.configurator.apply(motorConfig)
+
+        var encoderConfig =
+            CANcoderConfiguration().apply {
+                MagnetSensor.MagnetOffset = ENCODER_OFSET
+            }
     }
 
     override fun setHeight(height: Distance) {
-        val rotationalPosition = Units.Rotations.of(height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
-        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
+        val rotationalPosition =
+            Units.Rotations.of(
+                height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
+            )
+        motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
     }
 
     override fun setPower(percentOutput: Double) {
@@ -52,6 +65,16 @@ class ElevatorIOReal : ElevatorIO {
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+        inputs.height =
+            Units.Centimeter.of(
+                motor.position.value.`in`(Units.Rotations) *
+                        ROTATIONS_TO_CENTIMETER
+            )
+        inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
+        inputs.absoluteEncoderHeight =
+            Units.Centimeter.of(
+                encoder.position.value.`in`(Units.Rotations) *
+                        ROTATIONS_TO_CENTIMETER
+            )
     }
 }
