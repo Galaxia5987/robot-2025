@@ -9,11 +9,11 @@ import org.littletonrobotics.junction.AutoLogOutput
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
-    private fun setPosition(position: Distance): Command = runOnce {
+    private fun setPosition(position: Distance) = runOnce {
         io.setPosition(position)
     }
 
-    private fun setPower(power: Double): Command = runOnce {
+    private fun setPower(power: Double) = runOnce {
         io.setPower(power)
     }
 
