@@ -14,8 +14,8 @@ import edu.wpi.first.units.measure.Distance
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val motorPosititonRequest = PositionVoltage(0.0)
     private val encoder = CANcoder(ENCODER_ID)
+    private val motorPositionRequest = PositionVoltage(0.0)
 
     init {
         val motorConfig = TalonFXConfiguration().apply {
@@ -39,6 +39,10 @@ class ElevatorIOReal : ElevatorIO {
             }
         }
         motor.configurator.apply(motorConfig)
+
+        var encoderConfig = CANcoderConfiguration().apply {
+            MagnetSensor.MagnetOffset = ENCODER_OFSET
+        }
     }
 
     override fun setHeight(height: Distance) {
