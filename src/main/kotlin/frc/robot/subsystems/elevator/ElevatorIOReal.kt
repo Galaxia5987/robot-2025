@@ -18,35 +18,41 @@ class ElevatorIOReal : ElevatorIO {
     private val motorPositionRequest = PositionVoltage(0.0)
 
     init {
-        val motorConfig = TalonFXConfiguration().apply {
-            MotorOutput = MotorOutputConfigs().apply {
-                NeutralMode = NeutralModeValue.Brake
-                Inverted = InvertedValue.Clockwise_Positive
+        val motorConfig =
+            TalonFXConfiguration().apply {
+                MotorOutput =
+                    MotorOutputConfigs().apply {
+                        NeutralMode = NeutralModeValue.Brake
+                        Inverted = InvertedValue.Clockwise_Positive
+                    }
+                Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
+                Slot0 =
+                    Slot0Configs().apply {
+                        kP = GAINS.kP
+                        kI = GAINS.kI
+                        kD = GAINS.kD
+                    }
+                CurrentLimits =
+                    CurrentLimitsConfigs().apply {
+                        StatorCurrentLimitEnable = true
+                        SupplyCurrentLimitEnable = true
+                        StatorCurrentLimit = 80.0
+                        SupplyCurrentLimit = 40.0
+                    }
             }
-            Feedback = FeedbackConfigs().apply {
-                RotorToSensorRatio = 1.0
-            }
-            Slot0 = Slot0Configs().apply {
-                kP = GAINS.kP
-                kI = GAINS.kI
-                kD = GAINS.kD
-            }
-            CurrentLimits = CurrentLimitsConfigs().apply {
-                StatorCurrentLimitEnable = true
-                SupplyCurrentLimitEnable = true
-                StatorCurrentLimit = 80.0
-                SupplyCurrentLimit = 40.0
-            }
-        }
         motor.configurator.apply(motorConfig)
 
-        var encoderConfig = CANcoderConfiguration().apply {
-            MagnetSensor.MagnetOffset = ENCODER_OFSET
-        }
+        var encoderConfig =
+            CANcoderConfiguration().apply {
+                MagnetSensor.MagnetOffset = ENCODER_OFSET
+            }
     }
 
     override fun setHeight(height: Distance) {
-        val rotationalPosition = Units.Rotations.of(height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER)
+        val rotationalPosition =
+            Units.Rotations.of(
+                height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
+            )
         motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
     }
 
@@ -59,9 +65,16 @@ class ElevatorIOReal : ElevatorIO {
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.height = Units.Centimeter.of(motor.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+        inputs.height =
+            Units.Centimeter.of(
+                motor.position.value.`in`(Units.Rotations) *
+                        ROTATIONS_TO_CENTIMETER
+            )
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
         inputs.absoluteEncoderHeight =
-            Units.Centimeter.of(encoder.position.value.`in`(Units.Rotations) * ROTATIONS_TO_CENTIMETER)
+            Units.Centimeter.of(
+                encoder.position.value.`in`(Units.Rotations) *
+                        ROTATIONS_TO_CENTIMETER
+            )
     }
 }

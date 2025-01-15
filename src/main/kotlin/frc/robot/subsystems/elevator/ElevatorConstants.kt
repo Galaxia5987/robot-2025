@@ -12,6 +12,8 @@ const val FIRST_STAGE_RATIO = 2.0
 const val WEIGHT = 0.0
 const val ENCODER_OFSET = 0.0
 private val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
-val ROTATIONS_TO_CENTIMETER = GEAR_RATIO * FIRST_STAGE_RATIO * (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI)
+val ROTATIONS_TO_CENTIMETER =
+    GEAR_RATIO *
+            FIRST_STAGE_RATIO *
+            (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI)
 val GAINS = selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0), Gains())
-
