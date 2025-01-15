@@ -4,6 +4,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
+const val GEAR_RATIO = 1.0 // TODO: Calibrate
+const val MOMENT_OF_INERTIA = 0.001 // TODO: Calibrate
 
 enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(90.0)),
