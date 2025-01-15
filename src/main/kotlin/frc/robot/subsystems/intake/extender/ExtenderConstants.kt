@@ -1,0 +1,12 @@
+package frc.robot.subsystems.intake.extender
+
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Current
+import edu.wpi.first.units.measure.Distance
+
+const val GEAR_RATIO = 0.0
+const val RESET_POWER = 0.0
+val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
+val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
+val EXTENDED_POSITION: Distance = Units.Meters.of(0.0)
+val RETRACTED_POSITION: Distance = Units.Meters.of(0.0)
