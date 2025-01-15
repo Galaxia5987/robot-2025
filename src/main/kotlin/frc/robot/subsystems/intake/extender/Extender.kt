@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
@@ -52,5 +53,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput
     val isStuck = Trigger {
         io.inputs.motorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
+    }
+
+    override fun periodic() {
+        io.updateInputs()
+        Logger.processInputs(this::class.simpleName, io.inputs)
     }
 }
