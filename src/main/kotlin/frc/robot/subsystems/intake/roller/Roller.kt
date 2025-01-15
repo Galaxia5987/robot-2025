@@ -14,4 +14,8 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
     fun outtake() = setPower(OUTTAKE_POWER)
 
     fun farOuttake() = setPower(FAR_OUTTAKE_POWER)
+
+    override fun periodic() {
+        io.updateInputs()
+    }
 }
