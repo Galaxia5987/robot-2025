@@ -1,12 +1,11 @@
 package frc.robot.subsystems.intake.roller
 
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class Roller(private val io: RollerIO) : SubsystemBase() {
 
-    private fun setPower(power: Double): Command =
+    private fun setPower(power: Double) =
         Commands.runOnce({ io.setPower(power) })
 
     fun intake() = setPower(INTAKE_POWER)
