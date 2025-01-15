@@ -9,4 +9,14 @@ interface WristIO {
     fun setPower(power: Double) {}
     fun resetAbsoluteEncoder() {}
     fun updateInputs() {}
+
+    @Logged
+    open class WristInputs {
+        var angle: MutAngle = Units.Degree.zero().mutableCopy()
+        var absoluteEncoderAngle: MutAngle = Units.Degree.zero().mutableCopy()
+        var noOffsetAbsoluteEncoderPosition: MutAngle =
+            Units.Degree.zero().mutableCopy()
+        var appliedVoltage: MutVoltage = Units.Volts.zero().mutableCopy()
+        var sensorDistance: MutDistance = Units.Centimeters.zero().mutableCopy()
+    }
 }
