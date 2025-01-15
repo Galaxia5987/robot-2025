@@ -20,6 +20,6 @@ interface ExtenderIO {
     open class ExtenderInputs {
         var appliedVoltage: Voltage = Units.Volts.of(0.0)
         var position: Distance = Units.Meters.of(0.0)
-        var sensedDistance: Distance = Units.Meters.of(0.0)
+        var sensorValue: Distance = Units.Meters.of(0.0)
     }
 }
