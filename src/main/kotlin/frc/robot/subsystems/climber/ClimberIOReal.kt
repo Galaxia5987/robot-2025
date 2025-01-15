@@ -41,6 +41,8 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun updateInput() {
-        super.updateInput()
+        inputs.angle = mainMotor.position.value
+        inputs.appliedVoltage = mainMotor.supplyVoltage.value
+//        inputs.latchPosition =
     }
 }
