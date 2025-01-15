@@ -4,26 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-class Roller private constructor(private val io: RollerIO) : SubsystemBase() {
-
-    companion object {
-        @Volatile private var instance: Roller? = null
-
-        fun initialize(io: RollerIO) {
-            synchronized(this) {
-                if (instance == null) {
-                    instance = Roller(io)
-                }
-            }
-        }
-
-        fun getInstance(): Roller {
-            return instance
-                ?: throw IllegalStateException(
-                    "Roller has not been initialized"
-                )
-        }
-    }
+class Roller(private val io: RollerIO) : SubsystemBase() {
 
     private fun setPower(power: Double): Command =
         Commands.runOnce({ io.setPower(power) })
