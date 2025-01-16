@@ -1,5 +1,6 @@
 {
-  "name":"Andromeda",
+  "name":"2025Bot",
+  "disableSimplification":true,
   "rotations": [
     {
       "axis": "x",
@@ -11,9 +12,9 @@
     }
   ],
   "position": [
-    -0.651,
     0,
-    0
+    0,
+    0.05545625
   ],
   "cameras":[],
   "components":[
@@ -25,30 +26,49 @@
         },
         {
           "axis": "z",
-          "degrees": -90
+          "degrees": 90
         }
       ],
       "zeroedPosition":[
-        -0.61,
         0,
-        0
+        0,
+        0.05545625
       ]
     },
     {
       "zeroedRotations":[
-      {
-          "axis": "y",
-          "degrees": -90
-        },
         {
           "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
           "degrees": -90
         }
+        
       ],
       "zeroedPosition":[
-        -0.44,
+        -0.65,
         0,
-        0.265
+        -0.48
+      ]
+    },
+    {
+      "zeroedRotations":[
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+        
+      ],
+      "zeroedPosition":[
+        -0.65,
+        0,
+        0.0
       ]
     },
     {
@@ -69,7 +89,7 @@
       "zeroedPosition":[
         -0.80,
         0,
-        -0.12
+        -0.8
       ]
     },
     {
@@ -88,30 +108,9 @@
         }
       ],
       "zeroedPosition":[
-        -0.80,
         0,
-        -0.15
-      ]
-    },
-    {
-      "zeroedRotations":[
-        {
-          "axis": "x",
-          "degrees": -90
-        },
-        {
-          "axis": "z",
-          "degrees": -90
-        },
-        {
-          "axis": "y",
-          "degrees": 180
-        }
-      ],
-      "zeroedPosition":[
-        -0.80,
         0,
-        -0.80
+        0.05
       ]
     }
     

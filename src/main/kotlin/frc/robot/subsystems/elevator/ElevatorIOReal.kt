@@ -1,21 +1,20 @@
 package frc.robot.subsystems.elevator
 
-import ENCODER_ID
 import MOTOR_ID
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.PositionVoltage
-import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import frc.robot.CURRENT_MODE
+import frc.robot.Mode
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val encoder = CANcoder(ENCODER_ID)
-    private val motorPositionRequest = PositionVoltage(0.0)
+    private val motorPosititonRequest = PositionVoltage(0.0)
 
     init {
         val motorConfig =
@@ -41,40 +40,32 @@ class ElevatorIOReal : ElevatorIO {
                     }
             }
         motor.configurator.apply(motorConfig)
-
-        var encoderConfig =
-            CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFSET
-            }
     }
 
-    override fun setHeight(height: Distance) {
+    override fun setHeight(position: Distance) {
+        inputs.setpoint = position
         val rotationalPosition =
             Units.Rotations.of(
-                height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
+                position.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
             )
-        motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
+        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
 
     override fun setPower(percentOutput: Double) {
         motor.set(percentOutput)
     }
 
-    override fun resetAbsoluteEncoder() {
+    fun reset() {
         motor.setPosition(0.0)
     }
     override fun updateInputs() {
         inputs.appliedVoltege = motor.motorVoltage.value
-        inputs.height =
-            Units.Centimeter.of(
-                motor.position.value.`in`(Units.Rotations) *
+        if (CURRENT_MODE == Mode.REAL) {
+            inputs.height =
+                Units.Centimeter.of(
+                    motor.position.value.`in`(Units.Rotations) *
                         ROTATIONS_TO_CENTIMETER
-            )
-        inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
-        inputs.absoluteEncoderHeight =
-            Units.Centimeter.of(
-                encoder.position.value.`in`(Units.Rotations) *
-                        ROTATIONS_TO_CENTIMETER
-            )
+                )
+        }
     }
 }
