@@ -1,8 +1,8 @@
 package frc.robot.subsystems.wrist
 
 import com.ctre.phoenix6.configs.*
-import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.GravityTypeValue
@@ -14,7 +14,7 @@ import edu.wpi.first.units.measure.Angle
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
     private val positionControl = PositionVoltage(0.0)
-    private val dutyCycle = DutyCycleOut(0.0)
+    private val voltageOut = VoltageOut(0.0)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
@@ -51,7 +51,7 @@ class WristIOReal : WristIO {
     }
 
     override fun setPower(power: Double) {
-        motor.setControl(dutyCycle.withOutput(power))
+        motor.setControl(voltageOut.withOutput(power))
     }
 
     override fun resetAbsoluteEncoder(angle: Angle) {
