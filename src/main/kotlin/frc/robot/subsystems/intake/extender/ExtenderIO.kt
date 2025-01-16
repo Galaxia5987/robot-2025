@@ -19,9 +19,9 @@ interface ExtenderIO {
 
     @Logged
     open class ExtenderInputs {
-        var appliedVoltage: Voltage = Units.Volts.of(0.0)
-        var motorCurrent: Current = Units.Amps.of(0.0)
-        var position: Distance = Units.Meters.of(0.0)
-        var sensorValue: Distance = Units.Meters.of(0.0)
+        var appliedVoltage: Voltage = Units.Volts.zero()
+        var motorCurrent: Current = Units.Amps.zero()
+        var position: Distance = Units.Meters.zero()
+        var sensorValue: Distance = Units.Meters.zero()
     }
 }
