@@ -10,8 +10,16 @@ import org.littletonrobotics.junction.Logger
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
+    @AutoLogOutput private var setpoint = Units.Meters.zero()
+    @AutoLogOutput private var atSetpoint = false
+    @AutoLogOutput private var error = Units.Meters.zero()
+
     private fun setPosition(position: Distance): Command =
-        runOnce { io.setPosition(position) }.withName("setPosition")
+        runOnce {
+                io.setPosition(position)
+                setpoint = position
+            }
+            .withName("setPosition")
 
     private fun setPower(power: Double): Command =
         runOnce { io.setPower(power) }.withName("setPower")
@@ -51,5 +59,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
+
+        atSetpoint = io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
+        error = io.inputs.position - setpoint
     }
 }
