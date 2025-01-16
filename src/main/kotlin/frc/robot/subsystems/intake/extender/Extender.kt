@@ -12,15 +12,15 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private fun setPosition(position: Distance) = runOnce {
         io.setPosition(position)
-    }
+    }.withName("setPosition")
 
     private fun setPower(power: Double) = runOnce {
         io.setPower(power)
-    }
+    }.withName("setPower")
 
-    fun extend() = setPosition(EXTENDED_POSITION)
+    fun extend() = setPosition(EXTENDED_POSITION).withName("extend")
 
-    fun retract() = setPosition(RETRACTED_POSITION)
+    fun retract() = setPosition(RETRACTED_POSITION).withName("retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
@@ -28,6 +28,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .andThen(
                 setPower(0.0),
                 runOnce { io::reset }
+            ).withName("reset")
     }
 
     @AutoLogOutput
