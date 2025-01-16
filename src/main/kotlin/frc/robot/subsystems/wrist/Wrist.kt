@@ -28,21 +28,21 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         io.setPower(power)
     }
 
-    private fun setAngle(angleGoal: Angles, name: String): Command =
+    private fun setAngle(angleGoal: Angles): Command =
         runOnce {
                 io.setAngle(angleGoal.angle)
                 setpoint = angleGoal
             }
-            .withName(name)
+            .withName("Wrist ${angleGoal.name}")
 
-    fun l1(): Command = setAngle(Angles.L1, "Wrist L1")
-    fun l2(): Command = setAngle(Angles.L2, "Wrist L2")
-    fun l3(): Command = setAngle(Angles.L3, "Wrist L3")
-    fun l4(): Command = setAngle(Angles.L4, "Wrist L4")
-    fun l2algae(): Command = setAngle(Angles.L2_ALGAE, "Wrist L2 Algae")
-    fun l3algae(): Command = setAngle(Angles.L3_ALGAE, "Wrist L3 Algae")
-    fun feeder(): Command = setAngle(Angles.FEEDER, "Wrist Feeder")
-    fun retract(): Command = setAngle(Angles.ZERO, "Wrist Zero")
+    fun l1(): Command = setAngle(Angles.L1)
+    fun l2(): Command = setAngle(Angles.L2)
+    fun l3(): Command = setAngle(Angles.L3)
+    fun l4(): Command = setAngle(Angles.L4)
+    fun l2algae(): Command = setAngle(Angles.L2_ALGAE)
+    fun l3algae(): Command = setAngle(Angles.L3_ALGAE)
+    fun feeder(): Command = setAngle(Angles.FEEDER)
+    fun retract(): Command = setAngle(Angles.ZERO)
 
     override fun periodic() {
         io.updateInputs()
