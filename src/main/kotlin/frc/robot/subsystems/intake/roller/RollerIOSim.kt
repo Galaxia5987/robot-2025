@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.controls.DutyCycleOut
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 
@@ -16,6 +17,7 @@ class RollerIOSim : RollerIO {
     }
 
     override fun updateInputs() {
+        motor.update(Timer.getFPGATimestamp())
         inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
     }
 }
