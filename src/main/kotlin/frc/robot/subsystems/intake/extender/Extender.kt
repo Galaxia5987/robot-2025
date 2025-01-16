@@ -10,13 +10,11 @@ import org.littletonrobotics.junction.Logger
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
-    private fun setPosition(position: Distance): Command = runOnce {
-        io.setPosition(position)
-    }.withName("setPosition")
+    private fun setPosition(position: Distance): Command =
+        runOnce { io.setPosition(position) }.withName("setPosition")
 
-    private fun setPower(power: Double): Command = runOnce {
-        io.setPower(power)
-    }.withName("setPower")
+    private fun setPower(power: Double): Command =
+        runOnce { io.setPower(power) }.withName("setPower")
 
     fun extend() = setPosition(EXTENDED_POSITION).withName("extend")
 
@@ -25,26 +23,18 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     fun reset(): Command {
         return setPower(RESET_POWER)
             .until(isStuck)
-            .andThen(
-                setPower(0.0),
-                runOnce { io::reset }
-            ).withName("reset")
+            .andThen(setPower(0.0), runOnce { io::reset })
+            .withName("reset")
     }
 
     @AutoLogOutput
     val isExtended = Trigger {
-        EXTENDED_POSITION.isNear(
-            io.inputs.position,
-            POSITION_TOLERANCE
-        )
+        EXTENDED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
     }
 
     @AutoLogOutput
     val isRetracted = Trigger {
-        RETRACTED_POSITION.isNear(
-            io.inputs.position,
-            POSITION_TOLERANCE
-        )
+        RETRACTED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
     }
 
     @AutoLogOutput
@@ -52,13 +42,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput
     val isStuck = Trigger {
-        io.inputs.motorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
+        io.inputs.motorCurrent.abs(Units.Amps) >=
+            RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
-    @AutoLogOutput
-    val finishedResetting = Trigger {
-        reset().isFinished
-    }
+    @AutoLogOutput val finishedResetting = Trigger { reset().isFinished }
 
     override fun periodic() {
         io.updateInputs()
