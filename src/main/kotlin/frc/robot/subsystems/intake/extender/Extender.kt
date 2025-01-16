@@ -27,8 +27,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .until(isStuck)
             .andThen(
                 setPower(0.0),
-                runOnce { io.reset() }
-            )
+                runOnce { io::reset }
     }
 
     @AutoLogOutput
