@@ -2,6 +2,8 @@ package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -13,6 +15,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput private var setpoint = Units.Meters.zero()
     @AutoLogOutput private var atSetpoint = false
     @AutoLogOutput private var error = Units.Meters.zero()
+    @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
+    private var root = mechanism.getRoot("Extender", 1.0, 1.0)
+    private val ligament = root.append(MechanismLigament2d("ExtenderLigament",0.569, 0.0))
 
     private fun setPosition(position: Distance): Command =
         runOnce {
@@ -62,5 +67,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
         atSetpoint = io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
         error = io.inputs.position - setpoint
+
+        ligament.length = io.inputs.position.`in`(Units.Meters)
     }
 }
