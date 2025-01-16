@@ -101,6 +101,6 @@ public class TalonFXSim extends SimMotor {
     }
 
     public double getAppliedVoltage() {
-        return voltageRequest.getAsDouble();
+        return motorSim.getInputVoltage();
     }
 }
