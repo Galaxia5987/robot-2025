@@ -10,11 +10,11 @@ import org.littletonrobotics.junction.Logger
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
-    private fun setPosition(position: Distance) = runOnce {
+    private fun setPosition(position: Distance): Command = runOnce {
         io.setPosition(position)
     }.withName("setPosition")
 
-    private fun setPower(power: Double) = runOnce {
+    private fun setPower(power: Double): Command = runOnce {
         io.setPower(power)
     }.withName("setPower")
 
