@@ -22,7 +22,6 @@ object RobotContainer {
     private val operatorController = CommandPS5Controller(1)
     private val testController = CommandXboxController(2)
 
-    private val wrist = Wrist(WristIOSim())
     private val swerveDrive = frc.robot.swerveDrive
 
     init {
@@ -53,9 +52,6 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
-
-        driverController.b().whileTrue(wrist.l1())
-        driverController.x().whileTrue(wrist.retract())
 
         driverController
             .povUp()
