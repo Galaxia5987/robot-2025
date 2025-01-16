@@ -102,7 +102,7 @@ fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
 fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
 
 fun Distance.toAngle(radius: Distance): Angle =
-    Units.Degree.of(
+    Units.Rotations.of(
         this.`in`(Units.Meters) / (2 * PI * radius.`in`(Units.Meters))
     )
 
