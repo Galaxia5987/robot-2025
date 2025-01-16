@@ -55,6 +55,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.motorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
+    @AutoLogOutput
+    val finishedResetting = Trigger {
+        reset().isFinished
+    }
+
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
