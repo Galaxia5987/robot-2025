@@ -9,13 +9,14 @@ import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
+import frc.robot.lib.motors.LinearServo
 import frc.robot.subsystems.Port
 
 class ClimberIOReal:ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
     var mainMotor = TalonFX(Port.Climber.mainMotor)
-    var servo1 = Servo(Port.Climber.servo1)
-    var servo2 = Servo(Port.Climber.servo2)
+    var servo1 = LinearServo(Port.Climber.servo1,1,1)
+    var servo2 = LinearServo(Port.Climber.servo2,1,1)
     var auxMotor = TalonFX(Port.Climber.auxMotor)
     var dutyCycleOut = DutyCycleOut(0.0)
     var positionVoltage = PositionVoltage(0.0)
@@ -26,7 +27,7 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun setLatchPosition(position: Double) {
-        listOf(servo2, servo1).forEach { it.set(position) }
+        listOf(servo2, servo1).forEach { it.position = position }
     }
 
     override fun setPower(power: Double) {
