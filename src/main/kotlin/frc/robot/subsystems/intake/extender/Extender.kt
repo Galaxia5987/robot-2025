@@ -17,7 +17,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput private var error = Units.Meters.zero()
     @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
-    private val ligament = root.append(MechanismLigament2d("ExtenderLigament",0.569, 0.0))
+    private val ligament =
+        root.append(MechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
     private fun setPosition(position: Distance): Command =
         runOnce {
