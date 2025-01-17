@@ -14,7 +14,7 @@ import edu.wpi.first.units.measure.Angle
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
     private val positionControl = PositionVoltage(0.0)
-    private val voltageOut = VoltageOut(0.0)
+    private val voltageOut = Voltage(0.0)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
@@ -40,8 +40,8 @@ class WristIOReal : WristIO {
             CurrentLimits = CurrentLimitsConfigs().apply {
                 StatorCurrentLimitEnable = true
                 SupplyCurrentLimitEnable = true
-                StatorCurrentLimit = 40.0
-                SupplyCurrentLimit = 80.0
+                StatorCurrentLimit = 20.0
+                SupplyCurrentLimit = 40.0
             }
         })
     }
