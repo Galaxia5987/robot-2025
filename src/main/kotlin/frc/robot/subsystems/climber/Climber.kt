@@ -35,13 +35,13 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
         }
     }
 
-    fun closeLatch(): Command = Commands.runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
-    fun openLatch(): Command = Commands.runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
-    fun lock(): Command = Commands.runOnce({ io.lock() })
-    fun unlock(): Command = Commands.runOnce({ io.unlock() })
-    fun unfold() {} //TODO
-    fun fold() {}   //TODO
-    private fun setAngle(angle: Angle): Command = Commands.runOnce({ io.setAngle(angle) })
-    private fun setPower(power: Double): Command = Commands.runOnce({ io.setPower(power) })
+    fun closeLatch(): Command = runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
+    fun openLatch(): Command = runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
+    fun lock(): Command = runOnce({ io.lock() })
+    fun unlock(): Command = runOnce({ io.unlock() })
+    fun unfold() {}
+    fun fold(){}
+    private fun setAngle(angle: Angle): Command = runOnce({ io.setAngle(angle) })
+    private fun setPower(power: Double): Command = runOnce({ io.setPower(power) })
 
 }
