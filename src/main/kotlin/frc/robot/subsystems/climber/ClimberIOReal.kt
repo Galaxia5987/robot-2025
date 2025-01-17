@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber
 
+import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.NeutralMode
+import com.ctre.phoenix.motorcontrol.can.TalonSRX
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
@@ -18,6 +20,7 @@ class ClimberIOReal:ClimberIO {
     var servo1 = LinearServo(Port.Climber.servo1,1,1)
     var servo2 = LinearServo(Port.Climber.servo2,1,1)
     var auxMotor = TalonFX(Port.Climber.auxMotor)
+    var lockServo = TalonSRX(Port.Climber.lockServo)
     var dutyCycleOut = DutyCycleOut(0.0)
     var positionVoltage = PositionVoltage(0.0)
 
@@ -39,10 +42,11 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun lock() {
-
+        lockServo.set(ControlMode.Position,LOCK_POSITION)
     }
 
     override fun unlock() {
+        lockServo.set(ControlMode.Position, UNLOCK_POSITION)
 
     }
 
