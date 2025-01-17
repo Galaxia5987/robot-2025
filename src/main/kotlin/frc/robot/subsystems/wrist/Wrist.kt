@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj2.command.Command
@@ -18,11 +19,12 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     private val ligament2d =
         root.append(MechanismLigament2d("WristLigament", 0.21, 0.0))
 
-    @AutoLogOutput private var setpoint = Angles.ZERO
+    @AutoLogOutput private var setpointName: Angles = Angles.ZERO
+    @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
     private var atSetpoint: Trigger = Trigger {
-        setpoint.angle.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
+        setpointName.angle.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
     private fun setPower(power: Double): Command = runOnce {
@@ -32,7 +34,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     private fun setAngle(angle: Angles): Command =
         runOnce {
                 io.setAngle(angle.angle)
-                setpoint = angle
+                setpointName = angle
+                setpointValue = angle.angle
             }
             .withName("Wrist ${angle.getLoggingName()}")
 
