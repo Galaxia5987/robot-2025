@@ -17,12 +17,6 @@ class ClimberIOSim : ClimberIO {
 
     override fun setLatchPosition(position: Distance) {
 
-    override fun lock() {
-        //TODO
-    }
-
-    override fun unlock() {
-        //TODO
     }
 
     override fun lock() {
