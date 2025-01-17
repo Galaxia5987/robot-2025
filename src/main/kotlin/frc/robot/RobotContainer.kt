@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.wrist.Wrist
-import frc.robot.subsystems.wrist.WristIOSim
 
 /**
  * This class is where the bulk of the robot should be declared. Since
