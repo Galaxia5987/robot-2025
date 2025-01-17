@@ -1,6 +1,5 @@
 package frc.robot.subsystems.climber
 
-import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -13,7 +12,7 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
     @AutoLogOutput
     private var isTouching = Trigger { inputs.sensorDistance.lt(DISTANCE_THRESHOLD) }
     private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
-    private var isLatchClosed = Trigger { inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION }
+    private var isLatchClosed = Trigger { inputs.latchPosition < LATCH_TOLERANCE }
     private var isAttached = Trigger(isLatchClosed.and(isTouching))
 
     companion object {
@@ -35,13 +34,7 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
         }
     }
 
-    fun closeLatch(): Command = runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
-    fun openLatch(): Command = runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
-    fun lock(): Command = runOnce({ io.lock() })
-    fun unlock(): Command = runOnce({ io.unlock() })
-    fun unfold() {}
-    fun fold(){}
-    private fun setAngle(angle: Angle): Command = runOnce({ io.setAngle(angle) })
-    private fun setPower(power: Double): Command = runOnce({ io.setPower(power) })
+    fun closeLatch(): Command = Commands.runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
+    fun openLatch(): Command = Commands.runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
 
 }
