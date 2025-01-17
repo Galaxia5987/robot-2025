@@ -3,14 +3,18 @@ package frc.robot.subsystems.gripper
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.RobotController
 
 class GripperIOReal : GripperIO {
     override val inputs = LoggedGripperInputs()
 
     private val motor = TalonFX(GRIPPER_PORT)
+    private val control = VoltageOut(0.0).withEnableFOC(true)
 
     init {
         motor.configurator.apply(TalonFXConfiguration().apply {
@@ -28,7 +32,7 @@ class GripperIOReal : GripperIO {
     }
 
     override fun setPower(power: Double) {
-        motor.set(power)
+        motor.setControl(control.withOutput(power * RobotController.getBatteryVoltage()))
     }
 
     override fun updateInputs() {
