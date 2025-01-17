@@ -11,12 +11,18 @@ import frc.robot.lib.motors.TalonType
 
 class ClimberIOSim : ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
-    var motor = TalonFXSim(2, gearRation, momentOfInertia.`in`(Units.KilogramSquareMeters), 1.0, TalonType.KRAKEN)
+    var motor = TalonFXSim(2, GEAR_RATIO, MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters), 1.0, TalonType.KRAKEN)
     var dutyCycle = DutyCycleOut(0.0)
     var positionControler =PositionVoltage(0.0)
 
     override fun setLatchPosition(position: Distance) {
 
+    override fun lock() {
+        //TODO
+    }
+
+    override fun unlock() {
+        //TODO
     }
 
     override fun lock() {
