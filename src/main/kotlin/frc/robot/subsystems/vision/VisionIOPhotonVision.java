@@ -16,17 +16,13 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import org.photonvision.PhotonCamera;
 
-/**
- * IO implementation for real PhotonVision hardware.
- */
+/** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
@@ -34,7 +30,7 @@ public class VisionIOPhotonVision implements VisionIO {
     /**
      * Creates a new VisionIOPhotonVision.
      *
-     * @param name             The configured name of the camera.
+     * @param name The configured name of the camera.
      * @param rotationSupplier The 3D position of the camera relative to the robot.
      */
     public VisionIOPhotonVision(String name, Transform3d robotToCamera) {

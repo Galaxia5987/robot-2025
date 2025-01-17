@@ -37,7 +37,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
-
 import java.util.Queue;
 
 /**
@@ -48,7 +47,7 @@ import java.util.Queue;
  */
 public class ModuleIOTalonFX implements ModuleIO {
     private final SwerveModuleConstants<
-            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             constants;
 
     // Hardware objects
