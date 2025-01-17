@@ -1,0 +1,8 @@
+package frc.robot.subsystems.climber
+
+const val mainMotor = 0
+const val auxMotor = 1
+const val servo1 = 2
+const val servo2 = 3
+const val Sensor = 4
+const val lockServo = 5
