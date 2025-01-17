@@ -29,6 +29,7 @@ class RollerIOReal : RollerIO {
                         SupplyCurrentLimit = 40.0
                     }
             }
+        motor.configurator.apply(motorConfig)
     }
 
     override fun setPower(power: Double) {
