@@ -6,6 +6,7 @@ import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.Units.Radians
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import org.littletonrobotics.junction.AutoLogOutput
 
 class Visualizer(
     private val elevatorHeight: () -> Distance,
@@ -27,6 +28,7 @@ class Visualizer(
         return carriagePose.rotateBy(Rotation3d(0.0, wristAngleDouble, 0.0))
     }
 
+    @AutoLogOutput
     fun visualize(): Array<Pose3d> {
         val intakePose = Pose3d(extenderPosition.invoke().`in`(Meters), 0.0, 0.0, Rotation3d.kZero)
         val (firstStagePose, secondStagePose) = getElevatorPoses()
