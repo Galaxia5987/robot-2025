@@ -1,5 +1,6 @@
 package frc.robot.subsystems.climber
 
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -36,5 +37,11 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
 
     fun closeLatch(): Command = Commands.runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
     fun openLatch(): Command = Commands.runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
+    fun lock(): Command = Commands.runOnce({ io.lock() })
+    fun unlock(): Command = Commands.runOnce({ io.unlock() })
+    fun unfold() {} //TODO
+    fun fold() {}   //TODO
+    private fun setAngle(angle: Angle): Command = Commands.runOnce({ io.setAngle(angle) })
+    private fun setPower(power: Double): Command = Commands.runOnce({ io.setPower(power) })
 
 }
