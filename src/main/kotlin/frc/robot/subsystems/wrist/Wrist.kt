@@ -51,7 +51,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
             "Pose",
             Pose3d(
                 Translation3d(),
-                Rotation3d(0.0, -io.inputs.angle.`in`(Units.Radians), 0.0)
+                Rotation3d(Units.Degrees.zero(), -io.inputs.angle, Units.Degrees.zero())
             )
         )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
