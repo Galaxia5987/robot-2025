@@ -13,6 +13,6 @@ interface RollerIO {
 
     @Logged
     open class RollerInputs {
-        var appliedVoltage: Voltage = Units.Volts.of(0.0)
+        var appliedVoltage: Voltage = Units.Volts.zero()
     }
 }
