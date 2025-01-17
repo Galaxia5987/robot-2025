@@ -13,7 +13,7 @@ class WristIOSim : WristIO {
     override val inputs = LoggedWristInputs()
 
     private val motor =
-        TalonFXSim(1, GEAR_RATIO, MOMENT_OF_INERTIA, 1.0, TalonType.FALCON)
+        TalonFXSim(1, GEAR_RATIO, MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters), 1.0, TalonType.FALCON)
     private val angleController = PIDController(1.0, 0.0, 0.0)
     private val positionControl = PositionVoltage(0.0)
     private val dutyCycle = DutyCycleOut(0.0)
