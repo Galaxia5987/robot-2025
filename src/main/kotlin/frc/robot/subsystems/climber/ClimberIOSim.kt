@@ -14,7 +14,9 @@ import frc.robot.lib.motors.TalonType
 class ClimberIOSim : ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
     var motor = TalonFXSim(2, GEAR_RATIO, MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters), 1.0, TalonType.KRAKEN)
-    var servo = SolenoidSim(PneumaticsModuleType.REVPH, 0)
+    var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, 0)
+    var servo2 = SolenoidSim(PneumaticsModuleType.REVPH, 0)
+    var lockServo = SolenoidSim(PneumaticsModuleType.REVPH, 0)
     var dutyCycle = DutyCycleOut(0.0)
     var positionControler = PositionVoltage(0.0)
 
