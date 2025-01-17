@@ -13,5 +13,7 @@ enum class Angles(val angle: Angle) {
     L2_ALGAE(Units.Degrees.of(110.0)),
     L3_ALGAE(Units.Degrees.of(110.0)),
     FEEDER(Units.Degrees.of(125.0)),
-    ZERO(Units.Degrees.zero())
+    ZERO(Units.Degrees.zero());
+
+    fun getLoggingName(): String = name.lowercase().replace("_", " ")
 }
