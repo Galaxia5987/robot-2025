@@ -7,7 +7,6 @@ import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
-import edu.wpi.first.wpilibj.RobotController
 
 class GripperIOReal : GripperIO {
     override val inputs = LoggedGripperInputs()
