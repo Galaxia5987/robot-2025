@@ -14,18 +14,21 @@ class RollerIOReal : RollerIO {
     private val controlRequest = DutyCycleOut(0.0)
 
     init {
-        val motorConfig = TalonFXConfiguration().apply {
-            MotorOutput = MotorOutputConfigs().apply {
-                Inverted = InvertedValue.Clockwise_Positive
-                NeutralMode = NeutralModeValue.Brake
+        val motorConfig =
+            TalonFXConfiguration().apply {
+                MotorOutput =
+                    MotorOutputConfigs().apply {
+                        Inverted = InvertedValue.Clockwise_Positive
+                        NeutralMode = NeutralModeValue.Brake
+                    }
+                CurrentLimits =
+                    CurrentLimitsConfigs().apply {
+                        StatorCurrentLimitEnable = true
+                        SupplyCurrentLimitEnable = true
+                        StatorCurrentLimit = 80.0
+                        SupplyCurrentLimit = 40.0
+                    }
             }
-            CurrentLimits = CurrentLimitsConfigs().apply {
-                StatorCurrentLimitEnable = true
-                SupplyCurrentLimitEnable = true
-                StatorCurrentLimit = 80.0
-                SupplyCurrentLimit = 40.0
-            }
-        }
     }
 
     override fun setPower(power: Double) {
