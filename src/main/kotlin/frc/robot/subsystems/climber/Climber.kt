@@ -2,19 +2,24 @@ package frc.robot.subsystems.climber
 
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.finallyDo
 import org.littletonrobotics.junction.AutoLogOutput
 
 class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
-    private var isTouching = Trigger { inputs.sensorDistance.lt(DISTANCE_THRESHOLD) }
+    private var isTouching = Trigger {
+        inputs.sensorDistance.lt(DISTANCE_THRESHOLD)
+    }
     private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
-    private var isLatchClosed = Trigger { inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION }
+    private var isLatchClosed = Trigger {
+        inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
+    }
     private var isAttached = Trigger(isLatchClosed.and(isTouching))
+    private val isFolded = Trigger { inputs.angle == FOLDED_ANGLE }
 
     companion object {
         @Volatile
@@ -29,9 +34,10 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
         }
 
         fun getInstance(): Climber {
-            return instance ?: throw IllegalStateException(
-                "Climber has not been initialized. Call initialize(io: ClimberIO) first."
-            )
+            return instance
+                ?: throw IllegalStateException(
+                    "Climber has not been initialized. Call initialize(io: ClimberIO) first."
+                )
         }
     }
 

@@ -22,16 +22,13 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/**
- * IO implementation for real Limelight hardware.
- */
+/** IO implementation for real Limelight hardware. */
 public class VisionIOLimelight implements VisionIO {
     private final Supplier<Rotation2d> rotationSupplier;
     private final DoubleArrayPublisher orientationPublisher;
@@ -45,7 +42,7 @@ public class VisionIOLimelight implements VisionIO {
     /**
      * Creates a new VisionIOLimelight.
      *
-     * @param name             The configured name of the Limelight.
+     * @param name The configured name of the Limelight.
      * @param rotationSupplier Supplier for the current estimated rotation, used for MegaTag 2.
      */
     public VisionIOLimelight(String name, Supplier<Rotation2d> rotationSupplier) {
@@ -56,9 +53,9 @@ public class VisionIOLimelight implements VisionIO {
         txSubscriber = table.getDoubleTopic("tx").subscribe(0.0);
         tySubscriber = table.getDoubleTopic("ty").subscribe(0.0);
         megatag1Subscriber =
-                table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[]{});
+                table.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[] {});
         megatag2Subscriber =
-                table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[]{});
+                table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[] {});
     }
 
     @Override
@@ -75,7 +72,7 @@ public class VisionIOLimelight implements VisionIO {
 
         // Update orientation for MegaTag 2
         orientationPublisher.accept(
-                new double[]{rotationSupplier.get().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0});
+                new double[] {rotationSupplier.get().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0});
         NetworkTableInstance.getDefault()
                 .flush(); // Increases network traffic but recommended by Limelight
 
@@ -148,9 +145,7 @@ public class VisionIOLimelight implements VisionIO {
         }
     }
 
-    /**
-     * Parses the 3D pose from a Limelight botpose array.
-     */
+    /** Parses the 3D pose from a Limelight botpose array. */
     private static Pose3d parsePose(double[] rawLLArray) {
         return new Pose3d(
                 rawLLArray[0],
