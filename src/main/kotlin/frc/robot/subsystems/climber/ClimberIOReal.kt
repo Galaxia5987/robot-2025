@@ -26,7 +26,7 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun setLatchPosition(position: Double) {
-//        listOf(servo2,servo1).forEach{it.set()}
+        listOf(servo2, servo1).forEach { it.set(position) }
     }
 
     override fun setPower(power: Double) {
