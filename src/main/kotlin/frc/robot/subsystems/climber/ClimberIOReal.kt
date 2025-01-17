@@ -42,11 +42,12 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun unlock() {
+
     }
 
     override fun updateInput() {
         inputs.angle = mainMotor.position.value
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
-//        inputs.latchPosition =
+        inputs.latchPosition = servo1.position
     }
 }
