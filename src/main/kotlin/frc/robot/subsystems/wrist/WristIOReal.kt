@@ -2,7 +2,6 @@ package frc.robot.subsystems.wrist
 
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.MotionMagicVoltage
-import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
@@ -52,8 +51,8 @@ class WristIOReal : WristIO {
         motor.setControl(positionControl.withPosition(angle))
     }
 
-    override fun setPower(power: Double) {
-        motor.setControl(voltageOut.withOutput(power * RobotController.getBatteryVoltage()))
+    override fun setVoltage(voltage: Double) {
+        motor.setControl(voltageOut.withOutput(voltage))
     }
 
     override fun resetAbsoluteEncoder(angle: Angle) {

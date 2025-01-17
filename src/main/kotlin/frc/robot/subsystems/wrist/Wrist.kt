@@ -25,7 +25,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     @AutoLogOutput private var setpoint = Angles.ZERO
 
     private fun setPower(power: Double): Command = runOnce {
-        io.setPower(power)
+        io.setVoltage(power)
     }
 
     private fun setAngle(angleGoal: Angles, name: String): Command =
