@@ -1,6 +1,7 @@
 package frc.robot.subsystems.wrist
 
 import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.controls.MotionMagicVoltage
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
@@ -13,7 +14,7 @@ import edu.wpi.first.units.measure.Angle
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
-    private val positionControl = PositionVoltage(0.0).withEnableFOC(true)
+    private val positionControl = MotionMagicVoltage(0.0).withEnableFOC(true)
     private val voltageOut = VoltageOut(0.0).withEnableFOC(true)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
