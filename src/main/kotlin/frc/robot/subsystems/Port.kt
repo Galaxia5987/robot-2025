@@ -7,5 +7,6 @@ object Port {
         const val servo1 = 2
         const val servo2 = 3
         const val Sensor = 4
+        const val lockServo = 5
     }
 }
