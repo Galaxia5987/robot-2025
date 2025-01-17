@@ -13,16 +13,17 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
-    @AutoLogOutput
-    private var atSetpoint: Trigger = Trigger {
-        setpoint.angle.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
-    }
     @AutoLogOutput private val mechanism = Mechanism2d(2.0, 3.0)
     private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
     private val ligament2d =
         root.append(MechanismLigament2d("WristLigament", 0.21, 0.0))
 
     @AutoLogOutput private var setpoint = Angles.ZERO
+
+    @AutoLogOutput
+    private var atSetpoint: Trigger = Trigger {
+        setpoint.angle.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
+    }
 
     private fun setPower(power: Double): Command = runOnce {
         io.setPower(power)
