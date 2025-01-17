@@ -31,6 +31,8 @@ class Visualizer(
         val intakePose = Pose3d(extenderPosition.invoke().`in`(Meters), 0.0, 0.0, Rotation3d.kZero)
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose = getWristPose(secondStagePose)
-        return arrayOf(intakePose, firstStagePose, secondStagePose, wristPose)
+        val climberPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0))
+
+        return arrayOf(intakePose, firstStagePose, secondStagePose, wristPose, climberPose)
     }
 }
