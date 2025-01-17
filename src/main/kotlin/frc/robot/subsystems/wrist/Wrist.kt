@@ -29,12 +29,12 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         io.setPower(power)
     }
 
-    private fun setAngle(angleGoal: Angles): Command =
+    private fun setAngle(angle: Angles): Command =
         runOnce {
-                io.setAngle(angleGoal.angle)
-                setpoint = angleGoal
+                io.setAngle(angle.angle)
+                setpoint = angle
             }
-            .withName("Wrist ${angleGoal.getLoggingName()}")
+            .withName("Wrist ${angle.getLoggingName()}")
 
     fun l1(): Command = setAngle(Angles.L1)
     fun l2(): Command = setAngle(Angles.L2)
