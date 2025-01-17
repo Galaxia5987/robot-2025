@@ -15,5 +15,7 @@ enum class Angles(val angle: Angle) {
     FEEDER(Units.Degrees.of(125.0)),
     ZERO(Units.Degrees.zero());
 
-    fun getLoggingName(): String = name.lowercase().replace("_", " ")
+    fun getLoggingName() = name.split("_").joinToString(" ") {
+        it.lowercase().replaceFirstChar(Char::uppercase)
+    }
 }
