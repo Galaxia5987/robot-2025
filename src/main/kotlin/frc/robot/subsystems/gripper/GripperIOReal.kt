@@ -30,8 +30,8 @@ class GripperIOReal : GripperIO {
         })
     }
 
-    override fun setPower(power: Double) {
-        motor.setControl(control.withOutput(power * RobotController.getBatteryVoltage()))
+    override fun setVoltage(voltage: Double) {
+        motor.setControl(control.withOutput(voltage))
     }
 
     override fun updateInputs() {
