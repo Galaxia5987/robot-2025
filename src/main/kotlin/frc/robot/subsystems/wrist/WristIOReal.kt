@@ -13,8 +13,8 @@ import edu.wpi.first.units.measure.Angle
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
-    private val positionControl = PositionVoltage(0.0)
-    private val voltageOut = Voltage(0.0)
+    private val positionControl = PositionVoltage(0.0).withEnableFOC(true)
+    private val voltageOut = VoltageOut(0.0).withEnableFOC(true)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
