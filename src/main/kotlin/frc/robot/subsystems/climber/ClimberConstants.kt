@@ -18,8 +18,8 @@ val UNFOLDED_ANGLE: Angle = Units.Degree.of(60.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(30.0)
 const val GEAR_RATIO = 1.0
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.0)
-var DISTANCE_THRESHOLD: Distance = Units.Centimeter.of(0.4)
-var LATCH_TOLERANCE: Distance = Units.Centimeter.of(0.4)
+var DISTANCE_THRESHOLD  = Units.Centimeter.of(0.4)
+var LATCH_TOLERANCE = 0.03
 var MOTOR_CONFIG = TalonFXConfiguration().apply {
     MotorOutput.apply {
         NeutralMode = NeutralModeValue.Brake
