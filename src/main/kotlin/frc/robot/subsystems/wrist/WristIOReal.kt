@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.RobotController
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
-    private val positionControl = MotionMagicVoltage(0.0).withEnableFOC(true)
-    private val voltageOut = VoltageOut(0.0).withEnableFOC(true)
+    private val positionControl = MotionMagicVoltage(0.0)
+    private val voltageOut = VoltageOut(0.0)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
