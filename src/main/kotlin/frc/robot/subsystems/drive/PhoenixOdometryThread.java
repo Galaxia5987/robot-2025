@@ -18,7 +18,6 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.RobotController;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -67,9 +66,7 @@ public class PhoenixOdometryThread extends Thread {
         }
     }
 
-    /**
-     * Registers a Phoenix signal to be read from the thread.
-     */
+    /** Registers a Phoenix signal to be read from the thread. */
     public Queue<Double> registerSignal(StatusSignal<Angle> signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
@@ -87,9 +84,7 @@ public class PhoenixOdometryThread extends Thread {
         return queue;
     }
 
-    /**
-     * Registers a generic signal to be read from the thread.
-     */
+    /** Registers a generic signal to be read from the thread. */
     public Queue<Double> registerSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         signalsLock.lock();
@@ -104,9 +99,7 @@ public class PhoenixOdometryThread extends Thread {
         return queue;
     }
 
-    /**
-     * Returns a new queue that returns timestamp values for each sample.
-     */
+    /** Returns a new queue that returns timestamp values for each sample. */
     public Queue<Double> makeTimestampQueue() {
         Queue<Double> queue = new ArrayBlockingQueue<>(20);
         Drive.odometryLock.lock();
