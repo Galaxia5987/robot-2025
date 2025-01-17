@@ -14,6 +14,8 @@ class RollerIOReal : RollerIO {
     private val controlRequest = DutyCycleOut(0.0)
 
     init {
+        controlRequest.withEnableFOC(true)
+
         val motorConfig =
             TalonFXConfiguration().apply {
                 MotorOutput =
