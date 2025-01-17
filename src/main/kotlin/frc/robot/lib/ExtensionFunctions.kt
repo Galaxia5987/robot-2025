@@ -13,9 +13,9 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.WrapperCommand
 import frc.robot.IS_RED
+import org.littletonrobotics.junction.LogTable
 import kotlin.math.PI
 import kotlin.math.hypot
-import org.littletonrobotics.junction.LogTable
 
 fun ChassisSpeeds.getSpeed() = hypot(vxMetersPerSecond, vyMetersPerSecond)
 
@@ -107,6 +107,4 @@ fun Distance.toAngle(radius: Distance): Angle =
     )
 
 fun Angle.toDistance(radius: Distance): Distance =
-    Units.Meters.of(
-        this.`in`(Units.Rotations) * 2 * PI * radius.`in`(Units.Meters)
-    )
+    radius.times(this.`in`(Units.Rotations) * 2 * PI)
