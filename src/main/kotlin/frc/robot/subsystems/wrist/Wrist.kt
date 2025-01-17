@@ -37,7 +37,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 setpointName = angle
                 setpointValue = angle.angle
             }
-            .withName("Wrist ${angle.getLoggingName()}")
+            .withName("Wrist/${angle.getLoggingName()}")
 
     fun l1(): Command = setAngle(Angles.L1)
     fun l2(): Command = setAngle(Angles.L2)
