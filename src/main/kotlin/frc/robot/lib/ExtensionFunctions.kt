@@ -107,4 +107,4 @@ fun Distance.toAngle(radius: Distance): Angle =
     )
 
 fun Angle.toDistance(radius: Distance): Distance =
-    radius.times(this.`in`(Units.Rotations) * 2 * PI)
+    radius * this.`in`(Units.Rotations) * 2.0 * PI
