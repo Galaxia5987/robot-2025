@@ -35,3 +35,17 @@ fun getRotation3d(roll: Double = 0.0, pitch: Double = 0.0, yaw: Double = 0.0) = 
 
 fun getRotation3d(roll: Angle = Rotations.zero(), pitch: Angle = Rotations.zero(), yaw: Angle = Rotations.zero()) =
     Rotation3d(roll, pitch, yaw)
+
+
+fun getPose3d(translation: Translation3d = Translation3d(), rotation: Rotation3d = Rotation3d()) =
+    Pose3d(translation, rotation)
+
+fun getPose3d(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0, rotation: Rotation3d = Rotation3d()) =
+    Pose3d(x, y, z, rotation)
+
+fun getPose3d(
+    x: Distance = Meters.zero(),
+    y: Distance = Meters.zero(),
+    z: Distance = Meters.zero(),
+    rotation: Rotation3d = Rotation3d(),
+) = Pose3d(x, y, z, rotation)
