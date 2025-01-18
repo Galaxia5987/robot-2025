@@ -33,10 +33,11 @@ class Visualizer(
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose = secondStagePose.rotateBy(Rotation3d(0.0, wristAngle.invoke().`in`(Radians), 0.0))
-        val climberPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0))
 
         val coralRollersPose = wristPose.rotateBy(Rotation3d(0.0, coralRollersAngle.invoke().`in`(Radians), 0.0))
         val algaeRemoverPose = wristPose.rotateBy(Rotation3d(0.0, algaeRemoverAngle.invoke().`in`(Radians), 0.0))
+
+        val climberPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0))
 
         return arrayOf(
             intakePose,
