@@ -2,9 +2,7 @@ package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
@@ -84,9 +82,6 @@ fun Command.finallyDo(command: Command): WrapperCommand =
             command.schedule()
         }
     )
-
-fun Pose2d.toPose3d(): Pose3d =
-    Pose3d(x, y, 0.0, Rotation3d(0.0, 0.0, rotation.radians))
 
 fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
 
