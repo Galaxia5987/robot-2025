@@ -12,12 +12,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
     @AutoLogOutput private val mechanism = Mechanism2d(2.0, 3.0)
     private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
     private val ligament2d =
-        root.append(MechanismLigament2d("WristLigament", 0.21, 0.0))
+        root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
 
     @AutoLogOutput private var setpointName: Angles = Angles.ZERO
     @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
@@ -59,5 +61,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
             )
         )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
+        Logger.recordOutput("Wrist/Mechanism2d", mechanism)
+        Logger.recordOutput("Wrist/Setpoint", setpoint)
     }
 }
