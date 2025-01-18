@@ -12,11 +12,11 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
             {io.setPower(0.0)}
         ).withName("roller/setPower")
 
-    fun intake() = setPower(INTAKE_POWER)
+    fun intake() = setPower(INTAKE_POWER).withName("roller/intake")
 
-    fun outtake() = setPower(OUTTAKE_POWER)
+    fun outtake() = setPower(OUTTAKE_POWER).withName("roller/outtake")
 
-    fun farOuttake() = setPower(FAR_OUTTAKE_POWER)
+    fun farOuttake() = setPower(FAR_OUTTAKE_POWER).withName("roller/farOuttake")
 
     override fun periodic() {
         io.updateInputs()
