@@ -44,12 +44,14 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     fun climb(): Command =
-        run { closeLatch() }
-            .andThen(setAngle(FOLDED_ANGLE).onlyIf(isLatchClosed))
-            .finallyDo(lock().onlyIf(isFolded))
+        run {setLatchPose(CLOSE_LATCH_POSITION)}
+            .until(isLatchClosed)
+            .andThen(setAngle(FOLDED_ANGLE))
+            .until(isFolded)
+            .andThen(lock())
 
     fun unClimb(): Command =
-        run { setPower(-0.4) }
+        run {setLatchPose(CLOSE_LATCH_POSITION)}
             .andThen(unlock())
             .andThen({ unfold() })
             .andThen(openLatch())
