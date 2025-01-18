@@ -52,7 +52,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         run { setPower(-0.4) }
             .andThen(unlock())
             .andThen({ unfold() })
-            .finallyDo(openLatch())
+            .andThen(openLatch())
 
     private fun setAngle(angle: Angle): Command =
         runOnce({ io.setAngle(angle) })
