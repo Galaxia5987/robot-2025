@@ -13,7 +13,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     @AutoLogOutput
     private var isTouching = Trigger {
-        inputs.sensorDistance.lt(DISTANCE_THRESHOLD)
+        inputs.sensorDistance < DISTANCE_THRESHOLD
     }
     private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
     private var isLatchClosed = Trigger {
