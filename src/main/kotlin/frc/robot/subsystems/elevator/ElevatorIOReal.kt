@@ -42,10 +42,12 @@ class ElevatorIOReal : ElevatorIO {
             }
         motor.configurator.apply(motorConfig)
 
-        var encoderConfig =
+        val encoderConfig =
             CANcoderConfiguration().apply {
                 MagnetSensor.MagnetOffset = ENCODER_OFSET
             }
+
+        encoder.configurator.apply(encoderConfig)
     }
 
     override fun setHeight(height: Distance) {
