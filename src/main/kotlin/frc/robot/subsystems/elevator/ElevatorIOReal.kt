@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator
 import ENCODER_ID
 import MOTOR_ID
 import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
@@ -14,7 +15,7 @@ class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motor = TalonFX(MOTOR_ID)
     private val encoder = CANcoder(ENCODER_ID)
-    private val motorPositionRequest = PositionVoltage(0.0)
+    private val motorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
 
     init {
         val motorConfig =
