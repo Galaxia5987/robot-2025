@@ -17,13 +17,14 @@ import frc.robot.lib.motors.LinearServo
 
 class ClimberIOReal:ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
-    var mainMotor = TalonFX(MAIN_MOTOR_ID)
-    var servo1 = LinearServo(SERVO_1_ID,1,1)
-    var servo2 = LinearServo(SERVO_2_ID,1,1)
-    var auxMotor = TalonFX(AUX_MOTOR_ID)
-    var lockServo = TalonSRX(LOCK_MOTOR_ID)
-    var dutyCycleOut = DutyCycleOut(0.0)
-    var positionVoltage = PositionVoltage(0.0)
+    val mainMotor = TalonFX(MAIN_MOTOR_ID)
+    val servo1 = LinearServo(SERVO_1_ID,1,1)
+    val servo2 = LinearServo(SERVO_2_ID,1,1)
+    val auxMotor = TalonFX(AUX_MOTOR_ID)
+    val lockServo = TalonSRX(LOCK_MOTOR_ID)
+    val dutyCycleOut = DutyCycleOut(0.0)
+    val positionVoltage = PositionVoltage(0.0)
+
 
     init {
         auxMotor.setControl(StrictFollower(mainMotor.deviceID))
