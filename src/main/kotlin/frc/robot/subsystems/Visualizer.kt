@@ -12,6 +12,7 @@ class Visualizer(
     private val elevatorHeight: () -> Distance,
     private val wristAngle: () -> Angle,
     private val extenderPosition: () -> Distance,
+    private val intakeRollerAngle: () -> Angle,
     private val climberAngle: () -> Angle,
     private val coralRollersAngle: () -> Angle,
     private val algaeRemoverAngle: () -> Angle,
@@ -33,6 +34,8 @@ class Visualizer(
     @AutoLogOutput
     fun visualize(): Array<Pose3d> {
         val intakePose = Pose3d(extenderPosition.invoke().`in`(Meters), 0.0, 0.0, Rotation3d.kZero)
+        val intakeRollerPose = intakePose.rotateBy(Rotation3d(0.0, intakeRollerAngle.invoke().`in`(Radians), 0.0))
+
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose = getWristPose(secondStagePose)
         val climberPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0))
@@ -42,6 +45,7 @@ class Visualizer(
 
         return arrayOf(
             intakePose,
+            intakeRollerPose,
             firstStagePose,
             secondStagePose,
             wristPose,
