@@ -6,6 +6,7 @@ import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Dimensionless
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
@@ -31,7 +32,7 @@ class ClimberIOSim : ClimberIO {
     var positionControler = PositionVoltage(0.0)
 
 
-    override fun setLatchPosition(position: Double) {
+    override fun setLatchPosition(position: Dimensionless) {
         if (Double.equals(OPEN_LATCH_POSITION)) {
             listOf(servo2, servo1).forEach { it.output = true }
         } else {
