@@ -1,10 +1,9 @@
 package frc.robot.lib
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.math.geometry.*
 import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.Units.Rotations
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 
 fun getTranslation2d(x: Double = 0.0, y: Double = 0.0) = Translation2d(x, y)
@@ -30,3 +29,9 @@ fun getTranslation3d(x: Double = 0.0, y: Double = 0.0, z: Double = 0.0) = Transl
 
 fun getTranslation3d(x: Distance = Meters.zero(), y: Distance = Meters.zero(), z: Distance = Meters.zero()) =
     Translation3d(x, y, z)
+
+
+fun getRotation3d(roll: Double = 0.0, pitch: Double = 0.0, yaw: Double = 0.0) = Rotation3d(roll, pitch, yaw)
+
+fun getRotation3d(roll: Angle = Rotations.zero(), pitch: Angle = Rotations.zero(), yaw: Angle = Rotations.zero()) =
+    Rotation3d(roll, pitch, yaw)
