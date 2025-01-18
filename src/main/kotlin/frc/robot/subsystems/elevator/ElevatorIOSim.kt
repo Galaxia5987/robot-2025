@@ -12,6 +12,7 @@ import frc.robot.lib.motors.TalonType
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motorPosititonRequest = PositionVoltage(0.0)
+    private val dutyCycleRequest = DutyCycleOut(0.0)
     private val motor =
         TalonFXSim(
             LinearSystemId.createElevatorSystem(
@@ -34,7 +35,7 @@ class ElevatorIOSim : ElevatorIO {
         motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
     }
     override fun setPower(percentOutput: Double) {
-        motor.setControl(DutyCycleOut(percentOutput))
+        motor.setControl(dutyCycleRequest.withOutput(percentOutput))
     }
 
     override fun updateInputs() {
