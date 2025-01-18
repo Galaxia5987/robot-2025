@@ -28,7 +28,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     }
 
     private fun setPower(power: Double): Command = runOnce {
-        io.setPower(power)
+        io.setVoltage(power)
     }
 
     private fun setAngle(angle: Angles): Command =

@@ -8,7 +8,7 @@ interface WristIO {
     val inputs: LoggedWristInputs
 
     fun setAngle(angle: Angle) {}
-    fun setPower(power: Double) {}
+    fun setVoltage(power: Double) {}
     fun resetAbsoluteEncoder() {}
     fun updateInputs() {}
 
