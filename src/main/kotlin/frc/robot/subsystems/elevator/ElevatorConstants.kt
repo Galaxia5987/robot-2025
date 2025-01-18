@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.Units
+import edu.wpi.first.units.*
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
@@ -12,8 +13,14 @@ const val FIRST_STAGE_RATIO = 2.0
 const val WEIGHT = 0.0
 const val ENCODER_OFSET = 0.0
 private val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
-val ROTATIONS_TO_CENTIMETER =
+private val ROTATIONS_TO_CENTIMETERS_RATIO =
     GEAR_RATIO *
-        FIRST_STAGE_RATIO *
-        (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI)
+            FIRST_STAGE_RATIO *
+            (SPROCKET_RADIUS.`in`(Units.Centimeter) * 2 * PI)
+val ROTATIONS_TO_CENTIMETER: Measure<out PerUnit<DistanceUnit, AngleUnit>> =
+    Units.Centimeters.per(Units.Rotations).of(ROTATIONS_TO_CENTIMETERS_RATIO)
+val CENTIMETERS_TO_ROTATIONS: Measure<out PerUnit<AngleUnit, DistanceUnit>> =
+    Units.Rotations.per(Units.Centimeter).of(1 / ROTATIONS_TO_CENTIMETERS_RATIO)
+
+
 val GAINS = selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0), Gains())

@@ -8,7 +8,11 @@ import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.units.AngleUnit
+import edu.wpi.first.units.Measure
+import edu.wpi.first.units.PerUnit
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 
 class ElevatorIOReal : ElevatorIO {
@@ -51,11 +55,9 @@ class ElevatorIOReal : ElevatorIO {
     }
 
     override fun setHeight(height: Distance) {
-        val rotationalPosition =
-            Units.Rotations.of(
-                height.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
-            )
-        motor.setControl(motorPositionRequest.withPosition(rotationalPosition))
+        motor.setControl(
+            motorPositionRequest.withPosition(height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS))
+        )
     }
 
     override fun setPower(percentOutput: Double) {
@@ -65,18 +67,11 @@ class ElevatorIOReal : ElevatorIO {
     override fun resetAbsoluteEncoder() {
         motor.setPosition(0.0)
     }
+
     override fun updateInputs() {
         inputs.appliedVoltage = motor.motorVoltage.value
-        inputs.height =
-            Units.Centimeter.of(
-                motor.position.value.`in`(Units.Rotations) *
-                    ROTATIONS_TO_CENTIMETER
-            )
+        inputs.height = motor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
-        inputs.absoluteEncoderHeight =
-            Units.Centimeter.of(
-                encoder.position.value.`in`(Units.Rotations) *
-                    ROTATIONS_TO_CENTIMETER
-            )
+        inputs.absoluteEncoderHeight = encoder.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
     }
 }
