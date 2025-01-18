@@ -17,20 +17,26 @@ import frc.robot.lib.motors.TalonType
 class ClimberIOSim : ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
     var motor =
-        TalonFXSim(2, GEAR_RATIO, MOMENT_OF_INERTIA_MAIN.`in`(Units.KilogramSquareMeters), 1.0, TalonType.KRAKEN)
+        TalonFXSim(
+            2,
+            GEAR_RATIO,
+            MOMENT_OF_INERTIA_MAIN.`in`(Units.KilogramSquareMeters),
+            1.0,
+            TalonType.KRAKEN
+        )
     var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, 0)
     var servo2 = SolenoidSim(PneumaticsModuleType.REVPH, 0)
-    val lockMotor = DCMotorSim(
-        LinearSystemId.createDCMotorSystem(
-            DCMotor.getBag(1),
-            MOMENT_OF_INERTIA_LOCK.`in`(Units.KilogramSquareMeters),
-            1.0
-        ),
-        DCMotor.getBag(1)
-    )
+    val lockMotor =
+        DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getBag(1),
+                MOMENT_OF_INERTIA_LOCK.`in`(Units.KilogramSquareMeters),
+                1.0
+            ),
+            DCMotor.getBag(1)
+        )
     var dutyCycle = DutyCycleOut(0.0)
     var positionControler = PositionVoltage(0.0)
-
 
     override fun setLatchPosition(position: Dimensionless) {
         if (Double.equals(OPEN_LATCH_POSITION)) {
