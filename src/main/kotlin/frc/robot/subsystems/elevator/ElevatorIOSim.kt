@@ -28,19 +28,15 @@ class ElevatorIOSim : ElevatorIO {
         )
 
     override fun setHeight(position: Distance) {
-        val rotationalPosition =
-            Units.Rotations.of(
-                position.`in`(Units.Centimeter) / ROTATIONS_TO_CENTIMETER
-            )
-        motor.setControl(motorPosititonRequest.withPosition(rotationalPosition))
+        motor.setControl(motorPosititonRequest.withPosition(position.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)))
     }
+
     override fun setPower(percentOutput: Double) {
         motor.setControl(dutyCycleRequest.withOutput(percentOutput))
     }
 
     override fun updateInputs() {
         inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
-        inputs.height =
-            Units.Centimeter.of(motor.position * ROTATIONS_TO_CENTIMETER)
+        inputs.height = Units.Rotations.of(motor.position).timesConversionFactor(ROTATIONS_TO_CENTIMETER)
     }
 }
