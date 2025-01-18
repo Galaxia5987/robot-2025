@@ -31,11 +31,11 @@ object RobotContainer {
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand =
             DriveCommands.joystickDriveAtAngle(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { swerveDrive.desiredHeading },
-            )
+                    swerveDrive,
+                    { driverController.leftY },
+                    { driverController.leftX },
+                    { swerveDrive.desiredHeading },
+                )
                 .alongWith(
                     swerveDrive.updateDesiredHeading {
                         -driverController.rightX
