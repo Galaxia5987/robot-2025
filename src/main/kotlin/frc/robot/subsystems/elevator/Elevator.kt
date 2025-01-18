@@ -14,11 +14,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     fun setPosition(position: Distance): Command {
         positionSetpoint = position
-        return run({ io.setHeight(position) })
+        return run { io.setHeight(position) }
     }
 
     fun setPower(percentOutput: DoubleSupplier): Command {
-        return run({ io.setPower(percentOutput.asDouble) })
+        return run { io.setPower(percentOutput.asDouble) }
     }
 
     fun resetAbsoluteEncoder(): Command = runOnce(io::resetAbsoluteEncoder)
