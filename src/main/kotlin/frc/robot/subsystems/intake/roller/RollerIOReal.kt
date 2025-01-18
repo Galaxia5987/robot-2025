@@ -11,7 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 class RollerIOReal : RollerIO {
     override val inputs = LoggedRollerInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val controlRequest = DutyCycleOut(0.0)
+    private val controlRequest = DutyCycleOut(0.0).withEnableFOC(true)
 
     init {
         controlRequest.withEnableFOC(true)
