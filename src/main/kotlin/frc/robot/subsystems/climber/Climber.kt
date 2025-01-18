@@ -1,5 +1,6 @@
 package frc.robot.subsystems.climber
 
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -16,7 +17,7 @@ class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
     }
     private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
     private var isLatchClosed = Trigger {
-        inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
+        inputs.latchPosition < Units.Percent.of(LATCH_TOLERANCE + CLOSE_LATCH_POSITION)
     }
     private var isAttached = Trigger(isLatchClosed.and(isTouching))
     private val isFolded = Trigger { inputs.angle == FOLDED_ANGLE }
