@@ -1,6 +1,7 @@
 package frc.robot.subsystems.gripper
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.MutVoltage
 import org.team9432.annotation.Logged
 
 interface GripperIO {
@@ -12,6 +13,6 @@ interface GripperIO {
 
     @Logged
     open class GripperInputs {
-        var appliedVoltage = Units.Volts.zero()
+        var appliedVoltage: MutVoltage = Units.Volts.zero().mutableCopy()
     }
 }
