@@ -13,6 +13,7 @@ class Visualizer(
     private val wristAngle: () -> Angle,
     private val extenderPosition: () -> Distance,
     private val climberAngle: () -> Angle,
+    private val coralRollersAngle: () -> Angle,
 ) {
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
         val carriageHeight = elevatorHeight.invoke().`in`(Meters)
@@ -35,6 +36,12 @@ class Visualizer(
         val wristPose = getWristPose(secondStagePose)
         val climberPose = Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0))
 
-        return arrayOf(intakePose, firstStagePose, secondStagePose, wristPose, climberPose)
+        return arrayOf(
+            intakePose,
+            firstStagePose,
+            secondStagePose,
+            wristPose,
+            climberPose
+        )
     }
 }
