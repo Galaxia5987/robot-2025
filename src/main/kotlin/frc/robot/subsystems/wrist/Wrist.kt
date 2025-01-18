@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
-    @AutoLogOutput private val mechanism = Mechanism2d(2.0, 3.0)
+    @AutoLogOutput private val mechanism = LoggedMechanism2d(2.0, 3.0)
     private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
     private val ligament2d =
         root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
