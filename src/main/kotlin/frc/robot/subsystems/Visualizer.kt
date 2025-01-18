@@ -14,6 +14,7 @@ class Visualizer(
     private val extenderPosition: () -> Distance,
     private val climberAngle: () -> Angle,
     private val coralRollersAngle: () -> Angle,
+    private val algaeRemoverAngle: () -> Angle,
 ) {
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
         val carriageHeight = elevatorHeight.invoke().`in`(Meters)
