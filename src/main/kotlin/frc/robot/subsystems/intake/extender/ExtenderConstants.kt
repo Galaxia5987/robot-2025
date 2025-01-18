@@ -8,5 +8,12 @@ const val GEAR_RATIO = 0.0
 const val RESET_POWER = 0.0
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
-val EXTENDED_POSITION: Distance = Units.Meters.of(0.0)
-val RETRACTED_POSITION: Distance = Units.Meters.of(0.0)
+
+enum class Positions(val position: Distance) {
+    EXTENDED(Units.Meters.of(0.0)),
+    RETRACTED(Units.Meters.of(0.0));
+
+    fun getLoggingName() = name.split("_").joinToString(" ") {
+        it.lowercase().replaceFirstChar(Char::uppercase)
+    }
+}
