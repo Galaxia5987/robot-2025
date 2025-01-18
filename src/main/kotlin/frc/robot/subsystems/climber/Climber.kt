@@ -21,7 +21,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     @AutoLogOutput
     private var isLatchClosed = Trigger {
-        inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
+        inputs.latchPosition.isNear(CLOSE_LATCH_POSITION,LATCH_TOLERANCE)
     }
 
     @AutoLogOutput
