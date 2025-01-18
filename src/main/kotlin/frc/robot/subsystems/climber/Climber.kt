@@ -15,7 +15,11 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private var isTouching = Trigger {
         inputs.sensorDistance < DISTANCE_THRESHOLD
     }
-    private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
+
+    @AutoLogOutput
+    private val hasClimbed = Trigger { inputs.angle.isNear(FOLDED_ANGLE, FOLDED_ANGLE_TOLERANCE) }
+
+    @AutoLogOutput
     private var isLatchClosed = Trigger {
         inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
     }
