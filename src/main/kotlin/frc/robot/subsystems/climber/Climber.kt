@@ -15,10 +15,6 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private var isTouching = Trigger {
         inputs.sensorDistance < DISTANCE_THRESHOLD
     }
-
-    @AutoLogOutput
-    private val hasClimbed = Trigger { inputs.angle.isNear(FOLDED_ANGLE, FOLDED_ANGLE_TOLERANCE) }
-
     @AutoLogOutput
     private var isLatchClosed = Trigger {
         inputs.latchPosition.isNear(CLOSE_LATCH_POSITION,LATCH_TOLERANCE)
@@ -26,27 +22,8 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     @AutoLogOutput
     private var isAttached = Trigger(isLatchClosed).and(isTouching)
-    private val isFolded = Trigger { inputs.angle == FOLDED_ANGLE }
-
-    companion object {
-        @Volatile
-        private var instance: Climber? = null
-
-        fun initialize(io: ClimberIO) {
-            synchronized(this) {
-                if (instance == null) {
-                    instance = Climber(io)
-                }
-            }
-        }
-
-        fun getInstance(): Climber {
-            return instance
-                ?: throw IllegalStateException(
-                    "Climber has not been initialized. Call initialize(io: ClimberIO) first."
-                )
-        }
-    }
+    @AutoLogOutput
+    private val isFolded = Trigger { inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)  }
 
     fun closeLatch(): Command =
         runOnce({ setLatchPose(CLOSE_LATCH_POSITION) })
