@@ -31,9 +31,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private fun setPower(power: Double): Command =
         runOnce { io.setPower(power) }.withName("extender/setPower")
 
-    fun extend() = setPosition(EXTENDED_POSITION).withName("extender/extend")
+    fun extend() = setPosition(Positions.EXTENDED.position).withName("extender/extend")
 
-    fun retract() = setPosition(RETRACTED_POSITION).withName("extender/retract")
+    fun retract() = setPosition(Positions.RETRACTED.position).withName("extender/retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
@@ -45,12 +45,12 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput
     val isExtended = Trigger {
-        EXTENDED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
+        io.inputs.position.isNear(Positions.EXTENDED.position, POSITION_TOLERANCE)
     }
 
     @AutoLogOutput
     val isRetracted = Trigger {
-        RETRACTED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
+        io.inputs.position.isNear(Positions.RETRACTED.position, POSITION_TOLERANCE)
     }
 
     @AutoLogOutput
