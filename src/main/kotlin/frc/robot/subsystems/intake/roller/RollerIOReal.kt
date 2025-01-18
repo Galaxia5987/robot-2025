@@ -33,6 +33,10 @@ class RollerIOReal : RollerIO {
     }
 
     override fun setPower(power: Double) {
-        super.setPower(power)
+        motor.setControl(controlRequest.withOutput(power))
+    }
+
+    override fun updateInputs() {
+        inputs.appliedVoltage = motor.motorVoltage.value
     }
 }
