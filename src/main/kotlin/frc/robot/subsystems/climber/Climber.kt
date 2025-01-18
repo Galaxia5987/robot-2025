@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.finallyDo
 import org.littletonrobotics.junction.AutoLogOutput
 
-class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
+class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
