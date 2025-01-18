@@ -17,27 +17,28 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput private var error = Units.Meters.zero()
     @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
-    private val ligament = root.append(MechanismLigament2d("ExtenderLigament",0.569, 0.0))
+    private val ligament =
+        root.append(MechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
     private fun setPosition(position: Distance): Command =
         runOnce {
                 io.setPosition(position)
                 setpoint = position
             }
-            .withName("setPosition")
+            .withName("extender/setPosition")
 
     private fun setPower(power: Double): Command =
-        runOnce { io.setPower(power) }.withName("setPower")
+        runOnce { io.setPower(power) }.withName("extender/setPower")
 
-    fun extend() = setPosition(EXTENDED_POSITION).withName("extend")
+    fun extend() = setPosition(EXTENDED_POSITION).withName("extender/extend")
 
-    fun retract() = setPosition(RETRACTED_POSITION).withName("retract")
+    fun retract() = setPosition(RETRACTED_POSITION).withName("extender/retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
             .until(isStuck)
             .andThen(setPower(0.0), runOnce { io::reset })
-            .withName("reset")
+            .withName("extender/reset")
     }
 
     @AutoLogOutput
