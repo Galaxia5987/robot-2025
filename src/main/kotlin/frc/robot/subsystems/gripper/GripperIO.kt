@@ -6,7 +6,7 @@ import org.team9432.annotation.Logged
 interface GripperIO {
     val inputs: LoggedGripperInputs
 
-    fun setPower(power: Double) {}
+    fun setVoltage(power: Double) {}
 
     fun updateInputs() {}
 
