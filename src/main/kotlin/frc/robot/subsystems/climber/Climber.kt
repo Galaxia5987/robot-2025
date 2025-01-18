@@ -23,7 +23,9 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private var isLatchClosed = Trigger {
         inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
     }
-    private var isAttached = Trigger(isLatchClosed.and(isTouching))
+
+    @AutoLogOutput
+    private var isAttached = Trigger(isLatchClosed).and(isTouching)
     private val isFolded = Trigger { inputs.angle == FOLDED_ANGLE }
 
     companion object {
