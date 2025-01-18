@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.StrictFollower
 import com.ctre.phoenix6.hardware.TalonFX
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
@@ -42,11 +43,11 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun lock() {
-        lockServo.set(ControlMode.Position,LOCK_POSITION)
+        lockServo.set(ControlMode.Position, LOCK_ANGLE.`in`(Units.Radians))
     }
 
     override fun unlock() {
-        lockServo.set(ControlMode.Position, UNLOCK_POSITION)
+        lockServo.set(ControlMode.Position, UNLOCK_ANGLE.`in`(Units.Radians))
 
     }
 
