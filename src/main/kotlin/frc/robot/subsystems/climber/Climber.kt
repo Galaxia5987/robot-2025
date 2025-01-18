@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.finallyDo
 import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
@@ -61,4 +62,9 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     private fun setPower(power: Double): Command =
         runOnce({ io.setPower(power) })
+
+    override fun periodic() {
+        io.updateInput()
+        Logger.processInputs(this::class.simpleName, io.inputs)
+    }
 }
