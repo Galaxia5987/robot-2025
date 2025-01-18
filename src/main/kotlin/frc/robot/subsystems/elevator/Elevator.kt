@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.Logger
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
-    @AutoLogOutput var positionSetpoint: Distance = Units.Millimeters.of(0.0)
+    @AutoLogOutput private var positionSetpoint: Distance = Units.Millimeters.of(0.0)
 
     fun setPosition(position: Distance): Command = runOnce {
         positionSetpoint = position
