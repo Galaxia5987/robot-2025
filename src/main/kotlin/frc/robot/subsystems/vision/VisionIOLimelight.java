@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class VisionIOLimelight implements VisionIO {
     public void updateInputs(VisionIOInputs inputs) {
         // Update connection status based on whether an update has been seen in the last 250ms
         inputs.connected =
-                (RobotController.getFPGATime() - latencySubscriber.getLastChange()) < 250;
+                ((RobotController.getFPGATime() - latencySubscriber.getLastChange()) / 1000) < 250;
 
         // Update target observation
         inputs.latestTargetObservation =
@@ -81,39 +82,39 @@ public class VisionIOLimelight implements VisionIO {
         List<PoseObservation> poseObservations = new LinkedList<>();
         for (var rawSample : megatag1Subscriber.readQueue()) {
             if (rawSample.value.length == 0) continue;
-            for (int i = 10; i < rawSample.value.length; i += 7) {
+          for (int i = 11; i < rawSample.value.length; i += 7) {
                 tagIds.add((int) rawSample.value[i]);
             }
             poseObservations.add(
                     new PoseObservation(
                             // Timestamp, based on server timestamp of publish and latency
-                            rawSample.timestamp * 1.0e-9 - rawSample.value[7] * 1.0e-3,
+                            rawSample.timestamp * 1.0e-6 - rawSample.value[6] * 1.0e-3,
 
                             // 3D pose estimate
                             parsePose(rawSample.value),
 
                             // Ambiguity, using only the first tag because ambiguity isn't
                             // applicable for multitag
-                            rawSample.value.length >= 17 ? rawSample.value[16] : 0.0,
+                            rawSample.value.length >= 18 ? rawSample.value[17] : 0.0,
 
                             // Tag count
-                            (int) rawSample.value[8],
+                            (int) rawSample.value[7],
 
                             // Average tag distance
-                            rawSample.value[10],
+                            rawSample.value[9],
 
                             // Observation type
                             PoseObservationType.MEGATAG_1));
         }
         for (var rawSample : megatag2Subscriber.readQueue()) {
             if (rawSample.value.length == 0) continue;
-            for (int i = 10; i < rawSample.value.length; i += 7) {
+          for (int i = 11; i < rawSample.value.length; i += 7) {
                 tagIds.add((int) rawSample.value[i]);
             }
             poseObservations.add(
                     new PoseObservation(
                             // Timestamp, based on server timestamp of publish and latency
-                            rawSample.timestamp * 1.0e-9 - rawSample.value[7] * 1.0e-3,
+                            rawSample.timestamp * 1.0e-6 - rawSample.value[6] * 1.0e-3,
 
                             // 3D pose estimate
                             parsePose(rawSample.value),
@@ -122,10 +123,10 @@ public class VisionIOLimelight implements VisionIO {
                             0.0,
 
                             // Tag count
-                            (int) rawSample.value[8],
+                            (int) rawSample.value[7],
 
                             // Average tag distance
-                            rawSample.value[10],
+                            rawSample.value[9],
 
                             // Observation type
                             PoseObservationType.MEGATAG_2));
