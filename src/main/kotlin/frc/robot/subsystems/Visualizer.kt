@@ -9,13 +9,13 @@ import edu.wpi.first.units.measure.Distance
 import org.littletonrobotics.junction.AutoLogOutput
 
 class Visualizer(
-    private val elevatorHeight: () -> Distance,
-    private val wristAngle: () -> Angle,
     private val extenderPosition: () -> Distance,
     private val intakeRollerAngle: () -> Angle,
-    private val climberAngle: () -> Angle,
+    private val elevatorHeight: () -> Distance,
+    private val wristAngle: () -> Angle,
     private val coralRollersAngle: () -> Angle,
     private val algaeRemoverAngle: () -> Angle,
+    private val climberAngle: () -> Angle,
 ) {
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
         val carriageHeight = elevatorHeight.invoke().`in`(Meters)
