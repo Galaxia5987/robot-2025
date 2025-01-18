@@ -13,12 +13,13 @@ import org.littletonrobotics.junction.Logger
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpoint = Units.Meters.zero()
-    @AutoLogOutput private var atSetpoint = false
     @AutoLogOutput private var error = Units.Meters.zero()
     @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
     private val ligament =
         root.append(MechanismLigament2d("ExtenderLigament", 0.569, 0.0))
+
+    private var resetFlag = false
 
     private fun setPosition(position: Distance): Command =
         runOnce {
@@ -38,6 +39,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         return setPower(RESET_POWER)
             .until(isStuck)
             .andThen(setPower(0.0), runOnce { io::reset })
+            .finallyDo(Runnable { resetFlag = true })
             .withName("extender/reset")
     }
 
@@ -60,13 +62,16 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
-    @AutoLogOutput val finishedResetting = Trigger { reset().isFinished }
+    @AutoLogOutput
+    private var atSetpoint = Trigger { io.inputs.position.isNear(setpoint, POSITION_TOLERANCE) }
+
+    @AutoLogOutput
+    val finishedResetting = Trigger { resetFlag }
 
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
 
-        atSetpoint = io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
         error = io.inputs.position - setpoint
 
         ligament.length = io.inputs.position.`in`(Units.Meters)
