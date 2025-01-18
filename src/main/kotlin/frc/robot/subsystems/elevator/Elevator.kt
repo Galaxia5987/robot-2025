@@ -12,12 +12,14 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     @AutoLogOutput var positionSetpoint: Distance = Units.Millimeters.of(0.0)
 
-    fun setPosition(position: Distance): Command = runOnce{
+    fun setPosition(position: Distance): Command = runOnce {
         positionSetpoint = position
         io.setHeight(position)
     }
 
-    fun setPower(percentOutput: DoubleSupplier): Command = run { io.setPower(percentOutput.asDouble)}
+    fun setPower(percentOutput: DoubleSupplier): Command = run {
+        io.setPower(percentOutput.asDouble)
+    }
 
     fun reset(): Command = runOnce(io::resetAbsoluteEncoder)
 
