@@ -13,15 +13,15 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
 import frc.robot.lib.motors.LinearServo
-import frc.robot.subsystems.Port
+
 
 class ClimberIOReal:ClimberIO {
     override var inputs: LoggedInputClimber = LoggedInputClimber()
-    var mainMotor = TalonFX(Port.Climber.mainMotor)
-    var servo1 = LinearServo(Port.Climber.servo1,1,1)
-    var servo2 = LinearServo(Port.Climber.servo2,1,1)
-    var auxMotor = TalonFX(Port.Climber.auxMotor)
-    var lockServo = TalonSRX(Port.Climber.lockServo)
+    var mainMotor = TalonFX(MAIN_MOTOR_ID)
+    var servo1 = LinearServo(SERVO_1_ID,1,1)
+    var servo2 = LinearServo(SERVO_2_ID,1,1)
+    var auxMotor = TalonFX(AUX_MOTOR_ID)
+    var lockServo = TalonSRX(LOCK_MOTOR_ID)
     var dutyCycleOut = DutyCycleOut(0.0)
     var positionVoltage = PositionVoltage(0.0)
 
