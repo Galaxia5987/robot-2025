@@ -6,8 +6,9 @@ import org.littletonrobotics.junction.Logger
 
 class Roller(private val io: RollerIO) : SubsystemBase() {
 
-    private fun setPower(power: Double): Command =
-        runOnce{ io.setPower(power) }
+    private fun setPower(power: Double): Command = runOnce {
+        io.setPower(power)
+    }
 
     fun intake() = setPower(INTAKE_POWER)
 
