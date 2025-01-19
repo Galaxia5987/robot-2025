@@ -13,8 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static frc.robot.lib.PhoenixUtil.tryUntilOk;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -37,7 +35,10 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+
 import java.util.Queue;
+
+import static frc.robot.lib.PhoenixUtil.tryUntilOk;
 
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and
@@ -129,6 +130,8 @@ public class ModuleIOTalonFX implements ModuleIO {
                     case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
                     case FusedCANcoder -> FeedbackSensorSourceValue.FusedCANcoder;
                     case SyncCANcoder -> FeedbackSensorSourceValue.SyncCANcoder;
+                    default -> throw new RuntimeException(
+                            "You are using an unsupported swerve configuration, which this template does not support without manual customization. The 2025 release of Phoenix supports some swerve configurations which were not available during 2025 beta testing, preventing any development and support from the AdvantageKit developers.");
                 };
         turnConfig.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
         turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.SteerMotorGearRatio;

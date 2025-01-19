@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -16,11 +16,14 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import org.photonvision.PhotonCamera;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.photonvision.PhotonCamera;
+
+import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
@@ -58,7 +61,7 @@ public class VisionIOPhotonVision implements VisionIO {
             }
 
             // Add pose observation
-            if (result.multitagResult.isPresent()) {
+            if (result.multitagResult.isPresent()) { // Multitag result
                 var multitagResult = result.multitagResult.get();
 
                 // Calculate robot pose
@@ -85,6 +88,37 @@ public class VisionIOPhotonVision implements VisionIO {
                                 multitagResult.fiducialIDsUsed.size(), // Tag count
                                 totalTagDistance / result.targets.size(), // Average tag distance
                                 PoseObservationType.PHOTONVISION)); // Observation type
+
+            } else if (!result.targets.isEmpty()) { // Single tag result
+                var target = result.targets.get(0);
+
+                // Calculate robot pose
+                var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
+                if (tagPose.isPresent()) {
+                    Transform3d fieldToTarget =
+                            new Transform3d(
+                                    tagPose.get().getTranslation(), tagPose.get().getRotation());
+                    Transform3d cameraToTarget = target.bestCameraToTarget;
+                    Transform3d fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse());
+                    Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
+                    Pose3d robotPose =
+                            new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
+
+                    // Add tag ID
+                    tagIds.add((short) target.fiducialId);
+
+                    // Add observation
+                    poseObservations.add(
+                            new PoseObservation(
+                                    result.getTimestampSeconds(), // Timestamp
+                                    robotPose, // 3D pose estimate
+                                    target.poseAmbiguity, // Ambiguity
+                                    1, // Tag count
+                                    cameraToTarget
+                                            .getTranslation()
+                                            .getNorm(), // Average tag distance
+                                    PoseObservationType.PHOTONVISION)); // Observation type
+                }
             }
         }
 
