@@ -32,7 +32,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .withName("extender/setPosition")
 
     private fun setVoltage(voltage: Voltage): Command =
-        startEnd({ io.setVoltage(voltage) }, { io.setVoltage(Units.Volts.zero()) })
+        startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
             .withName("extender/setVoltage")
 
     fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
