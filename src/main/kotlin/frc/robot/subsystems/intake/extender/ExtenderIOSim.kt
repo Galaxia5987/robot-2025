@@ -1,30 +1,42 @@
 package frc.robot.subsystems.intake.extender
 
 import com.ctre.phoenix6.controls.PositionVoltage
-import edu.wpi.first.math.system.plant.DCMotor
-import edu.wpi.first.math.system.plant.LinearSystemId
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
+import frc.robot.lib.toAngle
+import frc.robot.lib.toDistance
 
 class ExtenderIOSim : ExtenderIO {
-
     override val inputs = LoggedExtenderInputs()
     private val motor =
         TalonFXSim(
-            LinearSystemId.createElevatorSystem(
-                DCMotor.getFalcon500Foc(1),
-                MASS.`in`(Units.Kilogram),
-                PINION_RADIUS.`in`(Units.Meters),
-                GEAR_RATIO
-            ),
             1,
-            GEAR_RATIO,
+            1.0,
+            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
             TalonType.FALCON_FOC
         )
     private val positionControl = PositionVoltage(0.0)
+    private val voltageControl = VoltageOut(0.0)
 
-    override fun setPosition(position: Distance) {}
+    override fun setPosition(position: Distance) {
+        motor.setControl(positionControl.withPosition(position.toAngle(PINION_RADIUS, GEAR_RATIO)))
+    }
+
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(voltageControl.withOutput(voltage))
+    }
+
+    override fun updateInputs() {
+        motor.update(Timer.getFPGATimestamp())
+
+        inputs.position = Units.Rotations.of(motor.position).toDistance(PINION_RADIUS, GEAR_RATIO)
+        inputs.motorCurrent = Units.Amps.of(motor.appliedCurrent)
+        inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
+    }
 }
