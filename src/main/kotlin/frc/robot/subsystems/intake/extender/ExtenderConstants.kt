@@ -8,6 +8,7 @@ const val GEAR_RATIO = 0.0
 val RESET_VOLTAGE = Units.Volts.of(0.0)
 val MASS = Units.Kilogram.of(1.5)
 val PINION_RADIUS = Units.Millimeters.of(15.22)
+val MOMENT_OF_INERTIA = Units.KilogramSquareMeters.of(0.003)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
 
