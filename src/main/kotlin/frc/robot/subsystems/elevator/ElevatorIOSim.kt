@@ -3,8 +3,6 @@ package frc.robot.subsystems.elevator
 import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.system.plant.DCMotor
-import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Timer
@@ -16,13 +14,7 @@ class ElevatorIOSim : ElevatorIO {
     private val motorPositionRequest = PositionVoltage(0.0)
     private val dutyCycleRequest = DutyCycleOut(0.0)
     private val angleController = PIDController(0.4, 0.0, 0.5)
-    private val motor = TalonFXSim(
-        1,
-        1.0,
-        0.003,
-        1.0,
-        TalonType.KRAKEN_FOC
-    )
+    private val motor = TalonFXSim(1, 1.0, 0.003, 1.0, TalonType.KRAKEN_FOC)
 
     init {
         motor.setController(angleController)
