@@ -53,7 +53,7 @@ class Visualizer(
         val climberPose =
             getPose3d(
                 rotation =
-                getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
+                    getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
             )
 
         return arrayOf(
