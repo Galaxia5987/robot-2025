@@ -47,7 +47,7 @@ class ElevatorIOReal : ElevatorIO {
 
         val encoderConfig =
             CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFSET
+                MagnetSensor.MagnetOffset = ENCODER_OFFSET
             }
 
         encoder.configurator.apply(encoderConfig)
