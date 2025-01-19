@@ -15,7 +15,7 @@ class ElevatorIOReal : ElevatorIO {
     private val auxMotor = TalonFX(AUX_ID)
     private val encoder = CANcoder(ENCODER_ID)
     private val mainMotorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
-    private val auxMotorPositionRequest =  Follower(mainMotor.deviceID, true)
+    private val auxMotorPositionRequest = Follower(mainMotor.deviceID, true)
 
     init {
         val motorConfig =
@@ -39,7 +39,6 @@ class ElevatorIOReal : ElevatorIO {
                         StatorCurrentLimit = 80.0
                         SupplyCurrentLimit = 40.0
                     }
-
             }
 
         mainMotor.configurator.apply(motorConfig)
@@ -74,7 +73,9 @@ class ElevatorIOReal : ElevatorIO {
     override fun updateInputs() {
         inputs.appliedVoltage = mainMotor.motorVoltage.value
         inputs.height =
-            mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
+            mainMotor.position.value.timesConversionFactor(
+                ROTATIONS_TO_CENTIMETER
+            )
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
         inputs.absoluteEncoderHeight =
             encoder.position.value.timesConversionFactor(
