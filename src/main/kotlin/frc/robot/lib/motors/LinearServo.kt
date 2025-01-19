@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.Timer
 
 class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
-    var m_speed: Double
-    var m_length: Double
-    var setPos = 0.0
-    var curPos = 0.0
-    var lastTime = 0.0
+    private var speed: Double
+    private var length: Double
+    private var setpoint = 0.0
+    private var position = 0.0
+    private var lastTime = 0.0
 
     /**
      * Miniature Linear Servo Actuators - User Guide (Rev 1) Page 10Table of
@@ -21,8 +21,8 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      * @param setpoint the target position of the servo [mm]
      */
     override fun setPosition(setpoint: Double) {
-        setPos = MathUtil.clamp(setpoint, 0.0, m_length)
-        speed = (setPos / m_length * 2.0) - 1.0
+        this.setpoint = MathUtil.clamp(setpoint, 0.0, length)
+        speed = (this.setpoint / length * 2.0) - 1.0
     }
 
     fun setPosition(setpoint: Distance) {
@@ -38,22 +38,22 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      */
     init {
         setBoundsMicroseconds(2000, 0, 0, 0, 1000)
-        m_length = length.toDouble()
-        m_speed = speed.toDouble()
+        this.length = length.toDouble()
+        this.speed = speed.toDouble()
     }
 
     /**
      * Run this method in any periodic function to update the position
      * estimation of your servo
      */
-    fun updateCurPos() {
+    fun updatePosition() {
         val dt = Timer.getFPGATimestamp() - lastTime
-        if (curPos > setPos + m_speed * dt) {
-            curPos -= m_speed * dt
-        } else if (curPos < setPos - m_speed * dt) {
-            curPos += m_speed * dt
+        if (position > setpoint + speed * dt) {
+            position -= speed * dt
+        } else if (position < setpoint - speed * dt) {
+            position += speed * dt
         } else {
-            curPos = setPos
+            position = setpoint
         }
     }
 
@@ -64,7 +64,7 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      * @return Servo Position [mm]
      */
     override fun getPosition(): Double {
-        return curPos
+        return position
     }
 
     /**
@@ -73,5 +73,5 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      * @return true when servo is at its target
      */
     val isFinished: Boolean
-        get() = curPos == setPos
+        get() = position == setpoint
 }
