@@ -35,7 +35,7 @@ class LinearServo(
      */
     override fun setPosition(setpoint: Double) {
         this.setpoint = MathUtil.clamp(setpoint, 0.0, length)
-        speed = (this.setpoint / length * 2.0) - 1.0
+        setSpeed((this.setpoint / length * 2.0) - 1.0)
     }
 
     fun setPosition(setpoint: Distance) {
