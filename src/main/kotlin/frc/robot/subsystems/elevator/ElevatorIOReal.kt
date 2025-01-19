@@ -1,10 +1,8 @@
 package frc.robot.subsystems.elevator
 
-import ENCODER_ID
-import MOTOR_ID
 import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
-import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
@@ -13,9 +11,11 @@ import edu.wpi.first.units.measure.Distance
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
-    private val motor = TalonFX(MOTOR_ID)
+    private val mainMotor = TalonFX(MAIN_ID)
+    private val auxMotor = TalonFX(AUX_ID)
     private val encoder = CANcoder(ENCODER_ID)
-    private val motorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
+    private val mainMotorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
+    private val auxMotorPositionRequest =  Follower(mainMotor.deviceID, true)
 
     init {
         val motorConfig =
@@ -39,8 +39,13 @@ class ElevatorIOReal : ElevatorIO {
                         StatorCurrentLimit = 80.0
                         SupplyCurrentLimit = 40.0
                     }
+
             }
-        motor.configurator.apply(motorConfig)
+
+        mainMotor.configurator.apply(motorConfig)
+        auxMotor.configurator.apply(motorConfig)
+
+        auxMotor.setControl(auxMotorPositionRequest)
 
         val encoderConfig =
             CANcoderConfiguration().apply {
@@ -51,25 +56,25 @@ class ElevatorIOReal : ElevatorIO {
     }
 
     override fun setHeight(height: Distance) {
-        motor.setControl(
-            motorPositionRequest.withPosition(
+        mainMotor.setControl(
+            mainMotorPositionRequest.withPosition(
                 height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
             )
         )
     }
 
     override fun setPower(percentOutput: Double) {
-        motor.set(percentOutput)
+        mainMotor.set(percentOutput)
     }
 
     override fun resetAbsoluteEncoder() {
-        motor.setPosition(0.0)
+        mainMotor.setPosition(0.0)
     }
 
     override fun updateInputs() {
-        inputs.appliedVoltage = motor.motorVoltage.value
+        inputs.appliedVoltage = mainMotor.motorVoltage.value
         inputs.height =
-            motor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
+            mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
         inputs.absoluteEncoderHeight =
             encoder.position.value.timesConversionFactor(
