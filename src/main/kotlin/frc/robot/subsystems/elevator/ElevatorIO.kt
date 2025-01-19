@@ -20,7 +20,6 @@ interface ElevatorIO {
     @Logged
     open class ElevatorInputs {
         var height: Distance = Units.Meters.of(0.0)
-        var setpoint: Distance = Units.Meters.of(0.0)
         var appliedVoltage: Voltage = Units.Volts.of(0.0)
         var noOffsetAbsoluteEncoderPosition: Angle = Units.Rotations.of(0.0)
         var absoluteEncoderHeight: Distance = Units.Meters.of(0.0)

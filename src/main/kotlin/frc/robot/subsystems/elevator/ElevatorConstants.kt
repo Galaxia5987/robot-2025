@@ -9,8 +9,7 @@ import kotlin.math.PI
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
 const val FIRST_STAGE_RATIO = 2.0
-const val WEIGHT = 0.0
-const val ENCODER_OFSET = 0.0
+const val ENCODER_OFFSET = 0.0
 private val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 private val ROTATIONS_TO_CENTIMETERS_RATIO =
     GEAR_RATIO *
