@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake.extender
 
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
@@ -23,6 +24,11 @@ class ExtenderIOSim : ExtenderIO {
         )
     private val positionControl = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
+    private val controller = PIDController(1.0, 0.0, 0.0)
+
+    init {
+        motor.setController(controller)
+    }
 
     override fun setPosition(position: Distance) {
         motor.setControl(
