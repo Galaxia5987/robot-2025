@@ -2,7 +2,6 @@ package frc.robot.subsystems.climber
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Dimensionless
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import org.team9432.annotation.Logged
@@ -12,8 +11,8 @@ interface ClimberIO {
     fun setLatchPosition(position: Angle) {}
     fun setPower(power: Double) {}
     fun setAngle(angle: Angle) {}
-    fun lock() {}
-    fun unlock() {}
+    fun closeStopper() {}
+    fun openStopper() {}
     fun updateInput() {}
 
     @Logged
