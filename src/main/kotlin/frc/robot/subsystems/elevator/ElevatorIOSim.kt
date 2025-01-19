@@ -14,7 +14,7 @@ class ElevatorIOSim : ElevatorIO {
     private val motorPositionRequest = PositionVoltage(0.0)
     private val dutyCycleRequest = DutyCycleOut(0.0)
     private val angleController = PIDController(0.4, 0.0, 0.5)
-    private val motor = TalonFXSim(1, 1.0, 0.003, 1.0, TalonType.KRAKEN_FOC)
+    private val motor = TalonFXSim(2, 1.0, 0.003, 1.0, TalonType.KRAKEN_FOC)
 
     init {
         motor.setController(angleController)
