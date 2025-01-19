@@ -13,6 +13,7 @@ import org.littletonrobotics.junction.Logger
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpoint = Units.Meters.zero()
+    @AutoLogOutput private var setpointName = ""
     @AutoLogOutput private var error = Units.Meters.zero()
     @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
@@ -32,10 +33,14 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         runOnce { io.setPower(power) }.withName("extender/setPower")
 
     fun extend() =
-        setPosition(Positions.EXTENDED.position).withName("extender/extend")
+        setPosition(Positions.EXTENDED.position)
+            .alongWith(runOnce{setpointName = Positions.EXTENDED.getLoggingName()})
+            .withName("extender/extend")
 
     fun retract() =
-        setPosition(Positions.RETRACTED.position).withName("extender/retract")
+        setPosition(Positions.RETRACTED.position)
+            .alongWith(runOnce{setpointName = Positions.RETRACTED.getLoggingName()})
+            .withName("extender/retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
