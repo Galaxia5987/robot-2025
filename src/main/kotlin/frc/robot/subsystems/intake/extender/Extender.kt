@@ -34,17 +34,21 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun extend() =
         setPosition(Positions.EXTENDED.position)
-            .alongWith(runOnce{setpointName = Positions.EXTENDED.getLoggingName()})
+            .alongWith(
+                runOnce { setpointName = Positions.EXTENDED.getLoggingName() }
+            )
             .withName("extender/extend")
 
     fun retract() =
         setPosition(Positions.RETRACTED.position)
-            .alongWith(runOnce{setpointName = Positions.RETRACTED.getLoggingName()})
+            .alongWith(
+                runOnce { setpointName = Positions.RETRACTED.getLoggingName() }
+            )
             .withName("extender/retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
-            .alongWith(runOnce{resetFlag = false})
+            .alongWith(runOnce { resetFlag = false })
             .until(isStuck)
             .andThen(setPower(0.0), runOnce { io::reset })
             .finallyDo(Runnable { resetFlag = true })
@@ -81,8 +85,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
-    @AutoLogOutput
-    val finishedResetting = Trigger { resetFlag }
+    @AutoLogOutput val finishedResetting = Trigger { resetFlag }
 
     override fun periodic() {
         io.updateInputs()
