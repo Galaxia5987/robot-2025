@@ -65,7 +65,7 @@ class LinearServo(
 
     /**
      * Current position of the servo, must be calling
-     * [updateCurPos()][.updateCurPos] periodically
+     * [updatePosition()][.updatePosition] periodically
      *
      * @return Servo Position [mm]
      */
@@ -75,7 +75,7 @@ class LinearServo(
 
     /**
      * Checks if the servo is at its target position, must be calling
-     * [updateCurPos()][.updateCurPos] periodically
+     * [updatePosition()][.updatePosition] periodically
      * @return true when servo is at its target
      */
     val reachedSetpoint = Trigger {
