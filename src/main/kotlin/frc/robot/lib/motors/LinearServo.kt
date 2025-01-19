@@ -6,7 +6,6 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.Utils
 
 class LinearServo(
     channel: Int,
@@ -80,6 +79,6 @@ class LinearServo(
      * @return true when servo is at its target
      */
     val reachedSetpoint = Trigger {
-        Utils.epsilonEquals(position, setpoint, positionTolerance)
+        MathUtil.isNear(setpoint, position, positionTolerance)
     }
 }
