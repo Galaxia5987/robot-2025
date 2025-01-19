@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -13,8 +13,8 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
+import static frc.robot.ConstantsKt.LOOP_TIME;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -27,6 +27,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -45,14 +46,15 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
-import frc.robot.generated.TunerConstants;
 import frc.robot.lib.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -65,7 +67,7 @@ public class Drive extends SubsystemBase {
                     Math.max(
                             Math.hypot(
                                     TunerConstants.FrontLeft.LocationX,
-                                    TunerConstants.FrontRight.LocationY),
+                                    TunerConstants.FrontLeft.LocationY),
                             Math.hypot(
                                     TunerConstants.FrontRight.LocationX,
                                     TunerConstants.FrontRight.LocationY)),
@@ -100,8 +102,11 @@ public class Drive extends SubsystemBase {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
+    private final SysIdRoutine turnSysId;
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+
+    @AutoLogOutput private Rotation2d desiredHeading;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -173,6 +178,22 @@ public class Drive extends SubsystemBase {
                                         Logger.recordOutput("Drive/SysIdState", state.toString())),
                         new SysIdRoutine.Mechanism(
                                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+        turnSysId =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(
+                                null,
+                                null,
+                                null,
+                                (state) ->
+                                        Logger.recordOutput(
+                                                "Drive/TurnSysIdState", state.toString())),
+                        new SysIdRoutine.Mechanism(
+                                (voltage) -> runTurnCharacterization(voltage.in(Volts)),
+                                null,
+                                this));
+
+        gyroIO.updateInputs(gyroInputs);
+        desiredHeading = gyroInputs.yawPosition;
     }
 
     @Override
@@ -186,6 +207,7 @@ public class Drive extends SubsystemBase {
         odometryLock.unlock();
 
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+        Logger.recordOutput("Odometry/Robot", getPose());
 
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
@@ -244,13 +266,15 @@ public class Drive extends SubsystemBase {
      */
     public void runVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
-        speeds.discretize(0.02);
-        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(speeds);
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", speeds);
+        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
+        Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
         // Send setpoints to modules
         for (int i = 0; i < 4; i++) {
@@ -265,6 +289,13 @@ public class Drive extends SubsystemBase {
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {
             modules[i].runCharacterization(output);
+        }
+    }
+
+    /** NOTE: DO NOT USE WITH TorqueCurrentFOC */
+    public void runTurnCharacterization(double output) {
+        for (int i = 0; i < 4; i++) {
+            modules[i].runTurnCharacterization(output);
         }
     }
 
@@ -298,6 +329,30 @@ public class Drive extends SubsystemBase {
         return run(() -> runCharacterization(0.0))
                 .withTimeout(1.0)
                 .andThen(sysId.dynamic(direction));
+    }
+
+    /**
+     * Returns a command to run a quasistatic test in the specified direction on the turn modules.
+     */
+    public Command turnSysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return run(() -> runTurnCharacterization(0.0))
+                .withTimeout(1.0)
+                .andThen(turnSysId.quasistatic(direction));
+    }
+
+    public Command runAllTurnSysID() {
+        return Commands.sequence(
+                turnSysIdQuasistatic(SysIdRoutine.Direction.kForward),
+                turnSysIdQuasistatic(SysIdRoutine.Direction.kReverse),
+                turnSysIdDynamic(SysIdRoutine.Direction.kForward),
+                turnSysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    /** Returns a command to run a dynamic test in the specified direction on the turn modules. */
+    public Command turnSysIdDynamic(SysIdRoutine.Direction direction) {
+        return run(() -> runTurnCharacterization(0.0))
+                .withTimeout(1.0)
+                .andThen(turnSysId.dynamic(direction));
     }
 
     /** Returns the module states (turn angles and drive velocities) for all of the modules. */
@@ -349,14 +404,38 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** Returns the current odometry rotation. */
+    /** Returns the current gyro rotation. */
     public Rotation2d getRotation() {
-        return getPose().getRotation();
+        return gyroInputs.yawPosition;
+    }
+
+    public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
+        return Commands.run(
+                () -> {
+                    double desiredDeltaOmega =
+                            MathUtil.applyDeadband(omegaAxis.getAsDouble(), 0.15)
+                                    * TunerConstants.kMaxOmegaVelocity.in(RadiansPerSecond)
+                                    * LOOP_TIME;
+                    desiredHeading = desiredHeading.plus(Rotation2d.fromRadians(desiredDeltaOmega));
+                });
+    }
+
+    public Rotation2d getDesiredHeading() {
+        return desiredHeading;
+    }
+
+    public Command setDesiredHeading(Rotation2d rotation) {
+        return Commands.runOnce(() -> desiredHeading = rotation);
     }
 
     /** Resets the current odometry pose. */
     public void setPose(Pose2d pose) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    }
+
+    public void resetGyro() {
+        gyroIO.zeroGyro();
+        desiredHeading = new Rotation2d();
     }
 
     /** Adds a new timestamped vision measurement. */

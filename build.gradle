@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "2.0.0"
-    id "edu.wpi.first.GradleRIO" version "2025.1.1-beta-2"
+    id "edu.wpi.first.GradleRIO" version "2025.2.1"
     id "com.diffplug.spotless" version "6.12.0"
     id "com.peterabeles.gversion" version "1.10"
     id 'com.google.devtools.ksp' version '2.0.0-1.0.21'
@@ -49,16 +49,11 @@ deploy {
                 // getTargetTypeClass is a shortcut to get the class type using a string
 
                 frcJava(getArtifactTypeClass('FRCJavaArtifact')) {
-                    // https://www.chiefdelphi.com/t/2024-wpilib-feedback/464322/141
-                    final MAX_JAVA_HEAP_SIZE_MB = 100;
                     jvmArgs.add("-XX:+UnlockExperimentalVMOptions")
-
-                    // Set the minimum heap size to the maximum heap size to avoid resizing
-                    jvmArgs.add("-Xmx" + MAX_JAVA_HEAP_SIZE_MB + "M")
-                    jvmArgs.add("-Xms" + MAX_JAVA_HEAP_SIZE_MB + "M")
                     jvmArgs.add("-XX:GCTimeRatio=5")
                     jvmArgs.add("-XX:+UseSerialGC")
                     jvmArgs.add("-XX:MaxGCPauseMillis=50")
+
                     // Enable VisualVM connection
                     jvmArgs.add("-Dcom.sun.management.jmxremote=true")
                     jvmArgs.add("-Dcom.sun.management.jmxremote.port=1198")
@@ -66,6 +61,13 @@ deploy {
                     jvmArgs.add("-Dcom.sun.management.jmxremote.ssl=false")
                     jvmArgs.add("-Dcom.sun.management.jmxremote.authenticate=false")
                     jvmArgs.add("-Djava.rmi.server.hostname=10.59.87.2") // Replace TE.AM with team number
+
+                    // The options below may improve performance, but should only be enabled on the RIO 2
+                    //
+                    final MAX_JAVA_HEAP_SIZE_MB = 100;
+                    jvmArgs.add("-Xmx" + MAX_JAVA_HEAP_SIZE_MB + "M")
+                    jvmArgs.add("-Xms" + MAX_JAVA_HEAP_SIZE_MB + "M")
+                    jvmArgs.add("-XX:+AlwaysPreTouch")
                 }
 
                 // Static files artifact
@@ -90,18 +92,9 @@ wpi.java.debugJni = false
 def includeDesktopSupport = true
 
 // Configuration for AdvantageKit
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/Mechanical-Advantage/AdvantageKit")
-        credentials {
-            username = "Mechanical-Advantage-Bot"
-            password = "\u0067\u0068\u0070\u005f\u006e\u0056\u0051\u006a\u0055\u004f\u004c\u0061\u0079\u0066\u006e\u0078\u006e\u0037\u0051\u0049\u0054\u0042\u0032\u004c\u004a\u006d\u0055\u0070\u0073\u0031\u006d\u0037\u004c\u005a\u0030\u0076\u0062\u0070\u0063\u0051"
-        }
-    }
-    maven {
-        url 'https://jitpack.io'
-    }
-    mavenCentral()
+task(replayWatch, type: JavaExec) {
+    mainClass = "org.littletonrobotics.junction.ReplayWatch"
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
@@ -147,16 +140,16 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                'src/main/java',
-                'src/main/kotlin'
+                    'src/main/java',
+                    'src/main/kotlin'
             ]
         }
     }
     test {
         java {
             srcDirs = [
-                'src/test/java',
-                'src/test/kotlin'
+                    'src/test/java',
+                    'src/test/kotlin'
             ]
         }
     }
@@ -168,6 +161,11 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
+//
+// The sim GUI is *disabled* by default to support running
+// AdvantageKit log replay from the command line. Set the
+// value to "true" to enable the sim GUI by default (this
+// is the standard WPILib behavior).
 wpi.sim.addGui().defaultEnabled = true
 wpi.sim.addDriverstation()
 
@@ -230,6 +228,40 @@ idea {
     }
 }
 
+// Create commit with working changes on event branches
+task(eventDeploy) {
+    doLast {
+        if (project.gradle.startParameter.taskNames.any({ it.toLowerCase().contains("deploy") })) {
+            def branchPrefix = "event"
+            def branch = 'git branch --show-current'.execute().text.trim()
+            def commitMessage = "Update at '${new Date().toString()}'"
+
+            if (branch.startsWith(branchPrefix)) {
+                exec {
+                    workingDir(projectDir)
+                    executable 'git'
+                    args 'add', '-A'
+                }
+                exec {
+                    workingDir(projectDir)
+                    executable 'git'
+                    args 'commit', '-m', commitMessage
+                    ignoreExitValue = true
+                }
+
+                println "Committed to branch: '$branch'"
+                println "Commit message: '$commitMessage'"
+            } else {
+                println "Not on an event branch, skipping commit"
+            }
+        } else {
+            println "Not running deploy task, skipping commit"
+        }
+    }
+}
+createVersionFile.dependsOn(eventDeploy)
+
+//spotless formatting
 spotless {
     format 'misc', {
         // define the files to apply `misc` to
@@ -253,6 +285,11 @@ spotless {
     kotlin {
         targetExclude('build/')
 
-        ktlint()
+        ktfmt().googleStyle().configure {
+            it.setBlockIndent(4)
+            it.setContinuationIndent(4)
+            it.setMaxWidth(80)
+            it.setRemoveUnusedImport(true)
+        }
     }
 }

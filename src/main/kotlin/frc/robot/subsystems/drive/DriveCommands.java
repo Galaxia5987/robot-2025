@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -14,14 +14,13 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -37,7 +36,7 @@ import java.util.function.Supplier;
 
 public class DriveCommands {
     private static final double DEADBAND = 0.1;
-    private static final double ANGLE_KP = 5.0;
+    private static final double ANGLE_KP = 10.0;
     private static final double ANGLE_KD = 0.4;
     private static final double ANGLE_MAX_VELOCITY = 8.0;
     private static final double ANGLE_MAX_ACCELERATION = 20.0;
@@ -45,6 +44,7 @@ public class DriveCommands {
     private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+    private static final Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.4);
 
     private DriveCommands() {}
 
@@ -92,11 +92,12 @@ public class DriveCommands {
                     boolean isFlipped =
                             DriverStation.getAlliance().isPresent()
                                     && DriverStation.getAlliance().get() == Alliance.Red;
-                    speeds.toRobotRelativeSpeeds(
-                            isFlipped
-                                    ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                                    : drive.getRotation());
-                    drive.runVelocity(speeds);
+                    drive.runVelocity(
+                            ChassisSpeeds.fromFieldRelativeSpeeds(
+                                    speeds,
+                                    isFlipped
+                                            ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                                            : drive.getRotation()));
                 },
                 drive);
     }
@@ -112,15 +113,10 @@ public class DriveCommands {
             DoubleSupplier ySupplier,
             Supplier<Rotation2d> rotationSupplier) {
 
-        // Create PID controller
-        ProfiledPIDController angleController =
-                new ProfiledPIDController(
-                        ANGLE_KP,
-                        0.0,
-                        ANGLE_KD,
-                        new TrapezoidProfile.Constraints(
-                                ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+        PIDController angleController = new PIDController(ANGLE_KP, 0.0, ANGLE_KD);
+
         angleController.enableContinuousInput(-Math.PI, Math.PI);
+        angleController.setTolerance(ANGLE_TOLERANCE.getRadians());
 
         // Construct command
         return Commands.run(
@@ -147,16 +143,18 @@ public class DriveCommands {
                             boolean isFlipped =
                                     DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get() == Alliance.Red;
-                            speeds.toRobotRelativeSpeeds(
-                                    isFlipped
-                                            ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                                            : drive.getRotation());
-                            drive.runVelocity(speeds);
+                            drive.runVelocity(
+                                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                                            speeds,
+                                            isFlipped
+                                                    ? drive.getRotation()
+                                                            .plus(new Rotation2d(Math.PI))
+                                                    : drive.getRotation()));
                         },
                         drive)
 
                 // Reset PID controller when command starts
-                .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+                .beforeStarting(angleController::reset);
     }
 
     /**
