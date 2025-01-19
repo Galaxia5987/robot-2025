@@ -14,11 +14,9 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
     var lastTime = 0.0
 
     /**
-     * Miniature Linear Servo Actuators -
-     * User Guide (Rev 1)
-     * Page 10Table of Contentswcproducts.com
-     * Run this method in any periodic function to update the position estimation of your
-     * servo
+     * Miniature Linear Servo Actuators - User Guide (Rev 1) Page 10Table of
+     * Contentswcproducts.com Run this method in any periodic function to update
+     * the position estimation of your servo
      *
      * @param setpoint the target position of the servo [mm]
      */
@@ -39,14 +37,14 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      * @param speed max speed of the servo [mm/second]
      */
     init {
-        setBoundsMicroseconds(2000, 0, 0, 0,1000)
+        setBoundsMicroseconds(2000, 0, 0, 0, 1000)
         m_length = length.toDouble()
         m_speed = speed.toDouble()
     }
 
     /**
-     * Run this method in any periodic function to update the position estimation of your
-     * servo
+     * Run this method in any periodic function to update the position
+     * estimation of your servo
      */
     fun updateCurPos() {
         val dt = Timer.getFPGATimestamp() - lastTime
@@ -60,7 +58,8 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
     }
 
     /**
-     * Current position of the servo, must be calling [updateCurPos()][.updateCurPos] periodically
+     * Current position of the servo, must be calling
+     * [updateCurPos()][.updateCurPos] periodically
      *
      * @return Servo Position [mm]
      */
@@ -69,7 +68,8 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
     }
 
     /**
-     * Checks if the servo is at its target position, must be calling [updateCurPos()][.updateCurPos] periodically
+     * Checks if the servo is at its target position, must be calling
+     * [updateCurPos()][.updateCurPos] periodically
      * @return true when servo is at its target
      */
     val isFinished: Boolean
