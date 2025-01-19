@@ -13,6 +13,8 @@
 
 package frc.robot.subsystems.vision;
 
+import static frc.robot.subsystems.vision.VisionConstants.*;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,12 +26,9 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
-import org.littletonrobotics.junction.Logger;
-
 import java.util.LinkedList;
 import java.util.List;
-
-import static frc.robot.subsystems.vision.VisionConstants.*;
+import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
     private final VisionConsumer consumer;
@@ -104,10 +103,10 @@ public class Vision extends SubsystemBase {
                 boolean rejectPose =
                         observation.tagCount() == 0 // Must have at least one tag
                                 || (observation.tagCount() == 1
-                                && observation.ambiguity()
-                                > maxAmbiguity) // Cannot be high ambiguity
+                                        && observation.ambiguity()
+                                                > maxAmbiguity) // Cannot be high ambiguity
                                 || Math.abs(observation.pose().getZ())
-                                > maxZError // Must have realistic Z coordinate
+                                        > maxZError // Must have realistic Z coordinate
 
                                 // Must be within the field boundaries
                                 || observation.pose().getX() < 0.0
