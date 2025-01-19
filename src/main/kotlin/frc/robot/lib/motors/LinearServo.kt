@@ -7,6 +7,13 @@ import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.button.Trigger
 
+/**
+ * Parameters for L16-R Actuonix Linear Actuators
+ *
+ * @param channel PWM channel used to control the servo
+ * @param length max length of the servo [mm]
+ * @param speed max speed of the servo [mm/second]
+ */
 class LinearServo(
     channel: Int,
     length: Int,
@@ -35,13 +42,6 @@ class LinearServo(
         setPosition(setpoint.`in`(Units.Millimeters))
     }
 
-    /**
-     * Parameters for L16-R Actuonix Linear Actuators
-     *
-     * @param channel PWM channel used to control the servo
-     * @param length max length of the servo [mm]
-     * @param speed max speed of the servo [mm/second]
-     */
     init {
         setBoundsMicroseconds(2000, 0, 0, 0, 1000)
         this.length = length.toDouble()
