@@ -15,8 +15,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput private var setpoint = Units.Meters.zero()
     @AutoLogOutput private var setpointName = ""
     @AutoLogOutput private var error = Units.Meters.zero()
-    @AutoLogOutput
-    private var mechanism = LoggedMechanism2d(3.0, 2.0)
+    @AutoLogOutput private var mechanism = LoggedMechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
@@ -25,17 +24,17 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private fun setPosition(position: Positions): Command =
         runOnce {
-            io.setPosition(position.position)
-            setpoint = position.position
-            setpointName = position.getLoggingName()
+                io.setPosition(position.position)
+                setpoint = position.position
+                setpointName = position.getLoggingName()
             }
             .withName("extender/setPosition")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
-            { io.setVoltage(voltage) },
-            { io.setVoltage(Units.Volts.zero()) }
-        )
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
             .withName("extender/setVoltage")
 
     fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
@@ -84,8 +83,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
-    @AutoLogOutput
-    val finishedResetting = Trigger { finishedResettingFlag }
+    @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }
 
     override fun periodic() {
         io.updateInputs()
