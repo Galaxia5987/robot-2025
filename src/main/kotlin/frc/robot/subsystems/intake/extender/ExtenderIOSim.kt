@@ -25,7 +25,11 @@ class ExtenderIOSim : ExtenderIO {
     private val voltageControl = VoltageOut(0.0)
 
     override fun setPosition(position: Distance) {
-        motor.setControl(positionControl.withPosition(position.toAngle(PINION_RADIUS, GEAR_RATIO)))
+        motor.setControl(
+            positionControl.withPosition(
+                position.toAngle(PINION_RADIUS, GEAR_RATIO)
+            )
+        )
     }
 
     override fun setVoltage(voltage: Voltage) {
@@ -35,7 +39,9 @@ class ExtenderIOSim : ExtenderIO {
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
 
-        inputs.position = Units.Rotations.of(motor.position).toDistance(PINION_RADIUS, GEAR_RATIO)
+        inputs.position =
+            Units.Rotations.of(motor.position)
+                .toDistance(PINION_RADIUS, GEAR_RATIO)
         inputs.motorCurrent = Units.Amps.of(motor.appliedCurrent)
         inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
     }
