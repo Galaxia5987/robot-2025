@@ -1,54 +1,73 @@
 package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpoint = Units.Meters.zero()
-    @AutoLogOutput private var atSetpoint = false
+    @AutoLogOutput private var setpointName = ""
     @AutoLogOutput private var error = Units.Meters.zero()
-    @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
+    @AutoLogOutput
+    private var mechanism = LoggedMechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
     private val ligament =
-        root.append(MechanismLigament2d("ExtenderLigament", 0.569, 0.0))
+        root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
-    private fun setPosition(position: Distance): Command =
+    private var finishedResettingFlag = false
+
+    private fun setPosition(position: Positions): Command =
         runOnce {
-                io.setPosition(position)
-                setpoint = position
+            io.setPosition(position.position)
+            setpoint = position.position
+            setpointName = position.getLoggingName()
             }
-            .withName("setPosition")
+            .withName("extender/setPosition")
 
-    private fun setPower(power: Double): Command =
-        runOnce { io.setPower(power) }.withName("setPower")
+    private fun setVoltage(voltage: Voltage): Command =
+        startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
+            .withName("extender/setVoltage")
 
-    fun extend() = setPosition(EXTENDED_POSITION).withName("extend")
+    fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
 
-    fun retract() = setPosition(RETRACTED_POSITION).withName("retract")
+    fun retract() =
+        setPosition(Positions.RETRACTED).withName("extender/retract")
 
     fun reset(): Command {
-        return setPower(RESET_POWER)
+        return setVoltage(RESET_VOLTAGE)
+            .alongWith(runOnce { finishedResettingFlag = false })
             .until(isStuck)
-            .andThen(setPower(0.0), runOnce { io::reset })
-            .withName("reset")
+            .andThen(
+                runOnce { io::reset },
+                runOnce { finishedResettingFlag = true }
+            )
+            .withName("extender/reset")
     }
 
     @AutoLogOutput
     val isExtended = Trigger {
-        EXTENDED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
+        io.inputs.position.isNear(
+            Positions.EXTENDED.position,
+            POSITION_TOLERANCE
+        )
     }
 
     @AutoLogOutput
     val isRetracted = Trigger {
-        RETRACTED_POSITION.isNear(io.inputs.position, POSITION_TOLERANCE)
+        io.inputs.position.isNear(
+            Positions.RETRACTED.position,
+            POSITION_TOLERANCE
+        )
     }
 
     @AutoLogOutput
@@ -60,13 +79,18 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
-    @AutoLogOutput val finishedResetting = Trigger { reset().isFinished }
+    @AutoLogOutput
+    private var atSetpoint = Trigger {
+        io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
+    }
+
+    @AutoLogOutput
+    val finishedResetting = Trigger { finishedResettingFlag }
 
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
 
-        atSetpoint = io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
         error = io.inputs.position - setpoint
 
         ligament.length = io.inputs.position.`in`(Units.Meters)

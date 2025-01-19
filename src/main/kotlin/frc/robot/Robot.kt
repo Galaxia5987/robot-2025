@@ -74,7 +74,6 @@ object Robot : LoggedRobot() {
                 )
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
-                TunerConstants.init()
             }
             SIM -> Logger.addDataReceiver(NT4Publisher())
             REPLAY -> {
@@ -88,6 +87,7 @@ object Robot : LoggedRobot() {
         }
         Logger.start()
 
+        TunerConstants.init()
         RobotContainer // Initialize robot container.
         compressor.enableDigital()
 
