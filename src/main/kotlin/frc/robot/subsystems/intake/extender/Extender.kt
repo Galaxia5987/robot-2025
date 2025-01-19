@@ -39,6 +39,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun reset(): Command {
         return setPower(RESET_POWER)
+            .alongWith(runOnce{resetFlag = false})
             .until(isStuck)
             .andThen(setPower(0.0), runOnce { io::reset })
             .finallyDo(Runnable { resetFlag = true })
