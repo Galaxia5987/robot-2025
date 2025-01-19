@@ -11,7 +11,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
 
     fun intake(): Command = setPower(INTAKE_POWER).withName("Gripper/Intake")
     fun outtake(): Command = setPower(OUTTAKE_POWER).withName("Gripper/Outtake")
-    fun removeAlgae(): Command = setPower().withName("Gripper/RemoveAlae")
+    fun removeAlgae(): Command = setPower(REMOVE_ALGAE_POWER).withName("Gripper/RemoveAlae")
 
     override fun periodic() {
         io.updateInputs()
