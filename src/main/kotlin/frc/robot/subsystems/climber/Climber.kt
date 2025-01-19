@@ -29,7 +29,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)
     }
 
-    fun closeLatch(): Command = runOnce({ setLatchPose(CLOSE_LATCH_POSITION) })
+    fun closeLatch(): Command = runOnce({ setLatchPose(CLOSE_LATCH_POSITION) }).until(isLatchClosed)
 
     private fun setLatchPose(latchPose: Angle) =
         io.setLatchPosition(latchPose)
