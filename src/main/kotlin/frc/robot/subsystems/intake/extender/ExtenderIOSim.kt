@@ -48,7 +48,7 @@ class ExtenderIOSim : ExtenderIO {
         inputs.position =
             Units.Rotations.of(motor.position)
                 .toDistance(PINION_RADIUS, GEAR_RATIO)
-        inputs.motorCurrent = Units.Amps.of(motor.appliedCurrent)
-        inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
+        inputs.motorCurrent = motor.appliedCurrent
+        inputs.appliedVoltage = motor.appliedVoltage
     }
 }
