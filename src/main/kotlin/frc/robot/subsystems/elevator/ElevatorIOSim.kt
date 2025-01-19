@@ -8,6 +8,8 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
+import frc.robot.lib.toAngle
+import frc.robot.lib.toDistance
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -23,7 +25,7 @@ class ElevatorIOSim : ElevatorIO {
     override fun setHeight(height: Distance) {
         motor.setControl(
             motorPositionRequest.withPosition(
-                height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
+                height.toAngle(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
             )
         )
     }
@@ -35,8 +37,6 @@ class ElevatorIOSim : ElevatorIO {
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
         inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
-        inputs.height =
-            Units.Rotations.of(motor.position)
-                .timesConversionFactor(ROTATIONS_TO_CENTIMETER)
+        inputs.height = Units.Rotations.of(motor.position).toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
     }
 }

@@ -8,6 +8,8 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.measure.Distance
+import frc.robot.lib.toAngle
+import frc.robot.lib.toDistance
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -56,7 +58,7 @@ class ElevatorIOReal : ElevatorIO {
     override fun setHeight(height: Distance) {
         mainMotor.setControl(
             mainMotorPositionRequest.withPosition(
-                height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
+                height.toAngle(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
             )
         )
     }
@@ -71,14 +73,11 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun updateInputs() {
         inputs.appliedVoltage = mainMotor.motorVoltage.value
-        inputs.height =
-            mainMotor.position.value.timesConversionFactor(
-                ROTATIONS_TO_CENTIMETER
-            )
+        inputs.height = mainMotor.position.value.toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
+        mainMotor.position.value.timesConversionFactor(
+            ROTATIONS_TO_CENTIMETER
+        )
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
-        inputs.absoluteEncoderHeight =
-            encoder.position.value.timesConversionFactor(
-                ROTATIONS_TO_CENTIMETER
-            )
+        inputs.absoluteEncoderHeight = encoder.position.value.toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
     }
 }
