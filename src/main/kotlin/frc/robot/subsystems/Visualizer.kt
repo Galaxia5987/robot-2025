@@ -18,13 +18,13 @@ class Visualizer(
     private val climberAngle: () -> Angle,
 ) {
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
-        val carriageHeight = elevatorHeight.invoke().`in`(Meters)
-        val firstStageHeight = carriageHeight / 2.0
+        val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
+        val firstStageHeight = secondStageHeight / 2.0
 
         val firstStagePose =
             Pose3d(0.0, 0.0, firstStageHeight, Rotation3d.kZero)
         val secondStagePose =
-            Pose3d(0.0, 0.0, carriageHeight, Rotation3d.kZero)
+            Pose3d(0.0, 0.0, secondStageHeight, Rotation3d.kZero)
         return Pair(firstStagePose, secondStagePose)
     }
 
