@@ -22,7 +22,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
-    private var isAttached = Trigger(isLatchClosed).and(isTouching)
+    private var isAttached = isLatchClosed.and(isTouching)
 
     @AutoLogOutput
     private val isFolded = Trigger {
