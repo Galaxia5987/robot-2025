@@ -5,8 +5,11 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.lib.math.differential.Derivative;
-import frc.robot.lib.units.Units;
 
 public class TalonFXSim extends SimMotor {
 
@@ -43,7 +46,7 @@ public class TalonFXSim extends SimMotor {
     public void update(double timestampSeconds) {
         super.update(timestampSeconds);
 
-        acceleration.update(getVelocity(), timestampSeconds);
+        acceleration.update(getVelocity().in(Units.RotationsPerSecond), timestampSeconds);
     }
 
     public void setControl(DutyCycleOut request) {
@@ -69,7 +72,11 @@ public class TalonFXSim extends SimMotor {
 
     public void setControl(VelocityVoltage request) {
         voltageRequest =
-                () -> controller.calculate(getVelocity(), request.Velocity) + request.FeedForward;
+                () ->
+                        controller.calculate(
+                                getVelocity().in(Units.RotationsPerSecond),
+                                request.Velocity)
+                                + request.FeedForward;
     }
 
     public void setControl(MotionMagicDutyCycle request) {
@@ -84,8 +91,10 @@ public class TalonFXSim extends SimMotor {
                                 + request.FeedForward;
     }
 
-    public double getVelocity() {
-        return Units.rpmToRps(motorSim.getAngularVelocityRPM()) * conversionFactor;
+    public AngularVelocity getVelocity() {
+        return Units.Rotation.per(Units.Minutes)
+                .of(motorSim.getAngularVelocityRPM())
+                .times(conversionFactor);
     }
 
     public double getPosition() {
@@ -96,11 +105,11 @@ public class TalonFXSim extends SimMotor {
         return acceleration.get();
     }
 
-    public double getAppliedCurrent() {
-        return motorSim.getCurrentDrawAmps();
+    public Current getAppliedCurrent() {
+        return Units.Amps.of(motorSim.getCurrentDrawAmps());
     }
 
-    public double getAppliedVoltage() {
-        return motorSim.getInputVoltage();
+    public Voltage getAppliedVoltage() {
+        return Units.Volts.of(motorSim.getInputVoltage());
     }
 }
