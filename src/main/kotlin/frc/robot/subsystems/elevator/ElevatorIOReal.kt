@@ -73,11 +73,17 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun updateInputs() {
         inputs.appliedVoltage = mainMotor.motorVoltage.value
-        inputs.height = mainMotor.position.value.toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
-        mainMotor.position.value.timesConversionFactor(
-            ROTATIONS_TO_CENTIMETER
-        )
+        inputs.height =
+            mainMotor.position.value.toDistance(
+                SPROCKET_RADIUS,
+                ADJUSTED_GEAR_RATIO
+            )
+        mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
         inputs.noOffsetAbsoluteEncoderPosition = encoder.absolutePosition.value
-        inputs.absoluteEncoderHeight = encoder.position.value.toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
+        inputs.absoluteEncoderHeight =
+            encoder.position.value.toDistance(
+                SPROCKET_RADIUS,
+                ADJUSTED_GEAR_RATIO
+            )
     }
 }
