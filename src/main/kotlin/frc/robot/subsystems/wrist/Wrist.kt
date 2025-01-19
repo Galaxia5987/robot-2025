@@ -5,8 +5,7 @@ import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -29,8 +28,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
-    private fun setPower(power: Double): Command = runOnce {
-        io.setVoltage(power)
+    private fun setVoltage(voltage: Voltage): Command = runOnce {
+        io.setVoltage(voltage)
     }
 
     private fun setAngle(angle: Angles): Command =
@@ -57,11 +56,15 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
             "Pose",
             Pose3d(
                 Translation3d(),
-                Rotation3d(Units.Degrees.zero(), -io.inputs.angle, Units.Degrees.zero())
+                Rotation3d(
+                    Units.Degrees.zero(),
+                    -io.inputs.angle,
+                    Units.Degrees.zero()
+                )
             )
         )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
         Logger.recordOutput("Wrist/Mechanism2d", mechanism)
-        Logger.recordOutput("Wrist/Setpoint", setpoint)
+        Logger.recordOutput("Wrist/Setpoint", setpointValue)
     }
 }

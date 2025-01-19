@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Voltage
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
@@ -20,37 +21,44 @@ class WristIOReal : WristIO {
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
 
     init {
-        motor.configurator.apply(TalonFXConfiguration().apply {
-            MotorOutput = MotorOutputConfigs().apply {
-                NeutralMode = NeutralModeValue.Brake
-                Inverted = InvertedValue.Clockwise_Positive
+        motor.configurator.apply(
+            TalonFXConfiguration().apply {
+                MotorOutput =
+                    MotorOutputConfigs().apply {
+                        NeutralMode = NeutralModeValue.Brake
+                        Inverted = InvertedValue.Clockwise_Positive
+                    }
+                Feedback =
+                    FeedbackConfigs().apply {
+                        RotorToSensorRatio = 1.0
+                        SensorToMechanismRatio = GEAR_RATIO
+                    }
+                Slot0 =
+                    Slot0Configs().apply {
+                        kP = 1.0
+                        kI = 0.0
+                        kD = 0.0
+                        kG = 0.0
+                        GravityType = GravityTypeValue.Arm_Cosine
+                        StaticFeedforwardSign =
+                            StaticFeedforwardSignValue.UseClosedLoopSign
+                    }
+                CurrentLimits =
+                    CurrentLimitsConfigs().apply {
+                        StatorCurrentLimitEnable = true
+                        SupplyCurrentLimitEnable = true
+                        StatorCurrentLimit = 20.0
+                        SupplyCurrentLimit = 40.0
+                    }
             }
-            Feedback = FeedbackConfigs().apply {
-                RotorToSensorRatio = 1.0
-                SensorToMechanismRatio = GEAR_RATIO
-            }
-            Slot0 = Slot0Configs().apply {
-                kP = 1.0
-                kI = 0.0
-                kD = 0.0
-                kG = 0.0
-                GravityType = GravityTypeValue.Arm_Cosine
-                StaticFeedforwardSign = StaticFeedforwardSignValue.UseClosedLoopSign
-            }
-            CurrentLimits = CurrentLimitsConfigs().apply {
-                StatorCurrentLimitEnable = true
-                SupplyCurrentLimitEnable = true
-                StatorCurrentLimit = 20.0
-                SupplyCurrentLimit = 40.0
-            }
-        })
+        )
     }
 
     override fun setAngle(angle: Angle) {
         motor.setControl(positionControl.withPosition(angle))
     }
 
-    override fun setVoltage(voltage: Double) {
+    override fun setVoltage(voltage: Voltage) {
         motor.setControl(voltageOut.withOutput(voltage))
     }
 
@@ -62,6 +70,8 @@ class WristIOReal : WristIO {
         inputs.angle.mut_replace(motor.position.value)
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
         inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
-        inputs.noOffsetAbsoluteEncoderPosition.mut_replace(absoluteEncoder.position.value)
+        inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
+            absoluteEncoder.position.value
+        )
     }
 }
