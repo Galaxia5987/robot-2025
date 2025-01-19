@@ -5,6 +5,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj2.command.button.Trigger
 
 class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
     private var speed: Double
@@ -72,6 +73,7 @@ class LinearServo(channel: Int, length: Int, speed: Int) : Servo(channel) {
      * [updateCurPos()][.updateCurPos] periodically
      * @return true when servo is at its target
      */
-    val isFinished: Boolean
-        get() = position == setpoint
+    val reachedSetpoint = Trigger {
+        position == setpoint
+    }
 }
