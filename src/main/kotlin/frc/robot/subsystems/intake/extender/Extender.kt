@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj2.command.Command
@@ -22,29 +21,21 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private var resetFlag = false
 
-    private fun setPosition(position: Distance): Command =
+    private fun setPosition(position: Positions): Command =
         runOnce {
-                io.setPosition(position)
-                setpoint = position
+            io.setPosition(position.position)
+            setpoint = position.position
+            setpointName = position.getLoggingName()
             }
             .withName("extender/setPosition")
 
     private fun setPower(power: Double): Command =
         runOnce { io.setPower(power) }.withName("extender/setPower")
 
-    fun extend() =
-        setPosition(Positions.EXTENDED.position)
-            .alongWith(
-                runOnce { setpointName = Positions.EXTENDED.getLoggingName() }
-            )
-            .withName("extender/extend")
+    fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
 
     fun retract() =
-        setPosition(Positions.RETRACTED.position)
-            .alongWith(
-                runOnce { setpointName = Positions.RETRACTED.getLoggingName() }
-            )
-            .withName("extender/retract")
+        setPosition(Positions.RETRACTED).withName("extender/retract")
 
     fun reset(): Command {
         return setPower(RESET_POWER)
