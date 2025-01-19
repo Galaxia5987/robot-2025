@@ -15,7 +15,7 @@ class ElevatorIOReal : ElevatorIO {
     private val auxMotor = TalonFX(AUX_ID)
     private val encoder = CANcoder(ENCODER_ID)
     private val mainMotorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
-    private val auxMotorPositionRequest = Follower(mainMotor.deviceID, true)
+    private val auxMotorPositionRequest = Follower(mainMotor.deviceID, false)
 
     init {
         val motorConfig =
