@@ -44,7 +44,6 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .alongWith(runOnce { finishedResettingFlag = false })
             .until(isStuck)
             .andThen(
-                setVoltage(0.0),
                 runOnce { io::reset },
                 runOnce { finishedResettingFlag = true }
             )
