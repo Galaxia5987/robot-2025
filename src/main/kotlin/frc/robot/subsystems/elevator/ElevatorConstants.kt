@@ -21,3 +21,19 @@ val CENTIMETERS_TO_ROTATIONS: Measure<out PerUnit<AngleUnit, DistanceUnit>> =
     Units.Rotations.per(Units.Centimeter).of(1 / ROTATIONS_TO_CENTIMETERS_RATIO)
 
 val GAINS = selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0), Gains())
+
+enum class Positions(val value: Distance) {
+    L1(Units.Centimeters.of(25.0)),
+    L2(Units.Centimeters.of(35.0)),
+    L3(Units.Centimeters.of(45.0)),
+    L4(Units.Centimeters.of(110.0)),
+    L2_ALGAE(Units.Centimeters.of(55.0)),
+    L3_ALGAE(Units.Centimeters.of(79.0)),
+    FEEDER(Units.Centimeters.of(95.0)),
+    ZERO(Units.Centimeters.zero());
+
+    fun getLoggingName() =
+        name.split("_").joinToString(" ") {
+            it.lowercase().replaceFirstChar(Char::uppercase)
+        }
+}
