@@ -24,7 +24,7 @@ class Visualizer(
         val firstStagePose =
             Pose3d(0.0, 0.0, firstStageHeight, Rotation3d.kZero)
         val secondStagePose =
-            Pose3d(0.0, 0.0, firstStageHeight, Rotation3d.kZero)
+            Pose3d(0.0, 0.0, carriageHeight, Rotation3d.kZero)
         return Pair(firstStagePose, secondStagePose)
     }
 
