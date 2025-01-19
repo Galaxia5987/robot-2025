@@ -9,7 +9,7 @@ import org.team9432.annotation.Logged
 
 interface ClimberIO {
     var inputs: LoggedInputClimber
-    fun setLatchPosition(position: Dimensionless) {}
+    fun setLatchPosition(position: Angle) {}
     fun setPower(power: Double) {}
     fun setAngle(angle: Angle) {}
     fun lock() {}
@@ -20,7 +20,7 @@ interface ClimberIO {
     open class InputClimber {
         var appliedVoltage: Voltage = Units.Volts.zero()
         var angle: Angle = Units.Degree.zero()
-        var latchPosition: Dimensionless = Units.Percent.of(0.0)
+        var latchPosition: Angle = Units.Degree.of(0.0)
         var sensorDistance: Distance = Units.Centimeter.zero()
     }
 }
