@@ -11,7 +11,7 @@ import frc.robot.lib.motors.TalonType
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
-    private val motorPosititonRequest = PositionVoltage(0.0)
+    private val motorPositionRequest = PositionVoltage(0.0)
     private val dutyCycleRequest = DutyCycleOut(0.0)
     private val motor =
         TalonFXSim(
@@ -29,7 +29,7 @@ class ElevatorIOSim : ElevatorIO {
 
     override fun setHeight(height: Distance) {
         motor.setControl(
-            motorPosititonRequest.withPosition(
+            motorPositionRequest.withPosition(
                 height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
             )
         )
