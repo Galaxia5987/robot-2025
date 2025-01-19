@@ -9,7 +9,7 @@ import org.team9432.annotation.Logged
 interface ElevatorIO {
     val inputs: LoggedElevatorInputs
 
-    fun setHeight(position: Distance) {}
+    fun setHeight(height: Distance) {}
 
     fun setPower(percentOutput: Double) {}
 
