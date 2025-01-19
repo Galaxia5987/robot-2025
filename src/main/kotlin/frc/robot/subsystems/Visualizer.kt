@@ -1,11 +1,12 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.Units.Radians
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import frc.robot.lib.getPose3d
+import frc.robot.lib.getRotation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
 class Visualizer(
@@ -18,51 +19,41 @@ class Visualizer(
     private val climberAngle: () -> Angle,
 ) {
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
-        val carriageHeight = elevatorHeight.invoke().`in`(Meters)
-        val firstStageHeight = carriageHeight / 2.0
+        val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
+        val firstStageHeight = secondStageHeight / 2.0
 
-        val firstStagePose =
-            Pose3d(0.0, 0.0, firstStageHeight, Rotation3d.kZero)
-        val secondStagePose =
-            Pose3d(0.0, 0.0, firstStageHeight, Rotation3d.kZero)
+        val firstStagePose = getPose3d(z = firstStageHeight)
+        val secondStagePose = getPose3d(z = secondStageHeight)
         return Pair(firstStagePose, secondStagePose)
     }
 
     @AutoLogOutput
     fun visualizeSubsystems(): Array<Pose3d> {
-        val intakePose =
-            Pose3d(
-                extenderPosition.invoke().`in`(Meters),
-                0.0,
-                0.0,
-                Rotation3d.kZero
-            )
+        val intakePose = getPose3d(x = extenderPosition.invoke().`in`(Meters))
         val intakeRollerPose =
             intakePose.rotateBy(
-                Rotation3d(0.0, intakeRollerAngle.invoke().`in`(Radians), 0.0)
+                getRotation3d(pitch = intakeRollerAngle.invoke().`in`(Radians))
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
             secondStagePose.rotateBy(
-                Rotation3d(0.0, wristAngle.invoke().`in`(Radians), 0.0)
+                getRotation3d(pitch = wristAngle.invoke().`in`(Radians))
             )
 
         val coralRollersPose =
             wristPose.rotateBy(
-                Rotation3d(0.0, coralRollersAngle.invoke().`in`(Radians), 0.0)
+                getRotation3d(pitch = coralRollersAngle.invoke().`in`(Radians))
             )
         val algaeRemoverPose =
             wristPose.rotateBy(
-                Rotation3d(0.0, algaeRemoverAngle.invoke().`in`(Radians), 0.0)
+                getRotation3d(pitch = algaeRemoverAngle.invoke().`in`(Radians))
             )
 
         val climberPose =
-            Pose3d(
-                0.0,
-                0.0,
-                0.0,
-                Rotation3d(0.0, climberAngle.invoke().`in`(Radians), 0.0)
+            getPose3d(
+                rotation =
+                    getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
             )
 
         return arrayOf(
@@ -70,8 +61,8 @@ class Visualizer(
             intakeRollerPose,
             firstStagePose,
             secondStagePose,
-            // The two identical poses are for the upper and lower rollers.
             wristPose,
+            // The two identical poses are for the upper and lower rollers.
             coralRollersPose,
             coralRollersPose,
             algaeRemoverPose,
