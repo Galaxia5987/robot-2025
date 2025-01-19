@@ -33,6 +33,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         io.updateInputs()
         Logger.processInputs(this.name, io.inputs)
         Logger.recordOutput("Elevator/Mechanism2d", mechanism)
+        Logger.recordOutput("Elevator/Setpoint", positionSetpoint)
 
         elevatorLigament.length = io.inputs.height.`in`(Units.Meters)
     }
