@@ -70,8 +70,8 @@ class Visualizer(
             intakeRollerPose,
             firstStagePose,
             secondStagePose,
-            // The two identical poses are for the upper and lower rollers.
             wristPose,
+            // The two identical poses are for the upper and lower rollers.
             coralRollersPose,
             coralRollersPose,
             algaeRemoverPose,
