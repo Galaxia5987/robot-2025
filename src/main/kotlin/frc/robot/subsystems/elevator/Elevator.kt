@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private val mechanism = LoggedMechanism2d(3.0, 3.0)
     private val root = mechanism.getRoot("Elevator", 2.0, 0.0)
-    private val elevator = root.append(LoggedMechanismLigament2d("ElevatorLigament", 1.0, 90.0))
+    private val elevatorLigament = root.append(LoggedMechanismLigament2d("ElevatorLigament", 1.0, 90.0))
     @AutoLogOutput private var positionSetpoint: Distance = Units.Millimeters.of(0.0)
 
     fun setPosition(position: Distance): Command = runOnce {
@@ -32,6 +32,6 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         Logger.processInputs(this.name, io.inputs)
         Logger.recordOutput("Elevator/Mechanism2d", mechanism)
 
-        elevator.length = io.inputs.height.`in`(Units.Meters)
+        elevatorLigament.length = io.inputs.height.`in`(Units.Meters)
     }
 }
