@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -30,8 +31,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             }
             .withName("extender/setPosition")
 
-    private fun setVoltage(voltage: Double): Command =
-        startEnd({ io.setVoltage(voltage) }, { io.setVoltage(0.0) })
+    private fun setVoltage(voltage: Voltage): Command =
+        startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
             .withName("extender/setVoltage")
 
     fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
@@ -40,7 +44,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         setPosition(Positions.RETRACTED).withName("extender/retract")
 
     fun reset(): Command {
-        return setVoltage(RESET_POWER)
+        return setVoltage(RESET_VOLTAGE)
             .alongWith(runOnce { finishedResettingFlag = false })
             .until(isStuck)
             .andThen(
