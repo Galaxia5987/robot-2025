@@ -24,6 +24,6 @@ class RollerIOSim : RollerIO {
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
-        inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
+        inputs.appliedVoltage = motor.appliedVoltage
     }
 }
