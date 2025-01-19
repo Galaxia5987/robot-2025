@@ -40,6 +40,7 @@ class ElevatorIOSim : ElevatorIO {
     }
 
     override fun updateInputs() {
+        motor.update(Timer.getFPGATimestamp())
         inputs.appliedVoltage = Units.Volts.of(motor.appliedVoltage)
         inputs.height =
             Units.Rotations.of(motor.position)
