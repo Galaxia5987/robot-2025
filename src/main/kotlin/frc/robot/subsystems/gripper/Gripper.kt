@@ -1,17 +1,21 @@
 package frc.robot.subsystems.gripper
 
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
-    private fun setPower(power: Double): Command = runOnce {
-        io.setPower(power)
+    private fun setVoltage(voltage: Voltage): Command = runOnce {
+        io.setVoltage(voltage)
     }
 
-    fun intake(): Command = setPower(INTAKE_POWER).withName("Gripper/Intake")
-    fun outtake(): Command = setPower(OUTTAKE_POWER).withName("Gripper/Outtake")
-    fun removeAlgae(): Command = setPower(REMOVE_ALGAE_POWER).withName("Gripper/RemoveAlae")
+    fun intake(): Command =
+        setVoltage(INTAKE_VOLTAGE).withName("Gripper/Intake")
+    fun outtake(): Command =
+        setVoltage(OUTTAKE_VOLTAGE).withName("Gripper/Outtake")
+    fun removeAlgae(): Command =
+        setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
 
     override fun periodic() {
         io.updateInputs()
