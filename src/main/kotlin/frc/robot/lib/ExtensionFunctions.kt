@@ -99,7 +99,7 @@ fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
 fun Distance.toAngle(radius: Distance, gearRatio: Double): Angle =
     this.timesConversionFactor(
         Units.Rotations.per(Units.Meters)
-            .of(1.0 / radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
+            .of(1.0 / (radius.`in`(Units.Meters) * gearRatio * 2.0 * PI))
     )
 
 fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
