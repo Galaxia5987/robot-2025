@@ -51,7 +51,11 @@ class ExtenderIOReal : ExtenderIO {
     }
 
     override fun setPosition(position: Distance) {
-        motor.setControl(positionControl.withPosition(position.toAngle(PINION_RADIUS, GEAR_RATIO)))
+        motor.setControl(
+            positionControl.withPosition(
+                position.toAngle(PINION_RADIUS, GEAR_RATIO)
+            )
+        )
     }
 
     override fun setVoltage(voltage: Voltage) {
@@ -63,7 +67,8 @@ class ExtenderIOReal : ExtenderIO {
     }
 
     override fun updateInputs() {
-        inputs.position = motor.position.value.toDistance(PINION_RADIUS, GEAR_RATIO)
+        inputs.position =
+            motor.position.value.toDistance(PINION_RADIUS, GEAR_RATIO)
         inputs.appliedVoltage = motor.motorVoltage.value
         inputs.motorCurrent = motor.supplyCurrent.value
     }

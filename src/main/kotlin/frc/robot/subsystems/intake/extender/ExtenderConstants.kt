@@ -15,10 +15,7 @@ val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
 
-val GAINS = selectGainsBasedOnMode(
-    Gains(),
-    Gains()
-)
+val GAINS = selectGainsBasedOnMode(Gains(), Gains())
 
 enum class Positions(val position: Distance) {
     EXTENDED(Units.Meters.of(0.5)),
