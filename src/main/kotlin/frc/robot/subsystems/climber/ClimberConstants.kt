@@ -5,8 +5,7 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Dimensionless
 import edu.wpi.first.units.measure.MomentOfInertia
 
-const val UNFOLD_POWER = 1
-const val FOLD_POWER = 1
+const val UNLOCK_POWER = 0.0
 val OPEN_LATCH_POSITION: Angle = Units.Degree.of(0.8)
 val CLOSE_LATCH_POSITION:Angle = Units.Degree.of(0.2)
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(60.0)
