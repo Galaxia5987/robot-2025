@@ -11,7 +11,7 @@ interface ExtenderIO {
 
     fun setPosition(position: Distance) {}
 
-    fun setPower(power: Double) {}
+    fun setVoltage(voltage: Double) {}
 
     fun reset() {}
 

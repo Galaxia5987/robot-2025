@@ -1,23 +1,24 @@
 package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpoint = Units.Meters.zero()
     @AutoLogOutput private var setpointName = ""
     @AutoLogOutput private var error = Units.Meters.zero()
-    @AutoLogOutput private var mechanism = Mechanism2d(3.0, 2.0)
+    @AutoLogOutput
+    private var mechanism = LoggedMechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
     private val ligament =
-        root.append(MechanismLigament2d("ExtenderLigament", 0.569, 0.0))
+        root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
     private var resetFlag = false
 
@@ -29,8 +30,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             }
             .withName("extender/setPosition")
 
-    private fun setPower(power: Double): Command =
-        runOnce { io.setPower(power) }.withName("extender/setPower")
+    private fun setVoltage(voltage: Double): Command =
+        runOnce { io.setVoltage(voltage) }.withName("extender/setVoltage")
 
     fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
 
@@ -38,10 +39,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         setPosition(Positions.RETRACTED).withName("extender/retract")
 
     fun reset(): Command {
-        return setPower(RESET_POWER)
+        return setVoltage(RESET_POWER)
             .alongWith(runOnce { resetFlag = false })
             .until(isStuck)
-            .andThen(setPower(0.0), runOnce { io::reset })
+            .andThen(setVoltage(0.0), runOnce { io::reset })
             .finallyDo(Runnable { resetFlag = true })
             .withName("extender/reset")
     }
