@@ -27,10 +27,10 @@ class ElevatorIOSim : ElevatorIO {
             TalonType.KRAKEN
         )
 
-    override fun setHeight(position: Distance) {
+    override fun setHeight(height: Distance) {
         motor.setControl(
             motorPosititonRequest.withPosition(
-                position.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
+                height.timesConversionFactor(CENTIMETERS_TO_ROTATIONS)
             )
         )
     }
