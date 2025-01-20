@@ -61,11 +61,11 @@ class ClimberIOReal : ClimberIO {
     }
 
     override fun closeStopper() {
-        stopperMotor.set(ControlMode.Position, LOCK_ANGLE.`in`(Units.Radians))
+        stopperMotor.set(ControlMode.PercentOutput, LOCK_POWER)
     }
 
     override fun openStopper() {
-        stopperMotor.set(ControlMode.Position, UNLOCK_ANGLE.`in`(Units.Radians))
+        stopperMotor.set(ControlMode.PercentOutput, UNLOCK_POWER)
     }
 
     override fun updateInput() {
