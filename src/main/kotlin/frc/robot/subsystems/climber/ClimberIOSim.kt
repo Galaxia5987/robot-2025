@@ -24,7 +24,7 @@ class ClimberIOSim : ClimberIO {
             GEAR_RATIO,
             MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
-            TalonType.KRAKEN
+            TalonType.KRAKEN_FOC
         )
     private var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
     private var servo2 = SolenoidSim(PneumaticsModuleType.REVPH, FOLLOW_LATCH_SERVO_ID)
