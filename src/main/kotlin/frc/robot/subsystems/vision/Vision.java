@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -92,13 +92,27 @@ public class Vision extends SubsystemBase {
             // Add tag poses
             for (int tagId : inputs[cameraIndex].tagIds) {
                 var tagPose = aprilTagLayout.getTagPose(tagId);
-                tagPose.ifPresent(tagPoses::add);
+                if (tagPose.isPresent()) {
+                    tagPoses.add(tagPose.get());
+                }
             }
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                // Check if observation should be rejected
-                boolean rejectPose = isRejectPose(observation);
+                // Check whether to reject pose
+                boolean rejectPose =
+                        observation.tagCount() == 0 // Must have at least one tag
+                                || (observation.tagCount() == 1
+                                        && observation.ambiguity()
+                                                > maxAmbiguity) // Cannot be high ambiguity
+                                || Math.abs(observation.pose().getZ())
+                                        > maxZError // Must have realistic Z coordinate
+
+                                // Must be within the field boundaries
+                                || observation.pose().getX() < 0.0
+                                || observation.pose().getX() > aprilTagLayout.getFieldLength()
+                                || observation.pose().getY() < 0.0
+                                || observation.pose().getY() > aprilTagLayout.getFieldWidth();
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -165,25 +179,6 @@ public class Vision extends SubsystemBase {
         Logger.recordOutput(
                 "Vision/Summary/RobotPosesRejected",
                 allRobotPosesRejected.toArray(new Pose3d[allRobotPosesRejected.size()]));
-    }
-
-    private static boolean isRejectPose(VisionIO.PoseObservation observation) {
-        boolean inFieldBounds =
-                observation.pose().getX() < 0.0
-                        || observation.pose().getX() > aprilTagLayout.getFieldLength()
-                        || observation.pose().getY() < 0.0
-                        || observation.pose().getY() > aprilTagLayout.getFieldWidth();
-
-        boolean onGround =
-                Math.abs(observation.pose().getZ()) > maxZError; // Must have realistic Z coordinate
-        boolean notEmpty = observation.tagCount() == 0; // Must have at least one tag
-
-        // Cannot be high ambiguity
-        boolean isHighAmbiguity =
-                (observation.tagCount() == 1 && observation.ambiguity() > maxAmbiguity);
-
-        // Check whether to reject pose
-        return notEmpty || isHighAmbiguity || onGround || inFieldBounds;
     }
 
     @FunctionalInterface
