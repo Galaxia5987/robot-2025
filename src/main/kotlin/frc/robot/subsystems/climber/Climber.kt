@@ -38,6 +38,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)
     }
 
+    @AutoLogOutput
+    private val isUnfolded = Trigger {
+        inputs.angle.isNear(UNFOLDED_ANGLE, FOLDED_TOLERANCE)
+    }
     private fun setAngle(angle: Angle): Command = runOnce { io.setAngle(angle) }
 
     private fun setVoltage(voltage: Voltage): Command =
