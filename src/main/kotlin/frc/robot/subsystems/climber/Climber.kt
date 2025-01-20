@@ -26,7 +26,8 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     @AutoLogOutput
     private var isStopperStuck = Trigger {
-        inputs.stopperMotorCurrent.abs(Units.Amps) >= STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
+        inputs.stopperMotorCurrent.abs(Units.Amps) >=
+                STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
     @AutoLogOutput
