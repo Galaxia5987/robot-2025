@@ -43,8 +43,10 @@ var MOTOR_CONFIG =
             Inverted = InvertedValue.Clockwise_Positive
         }
         CurrentLimits.apply {
-            StatorCurrentLimitEnable = false
-            SupplyCurrentLimitEnable = false
+            StatorCurrentLimitEnable = true
+            SupplyCurrentLimitEnable = true
+            StatorCurrentLimit = 160.0
+            SupplyCurrentLimit = 80.0
         }
         Slot0.apply {
             kP = GAINS.kP
