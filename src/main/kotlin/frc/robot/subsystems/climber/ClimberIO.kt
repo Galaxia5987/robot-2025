@@ -7,7 +7,7 @@ import edu.wpi.first.units.measure.Voltage
 import org.team9432.annotation.Logged
 
 interface ClimberIO {
-    var inputs: LoggedInputClimber
+    var inputs: LoggedClimberInputs
     fun setLatchPosition(position: Distance) {}
     fun setVoltage(voltage: Voltage) {}
     fun setAngle(angle: Angle) {}
@@ -16,7 +16,7 @@ interface ClimberIO {
     fun updateInput() {}
 
     @Logged
-    open class InputClimber {
+    open class ClimberInputs {
         var appliedVoltage: Voltage = Units.Volts.zero()
         var angle: Angle = Units.Degree.zero()
         var latchPosition: Distance = Units.Millimeters.zero()
