@@ -2,6 +2,7 @@ package frc.robot.subsystems.climber
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -21,7 +22,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private var isLatchClosed = Trigger {
         inputs.latchPosition.isNear(
             CLOSE_LATCH_POSITION,
-            LATCH_TOLERANCE.`in`(Units.Degree)
+            LATCH_TOLERANCE
         )
     }
 
@@ -41,7 +42,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             { io.setVoltage(Units.Volts.zero()) }
         )
 
-    private fun setLatchPose(latchPose: Angle): Command = runOnce {
+    private fun setLatchPose(latchPose: Distance): Command = runOnce {
         io.setLatchPosition(latchPose)
     }
 
