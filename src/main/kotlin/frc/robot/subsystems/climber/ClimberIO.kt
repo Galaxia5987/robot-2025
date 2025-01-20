@@ -12,9 +12,7 @@ interface ClimberIO {
     fun setLatchPosition(position: Distance) {}
     fun setVoltage(voltage: Voltage) {}
     fun setAngle(angle: Angle) {}
-    fun closeStopper() {}
-    fun openStopper() {}
-    fun stopStopper() {}
+    fun setStopperPower(power: Double) {}
     fun updateInput() {}
 
     @Logged
