@@ -1,0 +1,115 @@
+{
+  "name": "2025Bot",
+  "disableSimplification": true,
+  "rotations": [
+    {
+      "axis": "x",
+      "degrees": 90
+    },
+    {
+      "axis": "z",
+      "degrees": -90
+    }
+  ],
+  "position": [
+    0,
+    0,
+    0.05545625
+  ],
+  "cameras": [],
+  "components": [
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": 90
+        }
+      ],
+      "zeroedPosition": [
+        -0.095,
+        0,
+        -0.3
+      ]
+    },
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.765,
+        0,
+        -0.625
+      ]
+    },
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.765,
+        0,
+        -0.2
+      ]
+    },
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": -90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        },
+        {
+          "axis": "y",
+          "degrees": 180
+        }
+      ],
+      "zeroedPosition": [
+        -0.77,
+        0,
+        -0.845
+      ]
+    },
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": -90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        },
+        {
+          "axis": "y",
+          "degrees": 180
+        }
+      ],
+      "zeroedPosition": [
+        0.24,
+        0,
+        -0.213
+      ]
+    }
+  ]
+}
