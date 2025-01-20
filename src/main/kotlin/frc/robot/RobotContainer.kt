@@ -89,6 +89,11 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
+        // TODO: Remove before merging
+        driverController.b().onTrue(intakeExtender.extend()).onFalse(intakeExtender.retract())
+        driverController.a().onTrue(elevator.l4().alongWith(wrist.l4()))
+            .onFalse(elevator.zero().alongWith(wrist.feeder()))
+
         driverController
             .povUp()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kZero))
