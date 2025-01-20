@@ -44,6 +44,11 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
+    private val atSetpoint = Trigger {
+        inputs.angle.isNear(setpoint, FOLDED_TOLERANCE)
+    }
+
+    @AutoLogOutput
     private var setpoint = Units.Rotations.zero()
 
     private fun setAngle(angle: Angle): Command =
