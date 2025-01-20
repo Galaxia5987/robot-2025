@@ -43,10 +43,8 @@ class ClimberIOSim : ClimberIO {
     private var positionController = PositionVoltage(0.0)
 
     override fun setLatchPosition(position: Distance) {
-        if (position == OPEN_LATCH_POSITION) {
-            listOf(servo2, servo1).forEach { it.output = true }
-        } else {
-            listOf(servo2, servo1).forEach { it.output = false }
+        listOf(servo1, servo2).forEach {
+            it.output = position == OPEN_LATCH_POSITION
         }
     }
 
