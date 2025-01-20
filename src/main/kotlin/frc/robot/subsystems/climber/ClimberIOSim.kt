@@ -1,5 +1,6 @@
 package frc.robot.subsystems.climber
 
+import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.system.plant.DCMotor
@@ -35,6 +36,7 @@ class ClimberIOSim : ClimberIO {
             1.0
         )
     private var voltageControl = VoltageOut(0.0)
+    private var powerControl = DutyCycleOut(0.0)
     private var positionController = PositionVoltage(0.0)
 
     override fun setLatchPosition(position: Distance) {
@@ -45,12 +47,8 @@ class ClimberIOSim : ClimberIO {
         }
     }
 
-    override fun closeStopper() {
-        stopperMotor.setControl(voltageControl.withOutput(LOCK_POWER * 12))
-    }
-
-    override fun openStopper() {
-        stopperMotor.setControl(voltageControl.withOutput(UNLOCK_POWER * 12))
+    override fun setStopperPower(power: Double) {
+        stopperMotor.setControl(powerControl.withOutput(power))
     }
 
     override fun setVoltage(voltage: Voltage) {
