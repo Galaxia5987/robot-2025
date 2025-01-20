@@ -5,4 +5,4 @@ const val AUX_MOTOR_ID = 1
 const val LATCH_SERVO_ID = 2
 const val FOLLOW_LATCH_SERVO_ID = 3
 const val SENSOR_ID = 4
-const val LOCK_MOTOR_ID = 5
+const val STOPPER_MOTOR_ID = 5
