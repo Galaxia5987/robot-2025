@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
@@ -49,6 +51,12 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     @AutoLogOutput
     private var setpoint = Units.Rotations.zero()
+
+    @AutoLogOutput
+    private var mechanism = LoggedMechanism2d(3.0, 2.0)
+    private var root = mechanism.getRoot("Climber", 1.0, 1.0)
+    private val ligament =
+        root.append(LoggedMechanismLigament2d("ClimberLigament", 0.27003, 90.0))
 
     private fun setAngle(angle: Angle): Command = runOnce {
         io.setAngle(angle)
@@ -111,5 +119,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInput()
         Logger.processInputs(this::class.simpleName, io.inputs)
+
+        ligament.angle = inputs.angle.`in`(Units.Degrees)
     }
 }
