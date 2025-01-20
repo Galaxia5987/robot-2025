@@ -1,12 +1,15 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Transform3d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.Units.Radians
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
+import frc.robot.lib.getTranslation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
 class Visualizer(
@@ -29,7 +32,7 @@ class Visualizer(
 
     @AutoLogOutput
     fun visualizeSubsystems(): Array<Pose3d> {
-        val intakePose = getPose3d(x = extenderPosition.invoke().`in`(Meters))
+        val intakePose = getPose3d(x = 0.47 + extenderPosition.invoke().`in`(Meters), z = 0.35)
         val intakeRollerPose =
             intakePose.rotateBy(
                 getRotation3d(pitch = intakeRollerAngle.invoke().`in`(Radians))
@@ -37,9 +40,7 @@ class Visualizer(
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
-            secondStagePose.rotateBy(
-                getRotation3d(pitch = wristAngle.invoke().`in`(Radians))
-            )
+            secondStagePose.plus(Transform3d(0.08, 0.0, 0.44, getRotation3d(pitch = wristAngle.invoke().`in`(Radians))))
 
         val coralRollersPose =
             wristPose.rotateBy(
@@ -52,20 +53,21 @@ class Visualizer(
 
         val climberPose =
             getPose3d(
+                translation = getTranslation3d(x = -0.24, z = 0.27),
                 rotation =
                     getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
             )
 
         return arrayOf(
             intakePose,
-            intakeRollerPose,
+//            intakeRollerPose,
             firstStagePose,
             secondStagePose,
             wristPose,
             // The two identical poses are for the upper and lower rollers.
-            coralRollersPose,
-            coralRollersPose,
-            algaeRemoverPose,
+//            coralRollersPose,
+//            coralRollersPose,
+//            algaeRemoverPose,
             climberPose
         )
     }
