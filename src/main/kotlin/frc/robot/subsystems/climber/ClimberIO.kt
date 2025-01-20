@@ -9,7 +9,7 @@ import org.team9432.annotation.Logged
 interface ClimberIO {
     var inputs: LoggedInputClimber
     fun setLatchPosition(position: Angle) {}
-    fun setPower(power: Double) {}
+    fun setVoltage(voltage: Voltage) {}
     fun setAngle(angle: Angle) {}
     fun closeStopper() {}
     fun openStopper() {}
