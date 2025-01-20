@@ -14,6 +14,7 @@ interface ClimberIO {
     fun setAngle(angle: Angle) {}
     fun closeStopper() {}
     fun openStopper() {}
+    fun stopStopper() {}
     fun updateInput() {}
 
     @Logged
