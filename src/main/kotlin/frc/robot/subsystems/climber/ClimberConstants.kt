@@ -29,7 +29,7 @@ val STOPPER_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 var GAINS =
     selectGainsBasedOnMode(
         Gains(kP = 0.0, kI = 0.0, kD = 0.0),
-        Gains(kP = 0.5, kI = 0.0, kD = 0.08)
+        Gains(kP = 0.015, kI = 0.0, kD = 0.045)
     )
 var MOTOR_CONFIG =
     TalonFXConfiguration().apply {
