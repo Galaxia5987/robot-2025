@@ -27,7 +27,6 @@ class ClimberIOReal:ClimberIO {
 
     private val sensor = AnalogInput(SENSOR_ID)
     private val distanceFilter = MedianFilter(3)
-    private val distance = AnalogInput(0)
 
     init {
         auxMotor.setControl(StrictFollower(mainMotor.deviceID))
@@ -59,7 +58,7 @@ class ClimberIOReal:ClimberIO {
         inputs.angle = mainMotor.position.value
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
         inputs.latchPosition = servo1.position
-        var calculatedDistance = distanceFilter.calculate(4800 / (200 * distance.getVoltage() - 20.0))
+        var calculatedDistance = distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
         if (calculatedDistance < 0) {
             calculatedDistance = 80.0
         }
