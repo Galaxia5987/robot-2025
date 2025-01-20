@@ -44,7 +44,7 @@ class ClimberIOReal:ClimberIO {
     }
 
     override fun setAngle(angle: Angle) {
-        mainMotor.setControl(positionVoltage.withPosition(angle))
+        mainMotor.setControl(positionControl.withPosition(angle))
     }
 
     override fun closeStopper() {
