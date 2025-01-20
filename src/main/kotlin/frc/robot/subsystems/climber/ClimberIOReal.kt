@@ -14,8 +14,7 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.AnalogInput
 import frc.robot.lib.motors.LinearServo
 
-
-class ClimberIOReal:ClimberIO {
+class ClimberIOReal : ClimberIO {
     override var inputs: LoggedClimberInputs = LoggedClimberInputs()
 
     private val mainMotor = TalonFX(MAIN_MOTOR_ID)
@@ -31,12 +30,14 @@ class ClimberIOReal:ClimberIO {
     private val distanceFilter = MedianFilter(3)
 
     init {
-        listOf(auxMotor, mainMotor).forEach { it.apply {MOTOR_CONFIG} }
+        listOf(auxMotor, mainMotor).forEach { it.apply { MOTOR_CONFIG } }
         auxMotor.setControl(Follower(mainMotor.deviceID, true))
     }
 
     override fun setLatchPosition(position: Distance) {
-        listOf(servo2, servo1).forEach { it.position = position.`in`(Units.Millimeters) }
+        listOf(servo2, servo1).forEach {
+            it.position = position.`in`(Units.Millimeters)
+        }
     }
 
     override fun setVoltage(voltage: Voltage) {
@@ -53,7 +54,6 @@ class ClimberIOReal:ClimberIO {
 
     override fun openStopper() {
         stopperMotor.set(ControlMode.Position, UNLOCK_ANGLE.`in`(Units.Radians))
-
     }
 
     override fun updateInput() {
@@ -61,7 +61,8 @@ class ClimberIOReal:ClimberIO {
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
         inputs.latchPosition = Units.Millimeters.of(servo1.position)
 
-        var calculatedDistance = distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
+        var calculatedDistance =
+            distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
         if (calculatedDistance < 0) {
             calculatedDistance = 80.0
         }
