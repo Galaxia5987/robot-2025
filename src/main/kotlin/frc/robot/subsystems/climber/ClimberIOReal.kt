@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.can.TalonSRX
 import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
-import com.ctre.phoenix6.controls.StrictFollower
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.filter.MedianFilter
 import edu.wpi.first.units.Units
@@ -14,15 +14,18 @@ import frc.robot.lib.motors.LinearServo
 
 
 class ClimberIOReal:ClimberIO {
-    override var inputs: LoggedInputClimber = LoggedInputClimber()
-    val mainMotor = TalonFX(MAIN_MOTOR_ID)
-    val servo1 = LinearServo(SERVO_1_ID, 1, 1)
-    val servo2 = LinearServo(SERVO_2_ID, 1, 1)
-    val auxMotor = TalonFX(AUX_MOTOR_ID)
-    val lockServo = TalonSRX(LOCK_MOTOR_ID)
-    val dutyCycleOut = DutyCycleOut(0.0)
-    val positionVoltage = PositionVoltage(0.0)
-    val sensor = AnalogInput(SENSOR_ID)
+    override var inputs: LoggedClimberInputs = LoggedClimberInputs()
+
+    private val mainMotor = TalonFX(MAIN_MOTOR_ID)
+    private val auxMotor = TalonFX(AUX_MOTOR_ID)
+    private val servo1 = LinearServo(LATCH_SERVO_ID, 1, 1)
+    private val servo2 = LinearServo(FOLLOW_LATCH_SERVO_ID, 1, 1)
+    private val stopperMotor = TalonSRX(STOPPER_MOTOR_ID)
+
+    private val voltageControl = VoltageOut(0.0)
+    private val positionControl = PositionVoltage(0.0)
+
+    private val sensor = AnalogInput(SENSOR_ID)
     private val distanceFilter = MedianFilter(3)
     private val distance = AnalogInput(0)
 
