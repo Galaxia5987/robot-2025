@@ -1,0 +1,195 @@
+{
+  "hubs": [
+    {
+      "x": -8,
+      "y": -8,
+      "width": 1552,
+      "height": 832,
+      "state": {
+        "sidebar": {
+          "width": 300,
+          "expanded": [
+            "/RealOutputs",
+            "/RealOutputs/Extender",
+            "/RealOutputs/SubsystemPoses",
+            "/RealOutputs/SubsystemPoses/6",
+            "/RealOutputs/SubsystemPoses/3/translation",
+            "/RealOutputs/SubsystemPoses/2/translation",
+            "/RealOutputs/SubsystemPoses/1/translation",
+            "/RealOutputs/Pose",
+            "/RealOutputs/Pose/0/translation",
+            "/RealOutputs/Pose/0/rotation"
+          ]
+        },
+        "tabs": {
+          "selected": 4,
+          "tabs": [
+            {
+              "type": 0,
+              "title": "",
+              "controller": null,
+              "controllerUUID": "8vyc852j3yme4g57oq3p6l9p1y0d2ads",
+              "renderer": "#/",
+              "controlsHeight": 0
+            },
+            {
+              "type": 1,
+              "title": "Line Graph",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Extender/setpoint",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Extender/Position",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [],
+                "discreteSources": [],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "rightUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "qx7xl3pfov4jswrqr43xjfaz5m8e3zms",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 10,
+              "title": "Mechanism",
+              "controller": [
+                {
+                  "type": "mechanism",
+                  "logKey": "/RealOutputs/Elevator/Mechanism2d",
+                  "logType": "Mechanism2d",
+                  "visible": true,
+                  "options": {}
+                },
+                {
+                  "type": "mechanism",
+                  "logKey": "/RealOutputs/Extender/mechanism",
+                  "logType": "Mechanism2d",
+                  "visible": true,
+                  "options": {}
+                }
+              ],
+              "controllerUUID": "iyo0mfz6ao8u6f0q06em9hz9nrb9jgnz",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 2,
+              "title": "Odometry",
+              "controller": {
+                "sources": [],
+                "game": "2025 Field",
+                "bumpers": "auto",
+                "origin": "blue",
+                "orientation": 0,
+                "size": 30
+              },
+              "controllerUUID": "znut6vzxjy7ap9tu28yhuqp27e7f3np0",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 3,
+              "title": "3D Field",
+              "controller": {
+                "sources": [
+                  {
+                    "type": "robot",
+                    "logKey": "/RealOutputs/Pose/0",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {
+                      "model": "2025Bot"
+                    }
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "/RealOutputs/SubsystemPoses/0",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "/RealOutputs/SubsystemPoses/1",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "/RealOutputs/SubsystemPoses/2",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "/RealOutputs/SubsystemPoses/3",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "component",
+                    "logKey": "/RealOutputs/SubsystemPoses/4",
+                    "logType": "Pose3d",
+                    "visible": true,
+                    "options": {}
+                  }
+                ],
+                "game": "2025 Field",
+                "origin": "blue"
+              },
+              "controllerUUID": "6qh0zrx3bq9thc0lz0yr9r95tfr7t04r",
+              "renderer": {
+                "cameraIndex": -1,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  8.841221165045589,
+                  0.9920040500556202,
+                  -4.731890037128491
+                ],
+                "cameraTarget": [
+                  7.57206570451731,
+                  -1.30514678982443,
+                  -1.9064842950133467
+                ]
+              },
+              "controlsHeight": 200
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "4.1.1"
+}
