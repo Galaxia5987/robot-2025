@@ -57,6 +57,8 @@ object RobotContainer {
             )
     }
 
+    fun getVisualizerPoses() = visualizer.visualizeSubsystems()
+
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand =
             DriveCommands.joystickDriveAtAngle(
