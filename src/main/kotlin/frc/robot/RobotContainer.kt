@@ -59,19 +59,26 @@ object RobotContainer {
 
     fun getVisualizerPoses() = visualizer.visualizeSubsystems()
 
+    private fun getDriveCommandReal(): Command = DriveCommands.joystickDriveAtAngle(
+        swerveDrive,
+        { driverController.leftY },
+        { driverController.leftX },
+        { swerveDrive.desiredHeading },
+    )
+        .alongWith(
+            swerveDrive.updateDesiredHeading {
+                -driverController.rightX
+            })
+
+    private fun getDriveCommandSim(): Command = DriveCommands.joystickDrive(
+        swerveDrive,
+        { driverController.leftY },
+        { driverController.leftX },
+        { -driverController.rightX * 0.6 })
+
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand =
-            DriveCommands.joystickDriveAtAngle(
-                    swerveDrive,
-                    { driverController.leftY },
-                    { driverController.leftX },
-                    { swerveDrive.desiredHeading },
-                )
-                .alongWith(
-                    swerveDrive.updateDesiredHeading {
-                        -driverController.rightX
-                    }
-                )
+        swerveDrive.defaultCommand = if (CURRENT_MODE == Mode.REAL) getDriveCommandReal() else getDriveCommandSim()
+
     }
 
     private fun configureButtonBindings() {
