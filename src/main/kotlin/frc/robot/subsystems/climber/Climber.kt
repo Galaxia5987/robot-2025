@@ -42,6 +42,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private val isUnfolded = Trigger {
         inputs.angle.isNear(UNFOLDED_ANGLE, FOLDED_TOLERANCE)
     }
+
+    @AutoLogOutput
+    private var setpoint =
+
     private fun setAngle(angle: Angle): Command = runOnce { io.setAngle(angle) }
 
     private fun setVoltage(voltage: Voltage): Command =
@@ -68,9 +72,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     fun fold() = setAngle(FOLDED_ANGLE)
 
-    fun climb(): Command = Commands.sequence(closeLatch(), fold(), lock())
+    fun climb(): Command =
+        Commands.sequence(closeLatch(), Commands.waitUntil(isLatchClosed), fold(), Commands.waitUntil(isFolded), lock())
 
-    fun declimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
+    fun declimb(): Command = Commands.sequence(unlock(), unfold(), Commands.waitUntil(isUnfolded), openLatch())
 
     override fun periodic() {
         io.updateInput()
