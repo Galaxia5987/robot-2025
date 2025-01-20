@@ -66,15 +66,27 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         io.setLatchPosition(latchPose)
     }
 
+    private fun setStopperPower(power: Double): Command = runOnce {
+        io.setStopperPower(power)
+    }
+
     fun closeLatch(): Command = setLatchPose(CLOSE_LATCH_POSITION)
 
     fun openLatch(): Command = setLatchPose(OPEN_LATCH_POSITION)
 
     fun lock(): Command =
-        run(io::closeStopper).until(isStopperStuck).andThen(io::stopStopper)
+        Commands.sequence(
+            setStopperPower(LOCK_POWER),
+            Commands.waitUntil(isStopperStuck),
+            setStopperPower(0.0)
+        )
 
     fun unlock(): Command =
-        run(io::openStopper).until(isStopperStuck).andThen(io::stopStopper)
+        Commands.sequence(
+            setStopperPower(UNLOCK_POWER),
+            Commands.waitUntil(isStopperStuck),
+            setStopperPower(0.0)
+        )
 
     fun unfold() = setAngle(UNFOLDED_ANGLE)
 
