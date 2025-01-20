@@ -60,7 +60,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     fun climb(): Command = Commands.sequence(closeLatch(), fold(), lock())
 
-    fun unClimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
+    fun declimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
 
     override fun periodic() {
         io.updateInput()
