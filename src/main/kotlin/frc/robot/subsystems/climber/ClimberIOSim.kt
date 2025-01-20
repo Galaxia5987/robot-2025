@@ -25,9 +25,11 @@ class ClimberIOSim : ClimberIO {
             1.0,
             TalonType.KRAKEN_FOC
         )
+
     private var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
     private var servo2 =
         SolenoidSim(PneumaticsModuleType.REVPH, FOLLOW_LATCH_SERVO_ID)
+
     private val stopperMotor =
         TalonFXSim(
             DCMotor.getBag(1),
@@ -35,6 +37,7 @@ class ClimberIOSim : ClimberIO {
             MOMENT_OF_INERTIA_LOCK.`in`(Units.KilogramSquareMeters),
             1.0
         )
+
     private var voltageControl = VoltageOut(0.0)
     private var powerControl = DutyCycleOut(0.0)
     private var positionController = PositionVoltage(0.0)
