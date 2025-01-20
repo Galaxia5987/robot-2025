@@ -40,7 +40,7 @@ class Visualizer(
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
-            secondStagePose.plus(Transform3d(0.08, 0.0, 0.44, getRotation3d(pitch = wristAngle.invoke().`in`(Radians))))
+            secondStagePose.plus(Transform3d(0.0, 0.0, 0.59, getRotation3d(pitch = -wristAngle.invoke().`in`(Radians))))
 
         val coralRollersPose =
             wristPose.rotateBy(
