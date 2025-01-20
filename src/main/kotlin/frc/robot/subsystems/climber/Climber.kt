@@ -15,9 +15,8 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
-    private val isTouching = Trigger {
-        inputs.sensorDistance < DISTANCE_THRESHOLD
-    }
+    private val isTouching =
+        Trigger { inputs.sensorDistance < DISTANCE_THRESHOLD }.debounce(1.0)
 
     @AutoLogOutput
     private val isLatchClosed = Trigger {
