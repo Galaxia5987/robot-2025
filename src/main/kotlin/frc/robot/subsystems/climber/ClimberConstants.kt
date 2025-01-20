@@ -5,9 +5,7 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
-import edu.wpi.first.units.measure.Voltage
 
-val UNLOCK_VOLTAGE: Voltage = Units.Volts.of(0.0)
 val OPEN_LATCH_POSITION: Distance = Units.Millimeters.of(0.8)
 val CLOSE_LATCH_POSITION: Distance = Units.Millimeters.of(0.2)
 val LATCH_TOLERANCE: Distance = Units.Millimeters.of(1.0)
