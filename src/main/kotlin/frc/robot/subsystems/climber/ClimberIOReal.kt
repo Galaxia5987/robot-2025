@@ -65,7 +65,6 @@ class ClimberIOReal:ClimberIO {
         if (calculatedDistance < 0) {
             calculatedDistance = 80.0
         }
-
         inputs.sensorDistance = Units.Meters.of(calculatedDistance)
     }
 }
