@@ -2,6 +2,7 @@ package frc.robot.subsystems.climber
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -19,10 +20,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
     @AutoLogOutput
     private var isLatchClosed = Trigger {
-        inputs.latchPosition.isNear(
-            CLOSE_LATCH_POSITION,
-            LATCH_TOLERANCE.`in`(Units.Degree)
-        )
+        inputs.latchPosition.isNear(CLOSE_LATCH_POSITION, LATCH_TOLERANCE)
     }
 
     @AutoLogOutput
@@ -41,7 +39,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             { io.setVoltage(Units.Volts.zero()) }
         )
 
-    private fun setLatchPose(latchPose: Angle): Command = runOnce {
+    private fun setLatchPose(latchPose: Distance): Command = runOnce {
         io.setLatchPosition(latchPose)
     }
 
@@ -52,9 +50,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     fun lock(): Command = runOnce { io.closeStopper() }
 
     fun unlock(): Command =
-        setVoltage(UNLOCK_VOLTAGE)
-            .withTimeout(0.15)
-            .andThen({ io.openStopper() })
+        setVoltage(UNLOCK_VOLTAGE).withTimeout(0.15).andThen(io::openStopper)
 
     fun unfold() = setAngle(UNFOLDED_ANGLE)
 
@@ -62,7 +58,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     fun climb(): Command = Commands.sequence(closeLatch(), fold(), lock())
 
-    fun unClimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
+    fun declimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
 
     override fun periodic() {
         io.updateInput()
