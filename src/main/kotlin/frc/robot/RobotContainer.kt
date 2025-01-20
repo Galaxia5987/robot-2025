@@ -7,6 +7,16 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.Elevator
+import frc.robot.subsystems.elevator.ElevatorIOSim
+import frc.robot.subsystems.gripper.Gripper
+import frc.robot.subsystems.gripper.GripperIOSim
+import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.intake.extender.ExtenderIOSim
+import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.intake.roller.RollerIOSim
+import frc.robot.subsystems.wrist.Wrist
+import frc.robot.subsystems.wrist.WristIOSim
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -21,6 +31,13 @@ object RobotContainer {
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
+    private val elevator = Elevator(ElevatorIOSim())
+    private val wrist = Wrist(WristIOSim())
+    private val gripper = Gripper(GripperIOSim())
+    private val intakeExtender = Extender(ExtenderIOSim())
+    private val intakeRoller = Roller(RollerIOSim())
+
+    private val visualizer: Visualizer
 
     init {
         registerAutoCommands()
