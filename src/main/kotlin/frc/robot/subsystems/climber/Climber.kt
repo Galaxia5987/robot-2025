@@ -15,23 +15,23 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
-    private var isTouching = Trigger {
+    private val isTouching = Trigger {
         inputs.sensorDistance < DISTANCE_THRESHOLD
     }
 
     @AutoLogOutput
-    private var isLatchClosed = Trigger {
+    private val isLatchClosed = Trigger {
         inputs.latchPosition.isNear(CLOSE_LATCH_POSITION, LATCH_TOLERANCE)
     }
 
     @AutoLogOutput
-    private var isStopperStuck = Trigger {
+    private val isStopperStuck = Trigger {
         inputs.stopperMotorCurrent.abs(Units.Amps) >=
                 STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
     @AutoLogOutput
-    private var isAttached = isLatchClosed.and(isTouching)
+    private val isAttached = isLatchClosed.and(isTouching)
 
     @AutoLogOutput
     private val isFolded = Trigger {
