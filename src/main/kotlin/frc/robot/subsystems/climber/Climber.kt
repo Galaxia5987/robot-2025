@@ -44,9 +44,13 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
-    private var setpoint =
+    private var setpoint = Units.Rotations.zero()
 
-    private fun setAngle(angle: Angle): Command = runOnce { io.setAngle(angle) }
+    private fun setAngle(angle: Angle): Command =
+        runOnce {
+            io.setAngle(angle)
+            setpoint = angle
+        }
 
     private fun setVoltage(voltage: Voltage): Command =
         Commands.startEnd(
