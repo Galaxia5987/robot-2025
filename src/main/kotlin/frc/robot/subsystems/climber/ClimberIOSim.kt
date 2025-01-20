@@ -28,7 +28,7 @@ class ClimberIOSim : ClimberIO {
         )
     private var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
     private var servo2 = SolenoidSim(PneumaticsModuleType.REVPH, FOLLOW_LATCH_SERVO_ID)
-    private val lockMotor =
+    private val stopperMotor =
         DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getBag(1),
@@ -49,11 +49,11 @@ class ClimberIOSim : ClimberIO {
     }
 
     override fun closeStopper() {
-        lockMotor.setAngle(LOCK_ANGLE.`in`(Units.Radians))
+        stopperMotor.setAngle(LOCK_ANGLE.`in`(Units.Radians))
     }
 
     override fun openStopper() {
-        lockMotor.setAngle(UNLOCK_ANGLE.`in`(Units.Radians))
+        stopperMotor.setAngle(UNLOCK_ANGLE.`in`(Units.Radians))
     }
 
     override fun setVoltage(voltage: Voltage) {
@@ -66,7 +66,7 @@ class ClimberIOSim : ClimberIO {
 
     override fun updateInput() {
         motor.update(Timer.getFPGATimestamp())
-        lockMotor.update(Timer.getFPGATimestamp())
+        stopperMotor.update(Timer.getFPGATimestamp())
         inputs.angle = Units.Rotations.of(motor.position)
         inputs.appliedVoltage = motor.appliedVoltage
         if (servo1.output) {
