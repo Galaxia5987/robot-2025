@@ -18,9 +18,16 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private var isTouching = Trigger {
         inputs.sensorDistance < DISTANCE_THRESHOLD
     }
+
     @AutoLogOutput
     private var isLatchClosed = Trigger {
         inputs.latchPosition.isNear(CLOSE_LATCH_POSITION, LATCH_TOLERANCE)
+    }
+
+    @AutoLogOutput
+    private var isStopperStuck = Trigger {
+        inputs.stopperMotorCurrent.abs(Units.Amps) >=
+                STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
     @AutoLogOutput
@@ -47,10 +54,11 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     fun openLatch(): Command = setLatchPose(OPEN_LATCH_POSITION)
 
-    fun lock(): Command = runOnce { io.closeStopper() }
+    fun lock(): Command =
+        run(io::closeStopper).until(isStopperStuck).andThen(io::stopStopper)
 
     fun unlock(): Command =
-        setVoltage(UNLOCK_VOLTAGE).withTimeout(0.15).andThen(io::openStopper)
+        run(io::openStopper).until(isStopperStuck).andThen(io::stopStopper)
 
     fun unfold() = setAngle(UNFOLDED_ANGLE)
 
