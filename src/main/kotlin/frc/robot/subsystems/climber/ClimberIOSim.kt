@@ -3,6 +3,7 @@ package frc.robot.subsystems.climber
 import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
@@ -41,6 +42,10 @@ class ClimberIOSim : ClimberIO {
     private var voltageControl = VoltageOut(0.0)
     private var powerControl = DutyCycleOut(0.0)
     private var positionController = PositionVoltage(0.0)
+
+    init {
+        motor.setController(PIDController(GAINS.kP, GAINS.kI, GAINS.kD))
+    }
 
     override fun setLatchPosition(position: Distance) {
         listOf(servo1, servo2).forEach {
