@@ -9,6 +9,8 @@ import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.filter.MedianFilter
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.AnalogInput
 import frc.robot.lib.motors.LinearServo
 
@@ -33,24 +35,24 @@ class ClimberIOReal:ClimberIO {
         listOf(auxMotor, mainMotor).forEach { it.apply {MOTOR_CONFIG} }
     }
 
-    override fun setLatchPosition(position: Double) {
-        listOf(servo2, servo1).forEach { it.position = position }
+    override fun setLatchPosition(position: Distance) {
+        listOf(servo2, servo1).forEach { it.position = position.`in`(Units.Millimeters) }
     }
 
-    override fun setPower(power: Double) {
-        mainMotor.setControl(dutyCycleOut.withOutput(power))
+    override fun setVoltage(voltage: Voltage) {
+        mainMotor.setControl(voltageControl.withOutput(voltage))
     }
 
     override fun setAngle(angle: Angle) {
         mainMotor.setControl(positionVoltage.withPosition(angle))
     }
 
-    override fun lock() {
-        lockServo.set(ControlMode.Position, LOCK_ANGLE.`in`(Units.Radians))
+    override fun closeStopper() {
+        stopperMotor.set(ControlMode.Position, LOCK_ANGLE.`in`(Units.Radians))
     }
 
-    override fun unlock() {
-        lockServo.set(ControlMode.Position, UNLOCK_ANGLE.`in`(Units.Radians))
+    override fun openStopper() {
+        stopperMotor.set(ControlMode.Position, UNLOCK_ANGLE.`in`(Units.Radians))
 
     }
 
