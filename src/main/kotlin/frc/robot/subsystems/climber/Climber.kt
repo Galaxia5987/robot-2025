@@ -51,11 +51,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     @AutoLogOutput
     private var setpoint = Units.Rotations.zero()
 
-    private fun setAngle(angle: Angle): Command =
-        runOnce {
-            io.setAngle(angle)
-            setpoint = angle
-        }
+    private fun setAngle(angle: Angle): Command = runOnce {
+        io.setAngle(angle)
+        setpoint = angle
+    }
 
     private fun setVoltage(voltage: Voltage): Command =
         Commands.startEnd(
@@ -94,9 +93,21 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     fun fold() = setAngle(FOLDED_ANGLE)
 
     fun climb(): Command =
-        Commands.sequence(closeLatch(), Commands.waitUntil(isLatchClosed), fold(), Commands.waitUntil(isFolded), lock())
+        Commands.sequence(
+            closeLatch(),
+            Commands.waitUntil(isLatchClosed),
+            fold(),
+            Commands.waitUntil(isFolded),
+            lock()
+        )
 
-    fun declimb(): Command = Commands.sequence(unlock(), unfold(), Commands.waitUntil(isUnfolded), openLatch())
+    fun declimb(): Command =
+        Commands.sequence(
+            unlock(),
+            unfold(),
+            Commands.waitUntil(isUnfolded),
+            openLatch()
+        )
 
     override fun periodic() {
         io.updateInput()
