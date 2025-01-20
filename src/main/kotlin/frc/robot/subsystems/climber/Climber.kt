@@ -1,76 +1,71 @@
 package frc.robot.subsystems.climber
 
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.finallyDo
 import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 
-class Climber private constructor(private val io: ClimberIO) : SubsystemBase() {
+class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
 
     @AutoLogOutput
     private var isTouching = Trigger {
-        inputs.sensorDistance.lt(DISTANCE_THRESHOLD)
+        inputs.sensorDistance < DISTANCE_THRESHOLD
     }
-    private val hasClimbed = Trigger { inputs.angle.lt(FOLDED_ANGLE) }
+    @AutoLogOutput
     private var isLatchClosed = Trigger {
-        inputs.latchPosition < LATCH_TOLERANCE + CLOSE_LATCH_POSITION
-    }
-    private var isAttached = Trigger(isLatchClosed.and(isTouching))
-    private val isFolded = Trigger { inputs.angle == FOLDED_ANGLE }
-
-    companion object {
-        @Volatile
-        private var instance: Climber? = null
-
-        fun initialize(io: ClimberIO) {
-            synchronized(this) {
-                if (instance == null) {
-                    instance = Climber(io)
-                }
-            }
-        }
-
-        fun getInstance(): Climber {
-            return instance
-                ?: throw IllegalStateException(
-                    "Climber has not been initialized. Call initialize(io: ClimberIO) first."
-                )
-        }
+        inputs.latchPosition.isNear(
+            CLOSE_LATCH_POSITION,
+            LATCH_TOLERANCE.`in`(Units.Degree)
+        )
     }
 
-    fun closeLatch(): Command =
-        runOnce({ io.setLatchPosition(CLOSE_LATCH_POSITION) })
+    @AutoLogOutput
+    private var isAttached = isLatchClosed.and(isTouching)
 
-    fun openLatch(): Command =
-        runOnce({ io.setLatchPosition(OPEN_LATCH_POSITION) })
-
-    fun lock(): Command = runOnce({ io.lock() })
-    fun unlock(): Command = runOnce({ io.unlock() })
-    fun unfold() {
-        io.setAngle(UNFOLDED_ANGLE)
+    @AutoLogOutput
+    private val isFolded = Trigger {
+        inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)
     }
 
-    fun fold() {
-        io.setAngle(FOLDED_ANGLE)
+    private fun setAngle(angle: Angle): Command = runOnce { io.setAngle(angle) }
+
+    private fun setVoltage(voltage: Voltage): Command =
+        Commands.startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
+
+    private fun setLatchPose(latchPose: Angle): Command = runOnce {
+        io.setLatchPosition(latchPose)
     }
 
-    fun climb(): Command =
-        run { closeLatch() }
-            .andThen(setAngle(FOLDED_ANGLE).onlyIf(isLatchClosed))
-            .finallyDo(lock().onlyIf(isFolded))
+    fun closeLatch(): Command = setLatchPose(CLOSE_LATCH_POSITION)
 
-    fun unClimb(): Command =
-        run { setPower(-0.4) }
-            .andThen(unlock())
-            .andThen({ unfold() })
-            .finallyDo(openLatch())
+    fun openLatch(): Command = setLatchPose(OPEN_LATCH_POSITION)
 
-    private fun setAngle(angle: Angle): Command =
-        runOnce({ io.setAngle(angle) })
+    fun lock(): Command = runOnce { io.closeStopper() }
 
-    private fun setPower(power: Double): Command =
-        runOnce({ io.setPower(power) })
+    fun unlock(): Command =
+        setVoltage(UNLOCK_VOLTAGE)
+            .withTimeout(0.15)
+            .andThen({ io.openStopper() })
+
+    fun unfold() = setAngle(UNFOLDED_ANGLE)
+
+    fun fold() = setAngle(FOLDED_ANGLE)
+
+    fun climb(): Command = Commands.sequence(closeLatch(), fold(), lock())
+
+    fun unClimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
+
+    override fun periodic() {
+        io.updateInput()
+        Logger.processInputs(this::class.simpleName, io.inputs)
+    }
 }

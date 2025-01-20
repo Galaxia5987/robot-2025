@@ -7,11 +7,15 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.WrapperCommand
 import frc.robot.IS_RED
-import kotlin.math.hypot
 import org.littletonrobotics.junction.LogTable
+import kotlin.math.PI
+import kotlin.math.hypot
 
 fun ChassisSpeeds.getSpeed() = hypot(vxMetersPerSecond, vyMetersPerSecond)
 
@@ -96,3 +100,11 @@ fun Translation2d.flipIfNeeded(): Translation2d =
 fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
 
 fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
+
+fun Distance.toAngle(radius: Distance): Angle =
+    Units.Rotations.of(
+        this.`in`(Units.Meters) / (2 * PI * radius.`in`(Units.Meters))
+    )
+
+fun Angle.toDistance(radius: Distance): Distance =
+    radius * this.`in`(Units.Rotations) * 2.0 * PI
