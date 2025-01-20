@@ -6,7 +6,7 @@ import edu.wpi.first.units.measure.MomentOfInertia
 
 val UNLOCK_VOLTAGE = Units.Volts.of(0.0)
 val OPEN_LATCH_POSITION: Angle = Units.Degree.of(0.8)
-val CLOSE_LATCH_POSITION:Angle = Units.Degree.of(0.2)
+val CLOSE_LATCH_POSITION: Angle = Units.Degree.of(0.2)
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(60.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(30.0)
 val FOLDED_TOLERANCE = Units.Degree.of(1.0)

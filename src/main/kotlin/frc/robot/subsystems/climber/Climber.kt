@@ -19,7 +19,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
     @AutoLogOutput
     private var isLatchClosed = Trigger {
-        inputs.latchPosition.isNear(CLOSE_LATCH_POSITION, LATCH_TOLERANCE.`in`(Units.Degree))
+        inputs.latchPosition.isNear(
+            CLOSE_LATCH_POSITION,
+            LATCH_TOLERANCE.`in`(Units.Degree)
+        )
     }
 
     @AutoLogOutput
@@ -30,42 +33,36 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)
     }
 
-    private fun setAngle(angle: Angle): Command =
-        runOnce { io.setAngle(angle) }
+    private fun setAngle(angle: Angle): Command = runOnce { io.setAngle(angle) }
 
     private fun setVoltage(voltage: Voltage): Command =
-        Commands.startEnd({ io.setVoltage(voltage) }, { io.setVoltage(Units.Volts.zero()) })
+        Commands.startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
 
-    private fun setLatchPose(latchPose: Angle): Command =
-        runOnce { io.setLatchPosition(latchPose) }
+    private fun setLatchPose(latchPose: Angle): Command = runOnce {
+        io.setLatchPosition(latchPose)
+    }
 
     fun closeLatch(): Command = setLatchPose(CLOSE_LATCH_POSITION)
 
     fun openLatch(): Command = setLatchPose(OPEN_LATCH_POSITION)
 
-    fun lock(): Command = runOnce{ io.closeStopper() }
+    fun lock(): Command = runOnce { io.closeStopper() }
 
     fun unlock(): Command =
-        setVoltage(UNLOCK_VOLTAGE).withTimeout(0.15)
-            .andThen( {io.openStopper()} )
+        setVoltage(UNLOCK_VOLTAGE)
+            .withTimeout(0.15)
+            .andThen({ io.openStopper() })
 
     fun unfold() = setAngle(UNFOLDED_ANGLE)
 
     fun fold() = setAngle(FOLDED_ANGLE)
 
-    fun climb(): Command =
-        Commands.sequence(
-            closeLatch(),
-            fold(),
-            lock()
-        )
+    fun climb(): Command = Commands.sequence(closeLatch(), fold(), lock())
 
-    fun unClimb(): Command =
-        Commands.sequence(
-            unlock(),
-            unfold(),
-            openLatch()
-        )
+    fun unClimb(): Command = Commands.sequence(unlock(), unfold(), openLatch())
 
     override fun periodic() {
         io.updateInput()
