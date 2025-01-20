@@ -19,8 +19,8 @@ class ClimberIOReal : ClimberIO {
 
     private val mainMotor = TalonFX(MAIN_MOTOR_ID)
     private val auxMotor = TalonFX(AUX_MOTOR_ID)
-    private val servo1 = LinearServo(LATCH_SERVO_ID, 1, 1)
-    private val servo2 = LinearServo(FOLLOW_LATCH_SERVO_ID, 1, 1)
+    private val servo1 = LinearServo(LATCH_SERVO_ID, 1, 1, LATCH_TOLERANCE.`in`(Units.Millimeters))
+    private val servo2 = LinearServo(FOLLOW_LATCH_SERVO_ID, 1, 1, LATCH_TOLERANCE.`in`(Units.Millimeters))
     private val stopperMotor = TalonSRX(STOPPER_MOTOR_ID)
 
     private val voltageControl = VoltageOut(0.0)
