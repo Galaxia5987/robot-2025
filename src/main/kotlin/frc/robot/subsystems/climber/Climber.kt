@@ -64,7 +64,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     private fun setVoltage(voltage: Voltage): Command =
-        Commands.startEnd(
+        startEnd(
             { io.setVoltage(voltage) },
             { io.setVoltage(Units.Volts.zero()) }
         )
