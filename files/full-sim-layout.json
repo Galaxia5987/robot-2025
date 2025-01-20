@@ -7,18 +7,18 @@
       "height": 832,
       "state": {
         "sidebar": {
-          "width": 300,
+          "width": 230,
           "expanded": [
             "/RealOutputs",
             "/RealOutputs/Extender",
-            "/RealOutputs/SubsystemPoses",
             "/RealOutputs/SubsystemPoses/6",
             "/RealOutputs/SubsystemPoses/3/translation",
             "/RealOutputs/SubsystemPoses/2/translation",
             "/RealOutputs/SubsystemPoses/1/translation",
-            "/RealOutputs/Pose",
             "/RealOutputs/Pose/0/translation",
-            "/RealOutputs/Pose/0/rotation"
+            "/RealOutputs/Pose/0/rotation",
+            "/RealOutputs/Odometry",
+            "/RealOutputs/SubsystemPoses"
           ]
         },
         "tabs": {
@@ -122,8 +122,8 @@
                 "sources": [
                   {
                     "type": "robot",
-                    "logKey": "/RealOutputs/Pose/0",
-                    "logType": "Pose3d",
+                    "logKey": "/RealOutputs/Odometry/Robot",
+                    "logType": "Pose2d",
                     "visible": true,
                     "options": {
                       "model": "2025Bot"
@@ -131,36 +131,8 @@
                   },
                   {
                     "type": "component",
-                    "logKey": "/RealOutputs/SubsystemPoses/0",
-                    "logType": "Pose3d",
-                    "visible": true,
-                    "options": {}
-                  },
-                  {
-                    "type": "component",
-                    "logKey": "/RealOutputs/SubsystemPoses/1",
-                    "logType": "Pose3d",
-                    "visible": true,
-                    "options": {}
-                  },
-                  {
-                    "type": "component",
-                    "logKey": "/RealOutputs/SubsystemPoses/2",
-                    "logType": "Pose3d",
-                    "visible": true,
-                    "options": {}
-                  },
-                  {
-                    "type": "component",
-                    "logKey": "/RealOutputs/SubsystemPoses/3",
-                    "logType": "Pose3d",
-                    "visible": true,
-                    "options": {}
-                  },
-                  {
-                    "type": "component",
-                    "logKey": "/RealOutputs/SubsystemPoses/4",
-                    "logType": "Pose3d",
+                    "logKey": "/RealOutputs/SubsystemPoses",
+                    "logType": "Pose3d[]",
                     "visible": true,
                     "options": {}
                   }
@@ -170,17 +142,17 @@
               },
               "controllerUUID": "6qh0zrx3bq9thc0lz0yr9r95tfr7t04r",
               "renderer": {
-                "cameraIndex": -1,
+                "cameraIndex": -2,
                 "orbitFov": 50,
                 "cameraPosition": [
-                  8.841221165045589,
-                  0.9920040500556202,
-                  -4.731890037128491
+                  2,
+                  1,
+                  1.0000000000000002
                 ],
                 "cameraTarget": [
-                  7.57206570451731,
-                  -1.30514678982443,
-                  -1.9064842950133467
+                  0,
+                  0.5,
+                  0
                 ]
               },
               "controlsHeight": 200
