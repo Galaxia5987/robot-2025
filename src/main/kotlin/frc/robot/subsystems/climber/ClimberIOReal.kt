@@ -57,7 +57,8 @@ class ClimberIOReal:ClimberIO {
     override fun updateInput() {
         inputs.angle = mainMotor.position.value
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
-        inputs.latchPosition = servo1.position
+        inputs.latchPosition = Units.Millimeters.of(servo1.position)
+
         var calculatedDistance = distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
         if (calculatedDistance < 0) {
             calculatedDistance = 80.0
