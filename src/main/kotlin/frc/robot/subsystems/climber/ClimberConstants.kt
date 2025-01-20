@@ -42,8 +42,8 @@ var MOTOR_CONFIG = TalonFXConfiguration().apply {
         SupplyCurrentLimitEnable = false
     }
     Slot0.apply {
-        kD = GAINS.kD
         kP = GAINS.kP
         kI = GAINS.kI
+        kD = GAINS.kD
     }
 }
