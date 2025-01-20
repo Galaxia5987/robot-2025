@@ -1,12 +1,13 @@
 package frc.robot.subsystems.climber
 
-import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.system.plant.LinearSystemId
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Dimensionless
+import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.simulation.DCMotorSim
@@ -15,12 +16,12 @@ import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 
 class ClimberIOSim : ClimberIO {
-    override var inputs: LoggedInputClimber = LoggedInputClimber()
+    override var inputs: LoggedClimberInputs = LoggedClimberInputs()
     var motor =
         TalonFXSim(
             2,
             GEAR_RATIO,
-            MOMENT_OF_INERTIA_MAIN.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
             TalonType.KRAKEN
         )
@@ -35,10 +36,10 @@ class ClimberIOSim : ClimberIO {
             ),
             DCMotor.getBag(1)
         )
-    var dutyCycle = DutyCycleOut(0.0)
+    var voltageControl = VoltageOut(0.0)
     var positionControler = PositionVoltage(0.0)
 
-    override fun setLatchPosition(position: Dimensionless) {
+    override fun setLatchPosition(position: Distance) {
         if (Double.equals(OPEN_LATCH_POSITION)) {
             listOf(servo2, servo1).forEach { it.output = true }
         } else {
@@ -46,16 +47,16 @@ class ClimberIOSim : ClimberIO {
         }
     }
 
-    override fun lock() {
+    override fun closeStopper() {
         lockMotor.setAngle(LOCK_ANGLE.`in`(Units.Radians))
     }
 
-    override fun unlock() {
+    override fun openStopper() {
         lockMotor.setAngle(UNLOCK_ANGLE.`in`(Units.Radians))
     }
 
-    override fun setPower(power: Double) {
-        motor.setControl(dutyCycle.withOutput(power))
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(voltageControl.withOutput(voltage))
     }
 
     override fun setAngle(angle: Angle) {
@@ -66,7 +67,7 @@ class ClimberIOSim : ClimberIO {
         motor.update(Timer.getFPGATimestamp())
         lockMotor.update(Timer.getFPGATimestamp())
         inputs.angle = Units.Rotations.of(motor.position)
-        inputs.appliedVoltage = Units.Volt.of(motor.appliedVoltage)
+        inputs.appliedVoltage = motor.appliedVoltage
         if (servo1.output) {
             inputs.latchPosition = OPEN_LATCH_POSITION
         } else {
