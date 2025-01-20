@@ -52,7 +52,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     fun unlock(): Command =
         setVoltage(UNLOCK_VOLTAGE)
             .withTimeout(0.15)
-            .andThen({ io.openStopper() })
+            .andThen(io::openStopper)
 
     fun unfold() = setAngle(UNFOLDED_ANGLE)
 
