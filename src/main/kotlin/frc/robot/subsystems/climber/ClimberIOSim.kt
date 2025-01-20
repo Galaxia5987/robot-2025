@@ -38,7 +38,7 @@ class ClimberIOSim : ClimberIO {
             DCMotor.getBag(1)
         )
     private var voltageControl = VoltageOut(0.0)
-    private var positionControler = PositionVoltage(0.0)
+    private var positionController = PositionVoltage(0.0)
 
     override fun setLatchPosition(position: Distance) {
         if (Double.equals(OPEN_LATCH_POSITION)) {
@@ -61,7 +61,7 @@ class ClimberIOSim : ClimberIO {
     }
 
     override fun setAngle(angle: Angle) {
-        motor.setControl(positionControler.withPosition(angle))
+        motor.setControl(positionController.withPosition(angle))
     }
 
     override fun updateInput() {
