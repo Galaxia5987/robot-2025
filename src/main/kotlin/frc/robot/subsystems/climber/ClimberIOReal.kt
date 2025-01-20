@@ -2,7 +2,7 @@ package frc.robot.subsystems.climber
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.ctre.phoenix.motorcontrol.can.TalonSRX
-import com.ctre.phoenix6.controls.DutyCycleOut
+import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
@@ -31,8 +31,8 @@ class ClimberIOReal:ClimberIO {
     private val distanceFilter = MedianFilter(3)
 
     init {
-        auxMotor.setControl(StrictFollower(mainMotor.deviceID))
         listOf(auxMotor, mainMotor).forEach { it.apply {MOTOR_CONFIG} }
+        auxMotor.setControl(Follower(mainMotor.deviceID, true))
     }
 
     override fun setLatchPosition(position: Distance) {
