@@ -23,7 +23,7 @@ val FOLDED_TOLERANCE: Angle = Units.Degree.of(1.0)
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.0)
 val DISTANCE_THRESHOLD: Distance = Units.Centimeter.of(0.4)
 
-var Gains = selectGainsBasedOnMode(
+var GAINS = selectGainsBasedOnMode(
     Gains(
         0.0,
         0.0,
@@ -42,8 +42,8 @@ var MOTOR_CONFIG = TalonFXConfiguration().apply {
         SupplyCurrentLimitEnable = false
     }
     Slot0.apply {
-        kD = Gains.kD
-        kP = Gains.kP
-        kI = Gains.kI
+        kD = GAINS.kD
+        kP = GAINS.kP
+        kI = GAINS.kI
     }
 }
