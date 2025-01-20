@@ -67,10 +67,7 @@ class ClimberIOSim : ClimberIO {
         stopperMotor.update(Timer.getFPGATimestamp())
         inputs.angle = Units.Rotations.of(motor.position)
         inputs.appliedVoltage = motor.appliedVoltage
-        if (servo1.output) {
-            inputs.latchPosition = OPEN_LATCH_POSITION
-        } else {
-            inputs.latchPosition = CLOSE_LATCH_POSITION
-        }
+        inputs.latchPosition =
+            if (servo1.output) OPEN_LATCH_POSITION else CLOSE_LATCH_POSITION
     }
 }
