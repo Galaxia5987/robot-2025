@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.extender
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -19,6 +20,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private var root = mechanism.getRoot("Extender", 1.0, 1.0)
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
+
+    val position: () -> Distance = { io.inputs.position }
 
     private var finishedResettingFlag = false
 

@@ -74,8 +74,8 @@ public class TalonFXSim extends SimMotor {
         voltageRequest =
                 () ->
                         controller.calculate(
-                                getVelocity().in(Units.RotationsPerSecond),
-                                request.Velocity)
+                                        getVelocity().in(Units.RotationsPerSecond),
+                                        request.Velocity)
                                 + request.FeedForward;
     }
 
