@@ -28,11 +28,10 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     @AutoLogOutput
     private val isStopperStuck = Trigger {
         inputs.stopperMotorCurrent.abs(Units.Amps) >=
-                STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
+            STOPPER_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
-    @AutoLogOutput
-    private val isAttached = isLatchClosed.and(isTouching)
+    @AutoLogOutput private val isAttached = isLatchClosed.and(isTouching)
 
     @AutoLogOutput
     private val isFolded = Trigger {
@@ -49,11 +48,9 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(setpoint, FOLDED_TOLERANCE)
     }
 
-    @AutoLogOutput
-    private var setpoint = Units.Rotations.zero()
+    @AutoLogOutput private var setpoint = Units.Rotations.zero()
 
-    @AutoLogOutput
-    private var mechanism = LoggedMechanism2d(3.0, 2.0)
+    @AutoLogOutput private var mechanism = LoggedMechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Climber", 1.0, 1.0)
     private val ligament =
         root.append(LoggedMechanismLigament2d("ClimberLigament", 0.27003, 90.0))
