@@ -40,12 +40,12 @@ class Visualizer(
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION + (
-                    getTranslation3d(x = extenderPosition.invoke().`in`(Meters))
+                    getTranslation3d(x = extenderPosition.invoke())
                 )
             )
         val intakeRollerPose =
             intakePose.rotateBy(
-                getRotation3d(pitch = intakeRollerAngle.invoke().`in`(Radians))
+                getRotation3d(pitch = intakeRollerAngle.invoke())
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
@@ -53,24 +53,24 @@ class Visualizer(
             secondStagePose + (
                 Transform3d(
                     INITIAL_WRIST_TRANSLATION,
-                    getRotation3d(pitch = -wristAngle.invoke().`in`(Radians))
+                    getRotation3d(pitch = -wristAngle.invoke())
                 )
             )
 
         val coralRollersPose =
             wristPose.rotateBy(
-                getRotation3d(pitch = coralRollersAngle.invoke().`in`(Radians))
+                getRotation3d(pitch = coralRollersAngle.invoke())
             )
         val algaeRemoverPose =
             wristPose.rotateBy(
-                getRotation3d(pitch = algaeRemoverAngle.invoke().`in`(Radians))
+                getRotation3d(pitch = algaeRemoverAngle.invoke())
             )
 
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
                 rotation =
-                    getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
+                    getRotation3d(pitch = climberAngle.invoke())
             )
 
         return arrayOf(
