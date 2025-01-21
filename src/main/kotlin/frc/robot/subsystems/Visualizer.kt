@@ -3,7 +3,6 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.Units.Radians
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.getPose3d
@@ -11,11 +10,14 @@ import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
-private val INITIAL_INTAKE_TRANSLATION = getTranslation3d(x = Meters.of(-0.25), z = Meters.of(0.35))
+private val INITIAL_INTAKE_TRANSLATION =
+    getTranslation3d(x = Meters.of(-0.25), z = Meters.of(0.35))
 
-private val INITIAL_WRIST_TRANSLATION = getTranslation3d(x = Meters.of(0.08), z = Meters.of(0.43))
+private val INITIAL_WRIST_TRANSLATION =
+    getTranslation3d(x = Meters.of(0.08), z = Meters.of(0.43))
 
-private val INITIAL_CLIMBER_TRANSLATION = getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
+private val INITIAL_CLIMBER_TRANSLATION =
+    getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
 
 class Visualizer(
     private val extenderPosition: () -> Distance,
@@ -39,9 +41,8 @@ class Visualizer(
     fun visualizeSubsystems(): Array<Pose3d> {
         val intakePose =
             getPose3d(
-                INITIAL_INTAKE_TRANSLATION + (
-                    getTranslation3d(x = extenderPosition.invoke())
-                )
+                INITIAL_INTAKE_TRANSLATION +
+                    (getTranslation3d(x = extenderPosition.invoke()))
             )
         val intakeRollerPose =
             intakePose.rotateBy(
@@ -50,12 +51,11 @@ class Visualizer(
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
-            secondStagePose + (
-                Transform3d(
+            secondStagePose +
+                (Transform3d(
                     INITIAL_WRIST_TRANSLATION,
                     getRotation3d(pitch = -wristAngle.invoke())
-                )
-            )
+                ))
 
         val coralRollersPose =
             wristPose.rotateBy(
@@ -69,8 +69,7 @@ class Visualizer(
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation =
-                    getRotation3d(pitch = climberAngle.invoke())
+                rotation = getRotation3d(pitch = climberAngle.invoke())
             )
 
         return arrayOf(
