@@ -106,7 +106,7 @@ object Robot : LoggedRobot() {
         CommandScheduler.getInstance().run()
         Logger.recordOutput(
             "SubsystemPoses",
-            *RobotContainer.visualizer.visualizeSubsystems()
+            *RobotContainer.visualizer.getSubsystemsPoses()
         )
     }
 
