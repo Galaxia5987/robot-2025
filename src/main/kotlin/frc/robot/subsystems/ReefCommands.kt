@@ -23,4 +23,6 @@ class ReefCommands(private val elevator: Elevator, private val gripper: Gripper,
     // `.onFalse` will be `intakeCoral`
     fun moveFeeder(): Command = Commands.parallel(elevator.feeder(), wrist.feeder())
 
+    fun retract(): Command = Commands.parallel(elevator.zero(), wrist.retract())
+
 }
