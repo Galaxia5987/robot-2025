@@ -18,7 +18,7 @@ class ExtenderIOSim : ExtenderIO {
         TalonFXSim(
             1,
             1.0,
-            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA,
             1.0,
             TalonType.FALCON_FOC
         )

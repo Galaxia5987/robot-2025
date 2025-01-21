@@ -1,17 +1,21 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.*
+import edu.wpi.first.units.AngleUnit
+import edu.wpi.first.units.DistanceUnit
+import edu.wpi.first.units.Measure
+import edu.wpi.first.units.PerUnit
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
-import kotlin.time.times
 
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
 const val FIRST_STAGE_RATIO = 2.0
 const val ENCODER_OFFSET = 0.0
 const val ADJUSTED_GEAR_RATIO = FIRST_STAGE_RATIO * GEAR_RATIO
+val MOMENT_OF_INERTIA = Units.KilogramSquareMeters.of(0.003)
 val MIN_KG_HEIGHT: Distance = Units.Centimeters.of(3.0)
 val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 private val ROTATIONS_TO_CENTIMETERS_RATIO =

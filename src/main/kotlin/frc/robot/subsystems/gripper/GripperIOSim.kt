@@ -1,7 +1,6 @@
 package frc.robot.subsystems.gripper
 
 import com.ctre.phoenix6.controls.VoltageOut
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
@@ -14,7 +13,7 @@ class GripperIOSim : GripperIO {
         TalonFXSim(
             1,
             GEAR_RATIO,
-            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA,
             1.0,
             TalonType.FALCON
         )

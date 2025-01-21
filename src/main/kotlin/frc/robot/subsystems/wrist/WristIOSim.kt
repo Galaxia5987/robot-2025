@@ -17,7 +17,7 @@ class WristIOSim : WristIO {
         TalonFXSim(
             1,
             GEAR_RATIO,
-            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA,
             1.0,
             TalonType.FALCON
         )

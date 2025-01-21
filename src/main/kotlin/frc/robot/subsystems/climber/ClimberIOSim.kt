@@ -22,7 +22,7 @@ class ClimberIOSim : ClimberIO {
         TalonFXSim(
             2,
             GEAR_RATIO,
-            MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA,
             1.0,
             TalonType.KRAKEN_FOC
         )
@@ -35,7 +35,7 @@ class ClimberIOSim : ClimberIO {
         TalonFXSim(
             DCMotor.getBag(1),
             STOPPER_GEAR_RATIO,
-            MOMENT_OF_INERTIA_LOCK.`in`(Units.KilogramSquareMeters),
+            MOMENT_OF_INERTIA_LOCK,
             1.0
         )
 
