@@ -22,7 +22,8 @@ val UNFOLDED_ANGLE: Angle = Units.Degree.of(0.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(90.0)
 val FOLDED_TOLERANCE: Angle = Units.Degree.of(1.0)
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
-val MOMENT_OF_INERTIA_LOCK: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
+val MOMENT_OF_INERTIA_LOCK: MomentOfInertia =
+    Units.KilogramSquareMeters.of(0.003)
 val DISTANCE_THRESHOLD: Distance = Units.Centimeter.of(0.4)
 val STOPPER_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 
