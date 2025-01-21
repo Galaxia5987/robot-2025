@@ -7,9 +7,8 @@ import frc.robot.subsystems.gripper.Gripper
 import frc.robot.subsystems.wrist.Wrist
 
 class ReefCommands(private val elevator: Elevator, private val gripper: Gripper, private val wrist: Wrist) {
-    fun releaseCoral(): Command = gripper.outtake()
 
-    // `.onFalse` will be `releaseCoral`
+    // `.onFalse` will be `gripper.outtake`
     fun moveL1(): Command = Commands.parallel(elevator.l1(), wrist.l1())
     fun moveL2(): Command = Commands.parallel(elevator.l2(), wrist.l2())
     fun moveL3(): Command = Commands.parallel(elevator.l3(), wrist.l3())
@@ -18,9 +17,7 @@ class ReefCommands(private val elevator: Elevator, private val gripper: Gripper,
     fun moveL2algae(): Command = Commands.parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
     fun moveL3algae(): Command = Commands.parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
 
-    fun intakeCoral(): Command = gripper.intake()
-
-    // `.onFalse` will be `intakeCoral`
+    // `.onFalse` will be `gripper.intake()`
     fun moveFeeder(): Command = Commands.parallel(elevator.feeder(), wrist.feeder())
 
     fun retract(): Command = Commands.parallel(elevator.zero(), wrist.retract())
