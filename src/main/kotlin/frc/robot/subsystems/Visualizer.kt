@@ -11,14 +11,11 @@ import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
-private const val INTAKE_POSE_X_OFFSET = 0.47
-private const val INTAKE_POSE_Z_OFFSET = 0.35
+private val INTAKE_TRANSLATION = getTranslation3d(x = 0.47, z = 0.35)
 
-private const val WRIST_POSE_Z_OFFSET = 0.59
+private val WRIST_TRANSLATION = getTranslation3d(z = 0.59)
 
-private const val CLIMBER_POSE_X_OFFSET = -0.24
-
-private const val CLIMBER_POSE_Z_OFFSET = 0.27
+private val CLIMBER_TRANSLATION = getTranslation3d(x = -0.24, z = 0.27)
 
 class Visualizer(
     private val extenderPosition: () -> Distance,
@@ -42,8 +39,9 @@ class Visualizer(
     fun visualizeSubsystems(): Array<Pose3d> {
         val intakePose =
             getPose3d(
-                x = INTAKE_POSE_X_OFFSET + extenderPosition.invoke().`in`(Meters),
-                z = INTAKE_POSE_Z_OFFSET
+                INTAKE_TRANSLATION.plus(
+                    getTranslation3d(x = extenderPosition.invoke().`in`(Meters))
+                )
             )
         val intakeRollerPose =
             intakePose.rotateBy(
@@ -54,9 +52,7 @@ class Visualizer(
         val wristPose =
             secondStagePose.plus(
                 Transform3d(
-                    0.0,
-                    0.0,
-                    WRIST_POSE_Z_OFFSET,
+                    WRIST_TRANSLATION,
                     getRotation3d(pitch = -wristAngle.invoke().`in`(Radians))
                 )
             )
@@ -72,7 +68,7 @@ class Visualizer(
 
         val climberPose =
             getPose3d(
-                translation = getTranslation3d(x = CLIMBER_POSE_X_OFFSET, z = CLIMBER_POSE_Z_OFFSET),
+                translation = CLIMBER_TRANSLATION,
                 rotation =
                     getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
             )
