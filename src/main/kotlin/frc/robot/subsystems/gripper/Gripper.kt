@@ -1,5 +1,7 @@
 package frc.robot.subsystems.gripper
 
+import edu.wpi.first.math.filter.Debouncer
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -8,8 +10,12 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
+    private val debouncer = Debouncer(DEBOUNCE_TIME.`in`(Units.Seconds))
+
     @AutoLogOutput
-    val hasCoral = Trigger { io.inputs.sensorDistance < DISTANCE_THRESHOLD }
+    val hasCoral = Trigger {
+        debouncer.calculate(io.inputs.sensorDistance < DISTANCE_THRESHOLD)
+    }
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
