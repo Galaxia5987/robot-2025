@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.subsystems.ReefCommands
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
 
@@ -30,7 +31,8 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
-    val visualizer: Visualizer
+    private val visualizer: Visualizer
+    private val reefCommands: ReefCommands = ReefCommands(elevator, gripper, wrist)
 
     init {
         registerAutoCommands()
@@ -47,6 +49,8 @@ object RobotContainer {
                 { Units.Degrees.zero() }
             )
     }
+
+    fun getVisualizerPoses() = visualizer.visualizeSubsystems()
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
@@ -80,6 +84,8 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
+
+        driverController.y().onTrue(reefCommands.moveL1(driverController.y().negate()))
 
         driverController
             .povUp()
