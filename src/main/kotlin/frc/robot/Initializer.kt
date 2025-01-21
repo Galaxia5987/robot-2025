@@ -81,68 +81,62 @@ private val visionIOs =
 
 val vision = Vision(swerveDrive::addVisionMeasurement, *visionIOs)
 
-val subsystems =
+val climber = Climber(
     when (CURRENT_MODE) {
-        Mode.REAL -> {
-            mapOf(
-                "Climber" to Climber(ClimberIOReal()),
-                "Elevator" to Elevator(ElevatorIOReal()),
-                "Gripper" to Gripper(GripperIOReal()),
-                "Extender" to Extender(ExtenderIOReal()),
-                "Roller" to Roller(RollerIOReal()),
-                "Wrist" to Wrist(WristIOReal())
-            )
-        }
-
-        Mode.SIM -> {
-            mapOf(
-                "Climber" to Climber(ClimberIOSim()),
-                "Elevator" to Elevator(ElevatorIOSim()),
-                "Gripper" to Gripper(GripperIOSim()),
-                "Extender" to Extender(ExtenderIOSim()),
-                "Roller" to Roller(RollerIOSim()),
-                "Wrist" to Wrist(WristIOSim())
-            )
-        }
-
-        Mode.REPLAY -> {
-            mapOf(
-                "Climber" to
-                        Climber(
-                            object : ClimberIO {
-                                override var inputs = LoggedClimberInputs()
-                            }
-                        ),
-                "Elevator" to
-                        Elevator(
-                            object : ElevatorIO {
-                                override var inputs = LoggedElevatorInputs()
-                            }
-                        ),
-                "Gripper" to
-                        Gripper(
-                            object : GripperIO {
-                                override var inputs = LoggedGripperInputs()
-                            }
-                        ),
-                "Extender" to
-                        Extender(
-                            object : ExtenderIO {
-                                override var inputs = LoggedExtenderInputs()
-                            }
-                        ),
-                "Roller" to
-                        Roller(
-                            object : RollerIO {
-                                override var inputs = LoggedRollerInputs()
-                            }
-                        ),
-                "Wrist" to
-                        Wrist(
-                            object : WristIO {
-                                override var inputs = LoggedWristInputs()
-                            }
-                        )
-            )
+        Mode.REAL -> ClimberIOReal()
+        Mode.SIM -> ClimberIOSim()
+        Mode.REPLAY -> object : ClimberIO {
+            override var inputs = LoggedClimberInputs()
         }
     }
+)
+
+val elevator = Elevator(
+    when (CURRENT_MODE) {
+        Mode.REAL -> ElevatorIOReal()
+        Mode.SIM -> ElevatorIOSim()
+        Mode.REPLAY -> object : ElevatorIO {
+            override var inputs = LoggedElevatorInputs()
+        }
+    }
+)
+
+val gripper = Gripper(
+    when (CURRENT_MODE) {
+        Mode.REAL -> GripperIOReal()
+        Mode.SIM -> GripperIOSim()
+        Mode.REPLAY -> object : GripperIO {
+            override var inputs = LoggedGripperInputs()
+        }
+    }
+)
+
+val extender = Extender(
+    when (CURRENT_MODE) {
+        Mode.REAL -> ExtenderIOReal()
+        Mode.SIM -> ExtenderIOSim()
+        Mode.REPLAY -> object : ExtenderIO {
+            override var inputs = LoggedExtenderInputs()
+        }
+    }
+)
+
+val roller = Roller(
+    when (CURRENT_MODE) {
+        Mode.REAL -> RollerIOReal()
+        Mode.SIM -> RollerIOSim()
+        Mode.REPLAY -> object : RollerIO {
+            override var inputs = LoggedRollerInputs()
+        }
+    }
+)
+
+val wrist = Wrist(
+    when (CURRENT_MODE) {
+        Mode.REAL -> WristIOReal()
+        Mode.SIM -> WristIOSim()
+        Mode.REPLAY -> object : WristIO {
+            override var inputs = LoggedWristInputs()
+        }
+    }
+)

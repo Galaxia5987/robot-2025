@@ -22,12 +22,12 @@ object RobotContainer {
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
-    private val Climber = subsystems["Climber"]
-    private val Elevator = subsystems["Elevator"]
-    private val Gripper = subsystems["Gripper"]
-    private val Extender = subsystems["Extender"]
-    private val Roller = subsystems["Roller"]
-    private val Wrist = subsystems["Wrist"]
+    private val climber = frc.robot.climber
+    private val elevator = frc.robot.elevator
+    private val gripper = frc.robot.gripper
+    private val extender = frc.robot.extender
+    private val roller = frc.robot.roller
+    private val wrist = frc.robot.wrist
 
     init {
         registerAutoCommands()
