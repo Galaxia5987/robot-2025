@@ -7,11 +7,9 @@ import frc.robot.roller
 class IntakeCommands() {
     fun intake(): Command = extender.extend().alongWith(roller.intake())
 
-    fun outtake(): Command =
-        roller.outtake()
+    fun outtake(): Command = roller.outtake()
 
-    fun farOuttake(): Command =
-        roller.farOuttake()
+    fun farOuttake(): Command = roller.farOuttake()
 
     fun retract(): Command = extender.retract()
 }
