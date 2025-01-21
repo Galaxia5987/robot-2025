@@ -21,6 +21,13 @@ object RobotContainer {
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
+    private val vision = frc.robot.vision
+    private val Climber = subsystems["CLimber"]
+    private val Elevator = subsystems["Elevator"]
+    private val Gripper = subsystems["Gripper"]
+    private val Extender = subsystems["Extender"]
+    private val Roller = subsystems["Roller"]
+    private val Wrist = subsystems["Wrist"]
 
     init {
         registerAutoCommands()
