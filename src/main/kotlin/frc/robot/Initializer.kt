@@ -81,62 +81,74 @@ private val visionIOs =
 
 val vision = Vision(swerveDrive::addVisionMeasurement, *visionIOs)
 
-val climber = Climber(
-    when (CURRENT_MODE) {
-        Mode.REAL -> ClimberIOReal()
-        Mode.SIM -> ClimberIOSim()
-        Mode.REPLAY -> object : ClimberIO {
-            override var inputs = LoggedClimberInputs()
+val climber =
+    Climber(
+        when (CURRENT_MODE) {
+            Mode.REAL -> ClimberIOReal()
+            Mode.SIM -> ClimberIOSim()
+            Mode.REPLAY ->
+                object : ClimberIO {
+                    override var inputs = LoggedClimberInputs()
+                }
         }
-    }
-)
+    )
 
-val elevator = Elevator(
-    when (CURRENT_MODE) {
-        Mode.REAL -> ElevatorIOReal()
-        Mode.SIM -> ElevatorIOSim()
-        Mode.REPLAY -> object : ElevatorIO {
-            override var inputs = LoggedElevatorInputs()
+val elevator =
+    Elevator(
+        when (CURRENT_MODE) {
+            Mode.REAL -> ElevatorIOReal()
+            Mode.SIM -> ElevatorIOSim()
+            Mode.REPLAY ->
+                object : ElevatorIO {
+                    override var inputs = LoggedElevatorInputs()
+                }
         }
-    }
-)
+    )
 
-val gripper = Gripper(
-    when (CURRENT_MODE) {
-        Mode.REAL -> GripperIOReal()
-        Mode.SIM -> GripperIOSim()
-        Mode.REPLAY -> object : GripperIO {
-            override var inputs = LoggedGripperInputs()
+val gripper =
+    Gripper(
+        when (CURRENT_MODE) {
+            Mode.REAL -> GripperIOReal()
+            Mode.SIM -> GripperIOSim()
+            Mode.REPLAY ->
+                object : GripperIO {
+                    override var inputs = LoggedGripperInputs()
+                }
         }
-    }
-)
+    )
 
-val extender = Extender(
-    when (CURRENT_MODE) {
-        Mode.REAL -> ExtenderIOReal()
-        Mode.SIM -> ExtenderIOSim()
-        Mode.REPLAY -> object : ExtenderIO {
-            override var inputs = LoggedExtenderInputs()
+val extender =
+    Extender(
+        when (CURRENT_MODE) {
+            Mode.REAL -> ExtenderIOReal()
+            Mode.SIM -> ExtenderIOSim()
+            Mode.REPLAY ->
+                object : ExtenderIO {
+                    override var inputs = LoggedExtenderInputs()
+                }
         }
-    }
-)
+    )
 
-val roller = Roller(
-    when (CURRENT_MODE) {
-        Mode.REAL -> RollerIOReal()
-        Mode.SIM -> RollerIOSim()
-        Mode.REPLAY -> object : RollerIO {
-            override var inputs = LoggedRollerInputs()
+val roller =
+    Roller(
+        when (CURRENT_MODE) {
+            Mode.REAL -> RollerIOReal()
+            Mode.SIM -> RollerIOSim()
+            Mode.REPLAY ->
+                object : RollerIO {
+                    override var inputs = LoggedRollerInputs()
+                }
         }
-    }
-)
+    )
 
-val wrist = Wrist(
-    when (CURRENT_MODE) {
-        Mode.REAL -> WristIOReal()
-        Mode.SIM -> WristIOSim()
-        Mode.REPLAY -> object : WristIO {
-            override var inputs = LoggedWristInputs()
+val wrist =
+    Wrist(
+        when (CURRENT_MODE) {
+            Mode.REAL -> WristIOReal()
+            Mode.SIM -> WristIOSim()
+            Mode.REPLAY ->
+                object : WristIO {
+                    override var inputs = LoggedWristInputs()
+                }
         }
-    }
-)
+    )
