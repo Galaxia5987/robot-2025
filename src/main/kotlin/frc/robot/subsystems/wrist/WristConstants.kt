@@ -9,7 +9,7 @@ const val GEAR_RATIO = 1.0 // TODO: Calibrate
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 
 enum class Angles(val angle: Angle) {
-    L1(Units.Degrees.of(90.0)),
+    L1(Units.Degrees.of(10.0)),
     L2(Units.Degrees.of(35.0)),
     L3(Units.Degrees.of(35.0)),
     L4(Units.Degrees.of(40.0)),
