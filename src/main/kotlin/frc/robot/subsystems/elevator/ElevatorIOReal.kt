@@ -8,8 +8,12 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import org.littletonrobotics.junction.AutoLogOutput
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -17,6 +21,15 @@ class ElevatorIOReal : ElevatorIO {
     private val auxMotor = TalonFX(AUX_ID)
     private val encoder = CANcoder(ENCODER_ID)
     private val mainMotorPositionRequest = MotionMagicTorqueCurrentFOC(0.0)
+    private val slot0Configs = Slot0Configs().apply {
+        kP = GAINS.kP
+        kI = GAINS.kI
+        kD = GAINS.kD
+        kG = 0.0
+    }
+
+    @AutoLogOutput
+    private val kgTrigger = Trigger { inputs.height > MIN_KG_HEIGHT }.onTrue(setKG(GAINS.kG)).onFalse(setKG(0.0))
 
     init {
         val motorConfig =
@@ -27,12 +40,7 @@ class ElevatorIOReal : ElevatorIO {
                         Inverted = InvertedValue.Clockwise_Positive
                     }
                 Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
-                Slot0 =
-                    Slot0Configs().apply {
-                        kP = GAINS.kP
-                        kI = GAINS.kI
-                        kD = GAINS.kD
-                    }
+                Slot0 = slot0Configs
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
@@ -54,6 +62,8 @@ class ElevatorIOReal : ElevatorIO {
 
         encoder.configurator.apply(encoderConfig)
     }
+
+    private fun setKG(kg: Double): Command = runOnce({ mainMotor.configurator.apply(slot0Configs.withKG(kg)) })
 
     override fun setHeight(height: Distance) {
         mainMotor.setControl(
