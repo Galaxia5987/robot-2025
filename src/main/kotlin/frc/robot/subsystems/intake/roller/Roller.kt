@@ -1,20 +1,26 @@
 package frc.robot.subsystems.intake.roller
 
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 
 class Roller(private val io: RollerIO) : SubsystemBase() {
 
-    private fun setPower(power: Double): Command =
-        startEnd({ io.setPower(power) }, { io.setPower(0.0) })
-            .withName("roller/setPower")
+    private fun setVoltage(voltage: Voltage): Command =
+        startEnd(
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
+            .withName("roller/setVoltage")
 
-    fun intake() = setPower(INTAKE_POWER).withName("roller/intake")
+    fun intake() = setVoltage(INTAKE_VOLTAGE).withName("roller/intake")
 
-    fun outtake() = setPower(OUTTAKE_POWER).withName("roller/outtake")
+    fun outtake() = setVoltage(OUTTAKE_VOLTAGE).withName("roller/outtake")
 
-    fun farOuttake() = setPower(FAR_OUTTAKE_POWER).withName("roller/farOuttake")
+    fun farOuttake() =
+        setVoltage(FAR_OUTTAKE_VOLTAGE).withName("roller/farOuttake")
 
     override fun periodic() {
         io.updateInputs()

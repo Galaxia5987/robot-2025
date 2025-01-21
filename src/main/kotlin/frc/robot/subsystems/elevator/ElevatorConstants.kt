@@ -1,11 +1,14 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.*
+import edu.wpi.first.units.AngleUnit
+import edu.wpi.first.units.DistanceUnit
+import edu.wpi.first.units.Measure
+import edu.wpi.first.units.PerUnit
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
-import kotlin.time.times
 
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
@@ -23,7 +26,8 @@ val ROTATIONS_TO_CENTIMETER: Measure<out PerUnit<DistanceUnit, AngleUnit>> =
 val CENTIMETERS_TO_ROTATIONS: Measure<out PerUnit<AngleUnit, DistanceUnit>> =
     Units.Rotations.per(Units.Centimeter).of(1 / ROTATIONS_TO_CENTIMETERS_RATIO)
 
-val GAINS = selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0, kG = 1.0), Gains())
+val GAINS =
+    selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0, kG = 1.0), Gains())
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(25.0)),
