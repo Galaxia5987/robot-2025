@@ -69,19 +69,19 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             )
             .withName("climber/setVoltage")
 
-    private fun setLatchPose(latchPose: Distance): Command =
-        runOnce { io.setLatchPosition(latchPose) }
-            .withName("climber/setLatchPose")
+    private fun setLatchPosition(latchPosition: Distance): Command =
+        runOnce { io.setLatchPosition(latchPosition) }
+            .withName("climber/setLatchPosition")
 
     private fun setStopperPower(power: Double): Command =
         runOnce { io.setStopperPower(power) }
             .withName("climber/setStopperPower")
 
     fun closeLatch(): Command =
-        setLatchPose(CLOSE_LATCH_POSITION).withName("climber/closeLatch")
+        setLatchPosition(CLOSE_LATCH_POSITION).withName("climber/closeLatch")
 
     fun openLatch(): Command =
-        setLatchPose(OPEN_LATCH_POSITION).withName("climber/openLatch")
+        setLatchPosition(OPEN_LATCH_POSITION).withName("climber/openLatch")
 
     fun lock(): Command =
         Commands.sequence(
