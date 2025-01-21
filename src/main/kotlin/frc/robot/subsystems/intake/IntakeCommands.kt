@@ -1,13 +1,10 @@
 package frc.robot.subsystems.intake
 
 import edu.wpi.first.wpilibj2.command.Command
-import frc.robot.subsystems.intake.extender.Extender
-import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.extender
+import frc.robot.roller
 
-class IntakeCommands(
-    private val extender: Extender,
-    private val roller: Roller
-) {
+class IntakeCommands() {
     fun intake(): Command = extender.extend().alongWith(roller.intake())
 
     fun outtake(): Command =
