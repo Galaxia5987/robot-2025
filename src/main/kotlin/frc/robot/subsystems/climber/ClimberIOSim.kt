@@ -27,9 +27,7 @@ class ClimberIOSim : ClimberIO {
             TalonType.KRAKEN_FOC
         )
 
-    private var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
-    private var servo2 =
-        SolenoidSim(PneumaticsModuleType.REVPH, FOLLOW_LATCH_SERVO_ID)
+    private var latchServo = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
 
     private val stopperMotor =
         TalonFXSim(
@@ -48,9 +46,7 @@ class ClimberIOSim : ClimberIO {
     }
 
     override fun setLatchPosition(position: Distance) {
-        listOf(servo1, servo2).forEach {
-            it.output = position == OPEN_LATCH_POSITION
-        }
+        latchServo.output = position == OPEN_LATCH_POSITION
     }
 
     override fun setStopperPower(power: Double) {
@@ -71,6 +67,6 @@ class ClimberIOSim : ClimberIO {
         inputs.angle = Units.Rotations.of(motor.position)
         inputs.appliedVoltage = motor.appliedVoltage
         inputs.latchPosition =
-            if (servo1.output) OPEN_LATCH_POSITION else CLOSE_LATCH_POSITION
+            if (latchServo.output) OPEN_LATCH_POSITION else CLOSE_LATCH_POSITION
     }
 }
