@@ -27,7 +27,8 @@ class ClimberIOSim : ClimberIO {
             TalonType.KRAKEN_FOC
         )
 
-    private var latchServo = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
+    private var latchServo =
+        SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
 
     private val stopperMotor =
         TalonFXSim(
