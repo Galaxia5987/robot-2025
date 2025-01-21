@@ -1,24 +1,13 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.elevator.Elevator
-import frc.robot.subsystems.elevator.ElevatorIOSim
-import frc.robot.subsystems.gripper.Gripper
-import frc.robot.subsystems.gripper.GripperIOSim
-import frc.robot.subsystems.intake.extender.Extender
-import frc.robot.subsystems.intake.extender.ExtenderIOSim
-import frc.robot.subsystems.intake.roller.Roller
-import frc.robot.subsystems.intake.roller.RollerIOSim
-import frc.robot.subsystems.wrist.Wrist
-import frc.robot.subsystems.wrist.WristIOSim
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -33,31 +22,14 @@ object RobotContainer {
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
-    private val elevator = Elevator(ElevatorIOSim())
-    private val wrist = Wrist(WristIOSim())
-    private val gripper = Gripper(GripperIOSim())
-    private val intakeExtender = Extender(ExtenderIOSim())
-    private val intakeRoller = Roller(RollerIOSim())
-
-    private val visualizer: Visualizer
 
     init {
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
-        visualizer =
-            Visualizer(
-                intakeExtender.position,
-                { Units.Degrees.zero() },
-                elevator.height,
-                wrist.angle,
-                { Units.Degrees.zero() },
-                { Units.Degrees.zero() },
-                { Units.Degrees.zero() }
-            )
     }
 
-    fun getVisualizerPoses() = visualizer.visualizeSubsystems()
+    fun getVisualizerPoses() = arrayOf(Pose3d())
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
@@ -91,16 +63,6 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
-
-        // TODO: Remove before merging
-        driverController
-            .b()
-            .onTrue(intakeExtender.extend())
-            .onFalse(intakeExtender.retract())
-        driverController
-            .a()
-            .onTrue(elevator.l4().alongWith(wrist.l4()))
-            .onFalse(elevator.zero().alongWith(wrist.feeder()))
 
         driverController
             .povUp()
