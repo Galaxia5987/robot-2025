@@ -3,9 +3,14 @@ package frc.robot.subsystems.gripper
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
+    @AutoLogOutput
+    val hasCoral = Trigger { io.inputs.sensorDistance < DISTANCE_THRESHOLD }
+
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
 
