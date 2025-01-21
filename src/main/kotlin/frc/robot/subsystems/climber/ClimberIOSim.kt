@@ -19,13 +19,7 @@ class ClimberIOSim : ClimberIO {
     override var inputs: LoggedClimberInputs = LoggedClimberInputs()
 
     private var motor =
-        TalonFXSim(
-            2,
-            GEAR_RATIO,
-            MOMENT_OF_INERTIA,
-            1.0,
-            TalonType.KRAKEN_FOC
-        )
+        TalonFXSim(2, GEAR_RATIO, MOMENT_OF_INERTIA, 1.0, TalonType.KRAKEN_FOC)
 
     private var servo1 = SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
     private var servo2 =

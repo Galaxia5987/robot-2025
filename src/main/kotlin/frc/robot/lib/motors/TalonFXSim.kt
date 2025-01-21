@@ -29,9 +29,19 @@ class TalonFXSim : SimMotor {
         gearing: Double,
         conversionFactor: Double,
         motorType: TalonType
-    ) : super(model, TalonType.getDCMotor(motorType, numMotors), gearing, conversionFactor)
+    ) : super(
+        model,
+        TalonType.getDCMotor(motorType, numMotors),
+        gearing,
+        conversionFactor
+    )
 
-    constructor(motor: DCMotor, gearing: Double, jKgMetersSquared: MomentOfInertia, conversionFactor: Double) : super(
+    constructor(
+        motor: DCMotor,
+        gearing: Double,
+        jKgMetersSquared: MomentOfInertia,
+        conversionFactor: Double
+    ) : super(
         motor,
         jKgMetersSquared.`in`(Units.KilogramSquareMeters),
         gearing,
@@ -54,7 +64,10 @@ class TalonFXSim : SimMotor {
     override fun update(timestampSeconds: Double) {
         super.update(timestampSeconds)
 
-        acceleration.update(velocity.`in`(Units.RotationsPerSecond), timestampSeconds)
+        acceleration.update(
+            velocity.`in`(Units.RotationsPerSecond),
+            timestampSeconds
+        )
     }
 
     fun setControl(request: DutyCycleOut) {
@@ -66,46 +79,53 @@ class TalonFXSim : SimMotor {
     }
 
     fun setControl(request: PositionDutyCycle) {
-        setControl(PositionVoltage(request.Position).withFeedForward(request.FeedForward * 12))
+        setControl(
+            PositionVoltage(request.Position)
+                .withFeedForward(request.FeedForward * 12)
+        )
     }
 
     fun setControl(request: PositionVoltage) {
-        voltageRequest =
-            MotorSetpoint { controller.calculate(position, request.Position) + request.FeedForward }
+        voltageRequest = MotorSetpoint {
+            controller.calculate(position, request.Position) +
+                    request.FeedForward
+        }
     }
 
     fun setControl(request: VelocityDutyCycle) {
-        setControl(VelocityVoltage(request.Velocity).withFeedForward(request.FeedForward * 12))
+        setControl(
+            VelocityVoltage(request.Velocity)
+                .withFeedForward(request.FeedForward * 12)
+        )
     }
 
     fun setControl(request: VelocityVoltage) {
-        voltageRequest =
-            MotorSetpoint {
-                (controller.calculate(
-                    velocity.`in`(Units.RotationsPerSecond),
-                    request.Velocity
-                )
-                        + request.FeedForward)
-            }
+        voltageRequest = MotorSetpoint {
+            (controller.calculate(
+                velocity.`in`(Units.RotationsPerSecond),
+                request.Velocity
+            ) + request.FeedForward)
+        }
     }
 
     fun setControl(request: MotionMagicDutyCycle) {
         setControl(
-            MotionMagicVoltage(request.Position).withFeedForward(request.FeedForward * 12)
+            MotionMagicVoltage(request.Position)
+                .withFeedForward(request.FeedForward * 12)
         )
     }
 
     fun setControl(request: MotionMagicVoltage) {
-        voltageRequest =
-            MotorSetpoint {
-                (profiledController.calculate(position, request.Position)
-                        + request.FeedForward)
-            }
+        voltageRequest = MotorSetpoint {
+            (profiledController.calculate(position, request.Position) +
+                    request.FeedForward)
+        }
     }
 
     val velocity: AngularVelocity
-        get() = Units.Rotation.per(Units.Minutes)
-            .of(motorSim.angularVelocityRPM) * conversionFactor
+        get() =
+            Units.Rotation.per(Units.Minutes).of(motorSim.angularVelocityRPM) *
+                    conversionFactor
 
     val position: Double
         get() = motorSim.angularPositionRotations * conversionFactor

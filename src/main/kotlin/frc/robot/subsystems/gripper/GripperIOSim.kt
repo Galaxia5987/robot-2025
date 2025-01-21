@@ -10,13 +10,7 @@ class GripperIOSim : GripperIO {
     override val inputs = LoggedGripperInputs()
 
     private val motor =
-        TalonFXSim(
-            1,
-            GEAR_RATIO,
-            MOMENT_OF_INERTIA,
-            1.0,
-            TalonType.FALCON
-        )
+        TalonFXSim(1, GEAR_RATIO, MOMENT_OF_INERTIA, 1.0, TalonType.FALCON)
     private val voltageOut = VoltageOut(0.0)
 
     override fun setVoltage(voltage: Voltage) {

@@ -15,13 +15,7 @@ import frc.robot.lib.toDistance
 class ExtenderIOSim : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
     private val motor =
-        TalonFXSim(
-            1,
-            1.0,
-            MOMENT_OF_INERTIA,
-            1.0,
-            TalonType.FALCON_FOC
-        )
+        TalonFXSim(1, 1.0, MOMENT_OF_INERTIA, 1.0, TalonType.FALCON_FOC)
     private val positionControl = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
     private val controller = PIDController(1.0, 0.0, 0.0)
