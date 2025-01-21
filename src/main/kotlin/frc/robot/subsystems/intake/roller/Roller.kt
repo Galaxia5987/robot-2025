@@ -9,14 +9,18 @@ import org.littletonrobotics.junction.Logger
 class Roller(private val io: RollerIO) : SubsystemBase() {
 
     private fun setVoltage(voltage: Voltage): Command =
-        startEnd({ io.setVoltage(voltage) }, { io.setVoltage(Units.Volts.zero()) })
+        startEnd(
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
             .withName("roller/setVoltage")
 
     fun intake() = setVoltage(INTAKE_VOLTAGE).withName("roller/intake")
 
     fun outtake() = setVoltage(OUTTAKE_VOLTAGE).withName("roller/outtake")
 
-    fun farOuttake() = setVoltage(FAR_OUTTAKE_VOLTAGE).withName("roller/farOuttake")
+    fun farOuttake() =
+        setVoltage(FAR_OUTTAKE_VOLTAGE).withName("roller/farOuttake")
 
     fun stop() = setVoltage(Units.Volts.zero()).withName("roller/stop")
 
