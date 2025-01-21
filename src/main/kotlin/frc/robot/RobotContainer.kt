@@ -22,7 +22,7 @@ object RobotContainer {
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
-    private val Climber = subsystems["CLimber"]
+    private val Climber = subsystems["Climber"]
     private val Elevator = subsystems["Elevator"]
     private val Gripper = subsystems["Gripper"]
     private val Extender = subsystems["Extender"]
