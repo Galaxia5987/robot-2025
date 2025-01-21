@@ -39,7 +39,7 @@ class Visualizer(
     fun visualizeSubsystems(): Array<Pose3d> {
         val intakePose =
             getPose3d(
-                INITIAL_INTAKE_TRANSLATION.plus(
+                INITIAL_INTAKE_TRANSLATION + (
                     getTranslation3d(x = extenderPosition.invoke().`in`(Meters))
                 )
             )
@@ -50,7 +50,7 @@ class Visualizer(
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
-            secondStagePose.plus(
+            secondStagePose + (
                 Transform3d(
                     INITIAL_WRIST_TRANSLATION,
                     getRotation3d(pitch = -wristAngle.invoke().`in`(Radians))
