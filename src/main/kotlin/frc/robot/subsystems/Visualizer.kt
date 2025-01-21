@@ -11,7 +11,7 @@ import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
-private val INITIAL_INTAKE_TRANSLATION = getTranslation3d(x = Meters.of(0.47), z = Meters.of(0.35))
+private val INITIAL_INTAKE_TRANSLATION = getTranslation3d(x = Meters.of(-0.25), z = Meters.of(0.35))
 
 private val INITIAL_WRIST_TRANSLATION = getTranslation3d(z = Meters.of(0.59))
 
