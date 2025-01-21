@@ -15,13 +15,16 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
-    @AutoLogOutput private val mechanism = LoggedMechanism2d(2.0, 3.0)
+    @AutoLogOutput
+    private val mechanism = LoggedMechanism2d(2.0, 3.0)
     private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
     private val ligament2d =
         root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
 
-    @AutoLogOutput private var setpointName: Angles = Angles.ZERO
-    @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
+    @AutoLogOutput
+    private var setpointName: Angles = Angles.ZERO
+    @AutoLogOutput
+    private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
     private var atSetpoint: Trigger = Trigger {
@@ -36,10 +39,10 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     private fun setAngle(angle: Angles): Command =
         runOnce {
-                io.setAngle(angle.angle)
-                setpointName = angle
-                setpointValue = angle.angle
-            }
+            io.setAngle(angle.angle)
+            setpointName = angle
+            setpointValue = angle.angle
+        }
             .withName("Wrist/${angle.getLoggingName()}")
 
     fun l1(): Command = setAngle(Angles.L1)
@@ -54,17 +57,6 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
-        Logger.recordOutput(
-            "Pose",
-            Pose3d(
-                Translation3d(),
-                Rotation3d(
-                    Units.Degrees.zero(),
-                    -io.inputs.angle,
-                    Units.Degrees.zero()
-                )
-            )
-        )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
         Logger.recordOutput("Wrist/Mechanism2d", mechanism)
         Logger.recordOutput("Wrist/Setpoint", setpointValue)
