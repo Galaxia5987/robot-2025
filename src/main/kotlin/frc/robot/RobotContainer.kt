@@ -59,26 +59,29 @@ object RobotContainer {
 
     fun getVisualizerPoses() = visualizer.visualizeSubsystems()
 
-    private fun getDriveCommandReal(): Command = DriveCommands.joystickDriveAtAngle(
-        swerveDrive,
-        { driverController.leftY },
-        { driverController.leftX },
-        { swerveDrive.desiredHeading },
-    )
-        .alongWith(
-            swerveDrive.updateDesiredHeading {
-                -driverController.rightX
-            })
+    private fun getDriveCommandReal(): Command =
+        DriveCommands.joystickDriveAtAngle(
+                swerveDrive,
+                { driverController.leftY },
+                { driverController.leftX },
+                { swerveDrive.desiredHeading },
+            )
+            .alongWith(
+                swerveDrive.updateDesiredHeading { -driverController.rightX }
+            )
 
-    private fun getDriveCommandSim(): Command = DriveCommands.joystickDrive(
-        swerveDrive,
-        { driverController.leftY },
-        { driverController.leftX },
-        { -driverController.rightX * 0.6 })
+    private fun getDriveCommandSim(): Command =
+        DriveCommands.joystickDrive(
+            swerveDrive,
+            { driverController.leftY },
+            { driverController.leftX },
+            { -driverController.rightX * 0.6 }
+        )
 
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand = if (CURRENT_MODE == Mode.REAL) getDriveCommandReal() else getDriveCommandSim()
-
+        swerveDrive.defaultCommand =
+            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
+            else getDriveCommandSim()
     }
 
     private fun configureButtonBindings() {
@@ -90,8 +93,13 @@ object RobotContainer {
             )
 
         // TODO: Remove before merging
-        driverController.b().onTrue(intakeExtender.extend()).onFalse(intakeExtender.retract())
-        driverController.a().onTrue(elevator.l4().alongWith(wrist.l4()))
+        driverController
+            .b()
+            .onTrue(intakeExtender.extend())
+            .onFalse(intakeExtender.retract())
+        driverController
+            .a()
+            .onTrue(elevator.l4().alongWith(wrist.l4()))
             .onFalse(elevator.zero().alongWith(wrist.feeder()))
 
         driverController

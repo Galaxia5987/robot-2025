@@ -1,8 +1,5 @@
 package frc.robot.subsystems.wrist
 
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
@@ -15,16 +12,13 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
-    @AutoLogOutput
-    private val mechanism = LoggedMechanism2d(2.0, 3.0)
+    @AutoLogOutput private val mechanism = LoggedMechanism2d(2.0, 3.0)
     private val root = mechanism.getRoot("Wrist", 1.0, 1.0)
     private val ligament2d =
         root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
 
-    @AutoLogOutput
-    private var setpointName: Angles = Angles.ZERO
-    @AutoLogOutput
-    private var setpointValue: Angle = Angles.ZERO.angle
+    @AutoLogOutput private var setpointName: Angles = Angles.ZERO
+    @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
     private var atSetpoint: Trigger = Trigger {
@@ -39,10 +33,10 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     private fun setAngle(angle: Angles): Command =
         runOnce {
-            io.setAngle(angle.angle)
-            setpointName = angle
-            setpointValue = angle.angle
-        }
+                io.setAngle(angle.angle)
+                setpointName = angle
+                setpointValue = angle.angle
+            }
             .withName("Wrist/${angle.getLoggingName()}")
 
     fun l1(): Command = setAngle(Angles.L1)

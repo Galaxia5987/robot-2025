@@ -6,7 +6,6 @@ package frc.robot
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj.Compressor
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PneumaticsModuleType
@@ -105,7 +104,10 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
-        Logger.recordOutput("SubsystemPoses", *RobotContainer.getVisualizerPoses())
+        Logger.recordOutput(
+            "SubsystemPoses",
+            *RobotContainer.getVisualizerPoses()
+        )
     }
 
     /**
