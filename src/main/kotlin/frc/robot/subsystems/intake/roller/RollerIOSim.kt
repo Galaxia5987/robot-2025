@@ -1,7 +1,8 @@
 package frc.robot.subsystems.intake.roller
 
-import com.ctre.phoenix6.controls.DutyCycleOut
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
@@ -16,10 +17,10 @@ class RollerIOSim : RollerIO {
             1.0,
             TalonType.FALCON
         )
-    private val controlRequest = DutyCycleOut(0.0)
+    private val controlRequest = VoltageOut(0.0)
 
-    override fun setPower(power: Double) {
-        motor.setControl(controlRequest.withOutput(power))
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(controlRequest.withOutput(voltage))
     }
 
     override fun updateInputs() {
