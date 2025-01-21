@@ -28,7 +28,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
-    var angle: () -> Angle = { io.inputs.angle }
+    val angle: () -> Angle = { io.inputs.angle }
 
     private fun setVoltage(voltage: Voltage): Command = runOnce {
         io.setVoltage(voltage)

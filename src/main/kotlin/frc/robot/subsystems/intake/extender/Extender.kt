@@ -21,7 +21,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
-    var position: () -> Distance = { io.inputs.position }
+    val position: () -> Distance = { io.inputs.position }
 
     private var finishedResettingFlag = false
 

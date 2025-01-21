@@ -49,7 +49,7 @@ object RobotContainer {
             Visualizer(
                 intakeExtender.position,
                 { Units.Degrees.zero() },
-                elevator.position,
+                elevator.height,
                 wrist.angle,
                 { Units.Degrees.zero() },
                 { Units.Degrees.zero() },

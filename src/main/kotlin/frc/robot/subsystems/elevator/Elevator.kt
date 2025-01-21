@@ -21,7 +21,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpointName: Positions = Positions.ZERO
 
-    var position: () -> Distance = { io.inputs.height }
+    val height: () -> Distance = { io.inputs.height }
 
     fun setPosition(position: Positions): Command =
         runOnce {
