@@ -30,7 +30,7 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
-    private val visualizer: Visualizer
+    val visualizer: Visualizer
 
     init {
         registerAutoCommands()
@@ -47,8 +47,6 @@ object RobotContainer {
                 { Units.Degrees.zero() }
             )
     }
-
-    fun getVisualizerPoses() = visualizer.visualizeSubsystems()
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
