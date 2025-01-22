@@ -86,6 +86,7 @@ object RobotContainer {
             )
 
         driverController.y().onTrue(reefCommands.moveL1(driverController.y().negate()))
+        driverController.a().onTrue(reefCommands.moveL4(driverController.y().negate()))
 
         driverController
             .povUp()
