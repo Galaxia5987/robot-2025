@@ -10,7 +10,11 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
-    private val debouncer = Debouncer(DEBOUNCE_TIME.`in`(Units.Seconds), Debouncer.DebounceType.kBoth)
+    private val debouncer =
+        Debouncer(
+            DEBOUNCE_TIME.`in`(Units.Seconds),
+            Debouncer.DebounceType.kBoth
+        )
 
     @AutoLogOutput
     val hasCoral = Trigger {
