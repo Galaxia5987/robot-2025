@@ -38,7 +38,7 @@ class Visualizer(
     }
 
     @AutoLogOutput
-    fun visualizeSubsystems(): Array<Pose3d> {
+    fun getSubsystemsPoses(): Array<Pose3d> {
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +

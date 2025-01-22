@@ -50,8 +50,6 @@ object RobotContainer {
             )
     }
 
-    fun getVisualizerPoses() = visualizer.visualizeSubsystems()
-
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
