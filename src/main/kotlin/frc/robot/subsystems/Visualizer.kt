@@ -1,7 +1,6 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.measure.Angle
@@ -20,7 +19,7 @@ private val INITIAL_WRIST_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
 
-private val INITIAL_ELEVATOR_TRANSFORM = Transform3d(getTranslation3d(x = 0.12), Rotation3d())
+private val INITIAL_ELEVATOR_TRANSLATION = getTranslation3d(x = 0.12)
 
 class Visualizer(
     private val extenderPosition: () -> Distance,
@@ -35,8 +34,8 @@ class Visualizer(
         val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
-        val firstStagePose = getPose3d(z = firstStageHeight) + INITIAL_ELEVATOR_TRANSFORM
-        val secondStagePose = getPose3d(z = secondStageHeight) + INITIAL_ELEVATOR_TRANSFORM
+        val firstStagePose = getPose3d(INITIAL_ELEVATOR_TRANSLATION + getTranslation3d(z = firstStageHeight))
+        val secondStagePose = getPose3d(INITIAL_ELEVATOR_TRANSLATION + getTranslation3d(z = secondStageHeight))
         return Pair(firstStagePose, secondStagePose)
     }
 
