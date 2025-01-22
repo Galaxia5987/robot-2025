@@ -31,8 +31,9 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
-    private val visualizer: Visualizer
-    private val reefCommands: ReefCommands = ReefCommands(elevator, gripper, wrist)
+    private val reefCommands: ReefCommands =
+        ReefCommands(elevator, gripper, wrist)
+    val visualizer: Visualizer
 
     init {
         registerAutoCommands()
@@ -85,8 +86,17 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.y().onTrue(reefCommands.moveL1(driverController.y().negate()))
-        driverController.a().onTrue(reefCommands.moveL4(driverController.y().negate()))
+        // TODO: Remove binds before merging
+        driverController
+            .y()
+            .onTrue(reefCommands.moveL1(driverController.y().negate()))
+        driverController
+            .a()
+            .onTrue(reefCommands.moveL4(driverController.a().negate()))
+
+        driverController.x().onTrue(reefCommands.moveFeeder(driverController.x().negate()))
+
+        driverController.b().onTrue(extender.extend()).onFalse(extender.retract())
 
         driverController
             .povUp()
