@@ -7,7 +7,7 @@ import org.team9432.annotation.Logged
 interface RollerIO {
     val inputs: LoggedRollerInputs
 
-    fun setPower(power: Double) {}
+    fun setVoltage(voltage: Voltage) {}
 
     fun updateInputs() {}
 
