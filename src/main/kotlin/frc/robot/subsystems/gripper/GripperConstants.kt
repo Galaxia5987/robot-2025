@@ -15,4 +15,4 @@ val REMOVE_ALGAE_VOLTAGE: Voltage = Units.Volts.of(0.3) // TODO: Calibrate
 val STOP_VOLTAGE: Voltage = Units.Volts.zero()
 val MOMENT_OF_INERTIA: MomentOfInertia =
     Units.KilogramSquareMeters.of(0.03) // TODO: Replace with real value
-val DEBOUNCE_TIME: Time = Units.Seconds.of(1.0)
+val DEBOUNCE_TIME: Time = Units.Seconds.of(0.2)
