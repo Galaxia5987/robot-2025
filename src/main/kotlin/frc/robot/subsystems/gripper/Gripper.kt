@@ -24,6 +24,8 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
 
+    fun stop(): Command = setVoltage(STOP_VOLTAGE).withName("Gripper/Stop")
+
     fun intake(): Command =
         setVoltage(INTAKE_VOLTAGE).withName("Gripper/Intake")
 
