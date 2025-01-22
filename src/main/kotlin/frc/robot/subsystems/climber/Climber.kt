@@ -71,7 +71,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     private fun setLatchPosition(latchPosition: Distance): Command =
         runOnce { io.setLatchPosition(latchPosition) }
-            .withName("climber/setLatchPosition")
+            .withName("climber/setLatchPosition: $latchPosition")
 
     private fun setStopperPower(power: Double): Command =
         runOnce { io.setStopperPower(power) }
