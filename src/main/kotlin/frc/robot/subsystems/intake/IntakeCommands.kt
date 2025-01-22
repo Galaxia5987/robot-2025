@@ -9,9 +9,15 @@ import frc.robot.roller
 fun intake(): Command = extender.extend().alongWith(roller.intake())
 
 fun outtake(endTrigger: Trigger): Command =
-    Commands.parallel(roller.outtake(), Commands.waitUntil(endTrigger).andThen(retract()))
+    Commands.parallel(
+        roller.outtake(),
+        Commands.waitUntil(endTrigger).andThen(retract())
+    )
 
 fun farOuttake(endTrigger: Trigger): Command =
-    Commands.parallel(roller.farOuttake(), Commands.waitUntil(endTrigger).andThen(retract()))
+    Commands.parallel(
+        roller.farOuttake(),
+        Commands.waitUntil(endTrigger).andThen(retract())
+    )
 
 fun retract(): Command = extender.retract()
