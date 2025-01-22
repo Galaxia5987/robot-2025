@@ -15,9 +15,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private val root = mechanism.getRoot("Elevator", 2.0, 0.0)
     private val elevatorLigament =
         root.append(LoggedMechanismLigament2d("ElevatorLigament", 5.0, 90.0))
+
     @AutoLogOutput
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
+
     @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+
+    val height: () -> Distance = { io.inputs.height }
 
     fun setPosition(position: Positions): Command =
         runOnce {

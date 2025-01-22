@@ -2,10 +2,12 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
 
 /**
@@ -28,26 +30,47 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
+    val visualizer: Visualizer
 
     init {
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
+        visualizer =
+            Visualizer(
+                extender.position,
+                { Units.Degrees.zero() },
+                elevator.height,
+                wrist.angle,
+                { Units.Degrees.zero() },
+                { Units.Degrees.zero() },
+                { Units.Degrees.zero() }
+            )
     }
+
+    private fun getDriveCommandReal(): Command =
+        DriveCommands.joystickDriveAtAngle(
+                swerveDrive,
+                { driverController.leftY },
+                { driverController.leftX },
+                { swerveDrive.desiredHeading },
+            )
+            .alongWith(
+                swerveDrive.updateDesiredHeading { -driverController.rightX }
+            )
+
+    private fun getDriveCommandSim(): Command =
+        DriveCommands.joystickDrive(
+            swerveDrive,
+            { driverController.leftY },
+            { driverController.leftX },
+            { -driverController.rightX * 0.6 }
+        )
 
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand =
-            DriveCommands.joystickDriveAtAngle(
-                    swerveDrive,
-                    { driverController.leftY },
-                    { driverController.leftX },
-                    { swerveDrive.desiredHeading },
-                )
-                .alongWith(
-                    swerveDrive.updateDesiredHeading {
-                        -driverController.rightX
-                    }
-                )
+            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
+            else getDriveCommandSim()
     }
 
     private fun configureButtonBindings() {
