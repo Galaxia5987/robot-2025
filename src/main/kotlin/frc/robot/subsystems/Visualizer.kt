@@ -10,6 +10,18 @@ import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import org.littletonrobotics.junction.AutoLogOutput
 
+private val INITIAL_MODULE_0_Turn_TRANSLATION = getTranslation3d(x= Meters.of(0.25448),y= Meters.of(0.25448),z=Meters.of(0.0508))
+private val INITIAL_MODULE_0_Drive_TRANSLATION = getTranslation3d(x= Meters.of(0.25448),y= Meters.of(0.25448),z=Meters.of(0.0508))
+
+private val INITIAL_MODULE_1_Turn_TRANSLATION = getTranslation3d(x= Meters.of(0.25448),y= Meters.of(-0.25448),z=Meters.of(0.0508))
+private val INITIAL_MODULE_1_Drive_TRANSLATION = getTranslation3d(x= Meters.of(0.25448),y= Meters.of(-0.25448),z=Meters.of(0.0508))
+
+private val INITIAL_MODULE_2_Turn_TRANSLATION = getTranslation3d(x= Meters.of(-0.25448),y= Meters.of(0.25448),z=Meters.of(0.0508))
+private val INITIAL_MODULE_2_Drive_TRANSLATION = getTranslation3d(x= Meters.of(-0.25448),y= Meters.of(0.25448),z=Meters.of(0.0508))
+
+private val INITIAL_MODULE_3_Turn_TRANSLATION = getTranslation3d(x= Meters.of(-0.25448),y= Meters.of(-0.25448),z=Meters.of(0.0508))
+private val INITIAL_MODULE_3_Drive_TRANSLATION = getTranslation3d(x= Meters.of(-0.25448),y= Meters.of(-0.25448),z=Meters.of(0.0508))
+
 private val INITIAL_INTAKE_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.25), z = Meters.of(0.35))
 
@@ -18,6 +30,8 @@ private val INITIAL_WRIST_TRANSLATION =
 
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
+
+
 
 class Visualizer(
     private val extenderPosition: () -> Distance,
@@ -39,6 +53,17 @@ class Visualizer(
 
     @AutoLogOutput
     fun getSubsystemsPoses(): Array<Pose3d> {
+        val Module0PoseTurn = getPose3d(INITIAL_MODULE_0_Turn_TRANSLATION)
+        val Module0PoseDrive = getPose3d(INITIAL_MODULE_0_Drive_TRANSLATION)
+
+        val Module1PoseTurn = getPose3d(INITIAL_MODULE_1_Turn_TRANSLATION)
+        val Module1PoseDrive = getPose3d(INITIAL_MODULE_1_Drive_TRANSLATION)
+
+        val Module2PoseTurn = getPose3d(INITIAL_MODULE_2_Turn_TRANSLATION)
+        val Module2PoseDrive = getPose3d(INITIAL_MODULE_2_Drive_TRANSLATION)
+
+        val Module3PoseTurn = getPose3d(INITIAL_MODULE_3_Turn_TRANSLATION)
+        val Module3PoseDrive = getPose3d(INITIAL_MODULE_3_Drive_TRANSLATION)
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +
@@ -73,6 +98,14 @@ class Visualizer(
             )
 
         return arrayOf(
+            Module0PoseTurn,
+            Module0PoseDrive,
+            Module1PoseTurn,
+            Module1PoseDrive,
+            Module2PoseTurn,
+            Module2PoseDrive,
+            Module3PoseTurn,
+            Module3PoseDrive,
             intakePose,
             //            intakeRollerPose,
             firstStagePose,
