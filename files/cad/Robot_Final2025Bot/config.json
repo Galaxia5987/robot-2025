@@ -209,7 +209,7 @@
         },
         {
           "axis": "z",
-          "degrees": 90
+          "degrees": -90
         }
       ],
       "zeroedPosition": [
@@ -250,7 +250,7 @@
         },
         {
           "axis": "y",
-          "degrees": 180
+          "degrees": -180
         }
       ],
       "zeroedPosition": [
@@ -307,7 +307,30 @@
         },
         {
           "axis": "z",
-          "degrees": 90
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_16 : Climb",
+
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": -38.489120
         }
       ],
       "zeroedPosition": [
