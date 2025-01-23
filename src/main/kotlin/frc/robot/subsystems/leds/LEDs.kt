@@ -37,12 +37,7 @@ class LEDs : SubsystemBase() {
     }
 
     fun intakeLED(): Command = run { blink(INTAKE_COLOR) }
-    fun climbLED(): Command = run {
-        RAINBOW.scrollAtAbsoluteSpeed(SCROLLING_SPEED, LED_SPACING)
-            .applyTo(ledBuffer)
-    }
-
-    fun pattern(): Command = run { setPattern(RED, BLUE, arrayOf(5, 15)) }
+    fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
     fun clearLED(): Command = run { TRANSPARENT.applyTo(ledBuffer) }
 
     override fun periodic() {
