@@ -47,7 +47,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun reset(): Command {
         return setVoltage(RESET_VOLTAGE)
-            .alongWith(runOnce { finishedResettingFlag = false })
+            .alongWith(
+                runOnce { finishedResettingFlag = false },
+                runOnce { io.setSoftLimits(false) }
+            )
             .until(isStuck)
             .andThen(
                 runOnce { io::reset },
@@ -86,7 +89,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
-    @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }
+    @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }.onTrue(runOnce{io.setSoftLimits(true)})
 
     override fun periodic() {
         io.updateInputs()
