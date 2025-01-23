@@ -20,5 +20,6 @@ interface ElevatorIO {
     open class ElevatorInputs {
         var height: Distance = Units.Meters.of(0.0)
         var appliedVoltage: Voltage = Units.Volts.of(0.0)
+        var limitSwitchValue = false
     }
 }
