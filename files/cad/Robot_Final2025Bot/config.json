@@ -325,12 +325,12 @@
           "degrees": 0
         },
         {
-          "axis": "z",
+          "axis": "y",
           "degrees": 0
         },
         {
-          "axis": "y",
-          "degrees": -38.489120
+          "axis": "z",
+          "degrees": -90
         }
       ],
       "zeroedPosition": [

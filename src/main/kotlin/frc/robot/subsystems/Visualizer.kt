@@ -133,7 +133,7 @@ class Visualizer(
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation = getRotation3d(pitch = climberAngle.invoke())
+//                rotation = getRotation3d(pitch = climberAngle.invoke())
             )
 
         return arrayOf(
