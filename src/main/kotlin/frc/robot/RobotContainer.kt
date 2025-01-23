@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.leds.LEDs
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -31,6 +32,7 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
+    private val LEDs = LEDs()
     val visualizer: Visualizer
 
     init {
@@ -98,6 +100,10 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
+        driverController.a().onTrue(LEDs.climbLED())
+        driverController.b().onTrue(LEDs.intakeLED())
+        driverController.y().onTrue(LEDs.clearLED())
+        driverController.x().onTrue(LEDs.pattern())
     }
 
     fun getAutonomousCommand(): Command =
