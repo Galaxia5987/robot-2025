@@ -127,7 +127,6 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         Logger.processInputs(this::class.simpleName, io.inputs)
 
         ligament.angle = inputs.angle.`in`(Units.Degrees)
-        Logger.recordOutput("Climber/Mechanism2d", mechanism)
         Logger.recordOutput("Climber/setpoint", setpoint)
     }
 }
