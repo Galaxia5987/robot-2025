@@ -4,9 +4,8 @@ import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-class LEDs(private val io: LedIO) : SubsystemBase() {
+class LEDs(private val io: LEDsIO) : SubsystemBase() {
 
-    private fun rainbow(): Command = runOnce { io.setRainbow(SCROLLING_SPEED) }
     private fun solid(color: LEDPattern): Command = runOnce {
         io.setLedColor(color)
     }
@@ -19,5 +18,5 @@ class LEDs(private val io: LedIO) : SubsystemBase() {
     }
 
     fun intakeLed(): Command = blink(INTAKE_COLOR)
-    fun climbLed(): Command = rainbow()
+    fun climbLed(): Command = runOnce { io.setRainbow(SCROLLING_SPEED) }
 }
