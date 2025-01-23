@@ -10,7 +10,7 @@ interface ElevatorIO {
 
     fun setHeight(height: Distance) {}
 
-    fun setVoltage(voltage: Voltage) {}
+    fun setPower(percentOutput: Double) {}
 
     fun reset() {}
 
