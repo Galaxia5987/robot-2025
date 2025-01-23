@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
-import org.littletonrobotics.junction.AutoLogOutput
 import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
+import org.littletonrobotics.junction.AutoLogOutput
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
