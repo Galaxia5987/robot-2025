@@ -33,7 +33,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  * project.
  */
 object Robot : LoggedRobot() {
-    private val compressor = Compressor(PneumaticsModuleType.CTREPCM)
     private lateinit var autonomousCommand: Command
 
     /**
