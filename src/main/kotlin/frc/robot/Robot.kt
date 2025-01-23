@@ -87,7 +87,6 @@ object Robot : LoggedRobot() {
 
         TunerConstants.init()
         RobotContainer // Initialize robot container.
-        compressor.enableDigital()
 
         enableAutoLogOutputFor(this)
 
