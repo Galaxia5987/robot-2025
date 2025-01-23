@@ -1,4 +1,4 @@
-![](important-files/markdown/logo.png)
+![](files/markdown/logo.png)
 # Robot Code 2025
 This is the code for [REDACTED], our 2025 robot.
 
