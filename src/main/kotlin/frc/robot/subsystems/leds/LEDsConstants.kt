@@ -20,9 +20,11 @@ val BLUE: LEDPattern = LEDPattern.solid(Color.kBlue)
 val YELLOW: LEDPattern = LEDPattern.solid(Color.kYellow)
 val GREEN: LEDPattern = LEDPattern.solid(Color.kGreen)
 val INTAKE_COLOR: LEDPattern = LEDPattern.solid(Color.kWhiteSmoke)
-val RAINBOW: LEDPattern = LEDPattern.rainbow(255, 128)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 100
 val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val BLINKING_TIME: Time = Units.Second.of(2.0)
+val RAINBOW: LEDPattern =
+    LEDPattern.rainbow(255, 128)
+        .scrollAtAbsoluteSpeed(SCROLLING_SPEED, LED_SPACING)
 const val LED_STRIP_PORT = 1
