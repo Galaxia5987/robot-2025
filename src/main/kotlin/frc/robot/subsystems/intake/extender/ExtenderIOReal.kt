@@ -16,7 +16,7 @@ import frc.robot.lib.toDistance
 
 class ExtenderIOReal : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
-    private val motor = TalonFX(MOTOR_ID)
+    private val motor = TalonFX(EXTENDER_MOTOR_ID)
     private val positionControl = MotionMagicTorqueCurrentFOC(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
