@@ -20,19 +20,19 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
-    @AutoLogOutput
-    private var setpointName: Positions = Positions.ZERO
+    @AutoLogOutput private var setpointName: Positions = Positions.ZERO
 
-    private val tuningHeight = LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
+    private val tuningHeight =
+        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
     fun setPosition(position: Positions): Command =
         runOnce {
-            setpointValue = position.value
-            setpointName = position
-            io.setHeight(position.value)
-        }
+                setpointValue = position.value
+                setpointName = position
+                io.setHeight(position.value)
+            }
             .withName(position.getLoggingName())
 
     fun l1(): Command = setPosition(Positions.L1)
@@ -44,7 +44,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun feeder(): Command = setPosition(Positions.FEEDER)
     fun zero(): Command = setPosition(Positions.ZERO)
     fun tuningPosition(): Command =
-        runOnce { Positions.TUNING.value = Units.Meters.of(tuningHeight.get()) }.andThen(setPosition(Positions.TUNING))
+        runOnce { Positions.TUNING.value = Units.Meters.of(tuningHeight.get()) }
+            .andThen(setPosition(Positions.TUNING))
 
     fun setPower(percentOutput: DoubleSupplier): Command = run {
         io.setPower(percentOutput.asDouble)
