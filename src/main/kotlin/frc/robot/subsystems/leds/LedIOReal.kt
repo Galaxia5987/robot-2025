@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBufferView
 import edu.wpi.first.wpilibj.LEDPattern
 
 class LedIOReal : LedIO {
-    val ledStrip = AddressableLED(1).apply { setLength(STRIP_LENGTH) }
+    val ledStrip = AddressableLED(LED_STRIP_PORT).apply { setLength(STRIP_LENGTH) }
     val ledBuffer = AddressableLEDBuffer(STRIP_LENGTH)
 
     init {

@@ -25,3 +25,4 @@ val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 100
 val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val BLINKING_TIME: Time = Units.Second.one()
+const val LED_STRIP_PORT = 1
