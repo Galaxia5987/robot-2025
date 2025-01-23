@@ -47,9 +47,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun feeder(): Command = setPosition(Positions.FEEDER)
     fun zero(): Command = setPosition(Positions.ZERO)
 
-    fun setVoltage(voltage: Voltage): Command = run {
-        io.setVoltage(voltage)
-    }
+    fun setVoltage(voltage: Voltage): Command =
+        startEnd(
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
 
     fun reset(): Command = runOnce(io::reset)
 
