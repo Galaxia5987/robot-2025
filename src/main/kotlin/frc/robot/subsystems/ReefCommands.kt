@@ -20,25 +20,25 @@ private fun scoreCoral(endTrigger: Trigger): Command =
 private fun moveDefaultPosition(): Command =
     parallel(elevator.feeder(), wrist.feeder())
 
-fun moveL1(outtakeTrigger: Trigger): Command =
+fun l1(outtakeTrigger: Trigger): Command =
     parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))
 
-fun moveL2(outtakeTrigger: Trigger): Command =
+fun l2(outtakeTrigger: Trigger): Command =
     parallel(elevator.l2(), wrist.l2()).andThen(scoreCoral(outtakeTrigger))
 
-fun moveL3(outtakeTrigger: Trigger): Command =
+fun l3(outtakeTrigger: Trigger): Command =
     parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
 
-fun moveL4(outtakeTrigger: Trigger): Command =
+fun l4(outtakeTrigger: Trigger): Command =
     parallel(elevator.l4(), wrist.l4()).andThen(scoreCoral(outtakeTrigger))
 
-fun moveL3algae(): Command =
+fun l3algae(): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
 
-fun moveL2algae(): Command =
+fun l2algae(): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
 
-fun moveFeeder(intakeTrigger: Trigger): Command =
+fun feeder(intakeTrigger: Trigger): Command =
     sequence(
         parallel(elevator.feeder(), wrist.feeder()),
         waitUntil(intakeTrigger),
