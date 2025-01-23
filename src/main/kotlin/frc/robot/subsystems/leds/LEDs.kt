@@ -49,7 +49,6 @@ class LEDs : SubsystemBase() {
         primaryPattern.applyTo(sectionOfBuffer)
         ledStrip.setData(ledBuffer)
     }
-
     private fun setPattern(
         primaryPattern: LEDPattern,
     ) {
@@ -57,9 +56,11 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
+    private fun clear() = TRANSPARENT.applyTo(ledBuffer)
+
     fun intakeLED(): Command = run { blink(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
-    fun clearLED(): Command = run { TRANSPARENT.applyTo(ledBuffer) }
+    fun setPattern(): Command = run { setSplitColor(RED, BLUE) } // don't commit
 
     override fun periodic() {
         ledStrip.setData(ledBuffer)
