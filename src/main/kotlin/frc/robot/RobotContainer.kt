@@ -86,18 +86,6 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        // TODO: Remove binds before merging
-        driverController
-            .y()
-            .onTrue(reefCommands.moveL1(driverController.y().negate()))
-        driverController
-            .a()
-            .onTrue(reefCommands.moveL4(driverController.a().negate()))
-
-        driverController.x().onTrue(reefCommands.moveFeeder(driverController.x().negate()))
-
-        driverController.b().onTrue(extender.extend()).onFalse(extender.retract())
-
         driverController
             .povUp()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kZero))
