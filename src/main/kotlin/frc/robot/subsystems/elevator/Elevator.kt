@@ -26,8 +26,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private val isStuck = Trigger {
         maxOf(
             io.inputs.mainMotorCurrent.abs(Units.Amps),
-            io.inputs.auxMotorCurrent.abs(Units.Amps)) >=
-                    RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
+            io.inputs.auxMotorCurrent.abs(Units.Amps)
+        ) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
 
     val height: () -> Distance = { io.inputs.height }
