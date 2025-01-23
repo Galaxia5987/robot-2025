@@ -20,6 +20,12 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private val tuningAngleDegrees =
         LoggedNetworkNumber("Tuning/Climb/AngleDegrees", 0.0)
 
+    private val tuningLatchPositionMeters =
+        LoggedNetworkNumber("Tuning/Climb/LatchPositionMeters", 0.0)
+
+    private val tuningStopperPower =
+        LoggedNetworkNumber("Tuning/Climb/StopperPower", 0.0)
+
     @AutoLogOutput
     private val isTouching =
         Trigger { inputs.sensorDistance < DISTANCE_THRESHOLD }.debounce(1.0)
@@ -75,7 +81,15 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     fun setTuningAngle(): Command =
         run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
-            .withName("Climb/Tuning")
+            .withName("Climb/Tuning/Angle")
+
+    fun setTuningLatchPosition(): Command =
+        run { io.setLatchPosition(Units.Meters.of(tuningLatchPositionMeters.get())) }
+            .withName("Climb/Tuning/LatchPosition")
+
+    fun setTuningStopperPower(): Command =
+        run { io.setStopperPower(tuningStopperPower.get())}
+            .withName("Climb/Tuning/StopperPower")
 
     private fun setLatchPosition(latchPosition: Distance): Command =
         runOnce { io.setLatchPosition(latchPosition) }
