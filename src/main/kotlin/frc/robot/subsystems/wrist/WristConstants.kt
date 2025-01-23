@@ -10,7 +10,7 @@ val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 
 enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(10.0)),
-    L2(Units.Degrees.of(35.0)),
+    L2(Units.Degrees.of(30.0)),
     L3(Units.Degrees.of(35.0)),
     L4(Units.Degrees.of(30.0)),
     L2_ALGAE(Units.Degrees.of(110.0)),
