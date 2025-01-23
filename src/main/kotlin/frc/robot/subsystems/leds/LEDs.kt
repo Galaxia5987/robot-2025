@@ -36,6 +36,23 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
+    private fun setPattern(
+        primaryPattern: LEDPattern,
+        section: Array<Int>
+    ) {
+        val sectionOfBuffer: AddressableLEDBufferView =
+            ledBuffer.createView(section[0], section[1])
+        primaryPattern.applyTo(sectionOfBuffer)
+        ledStrip.setData(ledBuffer)
+    }
+
+    private fun setPattern(
+        primaryPattern: LEDPattern,
+    ) {
+        primaryPattern.applyTo(ledBuffer)
+        ledStrip.setData(ledBuffer)
+    }
+
     fun intakeLED(): Command = run { blink(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
     fun clearLED(): Command = run { TRANSPARENT.applyTo(ledBuffer) }
