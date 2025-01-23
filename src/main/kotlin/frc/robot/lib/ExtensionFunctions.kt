@@ -8,8 +8,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WrapperCommand
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.IS_RED
 import kotlin.math.PI
 import kotlin.math.hypot
@@ -107,3 +110,14 @@ fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
         Units.Meters.per(Units.Rotations)
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
+
+fun CommandXboxController.setRumble(strength: Double) {
+    this.hid.setRumble(GenericHID.RumbleType.kBothRumble, strength)
+}
+
+fun CommandXboxController.rumbleCommand(): Command {
+    return Commands.startEnd(
+        { this.setRumble(1.0) },
+        { this.setRumble(0.0) }
+    )
+}
