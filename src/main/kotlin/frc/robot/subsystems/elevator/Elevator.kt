@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
+    @AutoLogOutput
     private val mechanism = LoggedMechanism2d(3.0, 3.0)
     private val root = mechanism.getRoot("Elevator", 2.0, 0.0)
     private val elevatorLigament =
