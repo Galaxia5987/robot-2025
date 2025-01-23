@@ -22,7 +22,7 @@ val GREEN: LEDPattern = LEDPattern.solid(Color.kGreen)
 val INTAKE_COLOR: LEDPattern = LEDPattern.solid(Color.kWhiteSmoke)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 100
-val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.5)
+val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.3)
 val BLINKING_TIME: Time = Units.Second.of(2.0)
 val RAINBOW: LEDPattern =
     LEDPattern.rainbow(255, 128)
