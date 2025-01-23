@@ -36,6 +36,6 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
-        Logger.recordOutput("HasCoral", hasCoral)
+        Logger.recordOutput("Gripper/HasCoral", hasCoral)
     }
 }
