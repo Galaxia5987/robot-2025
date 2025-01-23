@@ -32,26 +32,26 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     fun setPosition(position: Positions): Command =
         runOnce {
-                setpointValue = position.value
-                setpointName = position
-                io.setHeight(position.value)
-            }
-            .withName(position.getLoggingName())
+            setpointValue = position.value
+            setpointName = position
+            io.setHeight(position.value)
+        }
+            .withName("Elevator/setPosition ${position.getLoggingName()}")
 
-    fun l1(): Command = setPosition(Positions.L1)
-    fun l2(): Command = setPosition(Positions.L2)
-    fun l3(): Command = setPosition(Positions.L3)
-    fun l4(): Command = setPosition(Positions.L4)
-    fun l2Algae(): Command = setPosition(Positions.L2_ALGAE)
-    fun l3Algae(): Command = setPosition(Positions.L3_ALGAE)
-    fun feeder(): Command = setPosition(Positions.FEEDER)
-    fun zero(): Command = setPosition(Positions.ZERO)
+    fun l1(): Command = setPosition(Positions.L1).withName("Elevator/l1")
+    fun l2(): Command = setPosition(Positions.L2).withName("Elevator/l2")
+    fun l3(): Command = setPosition(Positions.L3).withName("Elevator/l3")
+    fun l4(): Command = setPosition(Positions.L4).withName("Elevator/l4")
+    fun l2Algae(): Command = setPosition(Positions.L2_ALGAE).withName("Elevator/moveL2Algae")
+    fun l3Algae(): Command = setPosition(Positions.L3_ALGAE).withName("Elevator/moveL3Algae")
+    fun feeder(): Command = setPosition(Positions.FEEDER).withName("Elevator/moveFeeder")
+    fun zero(): Command = setPosition(Positions.ZERO).withName("Elevator/moveZero")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
             { io.setVoltage(voltage) },
             { io.setVoltage(Units.Volts.zero()) }
-        )
+        ).withName("Elevator/setVoltage")
 
     fun reset(): Command = runOnce(io::reset)
 
