@@ -18,8 +18,8 @@ interface ElevatorIO {
 
     @Logged
     open class ElevatorInputs {
-        var height: Distance = Units.Meters.of(0.0)
-        var appliedVoltage: Voltage = Units.Volts.of(0.0)
+        var height: Distance = Units.Meters.zero()
+        var appliedVoltage: Voltage = Units.Volts.zero()
         var limitSwitchValue = false
     }
 }
