@@ -16,8 +16,8 @@ class LEDs : SubsystemBase() {
         ledStrip.start()
     }
 
-    private fun setLEDPattern(color: LEDPattern) {
-        color.applyTo(ledBuffer)
+    private fun setLEDPattern(pattern: LEDPattern) {
+        pattern.applyTo(ledBuffer)
     }
 
     private fun blink(primary: LEDPattern) {
@@ -31,15 +31,28 @@ class LEDs : SubsystemBase() {
         left.applyTo(leftBuffer)
         right.applyTo(rightBuffer)
     }
-    private fun setPatternArea(
+    private fun setPattern(
         primaryPattern: LEDPattern,
-        secondaryPattern: LEDPattern? = null,
+        secondaryPattern: LEDPattern,
         section: Array<Int>
     ) {
         val sectionOfBuffer: AddressableLEDBufferView =
             ledBuffer.createView(section[0], section[1])
-        secondaryPattern?.applyTo(ledBuffer)
+        secondaryPattern.applyTo(ledBuffer)
         primaryPattern.applyTo(sectionOfBuffer)
+        ledStrip.setData(ledBuffer)
+    }
+
+    private fun setPattern(primaryPattern: LEDPattern, section: Array<Int>) {
+        val sectionOfBuffer: AddressableLEDBufferView =
+            ledBuffer.createView(section[0], section[1])
+        primaryPattern.applyTo(sectionOfBuffer)
+        ledStrip.setData(ledBuffer)
+    }
+    private fun setPattern(
+        primaryPattern: LEDPattern,
+    ) {
+        primaryPattern.applyTo(ledBuffer)
         ledStrip.setData(ledBuffer)
     }
 
@@ -47,9 +60,7 @@ class LEDs : SubsystemBase() {
 
     fun intakeLED(): Command = run { blink(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
-    fun setLEDPattern(): Command = run {
-        setPatternArea(GRADIENT, section = arrayOf(10, 30))
-    } // don't commit
+    fun setPattern(): Command = run { setSplitColor(RED, BLUE) } // don't commit
 
     override fun periodic() {
         ledStrip.setData(ledBuffer)
