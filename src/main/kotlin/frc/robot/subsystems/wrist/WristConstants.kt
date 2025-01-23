@@ -10,7 +10,7 @@ val MIN_ANGLE: Angle = Units.Rotations.of(0.0)
 const val GEAR_RATIO = 1.0 // TODO: Calibrate
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 
-enum class Angles(val angle: Angle) {
+enum class Angles(var angle: Angle) {
     L1(Units.Degrees.of(90.0)),
     L2(Units.Degrees.of(35.0)),
     L3(Units.Degrees.of(35.0)),
@@ -18,7 +18,8 @@ enum class Angles(val angle: Angle) {
     L2_ALGAE(Units.Degrees.of(110.0)),
     L3_ALGAE(Units.Degrees.of(110.0)),
     FEEDER(Units.Degrees.of(55.0)),
-    ZERO(Units.Degrees.zero());
+    ZERO(Units.Degrees.zero()),
+    TUNING(Units.Degrees.zero());
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {
