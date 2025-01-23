@@ -37,7 +37,8 @@ class LedIOReal : LedIO {
     }
 
     override fun setLedPattern(pattern: LEDPattern, section: Array<Int>) {
-        val sectionOfBuffer: AddressableLEDBufferView = ledBuffer.createView(section[0], section[1])
+        val sectionOfBuffer: AddressableLEDBufferView =
+            ledBuffer.createView(section[0], section[1])
         pattern.applyTo(sectionOfBuffer)
         ledStrip.setData(ledBuffer)
     }
