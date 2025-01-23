@@ -40,10 +40,10 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             }
             .withName("Elevator/setPosition ${position.getLoggingName()}")
 
-    fun l1(): Command = setPosition(Positions.L1).withName("Elevator/l1")
-    fun l2(): Command = setPosition(Positions.L2).withName("Elevator/l2")
-    fun l3(): Command = setPosition(Positions.L3).withName("Elevator/l3")
-    fun l4(): Command = setPosition(Positions.L4).withName("Elevator/l4")
+    fun l1(): Command = setPosition(Positions.L1).withName("Elevator/L1")
+    fun l2(): Command = setPosition(Positions.L2).withName("Elevator/L2")
+    fun l3(): Command = setPosition(Positions.L3).withName("Elevator/L3")
+    fun l4(): Command = setPosition(Positions.L4).withName("Elevator/L4")
     fun l2Algae(): Command =
         setPosition(Positions.L2_ALGAE).withName("Elevator/moveL2Algae")
     fun l3Algae(): Command =
