@@ -57,6 +57,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 Angles.TUNING.angle = Units.Degrees.of(tuningAngleDegrees.get())
             }
             .andThen(setAngle(Angles.TUNING))
+            .withName("Wrist/Tuning")
 
     override fun periodic() {
         io.updateInputs()
