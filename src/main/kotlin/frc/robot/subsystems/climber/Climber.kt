@@ -55,63 +55,72 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ClimberLigament", 0.27003, 90.0))
 
-    private fun setAngle(angle: Angle): Command = runOnce {
-        io.setAngle(angle)
-        setpoint = angle
-    }
+    private fun setAngle(angle: Angle): Command =
+        runOnce {
+                io.setAngle(angle)
+                setpoint = angle
+            }
+            .withName("climber/setAngle")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
-            { io.setVoltage(voltage) },
-            { io.setVoltage(Units.Volts.zero()) }
-        )
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
+            .withName("climber/setVoltage")
 
-    private fun setLatchPose(latchPose: Distance): Command = runOnce {
-        io.setLatchPosition(latchPose)
-    }
+    private fun setLatchPosition(latchPosition: Distance): Command =
+        runOnce { io.setLatchPosition(latchPosition) }
+            .withName("climber/setLatchPosition: $latchPosition")
 
-    private fun setStopperPower(power: Double): Command = runOnce {
-        io.setStopperPower(power)
-    }
+    private fun setStopperPower(power: Double): Command =
+        runOnce { io.setStopperPower(power) }
+            .withName("climber/setStopperPower")
 
-    fun closeLatch(): Command = setLatchPose(CLOSE_LATCH_POSITION)
+    fun closeLatch(): Command =
+        setLatchPosition(CLOSE_LATCH_POSITION).withName("climber/closeLatch")
 
-    fun openLatch(): Command = setLatchPose(OPEN_LATCH_POSITION)
+    fun openLatch(): Command =
+        setLatchPosition(OPEN_LATCH_POSITION).withName("climber/openLatch")
 
     fun lock(): Command =
         Commands.sequence(
-            setStopperPower(LOCK_POWER),
-            Commands.waitUntil(isStopperStuck),
-            setStopperPower(0.0)
-        )
+                setStopperPower(LOCK_POWER),
+                Commands.waitUntil(isStopperStuck),
+                setStopperPower(0.0)
+            )
+            .withName("climber/lock")
 
     fun unlock(): Command =
         Commands.sequence(
-            setStopperPower(UNLOCK_POWER),
-            Commands.waitUntil(isStopperStuck),
-            setStopperPower(0.0)
-        )
+                setStopperPower(UNLOCK_POWER),
+                Commands.waitUntil(isStopperStuck),
+                setStopperPower(0.0)
+            )
+            .withName("climber/unlock")
 
-    fun unfold() = setAngle(UNFOLDED_ANGLE)
+    fun unfold() = setAngle(UNFOLDED_ANGLE).withName("climber/unfold")
 
-    fun fold() = setAngle(FOLDED_ANGLE)
+    fun fold() = setAngle(FOLDED_ANGLE).withName("climber/fold")
 
     fun climb(): Command =
         Commands.sequence(
-            closeLatch(),
-            Commands.waitUntil(isLatchClosed),
-            fold(),
-            Commands.waitUntil(isFolded),
-            lock()
-        )
+                closeLatch(),
+                Commands.waitUntil(isLatchClosed),
+                fold(),
+                Commands.waitUntil(isFolded),
+                lock()
+            )
+            .withName("climber/climb")
 
     fun declimb(): Command =
         Commands.sequence(
-            unlock(),
-            unfold(),
-            Commands.waitUntil(isUnfolded),
-            openLatch()
-        )
+                unlock(),
+                unfold(),
+                Commands.waitUntil(isUnfolded),
+                openLatch()
+            )
+            .withName("climber/declimb")
 
     override fun periodic() {
         io.updateInput()
