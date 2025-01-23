@@ -74,7 +74,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             .withName("climber/setVoltage")
 
     fun setTuningAngle(): Command =
-        setAngle(Units.Degrees.of(tuningAngleDegrees.get()))
+        run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
             .withName("Climb/Tuning")
 
     private fun setLatchPosition(latchPosition: Distance): Command =

@@ -53,10 +53,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
     fun tuningAngle(): Command =
-        runOnce {
-                Angles.TUNING.angle = Units.Degrees.of(tuningAngleDegrees.get())
-            }
-            .andThen(setAngle(Angles.TUNING))
+        run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
             .withName("Wrist/Tuning")
 
     override fun periodic() {
