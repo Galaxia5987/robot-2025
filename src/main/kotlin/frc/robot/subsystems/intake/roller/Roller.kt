@@ -31,6 +31,6 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs("intake/${this::class.simpleName}", io.inputs)
+        Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
     }
 }
