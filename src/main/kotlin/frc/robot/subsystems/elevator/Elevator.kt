@@ -5,7 +5,7 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import java.util.function.DoubleSupplier
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -21,6 +21,12 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
     @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+
+    @AutoLogOutput
+    private val isStuck = Trigger {
+        (io.inputs.mainMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
+                || (io.inputs.auxMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
+    }
 
     val height: () -> Distance = { io.inputs.height }
 
