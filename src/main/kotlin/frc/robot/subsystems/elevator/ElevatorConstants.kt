@@ -29,7 +29,7 @@ val CENTIMETERS_TO_ROTATIONS: Measure<out PerUnit<AngleUnit, DistanceUnit>> =
 val GAINS =
     selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0, kG = 1.0), Gains())
 
-enum class Positions(val value: Distance) {
+enum class Positions(var value: Distance) {
     L1(Units.Centimeters.of(25.0)),
     L2(Units.Centimeters.of(35.0)),
     L3(Units.Centimeters.of(45.0)),
@@ -37,7 +37,8 @@ enum class Positions(val value: Distance) {
     L2_ALGAE(Units.Centimeters.of(55.0)),
     L3_ALGAE(Units.Centimeters.of(79.0)),
     FEEDER(Units.Centimeters.of(25.0)),
-    ZERO(Units.Centimeters.zero());
+    ZERO(Units.Centimeters.zero()),
+    TUNING(Units.Centimeters.of(37.6));
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {
