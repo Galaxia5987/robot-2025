@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import java.util.function.DoubleSupplier
@@ -47,8 +48,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
             .withName("Elevator/Tuning")
 
-    fun setPower(percentOutput: DoubleSupplier): Command = run {
-        io.setPower(percentOutput.asDouble)
+    fun setVoltage(voltage: Voltage): Command = run {
+        io.setVoltage(voltage)
     }
 
     fun reset(): Command = runOnce(io::reset)
