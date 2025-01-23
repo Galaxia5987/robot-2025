@@ -1,4 +1,6 @@
-![](files/markdown/logo.png)
+<div align="center">
+    <img src="files/markdown/logo.png" alt="Logo" />
+</div>
 # Robot Code 2025
 This is the code for [REDACTED], our robot for the 2025 FIRST Robotics Competition season, REEFSCAPE.
 
