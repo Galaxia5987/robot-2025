@@ -11,6 +11,7 @@ import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
 
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
+val MIN_HEIGHT: Distance = Units.Meters.of(0.0)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
 const val FIRST_STAGE_RATIO = 2.0
 const val ENCODER_OFFSET = 0.0
