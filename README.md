@@ -9,5 +9,5 @@ This is the code for [REDACTED], our robot for the 2025 FIRST Robotics Competiti
 ## Our subsystems
  - Swerve Drive, WCP swerve X
  - Linear Algae floor intake, 1 roller
- - Coral Gripper, wrist on an elevator
+ - Coral gripper, wrist on an elevator that reaches L4
  - Low Climber, latch on a wrist
