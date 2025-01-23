@@ -49,8 +49,6 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this.name, io.inputs)
-        Logger.recordOutput("Elevator/Mechanism2d", mechanism)
-        Logger.recordOutput("Elevator/Setpoint", setpointValue)
 
         elevatorLigament.length = io.inputs.height.`in`(Units.Meters)
     }

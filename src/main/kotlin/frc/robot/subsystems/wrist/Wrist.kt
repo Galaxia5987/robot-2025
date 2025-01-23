@@ -52,7 +52,5 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
-        Logger.recordOutput("Wrist/Mechanism2d", mechanism)
-        Logger.recordOutput("Wrist/Setpoint", setpointValue)
     }
 }
