@@ -6,18 +6,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.extender
 import frc.robot.roller
 
-fun intake(): Command = extender.extend().alongWith(roller.intake())
+fun algaeIntake(): Command = extender.extend().alongWith(roller.intake())
 
-fun outtake(endTrigger: Trigger): Command =
+fun algaeOuttake(endTrigger: Trigger): Command =
     Commands.parallel(
         roller.outtake(),
-        Commands.waitUntil(endTrigger).andThen(retract())
+        Commands.waitUntil(endTrigger).andThen(retractIntake())
     )
 
-fun farOuttake(endTrigger: Trigger): Command =
+fun algaeFarOuttake(endTrigger: Trigger): Command =
     Commands.parallel(
         roller.farOuttake(),
-        Commands.waitUntil(endTrigger).andThen(retract())
+        Commands.waitUntil(endTrigger).andThen(retractIntake())
     )
 
-fun retract(): Command = extender.retract()
+fun retractIntake(): Command = extender.retract()
