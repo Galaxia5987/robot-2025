@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.subsystems.ReefCommands
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
 
@@ -31,8 +30,6 @@ object RobotContainer {
     private val extender = frc.robot.extender
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
-    private val reefCommands: ReefCommands =
-        ReefCommands(elevator, gripper, wrist)
     val visualizer: Visualizer
 
     init {
