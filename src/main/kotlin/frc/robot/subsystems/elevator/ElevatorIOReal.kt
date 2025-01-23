@@ -89,7 +89,7 @@ class ElevatorIOReal : ElevatorIO {
         mainMotor.set(percentOutput)
     }
 
-    override fun resetAbsoluteEncoder() {
+    override fun reset() {
         mainMotor.setPosition(0.0)
     }
 
