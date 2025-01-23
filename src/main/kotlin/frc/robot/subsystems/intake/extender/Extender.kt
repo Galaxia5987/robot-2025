@@ -101,7 +101,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs(this::class.simpleName, io.inputs)
+        Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
 
         error = io.inputs.position - setpoint
 
