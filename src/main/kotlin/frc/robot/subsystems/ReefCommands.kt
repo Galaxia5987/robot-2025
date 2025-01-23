@@ -44,12 +44,12 @@ class ReefCommands(
     fun moveL2algae(): Command =
         parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
 
-    private fun intakeCoral(endTrigger: Trigger): Command =
-        waitUntil(endTrigger).andThen(gripper.intake().until(gripper.hasCoral))
-
     fun moveFeeder(endTrigger: Trigger): Command =
-        parallel(elevator.feeder(), wrist.feeder())
-            .andThen(intakeCoral(endTrigger))
+        sequence(
+            parallel(elevator.feeder(), wrist.feeder()),
+            waitUntil(endTrigger),
+            gripper.intake().until(gripper.hasCoral)
+        )
 
     fun retract(): Command = parallel(elevator.zero(), wrist.retract())
 }
