@@ -17,6 +17,9 @@ class LEDs(private val io: LEDsIO) : SubsystemBase() {
         io.setPattern(pattern, section)
     }
 
+    fun pattern(): Command = run { setPattern(RED, BLUE, arrayOf(5, 15)) }
+    fun clearLED(): Command = run { TRANSPARENT.applyTo(ledBuffer) }
+
     override fun periodic() {
         ledStrip.setData(ledBuffer)
     }
