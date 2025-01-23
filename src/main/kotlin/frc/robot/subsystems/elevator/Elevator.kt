@@ -45,13 +45,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l3(): Command = setPosition(Positions.L3).withName("Elevator/L3")
     fun l4(): Command = setPosition(Positions.L4).withName("Elevator/L4")
     fun l2Algae(): Command =
-        setPosition(Positions.L2_ALGAE).withName("Elevator/moveL2Algae")
+        setPosition(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
     fun l3Algae(): Command =
-        setPosition(Positions.L3_ALGAE).withName("Elevator/moveL3Algae")
+        setPosition(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
     fun feeder(): Command =
-        setPosition(Positions.FEEDER).withName("Elevator/moveFeeder")
+        setPosition(Positions.FEEDER).withName("Elevator/Feeder")
     fun zero(): Command =
-        setPosition(Positions.ZERO).withName("Elevator/moveZero")
+        setPosition(Positions.ZERO).withName("Elevator/Move To Zero")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
