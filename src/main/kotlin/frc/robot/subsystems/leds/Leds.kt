@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class Leds(private val io: LedIO) : SubsystemBase() {
 
-    private fun rainbow(): Command = run { io.setRainbow(SCROLLING_SPEED) }
-    private fun solid(color: LEDPattern): Command = run {
+    private fun rainbow(): Command = runOnce { io.setRainbow(SCROLLING_SPEED) }
+    private fun solid(color: LEDPattern): Command = runOnce {
         io.setLedColor(color)
     }
-    private fun blink(color: LEDPattern): Command = run {
+
+    private fun blink(color: LEDPattern): Command = runOnce {
         io.setStripBlink(color, BLINKING_TIME)
     }
     private fun setLedPattern(pattern: LEDPattern, section: Array<Int>) {
