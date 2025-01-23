@@ -54,7 +54,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             { io.setVoltage(Units.Volts.zero()) }
         ).withName("Elevator/setVoltage")
 
-    fun reset(): Command = runOnce(io::reset)
+    fun reset(): Command =
+        setVoltage(RESET_VOLTAGE)
+            .until(isStuck)
+            .andThen(runOnce(io::reset))
+            .withName("Elevator/reset")
 
     override fun periodic() {
         io.updateInputs()
