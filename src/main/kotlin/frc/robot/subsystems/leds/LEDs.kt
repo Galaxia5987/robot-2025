@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-class Leds(private val io: LedIO) : SubsystemBase() {
+class LEDs(private val io: LedIO) : SubsystemBase() {
 
     private fun rainbow(): Command = runOnce { io.setRainbow(SCROLLING_SPEED) }
     private fun solid(color: LEDPattern): Command = runOnce {

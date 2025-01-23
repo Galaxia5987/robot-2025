@@ -4,7 +4,7 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.LEDPattern
 
-interface LedIO {
+interface LEDsIO {
     fun setLedColor(color: LEDPattern) {}
     fun clearLedsStrip() {}
     fun setStripBlink(primary: LEDPattern, blinkTime: Time) {}
