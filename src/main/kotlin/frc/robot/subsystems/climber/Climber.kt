@@ -84,11 +84,15 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             .withName("Climb/Tuning/Angle")
 
     fun setTuningLatchPosition(): Command =
-        run { io.setLatchPosition(Units.Meters.of(tuningLatchPositionMeters.get())) }
+        run {
+                io.setLatchPosition(
+                    Units.Meters.of(tuningLatchPositionMeters.get())
+                )
+            }
             .withName("Climb/Tuning/LatchPosition")
 
     fun setTuningStopperPower(): Command =
-        run { io.setStopperPower(tuningStopperPower.get())}
+        run { io.setStopperPower(tuningStopperPower.get()) }
             .withName("Climb/Tuning/StopperPower")
 
     private fun setLatchPosition(latchPosition: Distance): Command =
