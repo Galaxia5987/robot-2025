@@ -16,8 +16,8 @@ class LEDs : SubsystemBase() {
         ledStrip.start()
     }
 
-    private fun setLEDPattern(pattern: LEDPattern) {
-        pattern.applyTo(ledBuffer)
+    private fun setColor(color: LEDPattern) {
+        color.applyTo(ledBuffer)
     }
 
     private fun blink(primary: LEDPattern) {
