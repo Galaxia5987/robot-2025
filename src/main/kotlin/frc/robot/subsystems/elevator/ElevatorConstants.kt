@@ -5,17 +5,13 @@ import edu.wpi.first.units.DistanceUnit
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.PerUnit
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
 
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
 val MIN_HEIGHT: Distance = Units.Meters.of(0.0)
-val RESET_VOLTAGE: Voltage = Units.Volts.of(0.0)
-val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
 const val FIRST_STAGE_RATIO = 2.0
 const val ENCODER_OFFSET = 0.0
@@ -35,10 +31,10 @@ val GAINS =
     selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0, kG = 1.0), Gains())
 
 enum class Positions(val value: Distance) {
-    L1(Units.Centimeters.of(25.0)),
-    L2(Units.Centimeters.of(35.0)),
-    L3(Units.Centimeters.of(45.0)),
-    L4(Units.Centimeters.of(110.0)),
+    L1(Units.Centimeters.of(15.0)),
+    L2(Units.Centimeters.of(32.0)),
+    L3(Units.Centimeters.of(52.0)),
+    L4(Units.Centimeters.of(130.0)),
     L2_ALGAE(Units.Centimeters.of(55.0)),
     L3_ALGAE(Units.Centimeters.of(79.0)),
     FEEDER(Units.Centimeters.of(25.0)),
