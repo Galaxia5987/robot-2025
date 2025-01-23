@@ -9,4 +9,5 @@ interface LedIO {
     fun clearLedsStrip() {}
     fun setStripBlink(primary: LEDPattern, blinkTime: Time) {}
     fun setRainbow(scrollingSpeed: LinearVelocity) {}
+    fun setLedPattern(pattern: LEDPattern, section: Array<Int>) {}
 }

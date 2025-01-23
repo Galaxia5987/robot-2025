@@ -4,6 +4,7 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
+import edu.wpi.first.wpilibj.AddressableLEDBufferView
 import edu.wpi.first.wpilibj.LEDPattern
 
 class LedIOReal : LedIO {
@@ -32,6 +33,12 @@ class LedIOReal : LedIO {
 
     override fun setStripBlink(primary: LEDPattern, blinkTime: Time) {
         (primary.blink(blinkTime)).applyTo(ledBuffer)
+        ledStrip.setData(ledBuffer)
+    }
+
+    override fun setLedPattern(pattern: LEDPattern, section: Array<Int>) {
+        val sectionOfBuffer: AddressableLEDBufferView = ledBuffer.createView(section[0], section[1])
+        pattern.applyTo(sectionOfBuffer)
         ledStrip.setData(ledBuffer)
     }
 }
