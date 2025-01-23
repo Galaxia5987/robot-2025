@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -90,6 +91,8 @@ object Robot : LoggedRobot() {
         TunerConstants.init()
         RobotContainer // Initialize robot container.
         compressor.enableDigital()
+
+        enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
     }

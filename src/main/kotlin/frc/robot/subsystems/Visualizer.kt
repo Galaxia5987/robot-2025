@@ -19,6 +19,8 @@ private val INITIAL_WRIST_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
 
+private val INITIAL_ELEVATOR_TRANSLATION = getTranslation3d(x = 0.12)
+
 class Visualizer(
     private val extenderPosition: () -> Distance,
     private val intakeRollerAngle: () -> Angle,
@@ -32,8 +34,16 @@ class Visualizer(
         val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
-        val firstStagePose = getPose3d(z = firstStageHeight)
-        val secondStagePose = getPose3d(z = secondStageHeight)
+        val firstStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = firstStageHeight)
+            )
+        val secondStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = secondStageHeight)
+            )
         return Pair(firstStagePose, secondStagePose)
     }
 
