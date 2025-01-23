@@ -8,8 +8,8 @@ import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj.util.Color
 
-var TRANSPARENT: LEDPattern = LEDPattern.kOff
-var GRADIENT: LEDPattern =
+val TRANSPARENT: LEDPattern = LEDPattern.kOff
+val GRADIENT: LEDPattern =
     LEDPattern.gradient(
         LEDPattern.GradientType.kDiscontinuous,
         Color.kPurple,
