@@ -1,8 +1,5 @@
 package frc.robot.subsystems.wrist
 
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
-import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
@@ -28,6 +25,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
+    val angle: () -> Angle = { io.inputs.angle }
+
     private fun setVoltage(voltage: Voltage): Command = runOnce {
         io.setVoltage(voltage)
     }
@@ -52,17 +51,6 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
-        Logger.recordOutput(
-            "Pose",
-            Pose3d(
-                Translation3d(),
-                Rotation3d(
-                    Units.Degrees.zero(),
-                    -io.inputs.angle,
-                    Units.Degrees.zero()
-                )
-            )
-        )
         ligament2d.setAngle(io.inputs.angle.`in`(Units.Degrees))
         Logger.recordOutput("Wrist/Mechanism2d", mechanism)
         Logger.recordOutput("Wrist/Setpoint", setpointValue)

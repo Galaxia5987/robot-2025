@@ -104,6 +104,10 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        Logger.recordOutput(
+            "SubsystemPoses",
+            *RobotContainer.visualizer.getSubsystemsPoses()
+        )
     }
 
     /**
