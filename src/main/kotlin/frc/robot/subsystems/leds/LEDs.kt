@@ -17,7 +17,7 @@ class LEDs(private val io: LEDsIO) : SubsystemBase() {
         io.setPattern(pattern, section)
     }
 
-    fun intakeLED(): Command = blink(INTAKE_COLOR)
-    fun climbLED(): Command = runOnce { io.setRainbow(SCROLLING_SPEED) }
-    fun clearLED(): Command = runOnce{io.clearStrip()}
+    override fun periodic() {
+        ledStrip.setData(ledBuffer)
+    }
 }
