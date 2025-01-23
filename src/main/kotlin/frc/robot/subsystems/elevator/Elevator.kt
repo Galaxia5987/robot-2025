@@ -46,6 +46,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun tuningPosition(): Command =
         runOnce { Positions.TUNING.value = Units.Meters.of(tuningHeight.get()) }
             .andThen(setPosition(Positions.TUNING))
+            .withName("Elevator/Tuning")
 
     fun setPower(percentOutput: DoubleSupplier): Command = run {
         io.setPower(percentOutput.asDouble)
