@@ -30,7 +30,7 @@ class LedIOReal : LedIO {
         ledStrip.setData(ledBuffer)
     }
 
-    override fun setLedColorBlink(primary: LEDPattern, blinkTime: Time) {
+    override fun setStripBlink(primary: LEDPattern, blinkTime: Time) {
         (primary.blink(blinkTime)).applyTo(ledBuffer)
         ledStrip.setData(ledBuffer)
     }

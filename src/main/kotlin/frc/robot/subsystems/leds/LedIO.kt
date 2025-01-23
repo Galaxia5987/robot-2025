@@ -7,6 +7,6 @@ import edu.wpi.first.wpilibj.LEDPattern
 interface LedIO {
     fun setLedColor(color: LEDPattern) {}
     fun clearLedsStrip() {}
-    fun setLedColorBlink(primary: LEDPattern, blinkTime: Time) {}
+    fun setStripBlink(primary: LEDPattern, blinkTime: Time) {}
     fun setRainbow(scrollingSpeed: LinearVelocity) {}
 }

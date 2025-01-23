@@ -8,10 +8,10 @@ class Leds(private val io: LedIO) : SubsystemBase() {
 
     private fun rainbow(): Command = run { io.setRainbow(SCROLLING_SPEED) }
     private fun solid(color: LEDPattern): Command = run {
-        io.setLedStrip(color)
+        io.setLedColor(color)
     }
     private fun blink(color: LEDPattern): Command = run {
-        io.setLedStripBlink(color, BLINKING_TIME)
+        io.setStripBlink(color, BLINKING_TIME)
     }
 
     fun intakeLed(): Command = blink(INTAKE_COLOR)
