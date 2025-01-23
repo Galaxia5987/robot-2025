@@ -24,6 +24,13 @@ class LEDs : SubsystemBase() {
         (primary.blink(BLINKING_TIME)).applyTo(ledBuffer)
     }
 
+    private fun setSplitColor(left: LEDPattern, right: LEDPattern) {
+        val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
+        val rightBuffer =
+            ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
+        left.applyTo(leftBuffer)
+        right.applyTo(rightBuffer)
+    }
     private fun setPattern(
         primaryPattern: LEDPattern,
         secondaryPattern: LEDPattern,
