@@ -17,10 +17,9 @@ val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
 
 val GAINS = selectGainsBasedOnMode(Gains(), Gains())
 
-enum class Positions(var position: Distance) {
+enum class Positions(val position: Distance) {
     EXTENDED(Units.Meters.of(0.3)),
-    RETRACTED(Units.Meters.of(0.0)),
-    TUNING(Units.Meters.zero());
+    RETRACTED(Units.Meters.of(0.0));
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {

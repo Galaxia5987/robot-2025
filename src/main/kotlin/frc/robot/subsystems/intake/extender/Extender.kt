@@ -44,12 +44,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             )
             .withName("Extender/setVoltage")
 
-    fun tuningPosition(): Command =
-        runOnce {
-                Positions.TUNING.position =
-                    Units.Meters.of(tuningPositionMeters.get())
-            }
-            .andThen(setPosition(Positions.TUNING))
+    fun tuningPosition(): Command = run {
+        io.setPosition(Units.Meters.of(tuningPositionMeters.get()))
+    }
 
     fun extend() = setPosition(Positions.EXTENDED).withName("Extender/extend")
 
