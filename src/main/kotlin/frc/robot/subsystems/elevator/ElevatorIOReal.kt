@@ -51,12 +51,14 @@ class ElevatorIOReal : ElevatorIO {
                     }
                 Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
                 Slot0 = slot0Configs
-                HardwareLimitSwitch = HardwareLimitSwitchConfigs().apply {
-                    ReverseLimitType = ReverseLimitTypeValue.NormallyOpen
-                    ReverseLimitEnable = true
-                    ReverseLimitSource = ReverseLimitSourceValue.RemoteTalonFX
-                    ReverseLimitRemoteSensorID = EXTENDER_MOTOR_ID
-                }
+                HardwareLimitSwitch =
+                    HardwareLimitSwitchConfigs().apply {
+                        ReverseLimitType = ReverseLimitTypeValue.NormallyOpen
+                        ReverseLimitEnable = true
+                        ReverseLimitSource =
+                            ReverseLimitSourceValue.RemoteTalonFX
+                        ReverseLimitRemoteSensorID = EXTENDER_MOTOR_ID
+                    }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
