@@ -22,22 +22,22 @@ class LEDsIOReal : LEDsIO {
         ledStrip.setData(ledBuffer)
     }
 
-    override fun setLedColor(color: LEDPattern) {
+    override fun setColor(color: LEDPattern) {
         color.applyTo(ledBuffer)
         ledStrip.setData(ledBuffer)
     }
 
-    override fun clearLedsStrip() {
+    override fun clearStrip() {
         TRANSPARENT.applyTo(ledBuffer)
         ledStrip.setData(ledBuffer)
     }
 
-    override fun setStripBlink(primary: LEDPattern, blinkTime: Time) {
+    override fun blink(primary: LEDPattern, blinkTime: Time) {
         (primary.blink(blinkTime)).applyTo(ledBuffer)
         ledStrip.setData(ledBuffer)
     }
 
-    override fun setLedPattern(pattern: LEDPattern, section: Array<Int>) {
+    override fun setPattern(pattern: LEDPattern, section: Array<Int>) {
         val sectionOfBuffer: AddressableLEDBufferView =
             ledBuffer.createView(section[0], section[1])
         pattern.applyTo(sectionOfBuffer)
