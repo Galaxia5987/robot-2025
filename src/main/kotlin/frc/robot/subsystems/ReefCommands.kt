@@ -17,9 +17,14 @@ class ReefCommands(
 ) {
 
     private fun scoreCoral(endTrigger: Trigger): Command =
-        sequence(waitUntil(endTrigger), gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT), moveDefaultPosition())
+        sequence(
+            waitUntil(endTrigger),
+            gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT),
+            moveDefaultPosition()
+        )
 
-    private fun moveDefaultPosition(): Command = parallel(elevator.feeder(), wrist.feeder())
+    private fun moveDefaultPosition(): Command =
+        parallel(elevator.feeder(), wrist.feeder())
 
     fun moveL1(endTrigger: Trigger): Command =
         parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(endTrigger))

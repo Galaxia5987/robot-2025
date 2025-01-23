@@ -34,8 +34,16 @@ class Visualizer(
         val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
-        val firstStagePose = getPose3d(INITIAL_ELEVATOR_TRANSLATION + getTranslation3d(z = firstStageHeight))
-        val secondStagePose = getPose3d(INITIAL_ELEVATOR_TRANSLATION + getTranslation3d(z = secondStageHeight))
+        val firstStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = firstStageHeight)
+            )
+        val secondStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = secondStageHeight)
+            )
         return Pair(firstStagePose, secondStagePose)
     }
 
