@@ -1,92 +1,88 @@
-package frc.robot.lib.motors;
+package frc.robot.lib.motors
 
-import com.revrobotics.spark.SparkBase;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.DCMotor;
+import com.revrobotics.spark.SparkBase.ControlType
+import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N2
+import edu.wpi.first.math.system.LinearSystem
+import edu.wpi.first.math.system.plant.DCMotor
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.MomentOfInertia
 
-public class SparkMaxSim extends SimMotor {
+class SparkMaxSim : SimMotor {
+    constructor(
+        numMotors: Int,
+        gearing: Double,
+        momentOfInertia: MomentOfInertia,
+        conversionFactor: Double
+    ) : super(DCMotor.getNEO(numMotors), momentOfInertia.`in`(Units.KilogramSquareMeters), gearing, conversionFactor)
 
-    public SparkMaxSim(
-            int numMotors, double gearing, double jKgMetersSquared, double conversionFactor) {
-        super(DCMotor.getNEO(numMotors), jKgMetersSquared, gearing, conversionFactor);
+    constructor(motor: DCMotor, gearing: Double, momentOfInertia: MomentOfInertia, conversionFactor: Double) : super(
+        motor,
+        momentOfInertia.`in`(Units.KilogramSquareMeters),
+        gearing,
+        conversionFactor
+    )
+
+    constructor(
+        model: LinearSystem<N2, N1, N2>,
+        numMotors: Int,
+        gearing: Double,
+        conversionFactor: Double
+    ) : super(model, DCMotor.getNEO(numMotors), gearing, conversionFactor)
+
+    fun set(speed: Double) {
+        setInputVoltage(speed * 12.0)
     }
 
-    public SparkMaxSim(
-            DCMotor motor, double gearing, double jKgMetersSquared, double conversionFactor) {
-        super(motor, jKgMetersSquared, gearing, conversionFactor);
+    fun setInputVoltage(voltage: Double) {
+        voltageRequest = MotorSetpoint.simpleVoltage(voltage)
     }
 
-    public SparkMaxSim(
-            LinearSystem<N2, N1, N2> model,
-            int numMotors,
-            double gearing,
-            double conversionFactor) {
-        super(model, DCMotor.getNEO(numMotors), gearing, conversionFactor);
+    fun setReference(value: Double, ctrl: ControlType) {
+        setReference(value, ctrl, 0.0)
     }
 
-    public void set(double speed) {
-        setInputVoltage(speed * 12.0);
+    private fun setInputVoltage(voltage: MotorSetpoint) {
+        voltageRequest = voltage
     }
 
-    public void setInputVoltage(double voltage) {
-        voltageRequest = MotorSetpoint.simpleVoltage(voltage);
-    }
+    fun setReference(value: Double, ctrl: ControlType, arbFeedforward: Double) {
+        when (ctrl) {
+            ControlType.kDutyCycle -> set(value)
+            ControlType.kPosition -> setInputVoltage { controller.calculate(position, value) + arbFeedforward }
+            ControlType.kMAXMotionPositionControl -> setInputVoltage {
+                profiledController.calculate(
+                    position,
+                    value
+                ) + arbFeedforward
+            }
 
-    public void setReference(double value, SparkBase.ControlType ctrl) {
-        setReference(value, ctrl, 0);
-    }
+            ControlType.kVelocity -> setInputVoltage { controller.calculate(velocity, value) + arbFeedforward }
+            ControlType.kMAXMotionVelocityControl -> setInputVoltage {
+                profiledController.calculate(
+                    velocity,
+                    value
+                ) + arbFeedforward
+            }
 
-    private void setInputVoltage(MotorSetpoint voltage) {
-        voltageRequest = voltage;
-    }
-
-    public void setReference(double value, SparkBase.ControlType ctrl, double arbFeedforward) {
-        switch (ctrl) {
-            case kDutyCycle:
-                set(value);
-                break;
-            case kPosition:
-                setInputVoltage(() -> controller.calculate(getPosition(), value) + arbFeedforward);
-                break;
-            case kMAXMotionPositionControl:
-                setInputVoltage(
-                        () -> profiledController.calculate(getPosition(), value) + arbFeedforward);
-                break;
-            case kVelocity:
-                setInputVoltage(() -> controller.calculate(getVelocity(), value) + arbFeedforward);
-                break;
-            case kMAXMotionVelocityControl:
-                setInputVoltage(
-                        () -> profiledController.calculate(getVelocity(), value) + arbFeedforward);
-                break;
-            case kVoltage:
-                setInputVoltage(value);
-                break;
-            case kCurrent:
-                System.out.println("Can't use current control for spark max in sim!");
-                break;
+            ControlType.kVoltage -> setInputVoltage(value)
+            ControlType.kCurrent -> println("Can't use current control for spark max in sim!")
+            else -> println("Incompatible with spark max sim!")
         }
     }
 
-    public double getBusVoltage() {
-        return voltageRequest.getAsDouble();
-    }
+    val busVoltage: Double
+        get() = motorSim.inputVoltage
 
-    public double getAppliedOutput() {
-        return voltageRequest.getAsDouble() / 12.0;
-    }
+    val appliedOutput: Double
+        get() = motorSim.inputVoltage / 12.0
 
-    public double getVelocity() {
-        return motorSim.getAngularVelocityRPM() * conversionFactor;
-    }
+    val velocity: Double
+        get() = motorSim.angularVelocityRPM * conversionFactor
 
-    public double getPosition() {
-        return motorSim.getAngularPositionRotations() * conversionFactor;
-    }
+    val position: Double
+        get() = motorSim.angularPositionRotations * conversionFactor
 
-    public double getOutputCurrent() {
-        return motorSim.getCurrentDrawAmps();
-    }
+    val outputCurrent: Double
+        get() = motorSim.currentDrawAmps
 }
