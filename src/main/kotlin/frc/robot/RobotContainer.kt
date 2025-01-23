@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
@@ -33,11 +34,20 @@ object RobotContainer {
     val visualizer: Visualizer
 
     init {
+
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
         visualizer =
             Visualizer(
+                Units.Radians.of(Timer.getTimestamp()),
+                swerveDrive.kinematics.modules[0].angle.measure,
+                swerveDrive.lastModulePositions[1].angle.measure,
+                Units.Radians.of(swerveDrive.lastModulePositions[1].distanceMeters),
+                swerveDrive.lastModulePositions[2].angle.measure,
+                Units.Radians.of(swerveDrive.lastModulePositions[2].distanceMeters),
+                swerveDrive.lastModulePositions[3].angle.measure,
+                Units.Radians.of(swerveDrive.lastModulePositions[3].distanceMeters),
                 extender.position,
                 { Units.Degrees.zero() },
                 elevator.height,
@@ -93,6 +103,9 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
+
+        driverController.a().onTrue(elevator.l4())
+        driverController.b().onTrue(elevator.zero())
     }
 
     fun getAutonomousCommand(): Command =

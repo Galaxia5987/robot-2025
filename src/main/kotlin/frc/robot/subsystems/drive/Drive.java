@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
+import static frc.robot.lib.GeometryFactoriesKt.getPose3d;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -30,10 +31,7 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -41,6 +39,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -52,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
@@ -99,18 +99,19 @@ public class Drive extends SubsystemBase {
 
     static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
+    public Angle[] SwerveAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+    public final Module[] modules = new Module[4]; // FL, FR, BL, BR
+    public final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private final SysIdRoutine sysId;
     private final SysIdRoutine turnSysId;
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
-
     @AutoLogOutput private Rotation2d desiredHeading;
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+    public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
-    private SwerveModulePosition[] lastModulePositions = // For delta tracking
+    public SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[] {
                 new SwerveModulePosition(),
                 new SwerveModulePosition(),
@@ -137,6 +138,9 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
         modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
+        for (int i = 0; i < modulePositions.length; i++) {
+            modulePositions[i] = modules[i].getPosition();
+        }
         // Usage reporting for swerve template
         HAL.report(
                 tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
@@ -205,7 +209,10 @@ public class Drive extends SubsystemBase {
             module.periodic();
         }
         odometryLock.unlock();
-
+        SwerveAngle[0] = modules[0].getAngle().getMeasure();
+        SwerveAngle[1] = modules[1].getAngle().getMeasure();
+        SwerveAngle[2] = modules[2].getAngle().getMeasure();
+        SwerveAngle[3] = modules[3].getAngle().getMeasure();
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
         Logger.recordOutput("Odometry/Robot", getPose());
 
