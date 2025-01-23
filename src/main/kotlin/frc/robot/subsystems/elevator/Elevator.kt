@@ -5,12 +5,11 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import java.util.function.DoubleSupplier
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private val mechanism = LoggedMechanism2d(3.0, 3.0)
@@ -23,8 +22,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     @AutoLogOutput private var setpointName: Positions = Positions.ZERO
 
-    private val tuningHeight =
-        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
+    @AutoLogOutput
+    private val isStuck = Trigger {
+        (io.inputs.mainMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
+                || (io.inputs.auxMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
+    }
 
     val height: () -> Distance = { io.inputs.height }
 
@@ -44,9 +46,6 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l3Algae(): Command = setPosition(Positions.L3_ALGAE)
     fun feeder(): Command = setPosition(Positions.FEEDER)
     fun zero(): Command = setPosition(Positions.ZERO)
-    fun tuningPosition(): Command =
-        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
-            .withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command = run {
         io.setVoltage(voltage)
