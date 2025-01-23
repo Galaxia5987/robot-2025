@@ -12,8 +12,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
-    @AutoLogOutput
-    private val mechanism = LoggedMechanism2d(3.0, 3.0)
+    @AutoLogOutput private val mechanism = LoggedMechanism2d(3.0, 3.0)
     private val root = mechanism.getRoot("Elevator", 2.0, 0.0)
     private val elevatorLigament =
         root.append(LoggedMechanismLigament2d("ElevatorLigament", 5.0, 90.0))
@@ -25,34 +24,41 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     @AutoLogOutput
     private val isStuck = Trigger {
-        (io.inputs.mainMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
-                || (io.inputs.auxMotorCurrent.abs(Units.Amps) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
+        (io.inputs.mainMotorCurrent.abs(Units.Amps) >=
+            RESET_CURRENT_THRESHOLD.`in`(Units.Amps)) ||
+            (io.inputs.auxMotorCurrent.abs(Units.Amps) >=
+                RESET_CURRENT_THRESHOLD.`in`(Units.Amps))
     }
 
     val height: () -> Distance = { io.inputs.height }
 
     fun setPosition(position: Positions): Command =
         runOnce {
-            setpointValue = position.value
-            setpointName = position
-            io.setHeight(position.value)
-        }
+                setpointValue = position.value
+                setpointName = position
+                io.setHeight(position.value)
+            }
             .withName("Elevator/setPosition ${position.getLoggingName()}")
 
     fun l1(): Command = setPosition(Positions.L1).withName("Elevator/l1")
     fun l2(): Command = setPosition(Positions.L2).withName("Elevator/l2")
     fun l3(): Command = setPosition(Positions.L3).withName("Elevator/l3")
     fun l4(): Command = setPosition(Positions.L4).withName("Elevator/l4")
-    fun l2Algae(): Command = setPosition(Positions.L2_ALGAE).withName("Elevator/moveL2Algae")
-    fun l3Algae(): Command = setPosition(Positions.L3_ALGAE).withName("Elevator/moveL3Algae")
-    fun feeder(): Command = setPosition(Positions.FEEDER).withName("Elevator/moveFeeder")
-    fun zero(): Command = setPosition(Positions.ZERO).withName("Elevator/moveZero")
+    fun l2Algae(): Command =
+        setPosition(Positions.L2_ALGAE).withName("Elevator/moveL2Algae")
+    fun l3Algae(): Command =
+        setPosition(Positions.L3_ALGAE).withName("Elevator/moveL3Algae")
+    fun feeder(): Command =
+        setPosition(Positions.FEEDER).withName("Elevator/moveFeeder")
+    fun zero(): Command =
+        setPosition(Positions.ZERO).withName("Elevator/moveZero")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
-            { io.setVoltage(voltage) },
-            { io.setVoltage(Units.Volts.zero()) }
-        ).withName("Elevator/setVoltage")
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
+            .withName("Elevator/setVoltage")
 
     fun reset(): Command =
         setVoltage(RESET_VOLTAGE)
