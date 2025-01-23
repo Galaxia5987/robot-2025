@@ -36,10 +36,7 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private fun setPattern(
-        primaryPattern: LEDPattern,
-        section: Array<Int>
-    ) {
+    private fun setPattern(primaryPattern: LEDPattern, section: Array<Int>) {
         val sectionOfBuffer: AddressableLEDBufferView =
             ledBuffer.createView(section[0], section[1])
         primaryPattern.applyTo(sectionOfBuffer)
