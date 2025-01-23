@@ -4,6 +4,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -48,14 +49,14 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(setpoint, FOLDED_TOLERANCE)
     }
 
-    @AutoLogOutput private var setpoint = Units.Rotations.zero()
+    @AutoLogOutput private var setpoint = Units.Rotations.of(Timer.getTimestamp())
 
     @AutoLogOutput private var mechanism = LoggedMechanism2d(3.0, 2.0)
     private var root = mechanism.getRoot("Climber", 1.0, 1.0)
     private val ligament =
         root.append(LoggedMechanismLigament2d("ClimberLigament", 0.27003, 90.0))
 
-    private fun setAngle(angle: Angle): Command = runOnce {
+    public fun setAngle(angle: Angle): Command = runOnce {
         io.setAngle(angle)
         setpoint = angle
     }

@@ -99,7 +99,9 @@ public class Drive extends SubsystemBase {
 
     static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
-    public Angle[] SwerveAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
+    public Angle[] SwerveTurnAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
+    public Angle[] SwerveDriveAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
+
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     public final Module[] modules = new Module[4]; // FL, FR, BL, BR
     public final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
@@ -209,10 +211,15 @@ public class Drive extends SubsystemBase {
             module.periodic();
         }
         odometryLock.unlock();
-        SwerveAngle[0] = modules[0].getAngle().getMeasure();
-        SwerveAngle[1] = modules[1].getAngle().getMeasure();
-        SwerveAngle[2] = modules[2].getAngle().getMeasure();
-        SwerveAngle[3] = modules[3].getAngle().getMeasure();
+        SwerveTurnAngle[0] = modules[0].getAngle().getMeasure();
+        SwerveTurnAngle[1] = modules[1].getAngle().getMeasure();
+        SwerveTurnAngle[2] = modules[2].getAngle().getMeasure();
+        SwerveTurnAngle[3] = modules[3].getAngle().getMeasure();
+
+        SwerveDriveAngle[0] = Radians.of(modules[0].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[1] = Radians.of(modules[1].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[2] = Radians.of(modules[2].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[3] = Radians.of(modules[3].getWheelRadiusCharacterizationPosition());
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
         Logger.recordOutput("Odometry/Robot", getPose());
 
