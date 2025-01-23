@@ -101,5 +101,7 @@ class ElevatorIOReal : ElevatorIO {
                 ADJUSTED_GEAR_RATIO
             )
         mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
+
+        inputs.limitSwitchValue = mainMotor.reverseLimit.value.value == 1
     }
 }
