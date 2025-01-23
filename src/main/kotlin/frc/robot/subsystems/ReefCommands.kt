@@ -10,11 +10,9 @@ import frc.robot.subsystems.wrist.Wrist
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
 
-class ReefCommands(
-    private val elevator: Elevator,
-    private val gripper: Gripper,
-    private val wrist: Wrist,
-) {
+private val elevator = frc.robot.elevator
+private val gripper = frc.robot.gripper
+private val wrist = frc.robot.wrist
 
     private fun scoreCoral(endTrigger: Trigger): Command =
         sequence(
@@ -52,4 +50,3 @@ class ReefCommands(
         )
 
     fun retract(): Command = parallel(elevator.zero(), wrist.retract())
-}
