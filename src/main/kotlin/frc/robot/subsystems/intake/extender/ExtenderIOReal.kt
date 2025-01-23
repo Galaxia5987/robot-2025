@@ -28,11 +28,9 @@ class ExtenderIOReal : ExtenderIO {
             ForwardSoftLimitEnable = true
             ReverseSoftLimitEnable = true
             ForwardSoftLimitThreshold =
-                MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO)
-                    .`in`(Units.Rotations)
+                MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
             ReverseSoftLimitThreshold =
-                MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO)
-                    .`in`(Units.Rotations)
+                MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
         }
 
     init {
@@ -41,7 +39,7 @@ class ExtenderIOReal : ExtenderIO {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         Inverted = InvertedValue.Clockwise_Positive
-                        NeutralMode = NeutralModeValue.Coast
+                        NeutralMode = NeutralModeValue.Brake
                     }
 
                 CurrentLimits =

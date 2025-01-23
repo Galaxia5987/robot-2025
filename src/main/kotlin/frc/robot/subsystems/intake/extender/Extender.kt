@@ -4,15 +4,12 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands.sequence
-import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
@@ -24,66 +21,43 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
-    private val tuningPositionMeters =
-        LoggedNetworkNumber("Tuning/Extender/Position", 0.0)
-
     val position: () -> Distance = { io.inputs.position }
 
     private var finishedResettingFlag = false
 
-    private fun setPosition(position: () -> Distance): Command =
-        sequence(
-                runOnce {
-                    setpoint = position.invoke()
-                    io.setPosition(setpoint)
-                },
-                waitUntil(atSetpoint),
-                setVoltage(Units.Volts.zero())
-            )
-            .withName("Extender/setPosition")
-
     private fun setPosition(position: Positions): Command =
-        runOnce { setpointName = position.getLoggingName() }
-            .andThen(setPosition({ position.position }))
-            .withName("Extender/setPosition with enum")
+        runOnce {
+                io.setPosition(position.position)
+                setpoint = position.position
+                setpointName = position.getLoggingName()
+            }
+            .withName("extender/setPosition")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
                 { io.setVoltage(voltage) },
                 { io.setVoltage(Units.Volts.zero()) }
             )
-            .withName("Extender/setVoltage")
+            .withName("extender/setVoltage")
 
-    fun tuningPosition(): Command = run {
-        io.setPosition(Units.Meters.of(tuningPositionMeters.get()))
-    }
-
-    fun extend() = setPosition(Positions.EXTENDED).withName("Extender/extend")
+    fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
 
     fun retract() =
-        setPosition(Positions.RETRACTED).withName("Extender/retract")
+        setPosition(Positions.RETRACTED).withName("extender/retract")
 
     fun reset(): Command {
         return setVoltage(RESET_VOLTAGE)
             .alongWith(
-                runOnce {
-                    finishedResettingFlag = false
-                    io.setSoftLimits(false)
-                }
+                runOnce { finishedResettingFlag = false },
+                runOnce { io.setSoftLimits(false) }
             )
             .until(isStuck)
             .andThen(
-                runOnce {
-                    io::reset
-                    finishedResettingFlag = true
-                }
+                runOnce { io::reset },
+                runOnce { finishedResettingFlag = true }
             )
-            .withName("Extender/reset")
+            .withName("extender/reset")
     }
-
-    fun returnToSetpoint(): Command =
-        run { atSetpoint.negate().debounce(SAFETY_DEBOUNCE)
-            .onTrue(setPosition { setpoint } ) }
 
     @AutoLogOutput
     val isExtended = Trigger {
@@ -115,14 +89,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
-    @AutoLogOutput
-    val finishedResetting =
-        Trigger { finishedResettingFlag }
-            .onTrue(runOnce { io.setSoftLimits(true) })
+    @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }.onTrue(runOnce{io.setSoftLimits(true)})
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
+        Logger.processInputs(this::class.simpleName, io.inputs)
 
         error = io.inputs.position - setpoint
 
