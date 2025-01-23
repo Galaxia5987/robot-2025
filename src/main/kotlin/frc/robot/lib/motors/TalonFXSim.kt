@@ -88,7 +88,7 @@ class TalonFXSim : SimMotor {
     fun setControl(request: PositionVoltage) {
         voltageRequest = MotorSetpoint {
             controller.calculate(position, request.Position) +
-                    request.FeedForward
+                request.FeedForward
         }
     }
 
@@ -118,14 +118,14 @@ class TalonFXSim : SimMotor {
     fun setControl(request: MotionMagicVoltage) {
         voltageRequest = MotorSetpoint {
             (profiledController.calculate(position, request.Position) +
-                    request.FeedForward)
+                request.FeedForward)
         }
     }
 
     val velocity: AngularVelocity
         get() =
             Units.Rotation.per(Units.Minutes).of(motorSim.angularVelocityRPM) *
-                    conversionFactor
+                conversionFactor
 
     val position: Double
         get() = motorSim.angularPositionRotations * conversionFactor

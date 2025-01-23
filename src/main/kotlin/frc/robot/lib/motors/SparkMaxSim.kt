@@ -14,9 +14,19 @@ class SparkMaxSim : SimMotor {
         gearing: Double,
         momentOfInertia: MomentOfInertia,
         conversionFactor: Double
-    ) : super(DCMotor.getNEO(numMotors), momentOfInertia.`in`(Units.KilogramSquareMeters), gearing, conversionFactor)
+    ) : super(
+        DCMotor.getNEO(numMotors),
+        momentOfInertia.`in`(Units.KilogramSquareMeters),
+        gearing,
+        conversionFactor
+    )
 
-    constructor(motor: DCMotor, gearing: Double, momentOfInertia: MomentOfInertia, conversionFactor: Double) : super(
+    constructor(
+        motor: DCMotor,
+        gearing: Double,
+        momentOfInertia: MomentOfInertia,
+        conversionFactor: Double
+    ) : super(
         motor,
         momentOfInertia.`in`(Units.KilogramSquareMeters),
         gearing,
@@ -49,24 +59,27 @@ class SparkMaxSim : SimMotor {
     fun setReference(value: Double, ctrl: ControlType, arbFeedforward: Double) {
         when (ctrl) {
             ControlType.kDutyCycle -> set(value)
-            ControlType.kPosition -> setInputVoltage { controller.calculate(position, value) + arbFeedforward }
-            ControlType.kMAXMotionPositionControl -> setInputVoltage {
-                profiledController.calculate(
-                    position,
-                    value
-                ) + arbFeedforward
-            }
-
-            ControlType.kVelocity -> setInputVoltage { controller.calculate(velocity, value) + arbFeedforward }
-            ControlType.kMAXMotionVelocityControl -> setInputVoltage {
-                profiledController.calculate(
-                    velocity,
-                    value
-                ) + arbFeedforward
-            }
-
+            ControlType.kPosition ->
+                setInputVoltage {
+                    controller.calculate(position, value) + arbFeedforward
+                }
+            ControlType.kMAXMotionPositionControl ->
+                setInputVoltage {
+                    profiledController.calculate(position, value) +
+                        arbFeedforward
+                }
+            ControlType.kVelocity ->
+                setInputVoltage {
+                    controller.calculate(velocity, value) + arbFeedforward
+                }
+            ControlType.kMAXMotionVelocityControl ->
+                setInputVoltage {
+                    profiledController.calculate(velocity, value) +
+                        arbFeedforward
+                }
             ControlType.kVoltage -> setInputVoltage(value)
-            ControlType.kCurrent -> println("Can't use current control for spark max in sim!")
+            ControlType.kCurrent ->
+                println("Can't use current control for spark max in sim!")
             else -> println("Incompatible with spark max sim!")
         }
     }
