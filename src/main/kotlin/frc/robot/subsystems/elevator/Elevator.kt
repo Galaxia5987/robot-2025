@@ -44,7 +44,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         io.setPower(percentOutput.asDouble)
     }
 
-    fun reset(): Command = runOnce(io::resetAbsoluteEncoder)
+    fun reset(): Command = runOnce(io::reset)
 
     override fun periodic() {
         io.updateInputs()

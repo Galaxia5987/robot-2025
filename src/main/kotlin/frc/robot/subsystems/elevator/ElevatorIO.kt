@@ -12,7 +12,9 @@ interface ElevatorIO {
 
     fun setPower(percentOutput: Double) {}
 
-    fun resetAbsoluteEncoder() {}
+    fun reset() {}
+
+    fun setSoftLimits(value: Boolean) {}
 
     fun updateInputs() {}
 
