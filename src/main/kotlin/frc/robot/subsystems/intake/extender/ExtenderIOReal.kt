@@ -4,12 +4,14 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.toAngle
@@ -42,6 +44,14 @@ class ExtenderIOReal : ExtenderIO {
                     HardwareLimitSwitchConfigs().apply {
                         ForwardLimitEnable = false
                         ReverseLimitEnable = false
+                    }
+
+                SoftwareLimitSwitch =
+                    SoftwareLimitSwitchConfigs().apply {
+                        ForwardSoftLimitEnable = true
+                        ReverseSoftLimitEnable = true
+                        ForwardSoftLimitThreshold = MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
+                        ReverseSoftLimitThreshold = MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
                     }
 
                 Slot0 =
