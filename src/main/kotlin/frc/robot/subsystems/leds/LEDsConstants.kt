@@ -24,5 +24,5 @@ val RAINBOW: LEDPattern = LEDPattern.rainbow(255, 128)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 100
 val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.5)
-val BLINKING_TIME: Time = Units.Second.one()
+val BLINKING_TIME: Time = Units.Second.of(2.0)
 const val LED_STRIP_PORT = 1
