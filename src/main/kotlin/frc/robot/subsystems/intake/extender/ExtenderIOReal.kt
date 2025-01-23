@@ -23,6 +23,16 @@ class ExtenderIOReal : ExtenderIO {
     private val positionControl = MotionMagicTorqueCurrentFOC(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
+    private val softLimitsConfig =
+        SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold =
+                MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
+            ReverseSoftLimitThreshold =
+                MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
+        }
+
     init {
         val motorConfig =
             TalonFXConfiguration().apply {
@@ -46,13 +56,7 @@ class ExtenderIOReal : ExtenderIO {
                         ReverseLimitEnable = false
                     }
 
-                SoftwareLimitSwitch =
-                    SoftwareLimitSwitchConfigs().apply {
-                        ForwardSoftLimitEnable = true
-                        ReverseSoftLimitEnable = true
-                        ForwardSoftLimitThreshold = MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
-                        ReverseSoftLimitThreshold = MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO).`in`(Units.Rotations)
-                    }
+                SoftwareLimitSwitch = softLimitsConfig
 
                 Slot0 =
                     Slot0Configs().apply {
@@ -81,6 +85,14 @@ class ExtenderIOReal : ExtenderIO {
 
     override fun reset() {
         motor.setPosition(0.0)
+    }
+
+    override fun setSoftLimits(value: Boolean) {
+        motor.configurator.apply(
+            softLimitsConfig
+                .withForwardSoftLimitEnable(value)
+                .withReverseSoftLimitEnable(value)
+        )
     }
 
     override fun updateInputs() {
