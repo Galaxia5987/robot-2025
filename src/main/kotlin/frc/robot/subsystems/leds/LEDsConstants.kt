@@ -21,6 +21,10 @@ val BLUE: LEDPattern = LEDPattern.solid(Color.kBlue)
 val YELLOW: LEDPattern = LEDPattern.solid(Color.kYellow)
 val GREEN: LEDPattern = LEDPattern.solid(Color.kGreen)
 
+val STEP: LEDPattern =
+    LEDPattern.steps(mapOf(0.0 to Color.kPink, 0.5 to Color.kPurple))
+        .scrollAtAbsoluteSpeed(SCROLLING_SPEED, LED_SPACING)
+
 val GRADIENT: LEDPattern =
     LEDPattern.gradient(
         LEDPattern.GradientType.kDiscontinuous,

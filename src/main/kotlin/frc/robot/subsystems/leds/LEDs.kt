@@ -40,6 +40,16 @@ class LEDs : SubsystemBase() {
     }
 
     private fun clear() = TRANSPARENT.applyTo(ledBuffer)
+    private fun colorBlink(
+        primaryColor: LEDPattern,
+        secondaryPattern: LEDPattern
+    ) {
+        primaryColor.blink(BLINKING_TIME).applyTo(ledBuffer)
+        if (ledBuffer.getLED(0).toHexString().equals("#000000")) {
+            secondaryPattern.applyTo(ledBuffer)
+        }
+        println(ledBuffer.getLED(0).toHexString())
+    }
 
     fun intakeLED(): Command = run { setLEDPattern(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
