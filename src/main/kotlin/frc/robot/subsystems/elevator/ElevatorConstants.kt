@@ -5,13 +5,17 @@ import edu.wpi.first.units.DistanceUnit
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.PerUnit
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
 
 val MAX_HEIGHT: Distance = Units.Meters.of(1.3)
 val MIN_HEIGHT: Distance = Units.Meters.of(0.0)
+val RESET_VOLTAGE: Voltage = Units.Volts.of(0.0)
+val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 const val GEAR_RATIO = (1.0 / 12.0) * (42.0 / 48.0)
 const val FIRST_STAGE_RATIO = 2.0
 const val ENCODER_OFFSET = 0.0

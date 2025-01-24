@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
+    private val tuningVoltage =
+        LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
     private val debouncer =
         Debouncer(
             DEBOUNCE_TIME.`in`(Units.Seconds),
@@ -24,6 +27,10 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
 
+    fun tuningVoltage(): Command =
+        setVoltage(Units.Volts.of(tuningVoltage.get()))
+            .withName("Gripper/Tuning")
+
     fun intake(): Command =
         setVoltage(INTAKE_VOLTAGE).withName("Gripper/Intake")
 
@@ -36,6 +43,5 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
-        Logger.recordOutput("Gripper/HasCoral", hasCoral)
     }
 }

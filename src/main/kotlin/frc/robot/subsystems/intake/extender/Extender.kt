@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
@@ -21,6 +22,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
+    private val tuningPositionMeters =
+        LoggedNetworkNumber("Tuning/Extender/Position", 0.0)
+
     val position: () -> Distance = { io.inputs.position }
 
     private var finishedResettingFlag = false
@@ -31,19 +35,23 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
                 setpoint = position.position
                 setpointName = position.getLoggingName()
             }
-            .withName("extender/setPosition")
+            .withName("Extender/setPosition")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
                 { io.setVoltage(voltage) },
                 { io.setVoltage(Units.Volts.zero()) }
             )
-            .withName("extender/setVoltage")
+            .withName("Extender/setVoltage")
 
-    fun extend() = setPosition(Positions.EXTENDED).withName("extender/extend")
+    fun tuningPosition(): Command = run {
+        io.setPosition(Units.Meters.of(tuningPositionMeters.get()))
+    }
+
+    fun extend() = setPosition(Positions.EXTENDED).withName("Extender/extend")
 
     fun retract() =
-        setPosition(Positions.RETRACTED).withName("extender/retract")
+        setPosition(Positions.RETRACTED).withName("Extender/retract")
 
     fun reset(): Command {
         return setVoltage(RESET_VOLTAGE)
@@ -53,10 +61,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             )
             .until(isStuck)
             .andThen(
-                runOnce { io::reset },
+                runOnce(io::reset),
                 runOnce { finishedResettingFlag = true }
             )
-            .withName("extender/reset")
+            .withName("Extender/reset")
     }
 
     @AutoLogOutput
@@ -93,7 +101,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     override fun periodic() {
         io.updateInputs()
-        Logger.processInputs(this::class.simpleName, io.inputs)
+        Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
 
         error = io.inputs.position - setpoint
 
