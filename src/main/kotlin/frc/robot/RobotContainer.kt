@@ -107,7 +107,7 @@ object RobotContainer {
         driverController.a().onTrue(elevator.l4())
         driverController.b().onTrue(elevator.zero())
         driverController.leftTrigger().onTrue(climber.fold())
-        driverController.rightTrigger().onTrue(climber.setAngle(Units.Degrees.of(Timer.getTimestamp())))
+        driverController.rightTrigger().onTrue(climber.unfold())
     }
 
     fun getAutonomousCommand(): Command =

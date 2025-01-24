@@ -16,8 +16,8 @@ const val STOPPER_GEAR_RATIO = (8.0 / 72.0) * (1.0 / 15.0)
 val OPEN_LATCH_POSITION: Distance = Units.Millimeters.of(0.8)
 val CLOSE_LATCH_POSITION: Distance = Units.Millimeters.of(0.2)
 val LATCH_TOLERANCE: Distance = Units.Millimeters.of(1.0)
-val LOCK_POWER = 0.0
-val UNLOCK_POWER = 0.0
+val LOCK_POWER = 1.0
+val UNLOCK_POWER = 1.0
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(0.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(90.0)
 val FOLDED_TOLERANCE: Angle = Units.Degree.of(1.0)
@@ -29,7 +29,7 @@ val STOPPER_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 
 var GAINS =
     selectGainsBasedOnMode(
-        Gains(kP = 0.0, kI = 0.0, kD = 0.0),
+        Gains(kP = 1.0, kI = 0.0, kD = 0.0),
         Gains(kP = 0.015, kI = 0.0, kD = 0.045)
     )
 var MOTOR_CONFIG =
