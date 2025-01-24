@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
@@ -14,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
 import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
+import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
 
 class ElevatorIOReal : ElevatorIO {
@@ -36,6 +39,17 @@ class ElevatorIOReal : ElevatorIO {
             kI = GAINS.kI
             kD = GAINS.kD
             kG = 0.0
+        }
+    private val softLimitsConfig =
+        SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold =
+                MAX_HEIGHT.toAngle(SPROCKET_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
+            ReverseSoftLimitThreshold =
+                MIN_HEIGHT.toAngle(PINION_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
         }
 
     @AutoLogOutput
@@ -62,6 +76,7 @@ class ElevatorIOReal : ElevatorIO {
                             ReverseLimitSourceValue.RemoteTalonFX
                         ReverseLimitRemoteSensorID = EXTENDER_MOTOR_ID
                     }
+                SoftwareLimitSwitch = softLimitsConfig
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
@@ -94,6 +109,15 @@ class ElevatorIOReal : ElevatorIO {
 
     override fun reset() {
         mainMotor.setPosition(0.0)
+    }
+
+    override fun setSoftLimits(value: Boolean) {
+        softLimitsConfig
+            .withForwardSoftLimitEnable(value)
+            .withReverseSoftLimitEnable(value)
+
+        mainMotor.configurator.apply(softLimitsConfig)
+        auxMotor.configurator.apply(softLimitsConfig)
     }
 
     override fun updateInputs() {

@@ -1,6 +1,11 @@
 package frc.robot.subsystems.wrist
 
-import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs
+import com.ctre.phoenix6.configs.FeedbackConfigs
+import com.ctre.phoenix6.configs.MotorOutputConfigs
+import com.ctre.phoenix6.configs.Slot0Configs
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
+import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.MotionMagicVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
@@ -9,6 +14,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 
@@ -42,6 +48,15 @@ class WristIOReal : WristIO {
                         GravityType = GravityTypeValue.Arm_Cosine
                         StaticFeedforwardSign =
                             StaticFeedforwardSignValue.UseClosedLoopSign
+                    }
+                SoftwareLimitSwitch =
+                    SoftwareLimitSwitchConfigs().apply {
+                        ForwardSoftLimitEnable = true
+                        ReverseSoftLimitEnable = true
+                        ForwardSoftLimitThreshold =
+                            MAX_ANGLE.`in`(Units.Rotations)
+                        ReverseSoftLimitThreshold =
+                            MIN_ANGLE.`in`(Units.Rotations)
                     }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
