@@ -18,6 +18,6 @@ val OFF: LEDPattern = LEDPattern.kOff
 
 val INTAKE_COLOR: LEDPattern =
     LEDPattern.solid(Color.kWhiteSmoke).blink(BLINKING_TIME)
-val RAINBOW: LEDPattern =
+val CLIMB_LED: LEDPattern =
     LEDPattern.rainbow(255, 128)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED, LED_SPACING)
