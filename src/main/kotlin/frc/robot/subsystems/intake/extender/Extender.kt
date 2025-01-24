@@ -74,13 +74,6 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .withName("Extender/reset")
     }
 
-    fun defaultCommand(): Command = run {
-        atSetpoint
-            .negate()
-            .debounce(SAFETY_DEBOUNCE)
-            .onTrue(setPosition { setpoint })
-    }
-
     @AutoLogOutput
     val isExtended = Trigger {
         io.inputs.position.isNear(
@@ -109,7 +102,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     @AutoLogOutput
     private var atSetpoint = Trigger {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
-    }
+    }.negate().debounce(SAFETY_DEBOUNCE)
+        .onTrue(setPosition { setpoint })
 
     @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }
 
