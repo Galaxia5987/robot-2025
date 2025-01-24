@@ -12,9 +12,19 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
+
+    private val tuningAngleDegrees =
+        LoggedNetworkNumber("Tuning/Climb/AngleDegrees", 0.0)
+
+    private val tuningLatchPositionMeters =
+        LoggedNetworkNumber("Tuning/Climb/LatchPositionMeters", 0.0)
+
+    private val tuningStopperPower =
+        LoggedNetworkNumber("Tuning/Climb/StopperPower", 0.0)
 
     @AutoLogOutput
     private val isTouching =
@@ -68,6 +78,22 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 { io.setVoltage(Units.Volts.zero()) }
             )
             .withName("climber/setVoltage")
+
+    fun setTuningAngle(): Command =
+        run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
+            .withName("Climb/Tuning/Angle")
+
+    fun setTuningLatchPosition(): Command =
+        run {
+                io.setLatchPosition(
+                    Units.Meters.of(tuningLatchPositionMeters.get())
+                )
+            }
+            .withName("Climb/Tuning/LatchPosition")
+
+    fun setTuningStopperPower(): Command =
+        run { io.setStopperPower(tuningStopperPower.get()) }
+            .withName("Climb/Tuning/StopperPower")
 
     private fun setLatchPosition(latchPosition: Distance): Command =
         runOnce { io.setLatchPosition(latchPosition) }

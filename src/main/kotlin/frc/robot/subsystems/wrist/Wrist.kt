@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Wrist(private val io: WristIO) : SubsystemBase() {
     @AutoLogOutput private val mechanism = LoggedMechanism2d(2.0, 3.0)
@@ -18,12 +19,16 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
 
     @AutoLogOutput private var setpointName: Angles = Angles.ZERO
+
     @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
     private var atSetpoint: Trigger = Trigger {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
+
+    private val tuningAngleDegrees =
+        LoggedNetworkNumber("Tuning/Wrist/Angle", 0.0)
 
     val angle: () -> Angle = { io.inputs.angle }
 
@@ -47,6 +52,9 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun l3algae(): Command = setAngle(Angles.L3_ALGAE)
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
+    fun tuningAngle(): Command =
+        run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
+            .withName("Wrist/Tuning")
 
     override fun periodic() {
         io.updateInputs()
