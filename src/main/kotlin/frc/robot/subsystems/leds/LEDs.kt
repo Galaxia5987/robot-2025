@@ -40,7 +40,6 @@ class LEDs : SubsystemBase() {
     }
 
     private fun patternBlink(
-    private fun clear() = TRANSPARENT.applyTo(ledBuffer)
     private fun colorBlink(
         primaryColor: LEDPattern,
         secondaryPattern: LEDPattern
