@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
 import edu.wpi.first.wpilibj.AddressableLEDBufferView
 import edu.wpi.first.wpilibj.LEDPattern
-import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class LEDs : SubsystemBase() {
@@ -16,18 +15,20 @@ class LEDs : SubsystemBase() {
         ledStrip.start()
     }
 
-    private fun setLEDPattern(pattern: LEDPattern) {
-        pattern.applyTo(ledBuffer)
-    }
-
-    private fun setSplitColor(left: LEDPattern, right: LEDPattern) {
+    fun setPattern(
+        left: LEDPattern? = null,
+        right: LEDPattern? = null,
+        all: LEDPattern? = null
+    ) {
         val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
         val rightBuffer =
             ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
-        left.applyTo(leftBuffer)
-        right.applyTo(rightBuffer)
+        left?.applyTo(leftBuffer)
+        right?.applyTo(rightBuffer)
+        all?.applyTo(ledBuffer)
     }
-    private fun setPatternArea(
+
+    fun setPatternArea(
         primaryPattern: LEDPattern,
         secondaryPattern: LEDPattern? = null,
         section: Array<Int>
@@ -40,7 +41,6 @@ class LEDs : SubsystemBase() {
     }
 
     private fun patternBlink(
-    private fun colorBlink(
         primaryColor: LEDPattern,
         secondaryPattern: LEDPattern
     ) {
@@ -50,8 +50,6 @@ class LEDs : SubsystemBase() {
         }
     }
 
-    fun intakeLED(): Command = run { setLEDPattern(INTAKE_COLOR) }
-    fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
     override fun periodic() {
         ledStrip.setData(ledBuffer)
     }
