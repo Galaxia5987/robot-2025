@@ -35,7 +35,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         sequence(
                 runOnce {
                     setpoint = position.invoke()
-                    io.setPosition(position.invoke())
+                    io.setPosition(setpoint)
                 },
                 waitUntil(atSetpoint),
                 setVoltage(Units.Volts.zero())
