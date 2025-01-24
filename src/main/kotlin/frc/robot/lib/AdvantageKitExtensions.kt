@@ -97,7 +97,7 @@ fun enableAutoLogOutputFor(vararg roots: Any) {
     val objectClazz = Object::class.java
     for (root in roots) {
         val method =
-            autoLogOutputClazz.getDeclaredMethod("registerFields", objectClazz)
+            autoLogOutputClazz.getDeclaredMethod("addObject", objectClazz)
         method.isAccessible = true
         method.invoke(null, root)
     }
