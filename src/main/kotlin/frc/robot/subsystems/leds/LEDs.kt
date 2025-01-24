@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class LEDs : SubsystemBase() {
-    val ledStrip =
+    private val ledStrip =
         AddressableLED(LED_STRIP_PORT).apply { setLength(STRIP_LENGTH) }
-    val ledBuffer = AddressableLEDBuffer(STRIP_LENGTH)
+    private val ledBuffer = AddressableLEDBuffer(STRIP_LENGTH)
 
     init {
         ledStrip.start()
@@ -43,7 +43,6 @@ class LEDs : SubsystemBase() {
 
     fun intakeLED(): Command = run { setLEDPattern(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
-
 
     override fun periodic() {
         ledStrip.setData(ledBuffer)
