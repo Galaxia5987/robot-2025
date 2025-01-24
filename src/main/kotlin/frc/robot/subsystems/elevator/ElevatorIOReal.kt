@@ -23,9 +23,9 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
-import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -45,15 +45,11 @@ class ElevatorIOReal : ElevatorIO {
             ForwardSoftLimitEnable = true
             ReverseSoftLimitEnable = true
             ForwardSoftLimitThreshold =
-                MAX_HEIGHT.toAngle(
-                    SPROCKET_RADIUS,
-                    GEAR_RATIO
-                ).`in`(Units.Rotations)
+                MAX_HEIGHT.toAngle(SPROCKET_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
             ReverseSoftLimitThreshold =
-                MIN_HEIGHT.toAngle(
-                    PINION_RADIUS,
-                    GEAR_RATIO
-                ).`in`(Units.Rotations)
+                MIN_HEIGHT.toAngle(PINION_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
         }
 
     @AutoLogOutput
