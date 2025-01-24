@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput private val mechanism = LoggedMechanism2d(3.0, 3.0)
@@ -29,6 +30,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             io.inputs.auxMotorCurrent.abs(Units.Amps)
         ) >= RESET_CURRENT_THRESHOLD.`in`(Units.Amps)
     }
+
+    private val tuningHeight =
+        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
@@ -52,6 +56,10 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
+        
+    fun tuningPosition(): Command =
+        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
+            .withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
