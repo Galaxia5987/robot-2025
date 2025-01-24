@@ -80,6 +80,7 @@ class ElevatorIOReal : ElevatorIO {
                             ReverseLimitSourceValue.RemoteTalonFX
                         ReverseLimitRemoteSensorID = EXTENDER_MOTOR_ID
                     }
+                SoftwareLimitSwitch = softLimitsConfig
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
