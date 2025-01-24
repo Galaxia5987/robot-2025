@@ -56,7 +56,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
-        
+
     fun tuningPosition(): Command =
         run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
             .withName("Elevator/Tuning")
