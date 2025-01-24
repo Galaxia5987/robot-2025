@@ -4,6 +4,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands.sequence
+import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
@@ -29,13 +31,25 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private var finishedResettingFlag = false
 
-    private fun setPosition(position: Positions): Command =
-        runOnce {
-                io.setPosition(position.position)
-                setpoint = position.position
-                setpointName = position.getLoggingName()
-            }
+    private fun setPosition(position: Distance): Command =
+        sequence(
+            runOnce{
+                io.setPosition(position)
+                setpoint = position
+            },
+            waitUntil(atSetpoint),
+            setVoltage(Units.Volts.zero())
+        )
             .withName("Extender/setPosition")
+
+    private fun setPosition(position: Positions): Command =
+        setPosition(position.position)
+            .alongWith(
+                runOnce {
+                    setpointName = position.getLoggingName()
+                }
+            )
+            .withName("Extender/setPosition with enum")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
