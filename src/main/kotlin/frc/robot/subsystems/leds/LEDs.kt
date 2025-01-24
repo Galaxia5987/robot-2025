@@ -39,6 +39,7 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
+    private fun patternBlink(
     private fun clear() = TRANSPARENT.applyTo(ledBuffer)
     private fun colorBlink(
         primaryColor: LEDPattern,
