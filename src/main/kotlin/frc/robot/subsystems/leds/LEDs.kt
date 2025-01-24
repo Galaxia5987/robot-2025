@@ -48,12 +48,10 @@ class LEDs : SubsystemBase() {
         if (ledBuffer.getLED(0).toHexString().equals("#000000")) {
             secondaryPattern.applyTo(ledBuffer)
         }
-        println(ledBuffer.getLED(0).toHexString())
     }
 
     fun intakeLED(): Command = run { setLEDPattern(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
-
     override fun periodic() {
         ledStrip.setData(ledBuffer)
     }
