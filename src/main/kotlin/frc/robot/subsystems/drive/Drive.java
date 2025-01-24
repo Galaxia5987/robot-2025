@@ -15,7 +15,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
-import static frc.robot.lib.GeometryFactoriesKt.getPose3d;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -51,7 +50,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
@@ -99,8 +97,10 @@ public class Drive extends SubsystemBase {
 
     static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
-    public Angle[] SwerveTurnAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
-    public Angle[] SwerveDriveAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
+    public Angle[] SwerveTurnAngle =
+            new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
+    public Angle[] SwerveDriveAngle =
+            new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR

@@ -116,8 +116,5 @@ fun CommandXboxController.setRumble(strength: Double) {
 }
 
 fun CommandXboxController.rumbleCommand(): Command {
-    return Commands.startEnd(
-        { this.setRumble(1.0) },
-        { this.setRumble(0.0) }
-    )
+    return Commands.startEnd({ this.setRumble(1.0) }, { this.setRumble(0.0) })
 }
