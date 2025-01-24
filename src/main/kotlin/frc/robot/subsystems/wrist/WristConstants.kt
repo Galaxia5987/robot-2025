@@ -5,6 +5,8 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.MomentOfInertia
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
+val MAX_ANGLE: Angle = Units.Rotations.of(0.0)
+val MIN_ANGLE: Angle = Units.Rotations.of(0.0)
 const val GEAR_RATIO = 1.0 // TODO: Calibrate
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 

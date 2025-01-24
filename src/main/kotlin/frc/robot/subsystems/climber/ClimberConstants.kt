@@ -44,6 +44,12 @@ var MOTOR_CONFIG =
             StatorCurrentLimit = 160.0
             SupplyCurrentLimit = 80.0
         }
+        SoftwareLimitSwitch.apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold = FOLDED_ANGLE.`in`(Units.Rotations)
+            ReverseSoftLimitThreshold = UNFOLDED_ANGLE.`in`(Units.Rotations)
+        }
         Slot0.apply {
             kP = GAINS.kP
             kI = GAINS.kI
