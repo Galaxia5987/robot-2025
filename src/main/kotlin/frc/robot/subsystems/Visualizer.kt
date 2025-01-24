@@ -81,27 +81,8 @@ private val INITIAL_Elevator_2_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 
-private val INITIAL_ELEVATOR_TRANSLATION = getTranslation3d(x = 0.12)
-
-class Visualizer(
-    private val swerve0Turn: Angle,
-    private val swerve1Turn: Angle,
-    private val swerve2Turn: Angle,
-    private val swerve3Turn: Angle,
-    private val swerve0Drive: Angle,
-    private val swerve1Drive: Angle,
-    private val swerve2Drive: Angle,
-    private val swerve3Drive: Angle,
-    private val extenderPosition: () -> Distance,
-    private val intakeRollerAngle: () -> Angle,
-    private val elevatorHeight: () -> Distance,
-    private val wristAngle: () -> Angle,
-    private val coralRollersAngle: () -> Angle,
-    private val algaeRemoverAngle: () -> Angle,
-    private val climberAngle: () -> Angle,
-) {
+class Visualizer(){
     private val swerveDrive = frc.robot.swerveDrive
-    private val vision = frc.robot.vision
     private val climber = frc.robot.climber
     private val elevator = frc.robot.elevator
     private val gripper = frc.robot.gripper
@@ -190,12 +171,12 @@ class Visualizer(
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +
-                    (getTranslation3d(x = extenderPosition.invoke()))
+                    (getTranslation3d(x = extender.position.invoke()))
             )
         val intakeRollerPose =
             getPose3d(
                 INITIAL_INTAKE_Roller_TRANSLATION +
-                    getTranslation3d(x = extenderPosition.invoke())
+                    getTranslation3d(x = extender.position.invoke())
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
@@ -227,7 +208,7 @@ class Visualizer(
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation = getRotation3d(pitch = climberAngle.invoke())
+                rotation = getRotation3d(pitch = climber.angle.invoke())
             )
 
         return arrayOf(

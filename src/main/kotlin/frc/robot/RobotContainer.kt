@@ -44,29 +44,7 @@ object RobotContainer {
         configureButtonBindings()
         configureDefaultCommands()
         visualizer =
-            Visualizer(
-                Units.Radians.of(Timer.getTimestamp()),
-                swerveDrive.kinematics.modules[0].angle.measure,
-                swerveDrive.lastModulePositions[1].angle.measure,
-                Units.Radians.of(
-                    swerveDrive.lastModulePositions[1].distanceMeters
-                ),
-                swerveDrive.lastModulePositions[2].angle.measure,
-                Units.Radians.of(
-                    swerveDrive.lastModulePositions[2].distanceMeters
-                ),
-                swerveDrive.lastModulePositions[3].angle.measure,
-                Units.Radians.of(
-                    swerveDrive.lastModulePositions[3].distanceMeters
-                ),
-                extender.position,
-                { Units.Degrees.zero() },
-                elevator.height,
-                wrist.angle,
-                { Units.Degrees.zero() },
-                { Units.Degrees.zero() },
-                climber.angle
-            )
+            Visualizer()
 
         enableAutoLogOutputFor(this)
     }
