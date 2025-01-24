@@ -10,6 +10,8 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
+import frc.robot.subsystems.wrist.MAX_ANGLE
+import frc.robot.subsystems.wrist.MIN_ANGLE
 
 const val GEAR_RATIO = (1.0 / 12.0) * (30.0 / 66.0) * (12.0 / 36.0)
 const val STOPPER_GEAR_RATIO = (8.0 / 72.0) * (1.0 / 15.0)
@@ -43,6 +45,14 @@ var MOTOR_CONFIG =
             SupplyCurrentLimitEnable = true
             StatorCurrentLimit = 160.0
             SupplyCurrentLimit = 80.0
+        }
+        SoftwareLimitSwitch.apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold =
+                FOLDED_ANGLE.`in`(Units.Rotations)
+            ReverseSoftLimitThreshold =
+                UNFOLDED_ANGLE.`in`(Units.Rotations)
         }
         Slot0.apply {
             kP = GAINS.kP
