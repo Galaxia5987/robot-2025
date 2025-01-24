@@ -56,13 +56,17 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     fun reset(): Command {
         return setVoltage(RESET_VOLTAGE)
             .alongWith(
-                runOnce { finishedResettingFlag = false },
-                runOnce { io.setSoftLimits(false) }
+                runOnce {
+                    finishedResettingFlag = false
+                    io.setSoftLimits(false)
+                }
             )
             .until(isStuck)
             .andThen(
-                runOnce(io::reset),
-                runOnce { finishedResettingFlag = true }
+                runOnce {
+                    io::reset
+                    finishedResettingFlag = true
+                }
             )
             .withName("Extender/reset")
     }
