@@ -16,7 +16,7 @@ const val LED_STRIP_PORT = 1
 
 val OFF: LEDPattern = LEDPattern.kOff
 
-val INTAKE_COLOR: LEDPattern =
+val INTAKE: LEDPattern =
     LEDPattern.solid(Color.kWhiteSmoke).blink(BLINKING_TIME)
 val CLIMB_LED: LEDPattern =
     LEDPattern.rainbow(255, 128)
