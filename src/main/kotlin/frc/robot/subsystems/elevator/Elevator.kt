@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private val mechanism = LoggedMechanism2d(3.0, 3.0)
@@ -20,6 +21,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
     @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+
+    private val tuningHeight =
+        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
@@ -39,6 +43,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l3Algae(): Command = setPosition(Positions.L3_ALGAE)
     fun feeder(): Command = setPosition(Positions.FEEDER)
     fun zero(): Command = setPosition(Positions.ZERO)
+    fun tuningPosition(): Command =
+        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
+            .withName("Elevator/Tuning")
 
     fun setPower(percentOutput: DoubleSupplier): Command = run {
         io.setPower(percentOutput.asDouble)
@@ -49,8 +56,6 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this.name, io.inputs)
-        Logger.recordOutput("Elevator/Mechanism2d", mechanism)
-        Logger.recordOutput("Elevator/Setpoint", setpointValue)
 
         elevatorLigament.length = io.inputs.height.`in`(Units.Meters)
     }

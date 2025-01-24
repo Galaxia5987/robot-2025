@@ -39,7 +39,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
 
-
+private val INITIAL_ELEVATOR_TRANSLATION = getTranslation3d(x = 0.12)
 
 class Visualizer(
     private val swerve0Turn: Angle,
@@ -70,6 +70,16 @@ class Visualizer(
         val secondStageHeight = elevator.height.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
+        val firstStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = firstStageHeight)
+            )
+        val secondStagePose =
+            getPose3d(
+                INITIAL_ELEVATOR_TRANSLATION +
+                    getTranslation3d(z = secondStageHeight)
+            )
         val firstStagePose = getPose3d(x=INITIAL_Elevator_1_TRANSLATION.x,z = firstStageHeight.plus(INITIAL_Elevator_1_TRANSLATION.z).minus(0.01))
         val secondStagePose = getPose3d(x=INITIAL_Elevator_2_TRANSLATION.x,z = secondStageHeight.plus(INITIAL_Elevator_2_TRANSLATION.z).minus(0.02))
         return Pair(firstStagePose, secondStagePose)
@@ -94,7 +104,7 @@ class Visualizer(
             translation = INITIAL_MODULE_1_Drive_TRANSLATION,
             rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[1], pitch = swerveDrive.SwerveDriveAngle[1])
         )
-        
+
         val Module2PoseTurn = getPose3d(
             translation = INITIAL_MODULE_2_Turn_TRANSLATION,
             rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[2])
@@ -103,7 +113,7 @@ class Visualizer(
             translation = INITIAL_MODULE_2_Drive_TRANSLATION,
             rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[2], pitch = swerveDrive.SwerveDriveAngle[2])
         )
-        
+
         val Module3PoseTurn = getPose3d(
             translation = INITIAL_MODULE_3_Turn_TRANSLATION,
             rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[3])
@@ -112,7 +122,7 @@ class Visualizer(
             translation = INITIAL_MODULE_3_Drive_TRANSLATION,
             rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[3], pitch = swerveDrive.SwerveDriveAngle[3])
         )
-        
+
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.extender
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -35,6 +36,12 @@ class ExtenderIOReal : ExtenderIO {
                         SupplyCurrentLimitEnable = true
                         StatorCurrentLimit = 80.0
                         SupplyCurrentLimit = 40.0
+                    }
+
+                HardwareLimitSwitch =
+                    HardwareLimitSwitchConfigs().apply {
+                        ForwardLimitEnable = false
+                        ReverseLimitEnable = false
                     }
 
                 Slot0 =

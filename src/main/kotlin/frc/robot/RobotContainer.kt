@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
 
@@ -56,6 +57,8 @@ object RobotContainer {
                 { Units.Degrees.zero() },
                 { Units.Degrees.zero() }
             )
+
+        enableAutoLogOutputFor(this)
     }
 
     private fun getDriveCommandReal(): Command =

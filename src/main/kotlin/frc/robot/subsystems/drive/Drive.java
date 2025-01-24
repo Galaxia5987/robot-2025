@@ -103,8 +103,7 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle = new Angle[]{Radians.zero(),Radians.zero(),Radians.zero(),Radians.zero()};
 
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    public final Module[] modules = new Module[4]; // FL, FR, BL, BR
-    public final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+    private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
     private final SysIdRoutine turnSysId;
     private final Alert gyroDisconnectedAlert =
@@ -140,9 +139,6 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
         modules[3] = new Module(brModuleIO, 3, TunerConstants.BackRight);
 
-        for (int i = 0; i < modulePositions.length; i++) {
-            modulePositions[i] = modules[i].getPosition();
-        }
         // Usage reporting for swerve template
         HAL.report(
                 tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_AdvantageKit);
