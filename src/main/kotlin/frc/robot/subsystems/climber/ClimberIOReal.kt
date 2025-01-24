@@ -19,16 +19,9 @@ class ClimberIOReal : ClimberIO {
 
     private val mainMotor = TalonFX(MAIN_MOTOR_ID)
     private val auxMotor = TalonFX(AUX_MOTOR_ID)
-    private val servo1 =
+    private val latchServo =
         LinearServo(
             LATCH_SERVO_ID,
-            1,
-            1,
-            LATCH_TOLERANCE.`in`(Units.Millimeters)
-        )
-    private val servo2 =
-        LinearServo(
-            FOLLOW_LATCH_SERVO_ID,
             1,
             1,
             LATCH_TOLERANCE.`in`(Units.Millimeters)
@@ -47,9 +40,7 @@ class ClimberIOReal : ClimberIO {
     }
 
     override fun setLatchPosition(position: Distance) {
-        listOf(servo2, servo1).forEach {
-            it.position = position.`in`(Units.Millimeters)
-        }
+        latchServo.position = position.`in`(Units.Millimeters)
     }
 
     override fun setVoltage(voltage: Voltage) {
@@ -67,7 +58,7 @@ class ClimberIOReal : ClimberIO {
     override fun updateInput() {
         inputs.angle = mainMotor.position.value
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
-        inputs.latchPosition = Units.Millimeters.of(servo1.position)
+        inputs.latchPosition = Units.Millimeters.of(latchServo.position)
 
         var calculatedDistance =
             distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
