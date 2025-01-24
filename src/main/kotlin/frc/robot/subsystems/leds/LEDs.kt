@@ -20,10 +20,6 @@ class LEDs : SubsystemBase() {
         pattern.applyTo(ledBuffer)
     }
 
-    private fun blink(primary: LEDPattern) {
-        (primary.blink(BLINKING_TIME)).applyTo(ledBuffer)
-    }
-
     private fun setSplitColor(left: LEDPattern, right: LEDPattern) {
         val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
         val rightBuffer =
@@ -45,11 +41,9 @@ class LEDs : SubsystemBase() {
 
     private fun clear() = TRANSPARENT.applyTo(ledBuffer)
 
-    fun intakeLED(): Command = run { blink(INTAKE_COLOR) }
+    fun intakeLED(): Command = run { setLEDPattern(INTAKE_COLOR) }
     fun climbLED(): Command = run { RAINBOW.applyTo(ledBuffer) }
-    fun setLEDPattern(): Command = run {
-        setPatternArea(GRADIENT, section = arrayOf(10, 30))
-    } // don't commit
+
 
     override fun periodic() {
         ledStrip.setData(ledBuffer)
