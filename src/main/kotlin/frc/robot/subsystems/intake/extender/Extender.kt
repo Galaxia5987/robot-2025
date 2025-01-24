@@ -31,11 +31,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private var finishedResettingFlag = false
 
-    private fun setPosition(position: Distance): Command =
+    private fun setPosition(position: ()->Distance): Command =
         sequence(
-            runOnce{
-                io.setPosition(position)
-                setpoint = position
+            runOnce {
+                setpoint = position.invoke()
+                io.setPosition(position.invoke())
             },
             waitUntil(atSetpoint),
             setVoltage(Units.Volts.zero())
@@ -43,19 +43,15 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .withName("Extender/setPosition")
 
     private fun setPosition(position: Positions): Command =
-        setPosition(position.position)
-            .alongWith(
-                runOnce {
-                    setpointName = position.getLoggingName()
-                }
-            )
+        runOnce { setpointName = position.getLoggingName() }
+            .andThen(setPosition({position.position}))
             .withName("Extender/setPosition with enum")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
-                { io.setVoltage(voltage) },
-                { io.setVoltage(Units.Volts.zero()) }
-            )
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
             .withName("Extender/setVoltage")
 
     fun tuningPosition(): Command = run {
@@ -78,12 +74,12 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .withName("Extender/reset")
     }
 
-    fun defaultCommand(): Command =
-        run {
-            atSetpoint.negate().debounce(SAFETY_DEBOUNCE).onTrue(
-                setPosition(setpoint)
-            )
-        }
+    fun defaultCommand(): Command = run {
+        atSetpoint
+            .negate()
+            .debounce(SAFETY_DEBOUNCE)
+            .onTrue(setPosition{setpoint})
+    }
 
     @AutoLogOutput
     val isExtended = Trigger {
