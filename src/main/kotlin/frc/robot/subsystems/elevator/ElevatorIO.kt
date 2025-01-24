@@ -15,6 +15,8 @@ interface ElevatorIO {
 
     fun reset() {}
 
+    fun setSoftLimits(value: Boolean) {}
+
     fun updateInputs() {}
 
     @Logged
