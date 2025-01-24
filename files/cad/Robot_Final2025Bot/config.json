@@ -318,11 +318,10 @@
     },
     {
       "_comment": "model_16 : Climb",
-
       "zeroedRotations": [
         {
           "axis": "x",
-          "degrees": 0
+          "degrees": 128
         },
         {
           "axis": "y",
@@ -334,9 +333,9 @@
         }
       ],
       "zeroedPosition": [
-        -0.0,
         0,
-        -0.0
+        0,
+        0
       ]
     }
   ]

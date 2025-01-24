@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.intake.intakeAlgae
+import frc.robot.subsystems.intake.outtakeAlgae
+import java.util.function.DoubleSupplier
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -21,7 +24,7 @@ import frc.robot.subsystems.drive.DriveCommands
  */
 object RobotContainer {
     private val driverController = CommandXboxController(0)
-    private val operatorController = CommandPS5Controller(1)
+    private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
@@ -33,6 +36,7 @@ object RobotContainer {
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
+    val test: DoubleSupplier = DoubleSupplier { 0.1 }
 
     init {
 
@@ -94,7 +98,7 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController
-            .y()
+            .back()
             .onTrue(
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
@@ -113,10 +117,22 @@ object RobotContainer {
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
 
-        driverController.a().onTrue(elevator.l4())
-        driverController.b().onTrue(elevator.zero())
-        driverController.leftTrigger().onTrue(climber.fold())
-        driverController.rightTrigger().onTrue(climber.unfold())
+        driverController.a().onTrue(elevator.l1())
+        driverController.x().onTrue(elevator.l2())
+        driverController.b().onTrue(elevator.l3())
+        driverController.y().onTrue(elevator.l4())
+        driverController.start().onTrue(elevator.feeder())
+        driverController.rightTrigger().onTrue(gripper.intake())
+        driverController.leftTrigger().onTrue(gripper.outtake())
+        driverController.rightBumper().onTrue(intakeAlgae())
+        driverController.leftBumper().onTrue(outtakeAlgae(driverController.rightTrigger()))
+
+
+
+        operatorController.a().onTrue(climber.fold())
+        operatorController.b().onTrue(climber.unfold())
+        operatorController.rightTrigger().whileTrue(elevator.setPower(test))
+
     }
 
     fun getAutonomousCommand(): Command =

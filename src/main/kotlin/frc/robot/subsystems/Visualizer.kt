@@ -79,7 +79,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
     getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.20545040))
 
 private val INITIAL_CLIMBER_TRANSLATION =
-    getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.27))
+    getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 
 private val INITIAL_ELEVATOR_TRANSLATION = getTranslation3d(x = 0.12)
 
