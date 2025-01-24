@@ -14,6 +14,7 @@ val PINION_RADIUS: Distance = Units.Millimeters.of(15.22)
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
 val POSITION_TOLERANCE: Distance = Units.Meters.of(0.0)
+const val SAFETY_DEBOUNCE = 1.0
 
 val GAINS = selectGainsBasedOnMode(Gains(), Gains())
 
