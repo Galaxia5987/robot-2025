@@ -15,6 +15,8 @@ interface ExtenderIO {
 
     fun reset() {}
 
+    fun setSoftLimits(value: Boolean) {}
+
     fun updateInputs() {}
 
     @Logged
