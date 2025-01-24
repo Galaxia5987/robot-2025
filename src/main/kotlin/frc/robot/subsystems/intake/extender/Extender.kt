@@ -31,27 +31,27 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private var finishedResettingFlag = false
 
-    private fun setPosition(position: ()->Distance): Command =
+    private fun setPosition(position: () -> Distance): Command =
         sequence(
-            runOnce {
-                setpoint = position.invoke()
-                io.setPosition(position.invoke())
-            },
-            waitUntil(atSetpoint),
-            setVoltage(Units.Volts.zero())
-        )
+                runOnce {
+                    setpoint = position.invoke()
+                    io.setPosition(position.invoke())
+                },
+                waitUntil(atSetpoint),
+                setVoltage(Units.Volts.zero())
+            )
             .withName("Extender/setPosition")
 
     private fun setPosition(position: Positions): Command =
         runOnce { setpointName = position.getLoggingName() }
-            .andThen(setPosition({position.position}))
+            .andThen(setPosition({ position.position }))
             .withName("Extender/setPosition with enum")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
-            { io.setVoltage(voltage) },
-            { io.setVoltage(Units.Volts.zero()) }
-        )
+                { io.setVoltage(voltage) },
+                { io.setVoltage(Units.Volts.zero()) }
+            )
             .withName("Extender/setVoltage")
 
     fun tuningPosition(): Command = run {
@@ -78,7 +78,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         atSetpoint
             .negate()
             .debounce(SAFETY_DEBOUNCE)
-            .onTrue(setPosition{setpoint})
+            .onTrue(setPosition { setpoint })
     }
 
     @AutoLogOutput
