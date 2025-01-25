@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
 import edu.wpi.first.wpilibj.AddressableLEDBufferView
 import edu.wpi.first.wpilibj.LEDPattern
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 class LEDs : SubsystemBase() {
@@ -21,7 +22,7 @@ class LEDs : SubsystemBase() {
         left: LEDPattern? = null,
         right: LEDPattern? = null,
         all: LEDPattern? = null
-    ) {
+    ): Command = run {
         left?.applyTo(leftBuffer)
         right?.applyTo(rightBuffer)
         all?.applyTo(ledBuffer)
@@ -31,14 +32,14 @@ class LEDs : SubsystemBase() {
         primaryPattern: LEDPattern,
         secondaryPattern: LEDPattern? = null,
         section: Array<Int>
-    ) {
+    ): Command = run {
         val sectionOfBuffer: AddressableLEDBufferView =
             ledBuffer.createView(section[0], section[1])
         secondaryPattern?.applyTo(ledBuffer)
         primaryPattern.applyTo(sectionOfBuffer)
         ledStrip.setData(ledBuffer)
     }
-    
+
     override fun periodic() {
         ledStrip.setData(ledBuffer)
     }
