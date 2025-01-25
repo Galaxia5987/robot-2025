@@ -1,5 +1,6 @@
 package frc.robot.subsystems.wrist
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
@@ -10,6 +11,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
@@ -36,8 +38,10 @@ class WristIOReal : WristIO {
                     }
                 Feedback =
                     FeedbackConfigs().apply {
-                        RotorToSensorRatio = 1.0
-                        SensorToMechanismRatio = GEAR_RATIO
+                        RotorToSensorRatio = ROTOR_TO_SENSOR
+                        SensorToMechanismRatio = SENSOR_TO_MECHANISM
+                        FeedbackRemoteSensorID = CANCODER_PORT
+                        FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
                     }
                 Slot0 =
                     Slot0Configs().apply {
@@ -67,6 +71,12 @@ class WristIOReal : WristIO {
                     }
             }
         )
+
+        val encoderConfig = CANcoderConfiguration().apply {
+            MagnetSensor.MagnetOffset = ENCODER_OFFSET
+        }
+
+        absoluteEncoder.configurator.apply(encoderConfig)
     }
 
     override fun setAngle(angle: Angle) {
