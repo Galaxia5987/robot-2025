@@ -19,8 +19,6 @@
   ],
   "cameras": [],
   "components": [
-
-
     {
       "_comment": "model_0 : Swerve module 0 TURN",
       "zeroedRotations": [
