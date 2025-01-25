@@ -1,65 +1,20 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
+import frc.robot.subsystems.drive.Drive
 import org.littletonrobotics.junction.AutoLogOutput
 
-private val INITIAL_MODULE_0_Turn_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(0.25448),
-        y = Meters.of(0.25448),
-        z = Meters.of(0.0508)
-    )
-private val INITIAL_MODULE_0_Drive_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(0.25448),
-        y = Meters.of(0.25448),
-        z = Meters.of(0.0508)
-    )
 
-private val INITIAL_MODULE_1_Turn_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(0.25448),
-        y = Meters.of(-0.25448),
-        z = Meters.of(0.0508)
-    )
-private val INITIAL_MODULE_1_Drive_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(0.25448),
-        y = Meters.of(-0.25448),
-        z = Meters.of(0.0508)
-    )
-
-private val INITIAL_MODULE_2_Turn_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(-0.25448),
-        y = Meters.of(0.25448),
-        z = Meters.of(0.0508)
-    )
-private val INITIAL_MODULE_2_Drive_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(-0.25448),
-        y = Meters.of(0.25448),
-        z = Meters.of(0.0508)
-    )
-
-private val INITIAL_MODULE_3_Turn_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(-0.25448),
-        y = Meters.of(-0.25448),
-        z = Meters.of(0.0508)
-    )
-private val INITIAL_MODULE_3_Drive_TRANSLATION =
-    getTranslation3d(
-        x = Meters.of(-0.25448),
-        y = Meters.of(-0.25448),
-        z = Meters.of(0.0508)
-    )
+private val swerveMoudlePose:Array<Translation2d> = Drive.getModuleTranslations()
 
 private val INITIAL_INTAKE_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.32), z = Meters.of(0.35))
@@ -81,7 +36,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 
-class Visualizer(){
+class Visualizer{
     private val swerveDrive = frc.robot.swerveDrive
     private val climber = frc.robot.climber
     private val elevator = frc.robot.elevator
@@ -106,67 +61,22 @@ class Visualizer(){
         return Pair(firstStagePose, secondStagePose)
     }
 
+
+    private fun getSwerveModulePose(): Pair<Array<Pose3d>,Array<Pose3d>>
+    {
+        val swervePosesTurn:Array<Pose3d> = arrayOf(Pose3d(), Pose3d(),Pose3d(),Pose3d())
+        val swervePosesDrive:Array<Pose3d> = arrayOf(Pose3d(),Pose3d(),Pose3d(),Pose3d())
+        for (i in 0..3)
+        {
+            swervePosesTurn[i]= Pose3d(Translation3d(swerveMoudlePose[i].x, swerveMoudlePose[i].y,0.0508), getRotation3d(yaw=swerveDrive.SwerveTurnAngle[i]))
+            swervePosesDrive[i]= Pose3d(Translation3d(swerveMoudlePose[i].x, swerveMoudlePose[i].y,0.0508), getRotation3d(yaw=swerveDrive.SwerveTurnAngle[i], pitch = swerveDrive.SwerveDriveAngle[i]))
+        }
+        return Pair(swervePosesTurn,swervePosesDrive)
+    }
     @AutoLogOutput
     fun getSubsystemsPoses(): Array<Pose3d> {
-        val Module0PoseTurn =
-            getPose3d(
-                translation = INITIAL_MODULE_0_Turn_TRANSLATION,
-                rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[0])
-            )
-        val Module0PoseDrive =
-            getPose3d(
-                translation = INITIAL_MODULE_0_Drive_TRANSLATION,
-                rotation =
-                    getRotation3d(
-                        yaw = swerveDrive.SwerveTurnAngle[0],
-                        pitch = swerveDrive.SwerveDriveAngle[0]
-                    )
-            )
+        val (swervePosesTurn,swervePosesDrive) = getSwerveModulePose()
 
-        val Module1PoseTurn =
-            getPose3d(
-                translation = INITIAL_MODULE_1_Turn_TRANSLATION,
-                rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[1])
-            )
-        val Module1PoseDrive =
-            getPose3d(
-                translation = INITIAL_MODULE_1_Drive_TRANSLATION,
-                rotation =
-                    getRotation3d(
-                        yaw = swerveDrive.SwerveTurnAngle[1],
-                        pitch = swerveDrive.SwerveDriveAngle[1]
-                    )
-            )
-
-        val Module2PoseTurn =
-            getPose3d(
-                translation = INITIAL_MODULE_2_Turn_TRANSLATION,
-                rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[2])
-            )
-        val Module2PoseDrive =
-            getPose3d(
-                translation = INITIAL_MODULE_2_Drive_TRANSLATION,
-                rotation =
-                    getRotation3d(
-                        yaw = swerveDrive.SwerveTurnAngle[2],
-                        pitch = swerveDrive.SwerveDriveAngle[2]
-                    )
-            )
-
-        val Module3PoseTurn =
-            getPose3d(
-                translation = INITIAL_MODULE_3_Turn_TRANSLATION,
-                rotation = getRotation3d(yaw = swerveDrive.SwerveTurnAngle[3])
-            )
-        val Module3PoseDrive =
-            getPose3d(
-                translation = INITIAL_MODULE_3_Drive_TRANSLATION,
-                rotation =
-                    getRotation3d(
-                        yaw = swerveDrive.SwerveTurnAngle[3],
-                        pitch = swerveDrive.SwerveDriveAngle[3]
-                    )
-            )
 
         val intakePose =
             getPose3d(
@@ -186,10 +96,7 @@ class Visualizer(){
                     x = INITIAL_WRIST_TRANSLATION.x,
                     y = INITIAL_WRIST_TRANSLATION.y,
                     z =
-                        INITIAL_WRIST_TRANSLATION.z.plus(
-                            elevator.height.invoke().`in`(Meters)
-                        )
-                ),
+                        INITIAL_WRIST_TRANSLATION.z+elevator.height.invoke().`in`(Meters)),
                 getRotation3d(pitch = -wrist.angle.invoke())
             )
 
@@ -212,14 +119,14 @@ class Visualizer(){
             )
 
         return arrayOf(
-            Module0PoseTurn,
-            Module0PoseDrive,
-            Module1PoseTurn,
-            Module1PoseDrive,
-            Module2PoseTurn,
-            Module2PoseDrive,
-            Module3PoseTurn,
-            Module3PoseDrive,
+            swervePosesTurn[0],
+            swervePosesDrive[0],
+            swervePosesTurn[1],
+            swervePosesDrive[1],
+            swervePosesTurn[2],
+            swervePosesDrive[2],
+            swervePosesTurn[3],
+            swervePosesDrive[3],
             intakePose,
             intakeRollerPose,
             firstStagePose,
