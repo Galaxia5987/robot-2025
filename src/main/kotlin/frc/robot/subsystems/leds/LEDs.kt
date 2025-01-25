@@ -10,7 +10,9 @@ class LEDs : SubsystemBase() {
     private val ledStrip =
         AddressableLED(LED_STRIP_PORT).apply { setLength(STRIP_LENGTH) }
     private val ledBuffer = AddressableLEDBuffer(STRIP_LENGTH)
-
+    private val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
+    private val rightBuffer =
+        ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
     init {
         ledStrip.start()
     }
@@ -20,9 +22,6 @@ class LEDs : SubsystemBase() {
         right: LEDPattern? = null,
         all: LEDPattern? = null
     ) {
-        val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
-        val rightBuffer =
-            ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
         left?.applyTo(leftBuffer)
         right?.applyTo(rightBuffer)
         all?.applyTo(ledBuffer)
