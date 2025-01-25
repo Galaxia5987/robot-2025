@@ -90,8 +90,6 @@ object Robot : LoggedRobot() {
 
         enableAutoLogOutputFor(this)
 
-        enableAutoLogOutputFor(this)
-
         DriverStation.silenceJoystickConnectionWarning(true)
     }
 
