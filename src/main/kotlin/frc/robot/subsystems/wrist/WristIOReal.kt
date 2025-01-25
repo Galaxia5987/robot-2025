@@ -86,7 +86,7 @@ class WristIOReal : WristIO {
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
         inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
         inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
-            absoluteEncoder.position.value
+            absoluteEncoder.absolutePosition.value
         )
     }
 }
