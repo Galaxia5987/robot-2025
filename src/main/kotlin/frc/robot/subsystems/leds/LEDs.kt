@@ -38,17 +38,7 @@ class LEDs : SubsystemBase() {
         primaryPattern.applyTo(sectionOfBuffer)
         ledStrip.setData(ledBuffer)
     }
-
-    private fun patternBlink(
-        primaryColor: LEDPattern,
-        secondaryPattern: LEDPattern
-    ) {
-        primaryColor.blink(BLINKING_TIME).applyTo(ledBuffer)
-        if (ledBuffer.getLED(0).toHexString().equals("#000000")) {
-            secondaryPattern.applyTo(ledBuffer)
-        }
-    }
-
+    
     override fun periodic() {
         ledStrip.setData(ledBuffer)
     }
