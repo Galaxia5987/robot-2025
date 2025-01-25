@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
@@ -47,6 +49,12 @@ var MOTOR_CONFIG =
             StatorCurrentLimit = 160.0
             SupplyCurrentLimit = 80.0
         }
+        Feedback.apply {
+            RotorToSensorRatio = ROTOR_TO_SENSOR
+            SensorToMechanismRatio = SENSOR_TO_MECHANISM
+            FeedbackRemoteSensorID = CANCODER_ID
+            FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+        }
         SoftwareLimitSwitch.apply {
             ForwardSoftLimitEnable = true
             ReverseSoftLimitEnable = true
@@ -58,4 +66,8 @@ var MOTOR_CONFIG =
             kI = GAINS.kI
             kD = GAINS.kD
         }
+    }
+val CANCODER_CONFIG =
+    CANcoderConfiguration().apply {
+        MagnetSensor.MagnetOffset = ENCODER_OFFSET
     }
