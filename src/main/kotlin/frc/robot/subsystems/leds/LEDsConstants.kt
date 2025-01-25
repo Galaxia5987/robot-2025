@@ -6,7 +6,6 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.LEDPattern
-import edu.wpi.first.wpilibj.util.Color
 
 val SCROLLING_SPEED: LinearVelocity = Units.MetersPerSecond.of(0.3)
 val BLINKING_TIME: Time = Units.Second.of(2.0)
@@ -15,4 +14,3 @@ const val STRIP_LENGTH = 100
 const val LED_STRIP_PORT = 1
 
 val OFF: LEDPattern = LEDPattern.kOff
-
