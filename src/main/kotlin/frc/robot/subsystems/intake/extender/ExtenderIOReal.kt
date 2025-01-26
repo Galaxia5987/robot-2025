@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
 import frc.robot.lib.toLinear
@@ -96,6 +97,13 @@ class ExtenderIOReal : ExtenderIO {
                 .withForwardSoftLimitEnable(value)
                 .withReverseSoftLimitEnable(value)
         )
+    }
+
+    override fun updateRoutineLog(log: SysIdRoutineLog) {
+        log.motor("Extender motor")
+            .voltage(inputs.appliedVoltage)
+            .linearPosition(inputs.position)
+            .linearVelocity(inputs.velocity)
     }
 
     override fun updateInputs() {
