@@ -123,7 +123,7 @@ class ElevatorIOReal : ElevatorIO {
     }
 
     override fun updateRoutineLog(log: SysIdRoutineLog) {
-        log.motor("1")
+        log.motor("Elevator main motor")
             .voltage(inputs.appliedVoltage)
             .linearPosition(inputs.height)
             .linearVelocity(inputs.velocity)
