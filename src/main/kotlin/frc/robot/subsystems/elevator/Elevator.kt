@@ -74,6 +74,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             .andThen(runOnce(io::reset))
             .withName("Elevator/reset")
 
+    fun disableCommand(): Command =
+        setVoltage(Units.Volts.zero())
+
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this.name, io.inputs)
