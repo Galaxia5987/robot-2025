@@ -72,14 +72,14 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 io.setAngle(angle)
                 setpoint = angle
             }
-            .withName("climber/setAngle")
+            .withName("Climber/setAngle")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
                 { io.setVoltage(voltage) },
                 { io.setVoltage(Units.Volts.zero()) }
             )
-            .withName("climber/setVoltage")
+            .withName("Climber/setVoltage")
 
     fun setTuningAngle(): Command =
         run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
@@ -99,17 +99,17 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
 
     private fun setLatchPosition(latchPosition: Distance): Command =
         runOnce { io.setLatchPosition(latchPosition) }
-            .withName("climber/setLatchPosition: $latchPosition")
+            .withName("Climber/setLatchPosition: $latchPosition")
 
     private fun setStopperPower(power: Double): Command =
         runOnce { io.setStopperPower(power) }
-            .withName("climber/setStopperPower")
+            .withName("Climber/setStopperPower")
 
     fun closeLatch(): Command =
-        setLatchPosition(CLOSE_LATCH_POSITION).withName("climber/closeLatch")
+        setLatchPosition(CLOSE_LATCH_POSITION).withName("Climber/closeLatch")
 
     fun openLatch(): Command =
-        setLatchPosition(OPEN_LATCH_POSITION).withName("climber/openLatch")
+        setLatchPosition(OPEN_LATCH_POSITION).withName("Climber/openLatch")
 
     fun lock(): Command =
         Commands.sequence(
@@ -117,7 +117,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 Commands.waitUntil(isStopperStuck),
                 setStopperPower(0.0)
             )
-            .withName("climber/lock")
+            .withName("Climber/lock")
 
     fun unlock(): Command =
         Commands.sequence(
@@ -125,11 +125,11 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 Commands.waitUntil(isStopperStuck),
                 setStopperPower(0.0)
             )
-            .withName("climber/unlock")
+            .withName("Climber/unlock")
 
-    fun unfold() = setAngle(UNFOLDED_ANGLE).withName("climber/unfold")
+    fun unfold() = setAngle(UNFOLDED_ANGLE).withName("Climber/unfold")
 
-    fun fold() = setAngle(FOLDED_ANGLE).withName("climber/fold")
+    fun fold() = setAngle(FOLDED_ANGLE).withName("Climber/fold")
 
     fun climb(): Command =
         Commands.sequence(
@@ -139,7 +139,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 Commands.waitUntil(isFolded),
                 lock()
             )
-            .withName("climber/climb")
+            .withName("Climber/climb")
 
     fun declimb(): Command =
         Commands.sequence(
@@ -148,7 +148,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 Commands.waitUntil(isUnfolded),
                 openLatch()
             )
-            .withName("climber/declimb")
+            .withName("Climber/declimb")
 
     fun characterize(): Command {
         val routineForwards = SysIdRoutine(
