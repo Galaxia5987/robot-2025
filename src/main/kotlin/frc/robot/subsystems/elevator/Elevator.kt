@@ -102,7 +102,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
             Commands.waitSeconds(1.0),
             routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
-        )
+        ).withName("Elevator/characterize")
     }
 
     override fun periodic() {
