@@ -36,7 +36,7 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
-    private val BRANCH_MAP =
+    private val HEIGHT_MAP =
         mapOf(
             1 to l1(Trigger { true }), // TODO: Fill in correct trigger
             2 to l2(Trigger { true }), // TODO: Fill in correct trigger
@@ -63,8 +63,8 @@ object RobotContainer {
         enableAutoLogOutputFor(this)
     }
 
-    private fun getBranchCommand(): Command =
-        BRANCH_MAP[
+    private fun getHeightCommand(): Command =
+        HEIGHT_MAP[
             NetworkTableInstance.getDefault()
                 .getDoubleTopic("/Dashboard/TargetBranchPose")
                 .getEntry(0.0)
