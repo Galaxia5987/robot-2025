@@ -13,6 +13,8 @@ private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
 val SPEAKER_POSE: Translation2d
     get() = SPEAKER_POSE_BLUE.flipIfNeeded()
 
+val DISABLE_DEBOUNCE = 3.0
+
 val CURRENT_MODE: Mode
     get() =
         if (LoggedRobot.isReal()) {

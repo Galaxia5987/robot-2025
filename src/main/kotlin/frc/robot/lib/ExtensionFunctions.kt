@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem
 import edu.wpi.first.wpilibj2.command.WrapperCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.DISABLE_DEBOUNCE
 import kotlin.math.PI
 import kotlin.math.hypot
 import org.littletonrobotics.junction.LogTable
@@ -102,5 +103,5 @@ fun CommandXboxController.rumbleCommand(): Command {
 }
 
 fun Subsystem.setDisableCommand(command: Command) {
-    val isDisabled = Trigger { DriverStation.isDisabled() }.whileTrue(command)
+    val isDisabled = Trigger { DriverStation.isDisabled() }.debounce(DISABLE_DEBOUNCE).whileTrue(command)
 }
