@@ -7,6 +7,8 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
 
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
@@ -22,6 +24,9 @@ fun Pose2d.withRotation(rotation: Rotation2d): Pose2d = Pose2d(this.translation,
 
 fun Pose2d.toTransform(): Transform2d = Transform2d(this.translation, this.rotation)
 
+fun Pose2d.distanceFromPoint(translationMeters: Translation2d): Distance =
+    Units.Meters.of(this.translation.getDistance(translation))
+
 fun Pose3d.toTransform(): Transform3d = Transform3d(this.translation, this.rotation)
 
 fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
@@ -32,6 +37,10 @@ fun Translation2d.flipIfNeeded(): Translation2d =
 fun Translation2d.toTransform(): Transform2d = Transform2d(this, Rotation2d())
 
 fun Translation2d.toPose(): Pose2d = Pose2d(this, Rotation2d())
+
+fun Translation2d.rotationToPoint(targetPoint: Translation2d): Rotation2d =
+    Rotation2d(targetPoint.x - this.x,
+        targetPoint.y - this.y)
 
 fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
 
