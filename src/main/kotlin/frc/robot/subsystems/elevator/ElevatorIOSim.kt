@@ -11,6 +11,7 @@ import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import frc.robot.lib.toLinear
 
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -41,5 +42,6 @@ class ElevatorIOSim : ElevatorIO {
         inputs.height =
             Units.Rotations.of(motor.position)
                 .toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
+        inputs.velocity = motor.velocity.toLinear(SPROCKET_RADIUS, GEAR_RATIO)
     }
 }

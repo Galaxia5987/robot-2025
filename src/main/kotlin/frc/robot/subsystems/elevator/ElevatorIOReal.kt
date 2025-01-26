@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import frc.robot.lib.toLinear
 import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
@@ -128,6 +129,8 @@ class ElevatorIOReal : ElevatorIO {
                 ADJUSTED_GEAR_RATIO
             )
         mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
+
+        inputs.velocity = mainMotor.velocity.value.toLinear(SPROCKET_RADIUS, 1.0)
 
         inputs.limitSwitchValue = mainMotor.reverseLimit.value.value == 1
     }
