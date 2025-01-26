@@ -18,15 +18,17 @@ private val REEF_MAP =
         8 to REEF_1L_POSE, // TODO: Fill in actual command
         9 to REEF_2R_POSE, // TODO: Fill in actual command
         10 to REEF_2L_POSE, // TODO: Fill in actual command
-        11 to REEF_1R_POSE, // TODO: Fill in actual command
+        11 to REEF_3R_POSE, // TODO: Fill in actual command
         12 to RIGHT_FEEDER_POSE, // TODO: Fill in actual command (Coral Station)
         13 to LEFT_FEEDER_POSE // TODO: Fill in actual command (Coral Station)
     )
 
-fun getPoseSetpoint(): Pose3d =
+private fun getDriveToPose(): Pose3d =
     REEF_MAP[
         NetworkTableInstance.getDefault()
             .getDoubleTopic("/Dashboard/TargetReefPose")
             .getEntry(0.0)
             .asDouble
             .toInt()]!!
+
+fun getDriveToCommand(): Command = Commands.none() // TODO: Implement
