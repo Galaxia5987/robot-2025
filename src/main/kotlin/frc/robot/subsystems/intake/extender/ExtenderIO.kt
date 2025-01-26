@@ -25,5 +25,6 @@ interface ExtenderIO {
         var motorCurrent: Current = Units.Amps.zero()
         var position: Distance = Units.Meters.zero()
         var sensorValue: Distance = Units.Meters.zero()
+        var velocity: LinearVelocity = Units.MetersPerSecond.zero()
     }
 }
