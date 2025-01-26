@@ -1,12 +1,5 @@
 package frc.robot.lib
 
-import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Transform2d
-import edu.wpi.first.math.geometry.Transform3d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
@@ -16,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WrapperCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.IS_RED
 import org.littletonrobotics.junction.LogTable
 import kotlin.math.PI
 import kotlin.math.hypot
