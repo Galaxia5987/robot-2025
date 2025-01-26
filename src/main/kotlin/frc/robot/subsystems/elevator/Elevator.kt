@@ -78,7 +78,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             .withName("Elevator/reset")
 
     fun characterize(): Command {
-        var routineForwards = SysIdRoutine(
+        val routineForwards = SysIdRoutine(
             SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(6.0),Units.Second.of(1.5)),
             SysIdRoutine.Mechanism(
                 { voltage: Voltage -> io.setVoltage(voltage) },
@@ -86,7 +86,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                 this
             )
         )
-        var routineBackwards = SysIdRoutine(
+        val routineBackwards = SysIdRoutine(
             SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(4.0),Units.Second.of(1.5)),
             SysIdRoutine.Mechanism(
                 { voltage: Voltage -> io.setVoltage(voltage) },
