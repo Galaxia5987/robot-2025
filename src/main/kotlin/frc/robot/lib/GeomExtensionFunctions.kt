@@ -1,4 +1,4 @@
-package frc.robot
+package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
+import frc.robot.IS_RED
 
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
     (this - other).angle
