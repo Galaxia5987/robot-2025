@@ -5,7 +5,6 @@ import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Voltage
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import org.team9432.annotation.Logged
 
 interface ExtenderIO {
@@ -20,8 +19,6 @@ interface ExtenderIO {
     fun setSoftLimits(value: Boolean) {}
 
     fun updateInputs() {}
-
-    fun updateRoutineLog(log: SysIdRoutineLog) {}
 
     @Logged
     open class ExtenderInputs {

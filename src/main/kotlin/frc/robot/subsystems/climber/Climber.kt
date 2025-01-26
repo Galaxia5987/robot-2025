@@ -4,7 +4,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -156,13 +156,14 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 SysIdRoutine.Config(
                     Units.Volt.per(Units.Second).of(5.0),
                     Units.Volt.of(6.0),
-                    Units.Second.of(1.5)
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Climber/state", state)
+                    }
                 ),
                 SysIdRoutine.Mechanism(
                     { voltage: Voltage -> io.setVoltage(voltage) },
-                    { sysIdRoutineLog: SysIdRoutineLog ->
-                        io.updateRoutineLog(sysIdRoutineLog)
-                    },
+                    null,
                     this
                 )
             )
@@ -171,13 +172,14 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
                 SysIdRoutine.Config(
                     Units.Volt.per(Units.Second).of(5.0),
                     Units.Volt.of(6.0),
-                    Units.Second.of(1.5)
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Climber/state", state)
+                    }
                 ),
                 SysIdRoutine.Mechanism(
                     { voltage: Voltage -> io.setVoltage(voltage) },
-                    { sysIdRoutineLog: SysIdRoutineLog ->
-                        io.updateRoutineLog(sysIdRoutineLog)
-                    },
+                    null,
                     this
                 )
             )

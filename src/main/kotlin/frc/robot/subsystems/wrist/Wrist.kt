@@ -3,7 +3,7 @@ package frc.robot.subsystems.wrist
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -65,13 +65,14 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 SysIdRoutine.Config(
                     Units.Volt.per(Units.Second).of(5.0),
                     Units.Volt.of(6.0),
-                    Units.Second.of(1.5)
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Wrist/state", state)
+                    }
                 ),
                 SysIdRoutine.Mechanism(
                     { voltage: Voltage -> io.setVoltage(voltage) },
-                    { sysIdRoutineLog: SysIdRoutineLog ->
-                        io.updateRoutineLog(sysIdRoutineLog)
-                    },
+                    null,
                     this
                 )
             )
@@ -80,13 +81,14 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 SysIdRoutine.Config(
                     Units.Volt.per(Units.Second).of(5.0),
                     Units.Volt.of(6.0),
-                    Units.Second.of(1.5)
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Wrist/state", state)
+                    }
                 ),
                 SysIdRoutine.Mechanism(
                     { voltage: Voltage -> io.setVoltage(voltage) },
-                    { sysIdRoutineLog: SysIdRoutineLog ->
-                        io.updateRoutineLog(sysIdRoutineLog)
-                    },
+                    null,
                     this
                 )
             )
