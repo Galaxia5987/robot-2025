@@ -138,7 +138,8 @@ class ElevatorIOReal : ElevatorIO {
             )
         mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
 
-        inputs.velocity = mainMotor.velocity.value.toLinear(SPROCKET_RADIUS, 1.0)
+        inputs.velocity =
+            mainMotor.velocity.value.toLinear(SPROCKET_RADIUS, 1.0)
 
         inputs.limitSwitchValue = mainMotor.reverseLimit.value.value == 1
     }

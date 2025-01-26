@@ -111,6 +111,7 @@ class ExtenderIOReal : ExtenderIO {
             motor.position.value.toDistance(PINION_RADIUS, GEAR_RATIO)
         inputs.appliedVoltage = motor.motorVoltage.value
         inputs.motorCurrent = motor.supplyCurrent.value
-        inputs.velocity = motor.velocity.value.toLinear(PINION_RADIUS, GEAR_RATIO)
+        inputs.velocity =
+            motor.velocity.value.toLinear(PINION_RADIUS, GEAR_RATIO)
     }
 }

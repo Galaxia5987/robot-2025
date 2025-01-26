@@ -92,31 +92,46 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     }
 
     fun characterize(): Command {
-        val routineForwards = SysIdRoutine(
-            SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(6.0),Units.Second.of(1.5)),
-            SysIdRoutine.Mechanism(
-                { voltage: Voltage -> io.setVoltage(voltage) },
-                { sysIdRoutineLog: SysIdRoutineLog -> io.updateRoutineLog(sysIdRoutineLog) },
-                this
+        val routineForwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(5.0),
+                    Units.Volt.of(6.0),
+                    Units.Second.of(1.5)
+                ),
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    { sysIdRoutineLog: SysIdRoutineLog ->
+                        io.updateRoutineLog(sysIdRoutineLog)
+                    },
+                    this
+                )
             )
-        )
-        val routineBackwards = SysIdRoutine(
-            SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(4.0),Units.Second.of(1.5)),
-            SysIdRoutine.Mechanism(
-                { voltage: Voltage -> io.setVoltage(voltage) },
-                { sysIdRoutineLog: SysIdRoutineLog -> io.updateRoutineLog(sysIdRoutineLog) },
-                this
+        val routineBackwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(5.0),
+                    Units.Volt.of(4.0),
+                    Units.Second.of(1.5)
+                ),
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    { sysIdRoutineLog: SysIdRoutineLog ->
+                        io.updateRoutineLog(sysIdRoutineLog)
+                    },
+                    this
+                )
             )
-        )
         return Commands.sequence(
-            routineForwards.dynamic(SysIdRoutine.Direction.kForward),
-            Commands.waitSeconds(1.0),
-            routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
-            Commands.waitSeconds(1.0),
-            routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
-            Commands.waitSeconds(1.0),
-            routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
-        ).withName("Extender/characterize")
+                routineForwards.dynamic(SysIdRoutine.Direction.kForward),
+                Commands.waitSeconds(1.0),
+                routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
+                Commands.waitSeconds(1.0),
+                routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
+                Commands.waitSeconds(1.0),
+                routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
+            )
+            .withName("Extender/characterize")
     }
 
     @AutoLogOutput

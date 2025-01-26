@@ -113,16 +113,22 @@ fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
 
-fun LinearVelocity.toAngular(radius: Distance, gearRatio: Double): AngularVelocity =
+fun LinearVelocity.toAngular(
+    radius: Distance,
+    gearRatio: Double
+): AngularVelocity =
     this.timesConversionFactor(
         Units.RotationsPerSecond.per(Units.MetersPerSecond)
-            .of(1.0 / (radius.`in`(Units.Meters) *  gearRatio * 2.0 * PI))
+            .of(1.0 / (radius.`in`(Units.Meters) * gearRatio * 2.0 * PI))
     )
 
-fun AngularVelocity.toLinear(radius: Distance, gearRatio: Double): LinearVelocity =
+fun AngularVelocity.toLinear(
+    radius: Distance,
+    gearRatio: Double
+): LinearVelocity =
     this.timesConversionFactor(
         Units.MetersPerSecond.per(Units.RotationsPerSecond)
-            .of( radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
+            .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
 
 fun CommandXboxController.setRumble(strength: Double) {

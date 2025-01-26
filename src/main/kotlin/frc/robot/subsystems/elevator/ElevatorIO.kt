@@ -23,7 +23,6 @@ interface ElevatorIO {
 
     fun updateRoutineLog(log: SysIdRoutineLog) {}
 
-
     @Logged
     open class ElevatorInputs {
         var height: Distance = Units.Meters.zero()
