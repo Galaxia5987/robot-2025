@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.ReverseLimitTypeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -119,6 +120,13 @@ class ElevatorIOReal : ElevatorIO {
 
         mainMotor.configurator.apply(softLimitsConfig)
         auxMotor.configurator.apply(softLimitsConfig)
+    }
+
+    override fun updateRoutineLog(log: SysIdRoutineLog) {
+        log.motor("1")
+            .voltage(inputs.appliedVoltage)
+            .linearPosition(inputs.height)
+            .linearVelocity(inputs.velocity)
     }
 
     override fun updateInputs() {
