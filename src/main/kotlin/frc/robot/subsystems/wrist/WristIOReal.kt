@@ -100,5 +100,6 @@ class WristIOReal : WristIO {
         inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
             absoluteEncoder.absolutePosition.value
         )
+        inputs.velocity.mut_replace(motor.velocity.value)
     }
 }
