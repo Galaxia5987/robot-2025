@@ -1,9 +1,5 @@
 package frc.robot.lib
 
-import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
@@ -15,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WrapperCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.IS_RED
 import kotlin.math.PI
 import kotlin.math.hypot
 import org.littletonrobotics.junction.LogTable
@@ -71,9 +66,6 @@ inline fun <reified T : List<Any>> LogTable.get(
     else result as T
 }
 
-fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
-    (this - other).angle
-
 fun Command.handleInterrupt(command: Command): WrapperCommand =
     handleInterrupt {
         command.schedule()
@@ -87,19 +79,6 @@ fun Command.finallyDo(command: Command): WrapperCommand =
             command.schedule()
         }
     )
-
-fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
-
-fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
-
-fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
-
-fun Translation2d.flipIfNeeded(): Translation2d =
-    if (IS_RED) this.flip() else this
-
-fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
-
-fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
 
 fun Distance.toAngle(radius: Distance, gearRatio: Double): Angle =
     this.timesConversionFactor(
