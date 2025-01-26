@@ -41,7 +41,8 @@ class WristIOReal : WristIO {
                         RotorToSensorRatio = ROTOR_TO_SENSOR
                         SensorToMechanismRatio = SENSOR_TO_MECHANISM
                         FeedbackRemoteSensorID = CANCODER_PORT
-                        FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+                        FeedbackSensorSource =
+                            FeedbackSensorSourceValue.FusedCANcoder
                     }
                 Slot0 =
                     Slot0Configs().apply {
@@ -72,9 +73,10 @@ class WristIOReal : WristIO {
             }
         )
 
-        val encoderConfig = CANcoderConfiguration().apply {
-            MagnetSensor.MagnetOffset = ENCODER_OFFSET
-        }
+        val encoderConfig =
+            CANcoderConfiguration().apply {
+                MagnetSensor.MagnetOffset = ENCODER_OFFSET
+            }
 
         absoluteEncoder.configurator.apply(encoderConfig)
     }

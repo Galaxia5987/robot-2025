@@ -68,6 +68,4 @@ var MOTOR_CONFIG =
         }
     }
 val CANCODER_CONFIG =
-    CANcoderConfiguration().apply {
-        MagnetSensor.MagnetOffset = ENCODER_OFFSET
-    }
+    CANcoderConfiguration().apply { MagnetSensor.MagnetOffset = ENCODER_OFFSET }
