@@ -2,13 +2,16 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.networktables.NetworkTablesJNI
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 
 /**
@@ -33,6 +36,15 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
+    private val BRANCH_MAP =
+        mapOf(
+            1 to l1(Trigger { true }), // TODO: Fill in correct trigger
+            2 to l2(Trigger { true }), // TODO: Fill in correct trigger
+            3 to l3(Trigger { true }), // TODO: Fill in correct trigger
+            4 to l4(Trigger { true }), // TODO: Fill in correct trigger
+            5 to feeder(Trigger { true }) // TODO: Fill in correct trigger
+        )
+
     init {
         registerAutoCommands()
         configureButtonBindings()
@@ -50,6 +62,13 @@ object RobotContainer {
 
         enableAutoLogOutputFor(this)
     }
+
+    private fun getBranchCommand(): Command =
+        BRANCH_MAP[
+            NetworkTablesJNI.getEntry(
+                NetworkTablesJNI.getDefaultInstance(),
+                "Dashboard/TargetBranchPose"
+            )]!!
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
@@ -96,6 +115,11 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
+
+        NetworkTablesJNI.getEntry(
+            NetworkTablesJNI.getDefaultInstance(),
+            "Dashboard/TargetPose"
+        )
     }
 
     fun getAutonomousCommand(): Command =
