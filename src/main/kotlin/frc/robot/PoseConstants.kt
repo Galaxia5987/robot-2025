@@ -2,18 +2,18 @@ package frc.robot
 
 import edu.wpi.first.math.geometry.Pose3d
 
-val REEF_ONE_POSE = Pose3d() // TODO: Fill in
-val REEF_TWO_POSE = Pose3d() // TODO: Fill in
-val REEF_THREE_POSE = Pose3d() // TODO: Fill in
-val REEF_FOUR_POSE = Pose3d() // TODO: Fill in
-val REEF_FIVE_POSE = Pose3d() // TODO: Fill in
-val REEF_SIX_POSE = Pose3d() // TODO: Fill in
-val REEF_SEVEN_POSE = Pose3d() // TODO: Fill in
-val REEF_EIGHT_POSE = Pose3d() // TODO: Fill in
-val REEF_NINE_POSE = Pose3d() // TODO: Fill in
-val REEF_TEN_POSE = Pose3d() // TODO: Fill in
-val REEF_ELEVEN_POSE = Pose3d() // TODO: Fill in
-val REEF_TWELVE_POSE = Pose3d() // TODO: Fill in
+val REEF_1L_POSE = Pose3d() // TODO: Fill in
+val REEF_1R_POSE = Pose3d() // TODO: Fill in
+val REEF_2L_POSE = Pose3d() // TODO: Fill in
+val REEF_2R_POSE = Pose3d() // TODO: Fill in
+val REEF_3L_POSE = Pose3d() // TODO: Fill in
+val REEF_3R_POSE = Pose3d() // TODO: Fill in
+val REEF_4L_POSE = Pose3d() // TODO: Fill in
+val REEF_4R_POSE = Pose3d() // TODO: Fill in
+val REEF_5L_POSE = Pose3d() // TODO: Fill in
+val REEF_5R_POSE = Pose3d() // TODO: Fill in
+val REEF_6L_POSE = Pose3d() // TODO: Fill in
+val REEF_6R_POSE = Pose3d() // TODO: Fill in
 
 val LEFT_FEEDER_POSE = Pose3d() // TODO: Fill in
 val RIGHT_FEEDER_POSE = Pose3d() // TODO: Fill in
