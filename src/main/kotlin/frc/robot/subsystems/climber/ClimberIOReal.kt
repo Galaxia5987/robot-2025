@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.AnalogInput
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import frc.robot.lib.motors.LinearServo
 
 class ClimberIOReal : ClimberIO {
@@ -56,6 +57,13 @@ class ClimberIOReal : ClimberIO {
 
     override fun setStopperPower(power: Double) {
         stopperMotor.set(ControlMode.PercentOutput, power)
+    }
+
+    override fun updateRoutineLog(log: SysIdRoutineLog) {
+        log.motor("Climber main motor")
+            .voltage(inputs.appliedVoltage)
+            .angularPosition(inputs.angle)
+            .angularVelocity(inputs.angularVelocity)
     }
 
     override fun updateInput() {
