@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake.extender
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.sequence
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
@@ -87,6 +88,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .debounce(SAFETY_DEBOUNCE)
             .onTrue(setPosition { setpoint })
     }
+
+    fun disableCommand(): Command =
+        setVoltage(Units.Volts.zero())
+            .alongWith(runOnce{io.setNeutralMode(false)})
+            .until(DriverStation::isEnabled)
 
     @AutoLogOutput
     val isExtended = Trigger {
