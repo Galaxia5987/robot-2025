@@ -1,6 +1,6 @@
 package frc.robot
 
-import edu.wpi.first.networktables.NetworkTablesJNI
+import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 
@@ -22,4 +22,10 @@ private val REEF_MAP =
         13 to Commands.none() // TODO: Fill in actual command (Coral Station)
     )
 
-fun getReefDriveCommand(): Command = REEF_MAP[NetworkTablesJNI.getEntry(NetworkTablesJNI.getDefaultInstance(), "Dashboard/TargetReefPose")]!!
+fun getReefDriveCommand(): Command =
+    REEF_MAP[
+        NetworkTableInstance.getDefault()
+            .getDoubleTopic("/Dashboard/TargetReefPose")
+            .getEntry(0.0)
+            .asDouble
+            .toInt()]!!
