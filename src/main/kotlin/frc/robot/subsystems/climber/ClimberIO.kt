@@ -20,6 +20,7 @@ interface ClimberIO {
         var appliedVoltage: Voltage = Units.Volts.zero()
         var stopperMotorCurrent: Current = Units.Amps.zero()
         var angle: Angle = Units.Degree.zero()
+        var noOffsetEncoderPosition: Angle = Units.Rotations.zero()
         var latchPosition: Distance = Units.Millimeters.zero()
         var sensorDistance: Distance = Units.Centimeter.zero()
     }

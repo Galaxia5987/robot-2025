@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
+import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
 import edu.wpi.first.math.filter.MedianFilter
 import edu.wpi.first.units.Units
@@ -19,6 +20,7 @@ class ClimberIOReal : ClimberIO {
 
     private val mainMotor = TalonFX(MAIN_MOTOR_ID)
     private val auxMotor = TalonFX(AUX_MOTOR_ID)
+    private val encoder = CANcoder(CANCODER_ID)
     private val latchServo =
         LinearServo(
             LATCH_SERVO_ID,
@@ -37,6 +39,7 @@ class ClimberIOReal : ClimberIO {
     init {
         listOf(auxMotor, mainMotor).forEach { it.apply { MOTOR_CONFIG } }
         auxMotor.setControl(Follower(mainMotor.deviceID, true))
+        encoder.configurator.apply(CANCODER_CONFIG)
     }
 
     override fun setLatchPosition(position: Distance) {
@@ -57,6 +60,7 @@ class ClimberIOReal : ClimberIO {
 
     override fun updateInput() {
         inputs.angle = mainMotor.position.value
+        inputs.noOffsetEncoderPosition = encoder.absolutePosition.value
         inputs.appliedVoltage = mainMotor.supplyVoltage.value
         inputs.latchPosition = Units.Millimeters.of(latchServo.position)
 
