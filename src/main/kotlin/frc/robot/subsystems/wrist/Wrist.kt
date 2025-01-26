@@ -3,9 +3,12 @@ package frc.robot.subsystems.wrist
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -55,6 +58,34 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun tuningAngle(): Command =
         run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
             .withName("Wrist/Tuning")
+
+    fun characterize(): Command {
+        val routineForwards = SysIdRoutine(
+            SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(6.0),Units.Second.of(1.5)),
+            SysIdRoutine.Mechanism(
+                { voltage: Voltage -> io.setVoltage(voltage) },
+                { sysIdRoutineLog: SysIdRoutineLog -> io.updateRoutineLog(sysIdRoutineLog) },
+                this
+            )
+        )
+        val routineBackwards = SysIdRoutine(
+            SysIdRoutine.Config(Units.Volt.per(Units.Second).of(5.0),Units.Volt.of(6.0),Units.Second.of(1.5)),
+            SysIdRoutine.Mechanism(
+                { voltage: Voltage -> io.setVoltage(voltage) },
+                { sysIdRoutineLog: SysIdRoutineLog -> io.updateRoutineLog(sysIdRoutineLog) },
+                this
+            )
+        )
+        return Commands.sequence(
+            routineForwards.dynamic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1.0),
+            routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
+            Commands.waitSeconds(1.0),
+            routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1.0),
+            routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
+        ).withName("Wrist/characterize")
+    }
 
     override fun periodic() {
         io.updateInputs()
