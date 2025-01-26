@@ -102,5 +102,5 @@ fun CommandXboxController.rumbleCommand(): Command {
 }
 
 fun Subsystem.setDisableCommand(command: Command) {
-    val isDisabled = Trigger {DriverStation.isDisabled()}.whileTrue(command)
+    val isDisabled = Trigger { DriverStation.isDisabled() }.whileTrue(command)
 }

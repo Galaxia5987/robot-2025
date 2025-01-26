@@ -99,7 +99,8 @@ class ExtenderIOReal : ExtenderIO {
     }
 
     override fun setNeutralMode(isBreak: Boolean) {
-        motorOutputConfig.NeutralMode = if (isBreak) NeutralModeValue.Brake else NeutralModeValue.Coast
+        motorOutputConfig.NeutralMode =
+            if (isBreak) NeutralModeValue.Brake else NeutralModeValue.Coast
         motor.configurator.apply(motorOutputConfig)
     }
 

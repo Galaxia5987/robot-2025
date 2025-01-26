@@ -91,7 +91,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun disableCommand(): Command =
         setVoltage(Units.Volts.zero())
-            .alongWith(runOnce{io.setNeutralMode(false)})
+            .alongWith(runOnce { io.setNeutralMode(false) })
             .until(DriverStation::isEnabled)
 
     @AutoLogOutput
