@@ -23,6 +23,11 @@ class ExtenderIOReal : ExtenderIO {
     private val positionControl = MotionMagicTorqueCurrentFOC(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
+    private val motorOutputConfig =
+        MotorOutputConfigs().apply {
+            Inverted = InvertedValue.Clockwise_Positive
+            NeutralMode = NeutralModeValue.Coast
+        }
     private val softLimitsConfig =
         SoftwareLimitSwitchConfigs().apply {
             ForwardSoftLimitEnable = true
@@ -38,11 +43,7 @@ class ExtenderIOReal : ExtenderIO {
     init {
         val motorConfig =
             TalonFXConfiguration().apply {
-                MotorOutput =
-                    MotorOutputConfigs().apply {
-                        Inverted = InvertedValue.Clockwise_Positive
-                        NeutralMode = NeutralModeValue.Coast
-                    }
+                MotorOutput = motorOutputConfig
 
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
@@ -95,6 +96,11 @@ class ExtenderIOReal : ExtenderIO {
                 .withForwardSoftLimitEnable(value)
                 .withReverseSoftLimitEnable(value)
         )
+    }
+
+    override fun setNeutralMode(isBreak: Boolean) {
+        motorOutputConfig.NeutralMode = if (isBreak) NeutralModeValue.Brake else NeutralModeValue.Coast
+        motor.configurator.apply(motorOutputConfig)
     }
 
     override fun updateInputs() {
