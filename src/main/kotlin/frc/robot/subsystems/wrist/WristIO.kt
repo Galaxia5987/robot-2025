@@ -2,6 +2,7 @@ package frc.robot.subsystems.wrist
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.*
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 import org.team9432.annotation.Logged
 
 interface WristIO {
@@ -11,6 +12,7 @@ interface WristIO {
     fun setVoltage(voltage: Voltage) {}
     fun resetAbsoluteEncoder(angle: Angle) {}
     fun updateInputs() {}
+    fun updateRoutineLog(log: SysIdRoutineLog) {}
 
     @Logged
     open class WristInputs {

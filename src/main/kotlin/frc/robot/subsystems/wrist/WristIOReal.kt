@@ -19,6 +19,7 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
@@ -91,6 +92,13 @@ class WristIOReal : WristIO {
 
     override fun resetAbsoluteEncoder(angle: Angle) {
         absoluteEncoder.setPosition(angle)
+    }
+
+    override fun updateRoutineLog(log: SysIdRoutineLog) {
+        log.motor("Wrist motor")
+            .voltage(inputs.appliedVoltage)
+            .angularPosition(inputs.angle)
+            .angularVelocity(inputs.velocity)
     }
 
     override fun updateInputs() {
