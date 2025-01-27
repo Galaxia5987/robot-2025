@@ -72,7 +72,7 @@ class Visualizer {
             Translation3d(
                 moduleX,
                 moduleY,
-                kWheelRadius.`in`(Units.Centimeter)
+                kWheelRadius.`in`(Units.Meters)
             ),
             getRotation3d(yaw = moduleYaw)
         )
@@ -88,7 +88,7 @@ class Visualizer {
             Translation3d(
                 moduleX,
                 moduleY,
-                kWheelRadius.`in`(Units.Centimeter)
+                kWheelRadius.`in`(Units.Meters)
             ),
             getRotation3d(yaw = moduleYaw, pitch = modulePitch)
         )
