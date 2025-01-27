@@ -61,40 +61,70 @@ class Visualizer {
         return Pair(firstStagePose, secondStagePose)
     }
 
-    private fun getSwerveModulePose(): Pair<Array<Pose3d>, Array<Pose3d>> {
+    private fun getSwerveModulePoseTurn(
+        moduleX: Double,
+        moduleY: Double,
+        moduleYaw: Angle
+    ): Pose3d {
+        return Pose3d(
+            Translation3d(
+                moduleX,
+                moduleY,
+                kWheelRadius.`in`(Units.Centimeter)
+            ),
+            getRotation3d(yaw = moduleYaw)
+        )
+    }
+    private fun getSwerveModulePoseDrive(
+        moduleX: Double,
+        moduleY: Double,
+        moduleYaw: Angle,
+        modulePitch: Angle
+    ): Pose3d {
+
+        return Pose3d(
+            Translation3d(
+                moduleX,
+                moduleY,
+                kWheelRadius.`in`(Units.Centimeter)
+            ),
+            getRotation3d(yaw = moduleYaw, pitch = modulePitch)
+        )
+    }
+
+    private fun getAllSwerveModulePoseTurn(): Array<Pose3d> {
         val swervePosesTurn: Array<Pose3d> =
-            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
-        val swervePosesDrive: Array<Pose3d> =
             arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
         for (i in 0..3) {
             swervePosesTurn[i] =
-                Pose3d(
-                    Translation3d(
-                        swerveMoudlePose[i].x,
-                        swerveMoudlePose[i].y,
-                        0.0508
-                    ),
-                    getRotation3d(yaw = swerveDrive.SwerveTurnAngle[i])
-                )
-            swervePosesDrive[i] =
-                Pose3d(
-                    Translation3d(
-                        swerveMoudlePose[i].x,
-                        swerveMoudlePose[i].y,
-                        0.0508
-                    ),
-                    getRotation3d(
-                        yaw = swerveDrive.SwerveTurnAngle[i],
-                        pitch = swerveDrive.SwerveDriveAngle[i]
-                    )
+                getSwerveModulePoseTurn(
+                    swerveMoudlePose[i].x,
+                    swerveMoudlePose[i].y,
+                    swerveTurnAngle[i]
                 )
         }
-        return Pair(swervePosesTurn, swervePosesDrive)
+        return swervePosesTurn
+    }
+    private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
+        val swervePosesDrive: Array<Pose3d> =
+            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
+
+        for (i in 0..3) {
+            swervePosesDrive[i] =
+                getSwerveModulePoseDrive(
+                    swerveMoudlePose[i].x,
+                    swerveMoudlePose[i].y,
+                    swerveTurnAngle[i],
+                    swerveDriveAngle[i]
+                )
+        }
+        return swervePosesDrive
     }
 
     @AutoLogOutput
     fun getSubsystemsPoses(): Array<Pose3d> {
-        val (swervePosesTurn, swervePosesDrive) = getSwerveModulePose()
+        val swervePosesTurn = getAllSwerveModulePoseTurn()
+        val swervePosesDrive = getAllSwerveModulePoseDrive()
 
         val intakePose =
             getPose3d(
