@@ -34,7 +34,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
 
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
-private val kWheelRadius = Units.Meters.of(0.0508)
+private val kWheelRadius = Meters.of(0.0508)
 
 class Visualizer {
     private val swerveTurnAngle = frc.robot.swerveDrive.SwerveTurnAngle
@@ -70,7 +70,7 @@ class Visualizer {
         moduleYaw: Angle
     ): Pose3d {
         return Pose3d(
-            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Units.Meters)),
+            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Meters)),
             getRotation3d(yaw = moduleYaw)
         )
     }
