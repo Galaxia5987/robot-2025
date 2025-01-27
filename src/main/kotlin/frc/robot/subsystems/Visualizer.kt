@@ -1,20 +1,17 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
 import org.littletonrobotics.junction.AutoLogOutput
 
-
-private val swerveMoudlePose:Array<Translation2d> = Drive.getModuleTranslations()
+private val swerveMoudlePose: Array<Translation2d> =
+    Drive.getModuleTranslations()
 
 private val INITIAL_INTAKE_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.32), z = Meters.of(0.35))
@@ -36,7 +33,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 
-class Visualizer{
+class Visualizer {
     private val swerveDrive = frc.robot.swerveDrive
     private val climber = frc.robot.climber
     private val elevator = frc.robot.elevator
@@ -61,22 +58,40 @@ class Visualizer{
         return Pair(firstStagePose, secondStagePose)
     }
 
-
-    private fun getSwerveModulePose(): Pair<Array<Pose3d>,Array<Pose3d>>
-    {
-        val swervePosesTurn:Array<Pose3d> = arrayOf(Pose3d(), Pose3d(),Pose3d(),Pose3d())
-        val swervePosesDrive:Array<Pose3d> = arrayOf(Pose3d(),Pose3d(),Pose3d(),Pose3d())
-        for (i in 0..3)
-        {
-            swervePosesTurn[i]= Pose3d(Translation3d(swerveMoudlePose[i].x, swerveMoudlePose[i].y,0.0508), getRotation3d(yaw=swerveDrive.SwerveTurnAngle[i]))
-            swervePosesDrive[i]= Pose3d(Translation3d(swerveMoudlePose[i].x, swerveMoudlePose[i].y,0.0508), getRotation3d(yaw=swerveDrive.SwerveTurnAngle[i], pitch = swerveDrive.SwerveDriveAngle[i]))
+    private fun getSwerveModulePose(): Pair<Array<Pose3d>, Array<Pose3d>> {
+        val swervePosesTurn: Array<Pose3d> =
+            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
+        val swervePosesDrive: Array<Pose3d> =
+            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
+        for (i in 0..3) {
+            swervePosesTurn[i] =
+                Pose3d(
+                    Translation3d(
+                        swerveMoudlePose[i].x,
+                        swerveMoudlePose[i].y,
+                        0.0508
+                    ),
+                    getRotation3d(yaw = swerveDrive.SwerveTurnAngle[i])
+                )
+            swervePosesDrive[i] =
+                Pose3d(
+                    Translation3d(
+                        swerveMoudlePose[i].x,
+                        swerveMoudlePose[i].y,
+                        0.0508
+                    ),
+                    getRotation3d(
+                        yaw = swerveDrive.SwerveTurnAngle[i],
+                        pitch = swerveDrive.SwerveDriveAngle[i]
+                    )
+                )
         }
-        return Pair(swervePosesTurn,swervePosesDrive)
+        return Pair(swervePosesTurn, swervePosesDrive)
     }
+
     @AutoLogOutput
     fun getSubsystemsPoses(): Array<Pose3d> {
-        val (swervePosesTurn,swervePosesDrive) = getSwerveModulePose()
-
+        val (swervePosesTurn, swervePosesDrive) = getSwerveModulePose()
 
         val intakePose =
             getPose3d(
@@ -96,8 +111,10 @@ class Visualizer{
                     x = INITIAL_WRIST_TRANSLATION.x,
                     y = INITIAL_WRIST_TRANSLATION.y,
                     z =
-                        INITIAL_WRIST_TRANSLATION.z+elevator.height.invoke().`in`(Meters)),
-                getRotation3d(pitch = -wrist.angle.invoke())
+                        INITIAL_WRIST_TRANSLATION.z +
+                            elevator.height.invoke().`in`(Meters)
+                ),
+                getRotation3d(pitch = wrist.angle.invoke())
             )
 
         val coralRollersPoseDown = wristPose
@@ -107,9 +124,8 @@ class Visualizer{
             getPose3d(
                 x = INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.x,
                 z =
-                    INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.z.plus(
-                        elevator.height.invoke().`in`(Meters)
-                    )
+                    INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.z +
+                        elevator.height.invoke().`in`(Meters),
             )
 
         val climberPose =
