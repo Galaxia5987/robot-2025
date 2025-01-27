@@ -34,7 +34,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
 
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
-private val kWheelRadius = Units.Centimeters.of(5.08)
+private val kWheelRadius = Units.Meters.of(0.0508)
 
 class Visualizer {
     private val swerveTurnAngle = frc.robot.swerveDrive.SwerveTurnAngle
