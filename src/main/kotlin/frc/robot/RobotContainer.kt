@@ -1,5 +1,6 @@
 package frc.robot
 
+import choreo.auto.AutoChooser
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
@@ -32,6 +33,8 @@ object RobotContainer {
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
+
+    val autoChooser = AutoChooser()
 
     init {
         registerAutoCommands()
