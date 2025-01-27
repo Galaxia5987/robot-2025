@@ -106,10 +106,6 @@ object Robot : LoggedRobot() {
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
         Logger.recordOutput(
-            "ZeroedPosition",
-            Pose3d(0.0, 0.0, 0.0, Rotation3d(0.0, 0.0, 0.0))
-        )
-        Logger.recordOutput(
             "SubsystemPoses",
             *RobotContainer.visualizer.getSubsystemsPoses()
         )
