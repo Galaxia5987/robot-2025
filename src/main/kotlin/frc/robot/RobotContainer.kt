@@ -1,6 +1,5 @@
 package frc.robot
 
-import choreo.auto.AutoChooser
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
@@ -34,10 +33,8 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
-    val autoChooser = AutoChooser()
-
     init {
-        registerAutoCommands()
+        registerAutoRoutines()
         configureButtonBindings()
         configureDefaultCommands()
         visualizer =
@@ -104,8 +101,6 @@ object RobotContainer {
     fun getAutonomousCommand(): Command =
         DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
-    private fun registerAutoCommands() {
-        fun register(name: String, command: Command) =
-            NamedCommands.registerCommand(name, command)
+    private fun registerAutoRoutines() {
     }
 }
