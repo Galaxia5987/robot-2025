@@ -44,7 +44,8 @@ class Visualizer {
     private val extenderPosition = frc.robot.extender.position.invoke()
     val wristAngle = frc.robot.wrist.angle.invoke()
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
-        val secondStageHeight = elevator.height.invoke().`in`(Meters)
+
+        val secondStageHeight = elevatorHeight.`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
         val firstStagePose =
@@ -98,12 +99,12 @@ class Visualizer {
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +
-                    (getTranslation3d(x = extender.position.invoke()))
+                    (getTranslation3d(x = extenderPosition))
             )
         val intakeRollerPose =
             getPose3d(
                 INITIAL_INTAKE_Roller_TRANSLATION +
-                    getTranslation3d(x = extender.position.invoke())
+                    getTranslation3d(x = extenderPosition)
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
@@ -114,9 +115,9 @@ class Visualizer {
                     y = INITIAL_WRIST_TRANSLATION.y,
                     z =
                         INITIAL_WRIST_TRANSLATION.z +
-                            elevator.height.invoke().`in`(Meters)
+                            elevatorHeight.`in`(Meters)
                 ),
-                getRotation3d(pitch = wrist.angle.invoke())
+                getRotation3d(pitch = wristAngle)
             )
 
         val coralRollersPoseDown = wristPose
@@ -127,13 +128,13 @@ class Visualizer {
                 x = INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.x,
                 z =
                     INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.z +
-                        elevator.height.invoke().`in`(Meters),
+                        elevatorHeight.`in`(Meters),
             )
 
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation = getRotation3d(pitch = climber.angle.invoke())
+                rotation = getRotation3d(pitch = climbAngle)
             )
 
         return arrayOf(
