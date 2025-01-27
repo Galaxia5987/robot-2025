@@ -21,14 +21,13 @@ private val autoFactory =
         swerveDrive
     )
 
-private fun AutoTrajectory.atDistanceFromPoint(
+private fun AutoTrajectory.atDistanceFromFinalPoint(
     robotPose: () -> Pose2d,
-    point: Translation2d,
     distance: Distance,
     tolerance: Distance
 ): Trigger = Trigger {
     MathUtil.isNear(
-        robotPose.invoke().distanceFromPoint(point).`in`(Units.Meters),
+        robotPose.invoke().distanceFromPoint(this.finalPose.get().translation).`in`(Units.Meters),
         distance.`in`(Units.Meters),
         tolerance.`in`(Units.Meters)
     )
