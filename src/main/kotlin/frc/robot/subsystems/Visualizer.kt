@@ -148,7 +148,7 @@ class Visualizer {
                     y = INITIAL_WRIST_TRANSLATION.y,
                     z =
                         INITIAL_WRIST_TRANSLATION.z +
-                            elevatorHeight.`in`(Meters)
+                            elevatorHeight.invoke().`in`(Meters)
                 ),
                 getRotation3d(pitch = wristAngle)
             )
@@ -161,7 +161,7 @@ class Visualizer {
                 x = INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.x,
                 z =
                     INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.z +
-                        elevatorHeight.`in`(Meters),
+                        elevatorHeight.invoke().`in`(Meters),
             )
 
         val climberPose =
