@@ -3,7 +3,6 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.getPose3d
