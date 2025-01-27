@@ -1,14 +1,16 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
+import choreo.auto.AutoChooser
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.autoRoutines
 import frc.robot.subsystems.drive.DriveCommands
 
 /**
@@ -106,5 +108,8 @@ object RobotContainer {
         DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
     private fun registerAutoRoutines() {
+        autoRoutines.forEach {
+            autoChooser.addRoutine(it.toString(), { it })
+        }
     }
 }
