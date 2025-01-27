@@ -35,13 +35,14 @@ private val INITIAL_CLIMBER_TRANSLATION =
 private val kWheelRadius = Units.Centimeters.of(5.08)
 
 class Visualizer {
-    private val swerveDrive = frc.robot.swerveDrive
-    private val climber = frc.robot.climber
-    private val elevator = frc.robot.elevator
-    private val gripper = frc.robot.gripper
-    private val extender = frc.robot.extender
-    private val roller = frc.robot.roller
-    private val wrist = frc.robot.wrist
+    private val swerveTurnAngle = frc.robot.swerveDrive.SwerveTurnAngle
+    private val swerveDriveAngle = frc.robot.swerveDrive.SwerveDriveAngle
+
+    private val climbAngle = frc.robot.climber.angle.invoke()
+    private val elevatorHeight = frc.robot.elevator.height.invoke()
+
+    private val extenderPosition = frc.robot.extender.position.invoke()
+    val wristAngle = frc.robot.wrist.angle.invoke()
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
         val secondStageHeight = elevator.height.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
