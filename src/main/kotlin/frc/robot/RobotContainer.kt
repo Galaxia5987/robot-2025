@@ -33,10 +33,14 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
+    private val autoChooser = AutoChooser()
+
     init {
         registerAutoRoutines()
         configureButtonBindings()
         configureDefaultCommands()
+
+        SmartDashboard.putData(autoChooser)
         visualizer =
             Visualizer(
                 extender.position,
