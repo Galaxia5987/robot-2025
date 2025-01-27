@@ -70,11 +70,7 @@ class Visualizer {
         moduleYaw: Angle
     ): Pose3d {
         return Pose3d(
-            Translation3d(
-                moduleX,
-                moduleY,
-                kWheelRadius.`in`(Units.Meters)
-            ),
+            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Units.Meters)),
             getRotation3d(yaw = moduleYaw)
         )
     }
@@ -86,11 +82,7 @@ class Visualizer {
     ): Pose3d {
 
         return Pose3d(
-            Translation3d(
-                moduleX,
-                moduleY,
-                kWheelRadius.`in`(Meters)
-            ),
+            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Meters)),
             getRotation3d(yaw = moduleYaw, pitch = modulePitch)
         )
     }
