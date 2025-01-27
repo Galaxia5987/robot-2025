@@ -41,13 +41,14 @@ class Visualizer {
     private val swerveDriveAngle = frc.robot.swerveDrive.SwerveDriveAngle
 
     private val climbAngle = frc.robot.climber.angle.invoke()
-    private val elevatorHeight = frc.robot.elevator.height.invoke()
+
+    private val elevatorHeight = frc.robot.elevator.height
 
     private val extenderPosition = frc.robot.extender.position.invoke()
     val wristAngle = frc.robot.wrist.angle.invoke()
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
-        val secondStageHeight = elevatorHeight.`in`(Meters)
+        val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
         val firstStagePose =
@@ -88,7 +89,7 @@ class Visualizer {
             Translation3d(
                 moduleX,
                 moduleY,
-                kWheelRadius.`in`(Units.Meters)
+                kWheelRadius.`in`(Meters)
             ),
             getRotation3d(yaw = moduleYaw, pitch = modulePitch)
         )
