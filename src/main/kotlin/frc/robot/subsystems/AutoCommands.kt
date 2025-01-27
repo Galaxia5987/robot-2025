@@ -364,3 +364,5 @@ fun C6L5RL(): AutoRoutine {
 
     return routine
 }
+
+val autoRoutines =
