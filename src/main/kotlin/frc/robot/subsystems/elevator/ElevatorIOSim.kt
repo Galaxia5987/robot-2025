@@ -1,10 +1,11 @@
 package frc.robot.subsystems.elevator
 
-import com.ctre.phoenix6.controls.DutyCycleOut
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
@@ -14,7 +15,7 @@ import frc.robot.lib.toDistance
 class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motorPositionRequest = PositionVoltage(0.0)
-    private val dutyCycleRequest = DutyCycleOut(0.0)
+    private val voltageControl = VoltageOut(0.0)
     private val angleController = PIDController(0.4, 0.0, 0.5)
     private val motor = TalonFXSim(2, 1.0, 0.003, 1.0, TalonType.KRAKEN_FOC)
 
@@ -30,8 +31,8 @@ class ElevatorIOSim : ElevatorIO {
         )
     }
 
-    override fun setPower(percentOutput: Double) {
-        motor.setControl(dutyCycleRequest.withOutput(percentOutput))
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(voltageControl.withOutput(voltage))
     }
 
     override fun updateInputs() {

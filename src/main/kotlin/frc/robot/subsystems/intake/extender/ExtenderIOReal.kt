@@ -4,12 +4,14 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.toAngle
@@ -21,13 +23,25 @@ class ExtenderIOReal : ExtenderIO {
     private val positionControl = MotionMagicTorqueCurrentFOC(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
+    private val softLimitsConfig =
+        SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold =
+                MAX_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
+            ReverseSoftLimitThreshold =
+                MIN_EXTENSION.toAngle(PINION_RADIUS, GEAR_RATIO)
+                    .`in`(Units.Rotations)
+        }
+
     init {
         val motorConfig =
             TalonFXConfiguration().apply {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         Inverted = InvertedValue.Clockwise_Positive
-                        NeutralMode = NeutralModeValue.Brake
+                        NeutralMode = NeutralModeValue.Coast
                     }
 
                 CurrentLimits =
@@ -43,6 +57,8 @@ class ExtenderIOReal : ExtenderIO {
                         ForwardLimitEnable = false
                         ReverseLimitEnable = false
                     }
+
+                SoftwareLimitSwitch = softLimitsConfig
 
                 Slot0 =
                     Slot0Configs().apply {
@@ -71,6 +87,14 @@ class ExtenderIOReal : ExtenderIO {
 
     override fun reset() {
         motor.setPosition(0.0)
+    }
+
+    override fun setSoftLimits(value: Boolean) {
+        motor.configurator.apply(
+            softLimitsConfig
+                .withForwardSoftLimitEnable(value)
+                .withReverseSoftLimitEnable(value)
+        )
     }
 
     override fun updateInputs() {

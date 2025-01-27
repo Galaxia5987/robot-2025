@@ -4,6 +4,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands.sequence
+import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
@@ -29,13 +31,21 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private var finishedResettingFlag = false
 
-    private fun setPosition(position: Positions): Command =
-        runOnce {
-                io.setPosition(position.position)
-                setpoint = position.position
-                setpointName = position.getLoggingName()
-            }
+    private fun setPosition(position: () -> Distance): Command =
+        sequence(
+                runOnce {
+                    setpoint = position.invoke()
+                    io.setPosition(setpoint)
+                },
+                waitUntil(atSetpoint),
+                setVoltage(Units.Volts.zero())
+            )
             .withName("Extender/setPosition")
+
+    private fun setPosition(position: Positions): Command =
+        runOnce { setpointName = position.getLoggingName() }
+            .andThen(setPosition({ position.position }))
+            .withName("Extender/setPosition with enum")
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
@@ -55,13 +65,27 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun reset(): Command {
         return setVoltage(RESET_VOLTAGE)
-            .alongWith(runOnce { finishedResettingFlag = false })
+            .alongWith(
+                runOnce {
+                    finishedResettingFlag = false
+                    io.setSoftLimits(false)
+                }
+            )
             .until(isStuck)
             .andThen(
-                runOnce(io::reset),
-                runOnce { finishedResettingFlag = true }
+                runOnce {
+                    io::reset
+                    finishedResettingFlag = true
+                }
             )
             .withName("Extender/reset")
+    }
+
+    fun returnToSetpoint(): Command = run {
+        atSetpoint
+            .negate()
+            .debounce(SAFETY_DEBOUNCE)
+            .onTrue(setPosition { setpoint })
     }
 
     @AutoLogOutput
@@ -94,7 +118,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
-    @AutoLogOutput val finishedResetting = Trigger { finishedResettingFlag }
+    @AutoLogOutput
+    val finishedResetting =
+        Trigger { finishedResettingFlag }
+            .onTrue(runOnce { io.setSoftLimits(true) })
 
     override fun periodic() {
         io.updateInputs()
