@@ -365,3 +365,4 @@ fun C6L5RL(): AutoRoutine {
 }
 
 val autoRoutines =
+    arrayOf(A2R3LR(), A3LR4L(), ALeave(), BLeave(), CLeave(), B1L6RL(), B1R2LR(), B1R(), C5RL4R(), C6L5RL())
