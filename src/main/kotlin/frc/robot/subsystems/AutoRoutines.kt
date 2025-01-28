@@ -82,9 +82,9 @@ private fun routine3LR(): AutoRoutine {
     val S3R = routine.trajectory("S3R")
 
     routine.active().onTrue(t3LS.cmd())
-    t3LS.feedAtDistance()
+    t3LS.feedAtTime()
     t3LS.done().onTrue(S3R.cmd())
-    S3R.scoreAtDistance()
+    S3R.scoreAtTime()
 
     return routine
 }
@@ -96,11 +96,11 @@ private fun A2R3LR(): AutoRoutine {
     val S3L = routine.trajectory("S3L")
 
     routine.active().onTrue(A2R.cmd())
-    A2R.scoreAtDistance()
+    A2R.scoreAtTime()
     A2R.done().onTrue(t2RS.cmd())
-    t2RS.feedAtDistance()
+    t2RS.feedAtTime()
     t2RS.done().onTrue(S3L.cmd())
-    S3L.scoreAtDistance()
+    S3L.scoreAtTime()
     S3L.done().onTrue(routine3LR().cmd())
 
     return routine
@@ -113,11 +113,11 @@ private fun A3LR4L(): AutoRoutine {
     val S4L = routine.trajectory("S4L")
 
     routine.active().onTrue(A3L.cmd())
-    A3L.scoreAtDistance()
+    A3L.scoreAtTime()
     A3L.done().onTrue(routine3LR().cmd().andThen(t3RS.cmd()))
-    t3RS.feedAtDistance()
+    t3RS.feedAtTime()
     t3RS.done().onTrue(S4L.cmd())
-    S4L.scoreAtDistance()
+    S4L.scoreAtTime()
 
     return routine
 }
@@ -127,7 +127,7 @@ private fun B1L(): AutoRoutine {
     val B1L = routine.trajectory("B1L")
 
     routine.active().onTrue(B1L.cmd())
-    B1L.scoreAtDistance()
+    B1L.scoreAtTime()
 
     return routine
 }
@@ -137,7 +137,7 @@ private fun B1R(): AutoRoutine {
     val B1R = routine.trajectory("B1R")
 
     routine.active().onTrue(B1R.cmd())
-    B1R.scoreAtDistance()
+    B1R.scoreAtTime()
 
     return routine
 }
@@ -150,13 +150,13 @@ private fun B1L6RL(): AutoRoutine {
     val S6L = routine.trajectory("S6L")
 
     routine.active().onTrue(B1L().cmd().andThen(t1LS.cmd()))
-    t1LS.feedAtDistance()
+    t1LS.feedAtTime()
     t1LS.done().onTrue(S6R.cmd())
-    S6R.scoreAtDistance()
+    S6R.scoreAtTime()
     S6R.done().onTrue(t6RS.cmd())
-    t6RS.feedAtDistance()
+    t6RS.feedAtTime()
     t6RS.done().onTrue(S6L.cmd())
-    S6L.scoreAtDistance()
+    S6L.scoreAtTime()
 
     return routine
 }
@@ -169,13 +169,13 @@ private fun B1R2LR(): AutoRoutine {
     val S2R = routine.trajectory("S2R")
 
     routine.active().onTrue(B1R().cmd().andThen(t1RS.cmd()))
-    t1RS.feedAtDistance()
+    t1RS.feedAtTime()
     t1RS.done().onTrue(S2L.cmd())
-    S2L.scoreAtDistance()
+    S2L.scoreAtTime()
     S2L.done().onTrue(t3LS.cmd())
-    t3LS.feedAtDistance()
+    t3LS.feedAtTime()
     t3LS.done().onTrue(S2R.cmd())
-    S2R.scoreAtDistance()
+    S2R.scoreAtTime()
 
     return routine
 }
@@ -186,9 +186,9 @@ private fun routine5RL(): AutoRoutine {
     val S5L = routine.trajectory("S5L")
 
     routine.active().onTrue(t5RS.cmd())
-    t5RS.feedAtDistance()
+    t5RS.feedAtTime()
     t5RS.done().onTrue(S5L.cmd())
-    S5L.scoreAtDistance()
+    S5L.scoreAtTime()
 
     return routine
 }
@@ -200,11 +200,11 @@ private fun C5RL4R(): AutoRoutine {
     val S4L = routine.trajectory("S4L")
 
     routine.active().onTrue(C5R.cmd())
-    C5R.scoreAtDistance()
+    C5R.scoreAtTime()
     C5R.done().onTrue(routine5RL().cmd().andThen(t5LS.cmd()))
-    t5LS.feedAtDistance()
+    t5LS.feedAtTime()
     t5LS.done().onTrue(S4L.cmd())
-    S4L.scoreAtDistance()
+    S4L.scoreAtTime()
 
     return routine
 }
@@ -216,11 +216,11 @@ private fun C6L5RL(): AutoRoutine {
     val S5R = routine.trajectory("S5R")
 
     routine.active().onTrue(C6L.cmd())
-    C6L.scoreAtDistance()
+    C6L.scoreAtTime()
     C6L.done().onTrue(t6LS.cmd())
-    t6LS.feedAtDistance()
+    t6LS.feedAtTime()
     t6LS.done().onTrue(S5R.cmd())
-    S5R.scoreAtDistance()
+    S5R.scoreAtTime()
     S5R.done().onTrue(routine5RL().cmd())
 
     return routine
