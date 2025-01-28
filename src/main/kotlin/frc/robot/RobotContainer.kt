@@ -3,6 +3,7 @@ package frc.robot
 import choreo.auto.AutoChooser
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -35,7 +36,7 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
-    private val autoChooser = AutoChooser()
+    private val autoChooser = SendableChooser<Command>()
 
     init {
         registerAutoRoutines()
@@ -104,10 +105,9 @@ object RobotContainer {
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
     }
 
-    fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+    fun getAutonomousCommand(): Command = autoChooser.selected
 
     private fun registerAutoRoutines() {
-        autoRoutines.forEach { autoChooser.addRoutine(it.toString()) { it } }
+        autoRoutines.forEach { autoChooser.addOption(it.toString(), it.cmd()) }
     }
 }
