@@ -108,8 +108,6 @@ object RobotContainer {
         DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
     private fun registerAutoRoutines() {
-        autoRoutines.forEach {
-            autoChooser.addRoutine(it.toString()) { it }
-        }
+        autoRoutines.forEach { autoChooser.addRoutine(it.toString()) { it } }
     }
 }

@@ -20,22 +20,30 @@ private val autoFactory =
         swerveDrive
     )
 
-private fun AutoTrajectory.atDistanceFromFinalPoint(distance: Distance): Trigger = Trigger {
+private fun AutoTrajectory.atDistanceFromFinalPoint(
+    distance: Distance
+): Trigger = Trigger {
     MathUtil.isNear(
-        swerveDrive.pose.distanceFromPoint(this.finalPose.get().translation).`in`(Units.Meters),
+        swerveDrive.pose
+            .distanceFromPoint(this.finalPose.get().translation)
+            .`in`(Units.Meters),
         distance.`in`(Units.Meters),
         AUTO_DISTANCE_TOLERANCE.`in`(Units.Meters)
     )
 }
 
-private fun AutoTrajectory.scoreAtDistance(distance: Distance = SCORE_DISTANCE, outtakeTrigger: Trigger = this.done()) {
-    this.atDistanceFromFinalPoint(distance)
-        .onTrue(l4(outtakeTrigger))
+private fun AutoTrajectory.scoreAtDistance(
+    distance: Distance = SCORE_DISTANCE,
+    outtakeTrigger: Trigger = this.done()
+) {
+    this.atDistanceFromFinalPoint(distance).onTrue(l4(outtakeTrigger))
 }
 
-private fun AutoTrajectory.feedAtDistance(distance: Distance = INTAKE_FEEDER_DISTANCE, intakeTrigger: Trigger = this.done()) {
-    this.atDistanceFromFinalPoint(distance)
-        .onTrue(feeder(intakeTrigger))
+private fun AutoTrajectory.feedAtDistance(
+    distance: Distance = INTAKE_FEEDER_DISTANCE,
+    intakeTrigger: Trigger = this.done()
+) {
+    this.atDistanceFromFinalPoint(distance).onTrue(feeder(intakeTrigger))
 }
 
 private fun leaveRoutine(startingPoint: String): AutoRoutine {
@@ -48,14 +56,11 @@ private fun leaveRoutine(startingPoint: String): AutoRoutine {
     return routine
 }
 
-private fun ALeave(): AutoRoutine =
-    leaveRoutine("A")
+private fun ALeave(): AutoRoutine = leaveRoutine("A")
 
-private fun BLeave(): AutoRoutine =
-    leaveRoutine("B")
+private fun BLeave(): AutoRoutine = leaveRoutine("B")
 
-private fun CLeave(): AutoRoutine =
-    leaveRoutine("C")
+private fun CLeave(): AutoRoutine = leaveRoutine("C")
 
 private fun routine3LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("3LR")
@@ -86,7 +91,6 @@ private fun A2R3LR(): AutoRoutine {
 
     return routine
 }
-
 
 private fun A3LR4L(): AutoRoutine {
     val routine = autoFactory.newRoutine("A3LR4L")
@@ -209,4 +213,16 @@ private fun C6L5RL(): AutoRoutine {
 }
 
 val autoRoutines =
-    arrayOf(ALeave(), BLeave(), CLeave(), B1L(), B1R(), A3LR4L(), A2R3LR(), B1L6RL(), B1R2LR(), C6L5RL(), C5RL4R())
+    arrayOf(
+        ALeave(),
+        BLeave(),
+        CLeave(),
+        B1L(),
+        B1R(),
+        A3LR4L(),
+        A2R3LR(),
+        B1L6RL(),
+        B1R2LR(),
+        C6L5RL(),
+        C5RL4R()
+    )
