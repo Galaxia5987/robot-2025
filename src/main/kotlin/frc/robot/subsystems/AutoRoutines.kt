@@ -41,7 +41,8 @@ private fun AutoTrajectory.scoreAtDistance(
 }
 
 private fun AutoTrajectory.scoreAtTime(
-    time: Time = SCORE_TIME, outtakeTrigger: Trigger = this.done()
+    time: Time = SCORE_TIME,
+    outtakeTrigger: Trigger = this.done()
 ) {
     this.atTime(time.`in`(Units.Seconds)).onTrue(l4(outtakeTrigger))
 }
@@ -54,11 +55,11 @@ private fun AutoTrajectory.feedAtDistance(
 }
 
 private fun AutoTrajectory.feedAtTime(
-    time: Time = INTAKE_FEEDER_TIME, intakeTrigger: Trigger = this.done()
+    time: Time = INTAKE_FEEDER_TIME,
+    intakeTrigger: Trigger = this.done()
 ) {
     this.atTime(time.`in`(Units.Seconds)).onTrue(feeder(intakeTrigger))
 }
-
 
 private fun leaveRoutine(startingPoint: String): AutoRoutine {
     val routine = autoFactory.newRoutine("$startingPoint Leave")
