@@ -34,7 +34,7 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
-    private val HEIGHT_MAP =
+    private val SCORE_COMMAND_MAP =
         mapOf(
             1 to l1(Trigger { true }), // TODO: Fill in correct trigger
             2 to l2(Trigger { true }), // TODO: Fill in correct trigger
@@ -62,7 +62,7 @@ object RobotContainer {
     }
 
     private fun getHeightCommand(): Command =
-        HEIGHT_MAP[
+        SCORE_COMMAND_MAP[
             networkTables.getIntFromTopic("/Dashboard/TargetBranchPose")]!!
 
     private fun getDriveCommandReal(): Command =
