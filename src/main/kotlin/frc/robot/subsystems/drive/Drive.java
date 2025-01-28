@@ -472,7 +472,6 @@ public class Drive extends SubsystemBase {
         var chassisSpeeds = new ChassisSpeeds(
                 sample.vx, sample.vy, sample.omega
         );
-
         runVelocity(chassisSpeeds);
     }
 }
