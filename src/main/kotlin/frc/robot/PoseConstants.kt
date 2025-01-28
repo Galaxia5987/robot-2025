@@ -15,5 +15,7 @@ val REEF_5R_POSE = Pose3d() // TODO: Fill in
 val REEF_6L_POSE = Pose3d() // TODO: Fill in
 val REEF_6R_POSE = Pose3d() // TODO: Fill in
 
-val LEFT_FEEDER_POSE = Pose3d() // TODO: Fill in
-val RIGHT_FEEDER_POSE = Pose3d() // TODO: Fill in
+val LEFT_FEEDER_INNER_POSE = Pose3d() // TODO: Fill in
+val LEFT_FEEDER_OUTER_POSE = Pose3d() // TODO: Fill in
+val RIGHT_FEEDER_INNER_POSE = Pose3d() // TODO: Fill in
+val RIGHT_FEEDER_OUTER_POSE = Pose3d() // TODO: Fill in

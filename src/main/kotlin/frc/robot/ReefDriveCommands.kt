@@ -19,8 +19,10 @@ private val REEF_MAP =
         9 to REEF_2R_POSE, // TODO: Fill in actual command
         10 to REEF_2L_POSE, // TODO: Fill in actual command
         11 to REEF_3R_POSE, // TODO: Fill in actual command
-        12 to RIGHT_FEEDER_POSE, // TODO: Fill in actual command (Coral Station)
-        13 to LEFT_FEEDER_POSE // TODO: Fill in actual command (Coral Station)
+        12 to RIGHT_FEEDER_INNER_POSE, // TODO: Fill in actual command (Coral Station)
+        13 to RIGHT_FEEDER_OUTER_POSE, // TODO: Fill in actual command (Coral Station)
+        14 to LEFT_FEEDER_INNER_POSE, // TODO: Fill in actual command (Coral Station)
+        15 to LEFT_FEEDER_OUTER_POSE // TODO: Fill in actual command (Coral Station)
     )
 
 private fun getDriveToPose(): Pose3d =
