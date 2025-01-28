@@ -1,13 +1,10 @@
 package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Transform2d
-import edu.wpi.first.math.geometry.Transform3d
-import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.*
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Rotations
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
 
@@ -23,6 +20,21 @@ fun Pose2d.withTranslation(translation: Translation2d): Pose2d =
 
 fun Pose2d.withRotation(rotation: Rotation2d): Pose2d =
     Pose2d(this.translation, rotation)
+
+fun Pose3d.withRotation(rotation: Rotation3d): Pose3d =
+    Pose3d(this.translation, rotation)
+
+fun Pose3d.withRotation(
+    roll: Double = 0.0,
+    pitch: Double = 0.0,
+    yaw: Double = 0.0
+): Pose3d = Pose3d(this.translation, Rotation3d(roll, pitch, yaw))
+
+fun Pose3d.withRotation(
+    roll: Angle = Rotations.zero(),
+    pitch: Angle = Rotations.zero(),
+    yaw: Angle = Rotations.zero(),
+): Pose3d = Pose3d(this.translation, Rotation3d(roll, pitch, yaw))
 
 fun Pose2d.toTransform(): Transform2d =
     Transform2d(this.translation, this.rotation)
