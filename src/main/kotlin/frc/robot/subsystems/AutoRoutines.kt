@@ -6,6 +6,7 @@ import choreo.auto.AutoTrajectory
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.lib.distanceFromPoint
@@ -39,12 +40,25 @@ private fun AutoTrajectory.scoreAtDistance(
     this.atDistanceFromFinalPoint(distance).onTrue(l4(outtakeTrigger))
 }
 
+private fun AutoTrajectory.scoreAtTime(
+    time: Time = SCORE_TIME, outtakeTrigger: Trigger = this.done()
+) {
+    this.atTime(time.`in`(Units.Seconds)).onTrue(l4(outtakeTrigger))
+}
+
 private fun AutoTrajectory.feedAtDistance(
     distance: Distance = INTAKE_FEEDER_DISTANCE,
     intakeTrigger: Trigger = this.done()
 ) {
     this.atDistanceFromFinalPoint(distance).onTrue(feeder(intakeTrigger))
 }
+
+private fun AutoTrajectory.feedAtTime(
+    time: Time = INTAKE_FEEDER_TIME, intakeTrigger: Trigger = this.done()
+) {
+    this.atTime(time.`in`(Units.Seconds)).onTrue(feeder(intakeTrigger))
+}
+
 
 private fun leaveRoutine(startingPoint: String): AutoRoutine {
     val routine = autoFactory.newRoutine("$startingPoint Leave")
