@@ -15,6 +15,7 @@ import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
+import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -136,6 +137,10 @@ object Robot : LoggedRobot() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
         }
+    }
+
+    override fun simulationPeriodic() {
+        SimulatedArena.getInstance().simulationPeriodic()
     }
 
     /** This function is called periodically during operator control. */
