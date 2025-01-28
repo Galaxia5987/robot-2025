@@ -4,7 +4,6 @@ import choreo.auto.AutoFactory
 import choreo.auto.AutoRoutine
 import choreo.auto.AutoTrajectory
 import edu.wpi.first.math.MathUtil
-import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -21,147 +20,112 @@ private val autoFactory =
         swerveDrive
     )
 
-private fun AutoTrajectory.atDistanceFromFinalPoint(
-    robotPose: () -> Pose2d,
-    distance: Distance,
-    tolerance: Distance
-): Trigger = Trigger {
+private fun AutoTrajectory.atDistanceFromFinalPoint(distance: Distance): Trigger = Trigger {
     MathUtil.isNear(
-        robotPose.invoke().distanceFromPoint(this.finalPose.get().translation).`in`(Units.Meters),
+        swerveDrive.pose.distanceFromPoint(this.finalPose.get().translation).`in`(Units.Meters),
         distance.`in`(Units.Meters),
-        tolerance.`in`(Units.Meters)
+        AUTO_DISTANCE_TOLERANCE.`in`(Units.Meters)
     )
 }
 
-fun ALeave(): AutoRoutine {
-    val routine = autoFactory.newRoutine("A Leave")
-    val trajectory = routine.trajectory("A Leave")
+private fun leaveRoutine(startingPoint: String): AutoRoutine {
+    val routine = autoFactory.newRoutine("$startingPoint Leave")
+    val trajectory = routine.trajectory("$startingPoint Leave")
 
     routine
         .active()
-        .onTrue(trajectory.resetOdometry().alongWith(trajectory.cmd()))
+        .onTrue(trajectory.resetOdometry().andThen(trajectory.cmd()))
+    return routine
+}
+
+private fun ALeave(): AutoRoutine =
+    leaveRoutine("A")
+
+private fun BLeave(): AutoRoutine =
+    leaveRoutine("B")
+
+private fun CLeave(): AutoRoutine =
+    leaveRoutine("C")
+
+private fun routine3LR(): AutoRoutine {
+    val routine = autoFactory.newRoutine("3LR")
+
+    val t3LS = routine.trajectory("3LS")
+    val S3R = routine.trajectory("S3R")
+
+    routine.active()
+        .onTrue(t3LS.cmd())
+    t3LS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t3LS.done()))
+
+    t3LS.done().onTrue(S3R.cmd())
+    S3R.atDistanceFromFinalPoint(SCORE_3R_DISTANCE)
+        .onTrue(l4(S3R.done()))
 
     return routine
 }
 
-fun BLeave(): AutoRoutine {
-    val routine = autoFactory.newRoutine("B Leave")
-    val trajectory = routine.trajectory("B Leave")
-
-    routine
-        .active()
-        .onTrue(trajectory.resetOdometry().alongWith(trajectory.cmd()))
-
-    return routine
-}
-
-fun CLeave(): AutoRoutine {
-    val routine = autoFactory.newRoutine("C Leave")
-    val trajectory = routine.trajectory("C Leave")
-
-    routine
-        .active()
-        .onTrue(trajectory.resetOdometry().alongWith(trajectory.cmd()))
-
-    return routine
-}
-
-fun A2R3LR(): AutoRoutine {
+private fun A2R3LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("A2R3LR")
 
     val A2R = routine.trajectory("A2R")
     val t2RS = routine.trajectory("2RS")
     val S3L = routine.trajectory("S3L")
-    val t3LS = routine.trajectory("3LS")
-    val S3R = routine.trajectory("S3R")
 
     routine.active().onTrue(A2R.cmd())
-    A2R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_2R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(A2R.done()))
+    A2R.atDistanceFromFinalPoint(SCORE_2R_DISTANCE)
+        .onTrue(l4(A2R.done()))
 
     A2R.done().onTrue(t2RS.cmd())
-    t2RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t2RS.done()))
+    t2RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t2RS.done()))
 
     t2RS.done().onTrue(S3L.cmd())
-    S3L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_3L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S3L.done()))
+    S3L.atDistanceFromFinalPoint(SCORE_3L_DISTANCE)
+        .onTrue(l4(S3L.done()))
 
-    S3L.done().onTrue(t3LS.cmd())
-    t3LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t3LS.done()))
-
-    t3LS.done().onTrue(S3R.cmd())
-    S3R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_3R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S3R.done()))
+    S3L.done().onTrue(routine3LR().cmd())
 
     return routine
 }
 
 
-fun A3LR4L(): AutoRoutine {
+private fun A3LR4L(): AutoRoutine {
     val routine = autoFactory.newRoutine("A3LR4L")
 
     val A3L = routine.trajectory("A3L")
-    val t3LS = routine.trajectory("3LS")
-    val S3R = routine.trajectory("S3R")
     val t3RS = routine.trajectory("3RS")
     val S4L = routine.trajectory("S4L")
 
     routine.active().onTrue(A3L.cmd())
-    A3L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_3L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(A3L.done()))
+    A3L.atDistanceFromFinalPoint(SCORE_3L_DISTANCE)
+        .onTrue(l4(A3L.done()))
 
-    A3L.done().onTrue(t3LS.cmd())
-    t3LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t3LS.done()))
+    A3L.done().onTrue(routine3LR().cmd().andThen(t3RS.cmd()))
 
-    t3LS.done().onTrue(S3R.cmd())
-    S3R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_3R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S3R.done()))
-
-    S3R.done().onTrue(t3RS.cmd())
-    t3RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t3RS.done()))
+    t3RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t3RS.done()))
 
     t3RS.done().onTrue(S4L.cmd())
-    S4L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_4L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S4L.done()))
+    S4L.atDistanceFromFinalPoint(SCORE_4L_DISTANCE)
+        .onTrue(l4(S4L.done()))
 
     return routine
 }
 
-fun B1L6RL(): AutoRoutine {
+private fun B1R(): AutoRoutine {
+    val routine = autoFactory.newRoutine("B1R")
+
+    val B1R = routine.trajectory("B1R")
+
+    routine.active().onTrue(B1R.cmd())
+    B1R.atDistanceFromFinalPoint(SCORE_1R_DISTANCE)
+        .onTrue(l4(B1R.done()))
+
+    return routine
+}
+
+private fun B1L6RL(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1L6RL")
 
     val B1L = routine.trajectory("B1L")
@@ -171,106 +135,57 @@ fun B1L6RL(): AutoRoutine {
     val S6L = routine.trajectory("S6L")
 
     routine.active().onTrue(B1L.cmd())
-    B1L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_1L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(B1L.done()))
+    B1L.atDistanceFromFinalPoint(SCORE_1L_DISTANCE)
+        .onTrue(l4(B1L.done()))
 
     B1L.done().onTrue(t1LS.cmd())
-    t1LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t1LS.done()))
+    t1LS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t1LS.done()))
 
     t1LS.done().onTrue(S6R.cmd())
-    S6R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_6R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S6R.done()))
+    S6R.atDistanceFromFinalPoint(SCORE_6R_DISTANCE)
+        .onTrue(l4(S6R.done()))
 
     S6R.done().onTrue(t6RS.cmd())
-    t6RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t6RS.done()))
+    t6RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t6RS.done()))
 
     t6RS.done().onTrue(S6L.cmd())
-    S6L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_6L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S6L.done()))
+    S6L.atDistanceFromFinalPoint(SCORE_6L_DISTANCE)
+        .onTrue(l4(S6L.done()))
 
     return routine
 }
 
-fun B1R2LR(): AutoRoutine {
+private fun B1R2LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1R2LR")
 
-    val B1R = routine.trajectory("B1R")
     val t1RS = routine.trajectory("1RS")
     val S2L = routine.trajectory("S2L")
     val t3LS = routine.trajectory("3LS")
     val S2R = routine.trajectory("S2R")
 
-    routine.active().onTrue(B1R.cmd())
-    B1R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_1R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(B1R.done()))
+    routine.active().onTrue(B1R().cmd().andThen(t1RS.cmd()))
 
-    B1R.done().onTrue(t1RS.cmd())
-    t1RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t1RS.done()))
+    t1RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t1RS.done()))
 
     t1RS.done().onTrue(S2L.cmd())
-    S2L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_2L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S2L.done()))
+    S2L.atDistanceFromFinalPoint(SCORE_2L_DISTANCE)
+        .onTrue(l4(S2L.done()))
 
     S2L.done().onTrue(t3LS.cmd())
-    t3LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t3LS.done()))
+    t3LS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t3LS.done()))
 
     t3LS.done().onTrue(S2R.cmd())
-    S2R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_2R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S2R.done()))
+    S2R.atDistanceFromFinalPoint(SCORE_2R_DISTANCE)
+        .onTrue(l4(S2R.done()))
 
     return routine
 }
 
-fun B1R(): AutoRoutine {
-    val routine = autoFactory.newRoutine("B1R")
-
-    val B1R = routine.trajectory("B1R")
-
-    routine.active().onTrue(B1R.cmd())
-    B1R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_1R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(B1R.done()))
-
-    return routine
-}
-
-fun C5RL4R(): AutoRoutine {
+private fun C5RL4R(): AutoRoutine {
     val routine = autoFactory.newRoutine("C5RL4R")
 
     val C5R = routine.trajectory("C5R")
@@ -280,44 +195,29 @@ fun C5RL4R(): AutoRoutine {
     val S4L = routine.trajectory("S4L")
 
     routine.active().onTrue(C5R.cmd())
-    C5R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_5R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(C5R.done()))
+    C5R.atDistanceFromFinalPoint(SCORE_5R_DISTANCE)
+        .onTrue(l4(C5R.done()))
 
     C5R.done().onTrue(t5RS.cmd())
-    t5RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t5RS.done()))
+    t5RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t5RS.done()))
 
     t5RS.done().onTrue(S5L.cmd())
-    S5L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_5L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S5L.done()))
+    S5L.atDistanceFromFinalPoint(SCORE_5L_DISTANCE)
+        .onTrue(l4(S5L.done()))
 
     S5L.done().onTrue(t5LS.cmd())
-    t5LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t5LS.done()))
+    t5LS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t5LS.done()))
 
     t5LS.done().onTrue(S4L.cmd())
-    S4L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_4L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S4L.done()))
+    S4L.atDistanceFromFinalPoint(SCORE_4L_DISTANCE)
+        .onTrue(l4(S4L.done()))
 
     return routine
 }
 
-fun C6L5RL(): AutoRoutine {
+private fun C6L5RL(): AutoRoutine {
     val routine = autoFactory.newRoutine("C6L5RL")
 
     val C6L = routine.trajectory("C6L")
@@ -327,39 +227,24 @@ fun C6L5RL(): AutoRoutine {
     val S5L = routine.trajectory("S5L")
 
     routine.active().onTrue(C6L.cmd())
-    C6L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_6L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(C6L.done()))
+    C6L.atDistanceFromFinalPoint(SCORE_6L_DISTANCE)
+        .onTrue(l4(C6L.done()))
 
     C6L.done().onTrue(t6LS.cmd())
-    t6LS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t6LS.done()))
+    t6LS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t6LS.done()))
 
     t6LS.done().onTrue(S5R.cmd())
-    S5R.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_5R_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(l4(S5R.done()))
+    S5R.atDistanceFromFinalPoint(SCORE_5R_DISTANCE)
+        .onTrue(l4(S5R.done()))
 
     S5R.done().onTrue(t5RS.cmd())
-    t5RS.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        INTAKE_FEEDER_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(t5RS.done()))
+    t5RS.atDistanceFromFinalPoint(INTAKE_FEEDER_DISTANCE)
+        .onTrue(feeder(t5RS.done()))
 
     t5RS.done().onTrue(S5L.cmd())
-    S5L.atDistanceFromFinalPoint(
-        swerveDrive::getPose,
-        SCORE_5L_DISTANCE,
-        AUTO_DISTANCE_TOLERANCE
-    ).onTrue(feeder(S5L.done()))
+    S5L.atDistanceFromFinalPoint(SCORE_5L_DISTANCE)
+        .onTrue(feeder(S5L.done()))
 
     return routine
 }
