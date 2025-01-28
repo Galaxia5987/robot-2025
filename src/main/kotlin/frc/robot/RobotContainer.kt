@@ -2,7 +2,6 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.NetworkTablesJNI
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
@@ -65,19 +64,15 @@ object RobotContainer {
 
     private fun getHeightCommand(): Command =
         HEIGHT_MAP[
-            NetworkTableInstance.getDefault()
-                .getDoubleTopic("/Dashboard/TargetBranchPose")
-                .getEntry(0.0)
-                .asDouble
-                .toInt()]!!
+            networkTables.getIntFromTopic("/Dashboard/TargetBranchPose")]!!
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { swerveDrive.desiredHeading },
-            )
+            swerveDrive,
+            { driverController.leftY },
+            { driverController.leftX },
+            { swerveDrive.desiredHeading },
+        )
             .alongWith(
                 swerveDrive.updateDesiredHeading { -driverController.rightX }
             )
@@ -116,11 +111,6 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
-
-        NetworkTablesJNI.getEntry(
-            NetworkTablesJNI.getDefaultInstance(),
-            "Dashboard/TargetPose"
-        )
     }
 
     fun getAutonomousCommand(): Command =

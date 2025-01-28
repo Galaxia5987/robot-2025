@@ -24,11 +24,6 @@ private val REEF_MAP =
     )
 
 private fun getDriveToPose(): Pose3d =
-    REEF_MAP[
-        NetworkTableInstance.getDefault()
-            .getDoubleTopic("/Dashboard/TargetReefPose")
-            .getEntry(0.0)
-            .asDouble
-            .toInt()]!!
+    REEF_MAP[networkTables.getIntFromTopic("/Dashboard/TargetReefPose")]!!
 
 fun getDriveToCommand(): Command = Commands.none() // TODO: Implement
