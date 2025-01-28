@@ -1,5 +1,6 @@
 package frc.robot
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -24,7 +25,7 @@ private val REEF_MAP =
         15 to LEFT_FEEDER_FAR_POSE // TODO: Fill in actual command (Coral Station)
     )
 
-private fun getDriveToPose(): Pose3d =
+private fun getDriveToPose(): Pose2d =
     REEF_MAP[networkTables.getIntFromTopic("/Dashboard/TargetReefPose")]!!
 
 fun getDriveToCommand(): Command = Commands.none() // TODO: Implement
