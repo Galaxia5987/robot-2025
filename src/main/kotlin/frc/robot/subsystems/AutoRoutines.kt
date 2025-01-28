@@ -196,8 +196,6 @@ private fun C6L5RL(): AutoRoutine {
     val C6L = routine.trajectory("C6L")
     val t6LS = routine.trajectory("6LS")
     val S5R = routine.trajectory("S5R")
-    val t5RS = routine.trajectory("5RS")
-    val S5L = routine.trajectory("S5L")
 
     routine.active().onTrue(C6L.cmd())
     C6L.scoreAtDistance()
