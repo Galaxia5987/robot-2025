@@ -109,7 +109,7 @@ object RobotContainer {
 
     private fun registerAutoRoutines() {
         autoRoutines.forEach {
-            autoChooser.addRoutine(it.toString(), { it })
+            autoChooser.addRoutine(it.toString()) { it }
         }
     }
 }
