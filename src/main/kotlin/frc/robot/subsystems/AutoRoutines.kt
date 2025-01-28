@@ -85,7 +85,7 @@ fun A2R3LR(): AutoRoutine {
     A2R.done().onTrue(t2RS.cmd())
     t2RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t2RS.done()))
 
@@ -99,7 +99,7 @@ fun A2R3LR(): AutoRoutine {
     S3L.done().onTrue(t3LS.cmd())
     t3LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t3LS.done()))
 
@@ -133,7 +133,7 @@ fun A3LR4L(): AutoRoutine {
     A3L.done().onTrue(t3LS.cmd())
     t3LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t3LS.done()))
 
@@ -147,7 +147,7 @@ fun A3LR4L(): AutoRoutine {
     S3R.done().onTrue(t3RS.cmd())
     t3RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t3RS.done()))
 
@@ -180,7 +180,7 @@ fun B1L6RL(): AutoRoutine {
     B1L.done().onTrue(t1LS.cmd())
     t1LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t1LS.done()))
 
@@ -194,7 +194,7 @@ fun B1L6RL(): AutoRoutine {
     S6R.done().onTrue(t6RS.cmd())
     t6RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t6RS.done()))
 
@@ -227,7 +227,7 @@ fun B1R2LR(): AutoRoutine {
     B1R.done().onTrue(t1RS.cmd())
     t1RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t1RS.done()))
 
@@ -241,7 +241,7 @@ fun B1R2LR(): AutoRoutine {
     S2L.done().onTrue(t3LS.cmd())
     t3LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t3LS.done()))
 
@@ -289,7 +289,7 @@ fun C5RL4R(): AutoRoutine {
     C5R.done().onTrue(t5RS.cmd())
     t5RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t5RS.done()))
 
@@ -303,7 +303,7 @@ fun C5RL4R(): AutoRoutine {
     S5L.done().onTrue(t5LS.cmd())
     t5LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t5LS.done()))
 
@@ -336,7 +336,7 @@ fun C6L5RL(): AutoRoutine {
     C6L.done().onTrue(t6LS.cmd())
     t6LS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t6LS.done()))
 
@@ -350,7 +350,7 @@ fun C6L5RL(): AutoRoutine {
     S5R.done().onTrue(t5RS.cmd())
     t5RS.atDistanceFromFinalPoint(
         swerveDrive::getPose,
-        SCORE_FEEDER_DISTANCE,
+        INTAKE_FEEDER_DISTANCE,
         AUTO_DISTANCE_TOLERANCE
     ).onTrue(feeder(t5RS.done()))
 

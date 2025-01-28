@@ -3,7 +3,7 @@ package frc.robot.subsystems
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 
-val SCORE_FEEDER_DISTANCE: Distance = Units.Meters.of(0.0)
+val INTAKE_FEEDER_DISTANCE: Distance = Units.Meters.of(0.0)
 val SCORE_1L_DISTANCE: Distance = Units.Meters.of(0.0)
 val SCORE_1R_DISTANCE: Distance = Units.Meters.of(0.0)
 val SCORE_2R_DISTANCE: Distance = Units.Meters.of(0.0)
