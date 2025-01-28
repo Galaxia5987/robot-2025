@@ -1,6 +1,5 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -8,12 +7,10 @@ import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.wrist
 
-private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
-
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
         waitUntil(endTrigger),
-        gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT),
+        gripper.outtake().until(gripper.hasCoral.negate()),
         moveDefaultPosition()
     )
 
