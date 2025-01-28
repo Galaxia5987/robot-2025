@@ -1,6 +1,5 @@
 package frc.robot
 
-import choreo.auto.AutoChooser
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
