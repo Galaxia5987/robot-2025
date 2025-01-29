@@ -49,6 +49,22 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
+    private val isClimbed =
+        isFolded
+            .and(isLatchClosed)
+            .onTrue(
+                LEDs.setPattern(
+                    all =
+                        LEDPattern.rainbow(255, 128)
+                            .scrollAtAbsoluteSpeed(
+                                SCROLLING_SPEED_RAINBOW,
+                                LED_SPACING
+                            )
+                )
+            )
+            .onFalse(LEDs.setPattern(all = LEDs.teamPattern))
+
+    @AutoLogOutput
     private val isUnfolded = Trigger {
         inputs.angle.isNear(UNFOLDED_ANGLE, FOLDED_TOLERANCE)
     }
