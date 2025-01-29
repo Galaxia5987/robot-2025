@@ -61,9 +61,9 @@ object RobotContainer {
         enableAutoLogOutputFor(this)
     }
 
-    private fun getHeightCommand(): Command =
-        SCORE_COMMAND_MAP[
-            networkTables.getIntFromTopic("/Dashboard/TargetBranchPose")]!!
+        private fun getHeightCommand(): Command =
+            SCORE_COMMAND_MAP[
+                networkTables.getTargetBranchPose()]!!
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(

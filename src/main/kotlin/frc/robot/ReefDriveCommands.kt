@@ -28,8 +28,8 @@ private val REEF_MAP =
             LEFT_FEEDER_FAR_POSE // TODO: Fill in actual command (Coral Station)
     )
 
-private fun getDriveToPose(
-    index: Int = networkTables.getIntFromTopic("/Dashboard/TargetReefPose")
-): Pose2d = REEF_MAP[index]!!
+ private fun getDriveToPose(
+    index: Int = networkTables.getTargetReefPose()
+ ): Pose2d = REEF_MAP[index]!!
 
 fun driveToCommand(): Command = Commands.none() // TODO: Implement

@@ -1,9 +1,15 @@
 package frc.robot.lib.network_tables
 
+import org.team9432.annotation.Logged
+
 interface NetworkTableIO {
-    fun getDoubleFromTopic(topicName: String): Double = 0.0
+    var inputs: LoggedNetworkTableInputs
 
-    fun getIntFromTopic(topicName: String): Int = 0
+    fun updateInputs() {}
 
-    fun getStringTopic(topicName: String): String = ""
+    @Logged
+    open class NetworkTableInputs {
+        var targetBranchPose: Int = 0
+        var targetReefPose: Int = 0
+    }
 }

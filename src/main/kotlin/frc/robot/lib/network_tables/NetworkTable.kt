@@ -1,12 +1,12 @@
 package frc.robot.lib.network_tables
 
-class NetworkTable(private val io: NetworkTableIO) {
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 
-    fun getDoubleFromTopic(topicName: String): Double =
-        io.getDoubleFromTopic(topicName)
+class NetworkTable(private val io: NetworkTableIO) : SubsystemBase() {
+    fun getTargetBranchPose(): Int = io.inputs.targetBranchPose
 
-    fun getIntFromTopic(topicName: String): Int =
-        io.getDoubleFromTopic(topicName).toInt()
-
-    fun getStringTopic(topicName: String): String = io.getStringTopic(topicName)
+    fun getTargetReefPose(): Int = io.inputs.targetReefPose
+    override fun periodic() {
+        io.updateInputs()
+    }
 }
