@@ -32,7 +32,7 @@ class LEDs : SubsystemBase() {
             true ->
                 LEDPattern.gradient(
                         LEDPattern.GradientType.kDiscontinuous,
-                        Color.kMediumVioletRed,
+                    Color(255, 0, 148),
                         Color.kRed
                     )
                     .scrollAtAbsoluteSpeed(
