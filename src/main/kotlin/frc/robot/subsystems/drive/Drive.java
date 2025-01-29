@@ -55,7 +55,6 @@ import frc.robot.lib.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
-
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -101,20 +100,22 @@ public class Drive extends SubsystemBase {
                             1),
                     getModuleTranslations());
 
-    public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
-            .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
-            .withCustomModuleTranslations(getModuleTranslations())
-            .withGyro(COTS.ofNav2X())
-            .withSwerveModule(new SwerveModuleSimulationConfig(
-                    DCMotor.getKrakenX60(1),
-                    DCMotor.getFalcon500(1),
-                    TunerConstants.FrontLeft.DriveMotorGearRatio,
-                    TunerConstants.FrontLeft.SteerMotorGearRatio,
-                    Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
-                    Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
-                    Meters.of(TunerConstants.FrontLeft.WheelRadius),
-                    KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
-                    WHEEL_COF));
+    public static final DriveTrainSimulationConfig mapleSimConfig =
+            DriveTrainSimulationConfig.Default()
+                    .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
+                    .withCustomModuleTranslations(getModuleTranslations())
+                    .withGyro(COTS.ofNav2X())
+                    .withSwerveModule(
+                            new SwerveModuleSimulationConfig(
+                                    DCMotor.getKrakenX60(1),
+                                    DCMotor.getFalcon500(1),
+                                    TunerConstants.FrontLeft.DriveMotorGearRatio,
+                                    TunerConstants.FrontLeft.SteerMotorGearRatio,
+                                    Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),
+                                    Volts.of(TunerConstants.FrontLeft.SteerFrictionVoltage),
+                                    Meters.of(TunerConstants.FrontLeft.WheelRadius),
+                                    KilogramSquareMeters.of(TunerConstants.FrontLeft.SteerInertia),
+                                    WHEEL_COF));
 
     static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
