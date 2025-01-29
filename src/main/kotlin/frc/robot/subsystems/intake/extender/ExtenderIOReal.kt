@@ -41,7 +41,7 @@ class ExtenderIOReal : ExtenderIO {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         Inverted = InvertedValue.Clockwise_Positive
-                        NeutralMode = NeutralModeValue.Brake
+                        NeutralMode = NeutralModeValue.Coast
                     }
 
                 CurrentLimits =
