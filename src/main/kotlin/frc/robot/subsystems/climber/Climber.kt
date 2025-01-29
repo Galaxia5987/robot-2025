@@ -4,10 +4,14 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.subsystems.leds.LED_SPACING
+import frc.robot.subsystems.leds.LEDs
+import frc.robot.subsystems.leds.SCROLLING_SPEED_RAINBOW
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -16,6 +20,7 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
+    val LEDs = LEDs()
 
     private val tuningAngleDegrees =
         LoggedNetworkNumber("Tuning/Climb/AngleDegrees", 0.0)
