@@ -66,7 +66,8 @@ public final class PhoenixUtil {
         }
     }
 
-    public static class TalonFXMotorControllerWithRemoteCancoderSim extends TalonFXMotorControllerSim {
+    public static class TalonFXMotorControllerWithRemoteCancoderSim
+            extends TalonFXMotorControllerSim {
         private final CANcoderSimState remoteCancoderSimState;
 
         public TalonFXMotorControllerWithRemoteCancoderSim(TalonFX talonFX, CANcoder cancoder) {
@@ -83,16 +84,19 @@ public final class PhoenixUtil {
             remoteCancoderSimState.setRawPosition(mechanismAngle);
             remoteCancoderSimState.setVelocity(mechanismVelocity);
 
-            return super.updateControlSignal(mechanismAngle, mechanismVelocity, encoderAngle, encoderVelocity);
+            return super.updateControlSignal(
+                    mechanismAngle, mechanismVelocity, encoderAngle, encoderVelocity);
         }
     }
 
     public static double[] getSimulationOdometryTimeStamps() {
-        final double[] odometryTimeStamps = new double[SimulatedArena.getSimulationSubTicksIn1Period()];
+        final double[] odometryTimeStamps =
+                new double[SimulatedArena.getSimulationSubTicksIn1Period()];
         for (int i = 0; i < odometryTimeStamps.length; i++) {
-            odometryTimeStamps[i] = Timer.getFPGATimestamp()
-                    - 0.02
-                    + i * SimulatedArena.getSimulationDt().in(Seconds);
+            odometryTimeStamps[i] =
+                    Timer.getFPGATimestamp()
+                            - 0.02
+                            + i * SimulatedArena.getSimulationDt().in(Seconds);
         }
 
         return odometryTimeStamps;
@@ -103,18 +107,21 @@ public final class PhoenixUtil {
      *
      * <h2>Regulates the {@link SwerveModuleConstants} for a single module.</h2>
      *
-     * <p>This method applies specific adjustments to the {@link SwerveModuleConstants} for simulation purposes. These
-     * changes have no effect on real robot operations and address known simulation bugs:
+     * <p>This method applies specific adjustments to the {@link SwerveModuleConstants} for
+     * simulation purposes. These changes have no effect on real robot operations and address known
+     * simulation bugs:
      *
      * <ul>
-     *   <li><strong>Inverted Drive Motors:</strong> Prevents drive PID issues caused by inverted configurations.
-     *   <li><strong>Non-zero CanCoder Offsets:</strong> Fixes potential module state optimization issues.
-     *   <li><strong>Steer Motor PID:</strong> Adjusts PID values tuned for real robots to improve simulation
-     *       performance.
+     *   <li><strong>Inverted Drive Motors:</strong> Prevents drive PID issues caused by inverted
+     *       configurations.
+     *   <li><strong>Non-zero CanCoder Offsets:</strong> Fixes potential module state optimization
+     *       issues.
+     *   <li><strong>Steer Motor PID:</strong> Adjusts PID values tuned for real robots to improve
+     *       simulation performance.
      * </ul>
      *
-     * <h4>Note:This function is skipped when running on a real robot, ensuring no impact on constants used on real
-     * robot hardware.</h4>
+     * <h4>Note:This function is skipped when running on a real robot, ensuring no impact on
+     * constants used on real robot hardware.</h4>
      */
     public static SwerveModuleConstants regulateModuleConstantForSimulation(
             SwerveModuleConstants<?, ?, ?> moduleConstants) {
@@ -131,10 +138,11 @@ public final class PhoenixUtil {
                 // Disable CanCoder inversion
                 .withEncoderInverted(false)
                 // Adjust steer motor PID gains for simulation
-                .withSteerMotorGains(moduleConstants
-                        .SteerMotorGains
-                        .withKP(70) // Proportional gain
-                        .withKD(4.5)) // Derivative gain
+                .withSteerMotorGains(
+                        moduleConstants
+                                .SteerMotorGains
+                                .withKP(70) // Proportional gain
+                                .withKD(4.5)) // Derivative gain
                 // Adjust friction voltages
                 .withDriveFrictionVoltage(Volts.of(0.1))
                 .withSteerFrictionVoltage(Volts.of(0.15))
