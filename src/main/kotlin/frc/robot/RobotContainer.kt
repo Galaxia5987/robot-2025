@@ -108,6 +108,18 @@ object RobotContainer {
 
     private fun registerAutoRoutines() {
         autoChooser.addDefaultOption("A leave", autoRoutines[0].cmd())
-        autoRoutines.forEach { autoChooser.addOption(it.toString(), it.cmd()) }
+        autoRoutines.forEach { autoChooser.addOption(it.cmd().name, it.cmd()) }
+        autoChooser.addOption("C6L5RL", C6L5RL().cmd())
+        autoChooser.addOption("C5RL4R", C5RL4R().cmd())
+        autoChooser.addOption("routine5RL", routine5RL().cmd())
+        autoChooser.addOption("B1R2LR", B1R2LR().cmd())
+        autoChooser.addOption("B1L6RL", B1L6RL().cmd())
+        autoChooser.addOption("B1R", B1R().cmd())
+        autoChooser.addOption("B1L", B1L().cmd())
+        autoChooser.addOption("A3LR4L", A3LR4L().cmd())
+        autoChooser.addOption("A2R3LR", A2R3LR().cmd())
+        autoChooser.addOption("routine3LR", routine3LR().cmd())
+        autoChooser.addOption("CLeave", CLeave().cmd())
+        autoChooser.addOption("BLeave", BLeave().cmd())
     }
 }
