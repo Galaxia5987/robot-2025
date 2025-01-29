@@ -11,6 +11,8 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
+    private val kV = 6
+    var rollerAngle :Angle = Units.Rotations.zero()
     private val tuningVoltage =
         LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
     private val debouncer =
@@ -27,6 +29,9 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
 
+    private fun getVoltage(): Double {
+        return io.inputs.appliedVoltage.`in`(Units.Volts)
+    }
     fun tuningVoltage(): Command =
         setVoltage(Units.Volts.of(tuningVoltage.get()))
             .withName("Gripper/Tuning")
@@ -41,6 +46,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
 
     override fun periodic() {
+        rollerAngle += Units.Rotations.of(getVoltage()*kV*0.02)
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
     }
