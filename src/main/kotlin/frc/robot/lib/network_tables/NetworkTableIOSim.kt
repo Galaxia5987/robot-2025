@@ -11,7 +11,7 @@ class NetworkTableIOSim : NetworkTableIO {
     override fun getDoubleFromTopic(topicName: String): Double {
         val simTopicValue =
             doubleTopics.getOrPut(topicName) {
-                LoggedNetworkNumber(topicName, 0.0)
+                LoggedNetworkNumber("/Tuning/$topicName", 0.0)
             }
         return simTopicValue.get()
     }
@@ -19,7 +19,7 @@ class NetworkTableIOSim : NetworkTableIO {
     override fun getIntFromTopic(topicName: String): Int {
         val simTopicValue =
             doubleTopics.getOrPut(topicName) {
-                LoggedNetworkNumber(topicName, 0.0)
+                LoggedNetworkNumber("/Tuning/$topicName", 0.0)
             }
         return simTopicValue.get().toInt()
     }
@@ -27,7 +27,7 @@ class NetworkTableIOSim : NetworkTableIO {
     override fun getStringTopic(topicName: String): String {
         val simTopicValue =
             stringTopics.getOrPut(topicName) {
-                LoggedNetworkString(topicName, "")
+                LoggedNetworkString("/Tuning/$topicName", "")
             }
         return simTopicValue.get()
     }
