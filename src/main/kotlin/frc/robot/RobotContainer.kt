@@ -96,8 +96,6 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
-        driverController.a().whileTrue(climber.climb())
-        driverController.b().whileTrue(climber.declimb())
     }
 
     fun getAutonomousCommand(): Command =
