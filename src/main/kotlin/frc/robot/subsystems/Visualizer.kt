@@ -36,8 +36,6 @@ private val INITIAL_CLIMBER_TRANSLATION =
 private val kWheelRadius = Meters.of(0.0508)
 
 class Visualizer {
-    private val swerveTurnAngle = frc.robot.swerveDrive.SwerveTurnAngle
-    private val swerveDriveAngle = frc.robot.swerveDrive.SwerveDriveAngle
     private val swerveDrive = frc.robot.swerveDrive
 
     private val climb = frc.robot.climber
@@ -57,12 +55,12 @@ class Visualizer {
         val firstStagePose =
             getPose3d(
                 x = INITIAL_Elevator_1_TRANSLATION.x,
-                z = firstStageHeight.plus(INITIAL_Elevator_1_TRANSLATION.z)
+                z = firstStageHeight + INITIAL_Elevator_1_TRANSLATION.z
             )
         val secondStagePose =
             getPose3d(
                 x = INITIAL_Elevator_2_TRANSLATION.x,
-                z = secondStageHeight.plus(INITIAL_Elevator_2_TRANSLATION.z)
+                z = secondStageHeight + INITIAL_Elevator_2_TRANSLATION.z
             )
         return Pair(firstStagePose, secondStagePose)
     }
