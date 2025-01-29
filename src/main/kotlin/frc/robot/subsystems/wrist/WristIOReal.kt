@@ -94,11 +94,10 @@ class WristIOReal : WristIO {
     }
 
     override fun updateInputs() {
-        inputs.angle.mut_replace(motor.position.value)
-        inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
-        inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
-        inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
+        inputs.angle = motor.position.value
+        inputs.appliedVoltage = motor.motorVoltage.value
+        inputs.absoluteEncoderAngle = absoluteEncoder.position.value
+        inputs.noOffsetAbsoluteEncoderPosition =
             absoluteEncoder.absolutePosition.value
-        )
     }
 }

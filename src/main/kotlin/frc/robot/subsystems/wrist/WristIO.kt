@@ -14,11 +14,11 @@ interface WristIO {
 
     @Logged
     open class WristInputs {
-        var angle: MutAngle = Units.Degree.zero().mutableCopy()
-        var absoluteEncoderAngle: MutAngle = Units.Degree.zero().mutableCopy()
-        var noOffsetAbsoluteEncoderPosition: MutAngle =
+        var angle: Angle = Units.Degree.zero().mutableCopy()
+        var absoluteEncoderAngle: Angle = Units.Degree.zero().mutableCopy()
+        var noOffsetAbsoluteEncoderPosition: Angle =
             Units.Degree.zero().mutableCopy()
-        var appliedVoltage: MutVoltage = Units.Volts.zero().mutableCopy()
-        var sensorDistance: MutDistance = Units.Centimeters.zero().mutableCopy()
+        var appliedVoltage: Voltage = Units.Volts.zero().mutableCopy()
+        var sensorDistance: Distance = Units.Centimeters.zero().mutableCopy()
     }
 }
