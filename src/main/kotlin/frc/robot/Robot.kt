@@ -141,10 +141,14 @@ object Robot : LoggedRobot() {
 
     override fun simulationPeriodic() {
         SimulatedArena.getInstance().simulationPeriodic()
-        Logger.recordOutput("FieldSimulation/Algae",
-            *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
-        Logger.recordOutput("FieldSimulation/Coral",
-            *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral"));
+        Logger.recordOutput(
+            "FieldSimulation/Algae",
+            *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae")
+        )
+        Logger.recordOutput(
+            "FieldSimulation/Coral",
+            *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral")
+        )
     }
 
     /** This function is called periodically during operator control. */
