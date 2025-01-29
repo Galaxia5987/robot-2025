@@ -22,9 +22,6 @@ private val INITIAL_INTAKE_Roller_TRANSLATION =
 private val INITIAL_WRIST_TRANSLATION =
     getTranslation3d(x = Meters.of(0.27434), z = Meters.of(0.79707))
 
-private val INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION =
-    getTranslation3d(x = Meters.of(0.113), z = Meters.of(0.995))
-
 private val INITIAL_Elevator_1_TRANSLATION =
     getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.14345040))
 
@@ -73,6 +70,7 @@ class Visualizer {
             getRotation3d(yaw = moduleYaw)
         )
     }
+
     private fun getSwerveModulePoseDrive(
         moduleX: Double,
         moduleY: Double,
@@ -99,6 +97,7 @@ class Visualizer {
         }
         return swervePosesTurn
     }
+
     private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
         val swervePosesDrive: Array<Pose3d> =
             arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())

@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class Gripper(private val io: GripperIO) : SubsystemBase() {
     private val kV = 6
-    var rollerAngle :Angle = Units.Rotations.zero()
+    var rollerAngle: Angle = Units.Rotations.zero()
     private val tuningVoltage =
         LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
     private val debouncer =
