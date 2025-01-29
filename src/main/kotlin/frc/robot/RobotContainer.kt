@@ -14,6 +14,8 @@ import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
+import frc.robot.subsystems.l4
+import frc.robot.subsystems.feeder
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -97,14 +99,12 @@ object RobotContainer {
         driverController.a().onTrue(l1(driverController.a().negate()))
         driverController.x().onTrue(l2(driverController.x().negate()))
         driverController.b().onTrue(l3(driverController.b().negate()))
-        driverController.y().onTrue(elevator.l4())
-        driverController.start().onTrue(elevator.feeder())
+        driverController.y().onTrue(l4(driverController.y().negate()))
+        driverController.start().onTrue(feeder(driverController.start().negate()))
         driverController.rightTrigger().onTrue(gripper.intake())
         driverController.leftTrigger().onTrue(gripper.outtake())
-        driverController.rightBumper().onTrue(intakeAlgae())
-        driverController
-            .leftBumper()
-            .onTrue(outtakeAlgae(driverController.rightTrigger()))
+        driverController.rightBumper().whileTrue(intakeAlgae()).onFalse(outtakeAlgae(driverController.rightBumper().negate()))
+
 
         operatorController.a().onTrue(climber.fold())
         operatorController.b().onTrue(climber.unfold())
