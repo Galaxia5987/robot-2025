@@ -12,6 +12,7 @@ import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.autoRoutines
 import frc.robot.subsystems.drive.DriveCommands
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,7 +36,7 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
-    private val autoChooser = SendableChooser<Command>()
+    private val autoChooser = LoggedDashboardChooser<Command>("Auto Chooser")
 
     init {
         registerAutoRoutines()
