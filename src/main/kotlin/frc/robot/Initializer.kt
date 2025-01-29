@@ -1,6 +1,10 @@
 package frc.robot
 
-import frc.robot.lib.network_tables.*
+import frc.robot.auto.network_tables.NetworkTable
+import frc.robot.auto.network_tables.NetworkTableIO
+import frc.robot.auto.network_tables.NetworkTableIOReal
+import frc.robot.auto.network_tables.NetworkTableIOSim
+import frc.robot.auto.network_tables.*
 import frc.robot.subsystems.climber.Climber
 import frc.robot.subsystems.climber.ClimberIO
 import frc.robot.subsystems.climber.ClimberIOReal

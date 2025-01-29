@@ -1,4 +1,4 @@
-package frc.robot.lib.network_tables
+package frc.robot.auto.network_tables
 
 import org.team9432.annotation.Logged
 

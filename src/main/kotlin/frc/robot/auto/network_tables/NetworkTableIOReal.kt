@@ -1,4 +1,4 @@
-package frc.robot.lib.network_tables
+package frc.robot.auto.network_tables
 
 import edu.wpi.first.networktables.NetworkTableInstance
 

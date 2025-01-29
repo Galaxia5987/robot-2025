@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
@@ -36,7 +37,8 @@ object RobotContainer {
 
     private val SCORE_COMMAND_MAP =
         mapOf(
-            1 to l1(Trigger { true }), // TODO: Fill in correct trigger
+            0 to Commands.none(),
+            1 to l1(driverController.a().negate()), // TODO: Fill in correct trigger
             2 to l2(Trigger { true }), // TODO: Fill in correct trigger
             3 to l3(Trigger { true }), // TODO: Fill in correct trigger
             4 to l4(Trigger { true }), // TODO: Fill in correct trigger
@@ -61,17 +63,17 @@ object RobotContainer {
         enableAutoLogOutputFor(this)
     }
 
-        private fun getHeightCommand(): Command =
-            SCORE_COMMAND_MAP[
-                networkTables.getTargetBranchPose()]!!
+    private fun getHeightCommand(): Command =
+        SCORE_COMMAND_MAP[
+            networkTables.getTargetBranchPose()]!!
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { swerveDrive.desiredHeading },
-            )
+            swerveDrive,
+            { driverController.leftY },
+            { driverController.leftX },
+            { swerveDrive.desiredHeading },
+        )
             .alongWith(
                 swerveDrive.updateDesiredHeading { -driverController.rightX }
             )
@@ -97,6 +99,8 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
+
+        driverController.a().onTrue(getHeightCommand())
 
         driverController
             .povUp()
