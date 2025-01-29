@@ -34,6 +34,8 @@ private val INITIAL_Elevator_2_TRANSLATION =
 private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 private val kWheelRadius = Meters.of(0.0508)
+private val CORAL_ROLLER_UP_C2C :Array<Double> = arrayOf(0.14,0.4) //arrayOf(C2C Distance, Angle (in rad))
+private val ALGAE_ROLLER_C2C :Array<Double> = arrayOf(0.25335,0.9) //arrayOf(C2C Distance, Angle (in rad))
 
 class Visualizer {
     private val swerveDrive = frc.robot.swerveDrive
@@ -120,8 +122,8 @@ class Visualizer {
     }
 
     private fun getGripperRollerPose(
-        distanceFromCenter: Double,
-        angleFromCenter: Double
+        distanceFromCenter: Double=0.0,
+        angleFromCenter: Double=0.0
     ): Pose3d {
         return getPose3d(
             getTranslation3d(
@@ -141,8 +143,8 @@ class Visualizer {
         )
     }
     private fun getGripperRollerPoseInverted(
-        distanceFromCenter: Double,
-        angleFromCenter: Double
+        distanceFromCenter: Double=0.0,
+        angleFromCenter: Double=0.0
     ): Pose3d {
         return getPose3d(
             getTranslation3d(
@@ -192,10 +194,10 @@ class Visualizer {
                 getRotation3d(pitch = wrist.angle.invoke())
             )
 
-        val coralRollersPoseDown = getGripperRollerPoseInverted(0.0, 0.0)
-        val coralRollersPoseUp = getGripperRollerPose(0.14, 0.4)
+        val coralRollersPoseDown = getGripperRollerPoseInverted()
+        val coralRollersPoseUp = getGripperRollerPose(CORAL_ROLLER_UP_C2C[0], CORAL_ROLLER_UP_C2C[1])
 
-        val algaeRemoverPose = getGripperRollerPoseInverted(0.25335, 0.9)
+        val algaeRemoverPose = getGripperRollerPoseInverted(ALGAE_ROLLER_C2C[0], ALGAE_ROLLER_C2C[1])
 
         val climberPose =
             getPose3d(
