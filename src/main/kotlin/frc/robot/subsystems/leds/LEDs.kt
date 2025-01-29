@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
 import edu.wpi.first.wpilibj.AddressableLEDBufferView
 import edu.wpi.first.wpilibj.LEDPattern
+import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.IS_RED
 
 class LEDs : SubsystemBase() {
     private val ledStrip =
@@ -14,6 +16,32 @@ class LEDs : SubsystemBase() {
     private val leftBuffer = ledBuffer.createView(0, STRIP_LENGTH / 2)
     private val rightBuffer =
         ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
+
+    val teamPattern =
+        when (IS_RED) {
+            false ->
+                LEDPattern.gradient(
+                    LEDPattern.GradientType.kDiscontinuous,
+                    Color.kAqua,
+                    Color.kBlue
+                )
+                    .scrollAtAbsoluteSpeed(
+                        SCROLLING_SPEED_TEAM_PATTERN,
+                        LED_SPACING
+                    )
+
+            true ->
+                LEDPattern.gradient(
+                    LEDPattern.GradientType.kDiscontinuous,
+                    Color.kMediumVioletRed,
+                    Color.kRed
+                )
+                    .scrollAtAbsoluteSpeed(
+                        SCROLLING_SPEED_TEAM_PATTERN,
+                        LED_SPACING
+                    )
+        }
+
     init {
         ledStrip.start()
     }
