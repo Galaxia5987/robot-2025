@@ -43,7 +43,8 @@ object RobotContainer {
         configureButtonBindings()
         configureDefaultCommands()
 
-        SmartDashboard.putData(autoChooser)
+        SmartDashboard.putData(autoChooser.sendableChooser)
+        autoChooser.addDefaultOption("A leave", autoRoutines[0].cmd())
         visualizer =
             Visualizer(
                 extender.position,
@@ -105,9 +106,10 @@ object RobotContainer {
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
     }
 
-    fun getAutonomousCommand(): Command = autoChooser.selected
+    fun getAutonomousCommand(): Command = autoChooser.get()
 
     private fun registerAutoRoutines() {
+        autoChooser.addDefaultOption("A leave", autoRoutines[0].cmd())
         autoRoutines.forEach { autoChooser.addOption(it.toString(), it.cmd()) }
     }
 }
