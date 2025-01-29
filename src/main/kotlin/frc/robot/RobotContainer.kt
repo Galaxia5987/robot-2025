@@ -8,8 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.Visualizer
-import frc.robot.subsystems.autoRoutines
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 

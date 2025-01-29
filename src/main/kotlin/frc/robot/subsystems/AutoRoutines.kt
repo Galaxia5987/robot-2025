@@ -71,13 +71,13 @@ private fun leaveRoutine(startingPoint: String): AutoRoutine {
     return routine
 }
 
-private fun ALeave(): AutoRoutine = leaveRoutine("A")
+fun ALeave(): AutoRoutine = leaveRoutine("A")
 
-private fun BLeave(): AutoRoutine = leaveRoutine("B")
+fun BLeave(): AutoRoutine = leaveRoutine("B")
 
-private fun CLeave(): AutoRoutine = leaveRoutine("C")
+fun CLeave(): AutoRoutine = leaveRoutine("C")
 
-private fun routine3LR(): AutoRoutine {
+fun routine3LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("3LR")
     val t3LS = routine.trajectory("3LS")
     val S3R = routine.trajectory("S3R")
@@ -90,7 +90,7 @@ private fun routine3LR(): AutoRoutine {
     return routine
 }
 
-private fun A2R3LR(): AutoRoutine {
+fun A2R3LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("A2R3LR")
     val A2R = routine.trajectory("A2R")
     val t2RS = routine.trajectory("2RS")
@@ -104,10 +104,11 @@ private fun A2R3LR(): AutoRoutine {
     S3L.scoreAtTime()
     S3L.done().onTrue(routine3LR().cmd())
 
+    routine.cmd().withName("a")
     return routine
 }
 
-private fun A3LR4L(): AutoRoutine {
+fun A3LR4L(): AutoRoutine {
     val routine = autoFactory.newRoutine("A3LR4L")
     val A3L = routine.trajectory("A3L")
     val t3RS = routine.trajectory("3RS")
@@ -123,7 +124,7 @@ private fun A3LR4L(): AutoRoutine {
     return routine
 }
 
-private fun B1L(): AutoRoutine {
+fun B1L(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1L")
     val B1L = routine.trajectory("B1L")
 
@@ -133,7 +134,7 @@ private fun B1L(): AutoRoutine {
     return routine
 }
 
-private fun B1R(): AutoRoutine {
+fun B1R(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1R")
     val B1R = routine.trajectory("B1R")
 
@@ -143,7 +144,7 @@ private fun B1R(): AutoRoutine {
     return routine
 }
 
-private fun B1L6RL(): AutoRoutine {
+fun B1L6RL(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1L6RL")
     val t1LS = routine.trajectory("1LS")
     val S6R = routine.trajectory("S6R")
@@ -162,7 +163,7 @@ private fun B1L6RL(): AutoRoutine {
     return routine
 }
 
-private fun B1R2LR(): AutoRoutine {
+fun B1R2LR(): AutoRoutine {
     val routine = autoFactory.newRoutine("B1R2LR")
     val t1RS = routine.trajectory("1RS")
     val S2L = routine.trajectory("S2L")
@@ -181,7 +182,7 @@ private fun B1R2LR(): AutoRoutine {
     return routine
 }
 
-private fun routine5RL(): AutoRoutine {
+fun routine5RL(): AutoRoutine {
     val routine = autoFactory.newRoutine("5RL")
     val t5RS = routine.trajectory("5RS")
     val S5L = routine.trajectory("S5L")
@@ -194,7 +195,7 @@ private fun routine5RL(): AutoRoutine {
     return routine
 }
 
-private fun C5RL4R(): AutoRoutine {
+fun C5RL4R(): AutoRoutine {
     val routine = autoFactory.newRoutine("C5RL4R")
     val C5R = routine.trajectory("C5R")
     val t5LS = routine.trajectory("5LS")
@@ -210,7 +211,7 @@ private fun C5RL4R(): AutoRoutine {
     return routine
 }
 
-private fun C6L5RL(): AutoRoutine {
+fun C6L5RL(): AutoRoutine {
     val routine = autoFactory.newRoutine("C6L5RL")
     val C6L = routine.trajectory("C6L")
     val t6LS = routine.trajectory("6LS")
