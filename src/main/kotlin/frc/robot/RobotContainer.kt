@@ -83,10 +83,22 @@ object RobotContainer {
         fun createScoreCommandMap(): Map<Int, Command> {
             return mapOf(
                 0 to Commands.none(),
-                1 to l1(driverController.a().negate()), // TODO: Fill in correct trigger
-                2 to l2(driverController.a().negate()), // TODO: Fill in correct trigger
-                3 to l3(driverController.a().negate()), // TODO: Fill in correct trigger
-                4 to l4(driverController.a().negate()), // TODO: Fill in correct trigger
+                1 to
+                    l1(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                2 to
+                    l2(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                3 to
+                    l3(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                4 to
+                    l4(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
                 5 to feeder(Trigger { true }) // TODO: Fill in correct trigger
             )
         }
@@ -98,8 +110,17 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.a().onTrue(Commands.defer({createScoreCommandMap()[networkTables.getTargetBranchPose()]}, setOf(
-            gripper, wrist, elevator)))
+        driverController
+            .a()
+            .onTrue(
+                Commands.defer(
+                    {
+                        createScoreCommandMap()[
+                            networkTables.getTargetBranchPose()]
+                    },
+                    setOf(gripper, wrist, elevator)
+                )
+            )
 
         driverController
             .povUp()
