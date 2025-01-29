@@ -3,12 +3,15 @@ package frc.robot.subsystems
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
+import frc.robot.roller
 import frc.robot.subsystems.drive.Drive
+import kotlin.math.cos
+import kotlin.math.sin
 import org.littletonrobotics.junction.AutoLogOutput
 
 private val swerveMoudlePose: Array<Translation2d> =
