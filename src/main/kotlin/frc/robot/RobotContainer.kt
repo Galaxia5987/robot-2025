@@ -10,12 +10,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
-import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import org.ironmaple.simulation.SimulatedArena
-import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 import org.littletonrobotics.junction.AutoLogOutput
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -25,7 +22,6 @@ import org.littletonrobotics.junction.AutoLogOutput
  * and trigger mappings) should be declared here.
  */
 object RobotContainer {
-    private var driveSimulation: SwerveDriveSimulation? = null
 
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandPS5Controller(1)
@@ -56,18 +52,14 @@ object RobotContainer {
                 { Units.Degrees.zero() }
             )
 
-        if (CURRENT_MODE == Mode.SIM) {
-            driveSimulation = SwerveDriveSimulation(Drive.mapleSimConfig, Pose2d(3.0, 3.0, Rotation2d()))
-            SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation)
-        }
-
-
+        SimulatedArena.getInstance().resetFieldForAuto()
 
         enableAutoLogOutputFor(this)
     }
 
     @AutoLogOutput(key = "MapleSimPose")
-    private fun getMapleSimPose(): Pose2d? = driveSimulation?.simulatedDriveTrainPose
+    private fun getMapleSimPose(): Pose2d? =
+        driveSimulation?.simulatedDriveTrainPose
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
