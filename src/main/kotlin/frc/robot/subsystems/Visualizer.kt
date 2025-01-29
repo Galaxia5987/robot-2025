@@ -14,7 +14,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import org.littletonrobotics.junction.AutoLogOutput
 
-private val swerveMoudlePose: Array<Translation2d> =
+private val swerveModulePose: Array<Translation2d> =
     Drive.getModuleTranslations()
 
 private val INITIAL_INTAKE_TRANSLATION =
@@ -38,16 +38,20 @@ private val kWheelRadius = Meters.of(0.0508)
 class Visualizer {
     private val swerveTurnAngle = frc.robot.swerveDrive.SwerveTurnAngle
     private val swerveDriveAngle = frc.robot.swerveDrive.SwerveDriveAngle
+    private val swerveDrive = frc.robot.swerveDrive
 
-    private val climbAngle = frc.robot.climber.angle.invoke()
+    private val climb = frc.robot.climber
 
-    private val elevatorHeight = frc.robot.elevator.height
+    private val elevator = frc.robot.elevator
 
-    private val extenderPosition = frc.robot.extender.position.invoke()
-    val wristAngle = frc.robot.wrist.angle.invoke()
+    private val extender = frc.robot.extender
+    private val wrist = frc.robot.wrist
+
+    private val gripper = frc.robot.gripper
+
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
-        val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
+        val secondStageHeight = elevator.height.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
         val firstStagePose =
@@ -93,9 +97,9 @@ class Visualizer {
         for (i in 0..3) {
             swervePosesTurn[i] =
                 getSwerveModulePoseTurn(
-                    swerveMoudlePose[i].x,
-                    swerveMoudlePose[i].y,
-                    swerveTurnAngle[i]
+                    swerveModulePose[i].x,
+                    swerveModulePose[i].y,
+                    swerveDrive.SwerveTurnAngle[i]
                 )
         }
         return swervePosesTurn
@@ -108,10 +112,10 @@ class Visualizer {
         for (i in 0..3) {
             swervePosesDrive[i] =
                 getSwerveModulePoseDrive(
-                    swerveMoudlePose[i].x,
-                    swerveMoudlePose[i].y,
-                    swerveTurnAngle[i],
-                    swerveDriveAngle[i]
+                    swerveModulePose[i].x,
+                    swerveModulePose[i].y,
+                    swerveDrive.SwerveTurnAngle[i],
+                    swerveDrive.SwerveDriveAngle[i]
                 )
         }
         return swervePosesDrive
@@ -125,12 +129,13 @@ class Visualizer {
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +
-                    (getTranslation3d(x = extenderPosition))
+                    (getTranslation3d(x = extender.position.invoke()))
             )
         val intakeRollerPose =
             getPose3d(
                 INITIAL_INTAKE_Roller_TRANSLATION +
-                    getTranslation3d(x = extenderPosition)
+                    getTranslation3d(x = extender.position.invoke()),
+                getRotation3d(pitch = roller.rollerAngle.`in`(Rotations))
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
@@ -141,9 +146,9 @@ class Visualizer {
                     y = INITIAL_WRIST_TRANSLATION.y,
                     z =
                         INITIAL_WRIST_TRANSLATION.z +
-                            elevatorHeight.invoke().`in`(Meters)
+                            elevator.height.invoke().`in`(Meters)
                 ),
-                getRotation3d(pitch = wristAngle)
+                getRotation3d(pitch = wrist.angle.invoke())
             )
 
         val coralRollersPoseDown = wristPose
@@ -160,7 +165,7 @@ class Visualizer {
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation = getRotation3d(pitch = climbAngle)
+                rotation = getRotation3d(pitch = climb.angle.invoke())
             )
 
         return arrayOf(
