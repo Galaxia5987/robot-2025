@@ -119,6 +119,49 @@ class Visualizer {
         return swervePosesDrive
     }
 
+    private fun getGripperRollerPose(
+        distanceFromCenter: Double,
+        angleFromCenter: Double
+    ): Pose3d {
+        return getPose3d(
+            getTranslation3d(
+                x =
+                    INITIAL_WRIST_TRANSLATION.x -
+                        cos(
+                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
+                        ) * distanceFromCenter,
+                z =
+                    (INITIAL_WRIST_TRANSLATION.z +
+                        sin(
+                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
+                        ) * distanceFromCenter +
+                        elevator.height.invoke().`in`(Meters))
+            ),
+            getRotation3d(pitch = gripper.rollerAngle.`in`(Rotations))
+        )
+    }
+    private fun getGripperRollerPoseInverted(
+        distanceFromCenter: Double,
+        angleFromCenter: Double
+    ): Pose3d {
+        return getPose3d(
+            getTranslation3d(
+                x =
+                    INITIAL_WRIST_TRANSLATION.x -
+                        cos(
+                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
+                        ) * distanceFromCenter,
+                z =
+                    (INITIAL_WRIST_TRANSLATION.z +
+                        sin(
+                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
+                        ) * distanceFromCenter +
+                        elevator.height.invoke().`in`(Meters))
+            ),
+            getRotation3d(pitch = -gripper.rollerAngle.`in`(Rotations))
+        )
+    }
+
     @AutoLogOutput
     fun getSubsystemsPoses(): Array<Pose3d> {
         val swervePosesTurn = getAllSwerveModulePoseTurn()
@@ -149,16 +192,10 @@ class Visualizer {
                 getRotation3d(pitch = wrist.angle.invoke())
             )
 
-        val coralRollersPoseDown = wristPose
-        val coralRollersPoseUp = wristPose
+        val coralRollersPoseDown = getGripperRollerPoseInverted(0.0, 0.0)
+        val coralRollersPoseUp = getGripperRollerPose(0.14, 0.4)
 
-        val algaeRemoverPose =
-            getPose3d(
-                x = INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.x,
-                z =
-                    INITIAL_ALGEA_REMOVER_ROLLER_TRANSLATION.z +
-                        elevatorHeight.invoke().`in`(Meters),
-            )
+        val algaeRemoverPose = getGripperRollerPoseInverted(0.25335, 0.9)
 
         val climberPose =
             getPose3d(
