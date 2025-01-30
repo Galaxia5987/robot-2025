@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.intake.intakeAlgae
+import frc.robot.subsystems.intake.retractIntake
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -93,6 +95,8 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
+
+        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
 
         driverController
             .povUp()
