@@ -29,6 +29,8 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
     fun farOuttake() =
         setVoltage(FAR_OUTTAKE_VOLTAGE).withName("Roller/farOuttake")
 
+    fun stop() = setVoltage(Units.Volts.zero())
+
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
