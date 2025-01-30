@@ -37,23 +37,27 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) : RollerIO
         )
     private val controlRequest = VoltageOut(0.0)
 
+    private fun outtakeGamePieceIfNeed() {
+        if (intakeSimulation.obtainGamePieceFromIntake()) {
+            SimulatedArena.getInstance().addGamePieceProjectile(ReefscapeAlgaeOnFly(
+                driveSimulation!!.simulatedDriveTrainPose.translation,
+                Translation2d(Units.Meters.of(0.3), Units.Meters.zero()),
+                driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative,
+                driveSimulation.simulatedDriveTrainPose.rotation,
+                Units.Meter.of(0.4),
+                Units.MetersPerSecond.of(3.0),
+                Units.Degrees.of(0.0)
+            ))
+        }
+    }
+
     override fun setVoltage(voltage: Voltage) {
         motor.setControl(controlRequest.withOutput(voltage))
         if (voltage != Units.Volts.zero()) {
             intakeSimulation.startIntake()
         } else {
             intakeSimulation.stopIntake()
-            if (intakeSimulation.obtainGamePieceFromIntake()) {
-                SimulatedArena.getInstance().addGamePieceProjectile(ReefscapeAlgaeOnFly(
-                    driveSimulation!!.simulatedDriveTrainPose.translation,
-                    Translation2d(Units.Meters.of(0.3), Units.Meters.zero()),
-                    driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative,
-                    driveSimulation.simulatedDriveTrainPose.rotation,
-                    Units.Meter.of(0.4),
-                    Units.MetersPerSecond.of(3.0),
-                    Units.Degrees.of(0.0)
-                ))
-            }
+            outtakeGamePieceIfNeed()
         }
     }
 
