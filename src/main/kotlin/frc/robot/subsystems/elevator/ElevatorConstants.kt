@@ -31,8 +31,7 @@ val ROTATIONS_TO_CENTIMETER: Measure<out PerUnit<DistanceUnit, AngleUnit>> =
 val CENTIMETERS_TO_ROTATIONS: Measure<out PerUnit<AngleUnit, DistanceUnit>> =
     Units.Rotations.per(Units.Centimeter).of(1 / ROTATIONS_TO_CENTIMETERS_RATIO)
 
-val GAINS =
-    selectGainsBasedOnMode(Gains(kP = 20.0, kD = 1.0, kG = 1.0), Gains())
+val GAINS = selectGainsBasedOnMode(Gains(kP = 1.0, kD = 1.0, kG = 1.0), Gains())
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(15.0)),
