@@ -16,16 +16,14 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     var rollerAngle: Angle = Units.Rotations.zero()
     private val tuningVoltage =
         LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
-    private val debouncer =
-        Debouncer(
-            DEBOUNCE_TIME.`in`(Units.Seconds),
-            Debouncer.DebounceType.kBoth
-        )
 
     @AutoLogOutput
-    val hasCoral = Trigger {
-        debouncer.calculate(io.inputs.sensorDistance < DISTANCE_THRESHOLD)
-    }
+    val hasCoral: Trigger =
+        Trigger { io.inputs.sensorDistance < DISTANCE_THRESHOLD }
+            .debounce(
+                DEBOUNCE_TIME.`in`(Units.Seconds),
+                Debouncer.DebounceType.kBoth
+            )
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
