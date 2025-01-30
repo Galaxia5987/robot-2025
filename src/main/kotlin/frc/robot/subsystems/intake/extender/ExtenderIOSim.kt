@@ -14,16 +14,8 @@ import frc.robot.lib.toDistance
 import org.ironmaple.simulation.IntakeSimulation
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation
 
-class ExtenderIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) : ExtenderIO {
+class ExtenderIOSim : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
-    private val intakeSimulation = IntakeSimulation.OverTheBumperIntake(
-        "Algae",
-        driveTrainSimulation,
-        Units.Meters.of(0.64),
-        Units.Meters.of(0.35),
-        IntakeSimulation.IntakeSide.FRONT,
-        1
-    )
     private val motor =
         TalonFXSim(
             1,
@@ -41,6 +33,7 @@ class ExtenderIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) : Extend
     }
 
     override fun setPosition(position: Distance) {
+        println(position.toAngle(PINION_RADIUS, GEAR_RATIO))
         motor.setControl(
             positionControl.withPosition(
                 position.toAngle(PINION_RADIUS, GEAR_RATIO)
