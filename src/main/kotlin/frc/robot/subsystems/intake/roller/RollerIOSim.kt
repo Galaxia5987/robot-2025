@@ -8,25 +8,23 @@ import edu.wpi.first.wpilibj.Timer
 import frc.robot.driveSimulation
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
-import frc.robot.swerveDrive
 import org.ironmaple.simulation.IntakeSimulation
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation
-import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnField
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFly
-import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnField
-import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
-class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) : RollerIO {
+class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
+    RollerIO {
     override val inputs = LoggedRollerInputs()
-    private val intakeSimulation = IntakeSimulation.OverTheBumperIntake(
-        "Algae",
-        driveTrainSimulation,
-        Units.Meters.of(0.64),
-        Units.Meters.of(0.35),
-        IntakeSimulation.IntakeSide.FRONT,
-        1
-    )
+    private val intakeSimulation =
+        IntakeSimulation.OverTheBumperIntake(
+            "Algae",
+            driveTrainSimulation,
+            Units.Meters.of(0.64),
+            Units.Meters.of(0.35),
+            IntakeSimulation.IntakeSide.FRONT,
+            1
+        )
     private val motor =
         TalonFXSim(
             1,
@@ -39,15 +37,22 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) : RollerIO
 
     private fun outtakeGamePieceIfNeed() {
         if (intakeSimulation.obtainGamePieceFromIntake()) {
-            SimulatedArena.getInstance().addGamePieceProjectile(ReefscapeAlgaeOnFly(
-                driveSimulation!!.simulatedDriveTrainPose.translation,
-                Translation2d(Units.Meters.of(0.3), Units.Meters.zero()),
-                driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative,
-                driveSimulation.simulatedDriveTrainPose.rotation,
-                Units.Meter.of(0.4),
-                Units.MetersPerSecond.of(3.0),
-                Units.Degrees.of(0.0)
-            ))
+            SimulatedArena.getInstance()
+                .addGamePieceProjectile(
+                    ReefscapeAlgaeOnFly(
+                        driveSimulation!!.simulatedDriveTrainPose.translation,
+                        Translation2d(
+                            Units.Meters.of(0.3),
+                            Units.Meters.zero()
+                        ),
+                        driveSimulation
+                            .driveTrainSimulatedChassisSpeedsFieldRelative,
+                        driveSimulation.simulatedDriveTrainPose.rotation,
+                        Units.Meter.of(0.4),
+                        Units.MetersPerSecond.of(3.0),
+                        Units.Degrees.of(0.0)
+                    )
+                )
         }
     }
 

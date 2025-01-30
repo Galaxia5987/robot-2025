@@ -11,8 +11,6 @@ import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
-import org.ironmaple.simulation.IntakeSimulation
-import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation
 
 class ExtenderIOSim : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
