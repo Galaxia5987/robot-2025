@@ -4,18 +4,47 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.elevator
-import frc.robot.gripper
-import frc.robot.wrist
+import frc.robot.*
+import frc.robot.lib.getTranslation2d
+import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
+
+// TODO: Fix Wrist angle zero position in AdvantageScope config
+
+private fun shootCoral(): Command =
+    runOnce({
+        if (gripper.hasCoral.asBoolean) {
+            SimulatedArena.getInstance()
+                .addGamePieceProjectile(
+                    ReefscapeCoralOnFly(
+                        driveSimulation!!.simulatedDriveTrainPose.translation,
+                        getTranslation2d(x = 0.22, y = 0.0),
+                        driveSimulation
+                            .driveTrainSimulatedChassisSpeedsFieldRelative,
+                        driveSimulation.simulatedDriveTrainPose.rotation,
+                        elevator.height.invoke() + Units.Meters.of(0.60),
+                        Units.MetersPerSecond.of(3.0),
+                        wrist.angle.invoke()
+                    )
+                )
+        }
+    })
 
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
         waitUntil(endTrigger),
-        gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT),
+        gripper
+            .outtake()
+            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .alongWith(
+                either(shootCoral(), none()) { CURRENT_MODE == Mode.SIM }
+            ),
         moveDefaultPosition()
     )
+
+// TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
     parallel(elevator.feeder(), wrist.feeder())
