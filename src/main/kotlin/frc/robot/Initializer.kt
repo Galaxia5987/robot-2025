@@ -152,7 +152,7 @@ val roller =
     Roller(
         when (CURRENT_MODE) {
             Mode.REAL -> RollerIOReal()
-            Mode.SIM -> RollerIOSim()
+            Mode.SIM -> RollerIOSim(driveSimulation!!)
             Mode.REPLAY ->
                 object : RollerIO {
                     override var inputs = LoggedRollerInputs()
