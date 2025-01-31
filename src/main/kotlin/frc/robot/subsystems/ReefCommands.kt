@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
 import frc.robot.lib.getTranslation2d
+import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
@@ -24,7 +25,9 @@ private fun shootCoral(): Command =
                         driveSimulation.simulatedDriveTrainPose.rotation,
                         elevator.height.invoke() + Units.Meters.of(0.50),
                         Units.MetersPerSecond.of(3.0),
-                        wrist.angle.invoke() - Units.Degrees.of(35.0)
+                        if (elevator.setpointName == Positions.L4) Units.Degrees.of(-80.0) else wrist.angle.invoke() - Units.Degrees.of(
+                            35.0
+                        )
                     )
                 )
         }
