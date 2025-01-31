@@ -12,26 +12,41 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
 
-private fun shootCoral(): Command =
-    runOnce({
-        if (gripper.hasCoral.asBoolean) {
-            SimulatedArena.getInstance()
-                .addGamePieceProjectile(
-                    ReefscapeCoralOnFly(
-                        driveSimulation!!.simulatedDriveTrainPose.translation,
-                        getTranslation2d(x = 0.40, y = 0.0),
-                        driveSimulation
-                            .driveTrainSimulatedChassisSpeedsFieldRelative,
-                        driveSimulation.simulatedDriveTrainPose.rotation,
-                        elevator.height.invoke() + Units.Meters.of(0.50),
-                        Units.MetersPerSecond.of(3.0),
-                        if (elevator.setpointName == Positions.L4) Units.Degrees.of(-80.0) else wrist.angle.invoke() - Units.Degrees.of(
-                            35.0
-                        )
-                    )
-                )
-        }
-    })
+private val CORAL_SHOOT_OFFSET = getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
+private val GRIPPER_HEIGHT = Units.Meters.of(0.50)
+private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
+private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
+private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
+
+private fun shootCoral(): Command = runOnce ({
+    if (!gripper.hasCoral.asBoolean) return@runOnce
+
+    val arena = SimulatedArena.getInstance()
+    val translation = driveSimulation!!.simulatedDriveTrainPose.translation
+    val velocity = driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative
+    val rotation = driveSimulation.simulatedDriveTrainPose.rotation
+    val elevation = elevator.height.invoke() + GRIPPER_HEIGHT
+    val speed = CORAL_SHOOT_SPEED
+    val angle = if (elevator.setpointName == Positions.L4) {
+        CORAL_L4_SHOOT_ANGLE
+    } else {
+        wrist.angle.invoke() - WRIST_ANGLE_OFFSET
+    }
+
+    arena.addGamePieceProjectile(
+        ReefscapeCoralOnFly(
+            translation,
+            CORAL_SHOOT_OFFSET,
+            velocity,
+            rotation,
+            elevation,
+            speed,
+            angle
+        )
+    )
+})
+
+
 
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
