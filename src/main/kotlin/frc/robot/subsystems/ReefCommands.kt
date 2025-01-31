@@ -11,8 +11,6 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
 
-// TODO: Fix Wrist angle zero position in AdvantageScope config
-
 private fun shootCoral(): Command =
     runOnce({
         if (gripper.hasCoral.asBoolean) {
@@ -20,13 +18,13 @@ private fun shootCoral(): Command =
                 .addGamePieceProjectile(
                     ReefscapeCoralOnFly(
                         driveSimulation!!.simulatedDriveTrainPose.translation,
-                        getTranslation2d(x = 0.22, y = 0.0),
+                        getTranslation2d(x = 0.40, y = 0.0),
                         driveSimulation
                             .driveTrainSimulatedChassisSpeedsFieldRelative,
                         driveSimulation.simulatedDriveTrainPose.rotation,
-                        elevator.height.invoke() + Units.Meters.of(0.60),
+                        elevator.height.invoke() + Units.Meters.of(0.50),
                         Units.MetersPerSecond.of(3.0),
-                        wrist.angle.invoke()
+                        wrist.angle.invoke() - Units.Degrees.of(35.0)
                     )
                 )
         }
