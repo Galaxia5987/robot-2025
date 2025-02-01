@@ -43,6 +43,7 @@ fun feeder(intakeTrigger: Trigger): Command =
         parallel(elevator.feeder(), wrist.feeder()),
         waitUntil(intakeTrigger),
         gripper.intake().until(gripper.hasCoral)
+            .andThen(moveDefaultPosition())
     )
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())
