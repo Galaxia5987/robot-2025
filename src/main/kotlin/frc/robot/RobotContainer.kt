@@ -5,12 +5,18 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.feeder
+import frc.robot.subsystems.intake.intakeAlgae
+import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.l1
+import frc.robot.subsystems.l2
+import frc.robot.subsystems.l3
+import frc.robot.subsystems.l4
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -21,7 +27,7 @@ import frc.robot.subsystems.drive.DriveCommands
  */
 object RobotContainer {
     private val driverController = CommandXboxController(0)
-    private val operatorController = CommandPS5Controller(1)
+    private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
@@ -33,21 +39,14 @@ object RobotContainer {
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
+    val voltage = Units.Volts.of(1.0)
 
     init {
+
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
-        visualizer =
-            Visualizer(
-                extender.position,
-                { Units.Degrees.zero() },
-                elevator.height,
-                wrist.angle,
-                { Units.Degrees.zero() },
-                { Units.Degrees.zero() },
-                { Units.Degrees.zero() }
-            )
+        visualizer = Visualizer()
 
         enableAutoLogOutputFor(this)
     }
@@ -104,7 +103,7 @@ object RobotContainer {
         }
 
         driverController
-            .y()
+            .back()
             .onTrue(
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
@@ -134,6 +133,26 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
+
+        driverController.a().onTrue(l1(driverController.a().negate()))
+        driverController.x().onTrue(l2(driverController.x().negate()))
+        driverController.b().onTrue(l3(driverController.b().negate()))
+        driverController.y().onTrue(l4(driverController.y().negate()))
+        driverController
+            .start()
+            .onTrue(feeder(driverController.start().negate()))
+        driverController.rightTrigger().onTrue(gripper.intake())
+        driverController.leftTrigger().onTrue(gripper.outtake())
+        driverController
+            .rightBumper()
+            .whileTrue(intakeAlgae())
+            .onFalse(outtakeAlgae(driverController.rightBumper().negate()))
+
+        operatorController.a().onTrue(climber.fold())
+        operatorController.b().onTrue(climber.unfold())
+        operatorController
+            .rightTrigger()
+            .whileTrue(elevator.setVoltage(voltage))
     }
 
     fun getAutonomousCommand(): Command =
