@@ -24,7 +24,7 @@ class ExtenderIOSim : ExtenderIO {
         )
     private val positionControl = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
-    private val controller = PIDController(0.5, 0.0, 0.0)
+    private val controller = PIDController(GAINS.kP, GAINS.kI, GAINS.kD)
 
     init {
         motor.setController(controller)

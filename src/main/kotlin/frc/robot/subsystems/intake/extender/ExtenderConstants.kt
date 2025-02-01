@@ -18,7 +18,7 @@ val MAX_EXTENSION: Distance = Units.Meters.of(0.0)
 val MIN_EXTENSION: Distance = Units.Meters.of(0.0)
 const val SAFETY_DEBOUNCE = 1.0
 
-val GAINS = selectGainsBasedOnMode(Gains(), Gains())
+val GAINS = selectGainsBasedOnMode(Gains(), Gains(kP = 0.5, kD = 0.2))
 
 enum class Positions(val position: Distance) {
     EXTENDED(Units.Meters.of(0.3)),
