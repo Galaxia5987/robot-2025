@@ -1,7 +1,6 @@
 package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.controls.VoltageOut
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
@@ -43,7 +42,7 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
             .addGamePieceProjectile(
                 ReefscapeAlgaeOnFly(
                     driveSimulation!!.simulatedDriveTrainPose.translation,
-                    Translation2d(Units.Meters.of(0.3), Units.Meters.zero()),
+                    CORAL_OUTTAKE_TRANSLATION,
                     driveSimulation
                         .driveTrainSimulatedChassisSpeedsFieldRelative,
                     driveSimulation.simulatedDriveTrainPose.rotation,

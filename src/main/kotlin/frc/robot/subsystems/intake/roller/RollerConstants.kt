@@ -1,8 +1,12 @@
 package frc.robot.subsystems.intake.roller
 
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.*
+import frc.robot.lib.getTranslation2d
 
+val CORAL_OUTTAKE_TRANSLATION: Translation2d =
+    getTranslation2d(Units.Meters.of(0.3), Units.Meters.zero())
 val CORAL_OUTTAKE_HEIGHT: Distance = Units.Meter.of(0.4)
 val CORAL_OUTTAKE_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(3.0)
 val CORAL_OUTTAKE_ANGLE: Angle = Units.Degrees.zero()
