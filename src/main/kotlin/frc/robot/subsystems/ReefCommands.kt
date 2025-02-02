@@ -28,7 +28,7 @@ private fun shootCoral(): Command =
         val velocity =
             driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative
         val rotation = driveSimulation.simulatedDriveTrainPose.rotation
-        val elevation = elevator.height.invoke() + GRIPPER_HEIGHT
+        val height = elevator.height.invoke() + GRIPPER_HEIGHT
         val angle =
             if (elevator.setpointName == Positions.L4) {
                 CORAL_L4_SHOOT_ANGLE
@@ -42,7 +42,7 @@ private fun shootCoral(): Command =
                 CORAL_SHOOT_OFFSET,
                 velocity,
                 rotation,
-                elevation,
+                height,
                 CORAL_SHOOT_SPEED,
                 angle
             )
