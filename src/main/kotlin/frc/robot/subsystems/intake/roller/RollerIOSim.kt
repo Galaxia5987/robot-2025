@@ -20,8 +20,8 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
         IntakeSimulation.OverTheBumperIntake(
             "Algae",
             driveTrainSimulation,
-            Units.Meters.of(0.64),
-            Units.Meters.of(0.35),
+            INTAKE_WIDTH,
+            INTAKE_LENGTH_EXTENDED,
             IntakeSimulation.IntakeSide.FRONT,
             1
         )
