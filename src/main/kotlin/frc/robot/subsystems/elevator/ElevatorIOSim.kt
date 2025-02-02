@@ -16,7 +16,7 @@ class ElevatorIOSim : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
     private val motorPositionRequest = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
-    private val angleController = PIDController(0.4, 0.0, 0.5)
+    private val angleController = PIDController(GAINS.kP, GAINS.kI, GAINS.kD)
     private val motor = TalonFXSim(2, 1.0, 0.003, 1.0, TalonType.KRAKEN_FOC)
 
     init {

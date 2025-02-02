@@ -105,10 +105,10 @@ object RobotContainer {
             .onTrue(feeder(driverController.start().negate()))
         driverController.rightTrigger().onTrue(gripper.intake())
         driverController.leftTrigger().onTrue(gripper.outtake())
+        driverController.rightBumper().whileTrue(intakeAlgae())
         driverController
-            .rightBumper()
-            .whileTrue(intakeAlgae())
-            .onFalse(outtakeAlgae(driverController.rightBumper().negate()))
+            .leftBumper()
+            .onTrue(outtakeAlgae(driverController.leftBumper().negate()))
 
         operatorController.a().onTrue(climber.fold())
         operatorController.b().onTrue(climber.unfold())
