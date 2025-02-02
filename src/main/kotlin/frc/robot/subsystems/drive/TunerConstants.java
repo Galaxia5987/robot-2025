@@ -128,7 +128,7 @@ public class TunerConstants {
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
                     new double[] {
-                        5.393476450205914, 5.3627968344482015, -3.5619033894704586, -1.1965050145508
+                            1.9374177350995647, 2.868544073346149, -0.2162912910918754, 1.1244079175201749
                     };
 
             steerGains =
