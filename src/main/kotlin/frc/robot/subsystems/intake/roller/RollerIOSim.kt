@@ -35,7 +35,7 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
         )
     private val controlRequest = VoltageOut(0.0)
 
-    private fun outtakeGamePieceIfNeed() {
+    private fun visualizeOuttakeGamePieceIfNeeded() {
         if (intakeSimulation.obtainGamePieceFromIntake()) {
             SimulatedArena.getInstance()
                 .addGamePieceProjectile(
@@ -62,7 +62,7 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
             intakeSimulation.startIntake()
         } else {
             intakeSimulation.stopIntake()
-            outtakeGamePieceIfNeed()
+            visualizeOuttakeGamePieceIfNeeded()
         }
     }
 
