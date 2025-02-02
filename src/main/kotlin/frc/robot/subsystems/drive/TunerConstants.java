@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.ALT_ROBORIO_SERIAL;
+import static frc.robot.ConstantsKt.SWERVE_CANBUS_NAME;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
@@ -163,7 +164,7 @@ public class TunerConstants {
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
-            kCANBus = new CANBus("rio", "./logs/example.hoot");
+            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.8);
 
@@ -272,7 +273,7 @@ public class TunerConstants {
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
-            kCANBus = new CANBus("rio", "./logs/example.hoot");
+            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.8);
             kMaxOmegaVelocity = RadiansPerSecond.of(5);
