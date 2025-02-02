@@ -17,6 +17,8 @@ interface ExtenderIO {
 
     fun setSoftLimits(value: Boolean) {}
 
+    fun setNeutralMode(isBreak: Boolean) {}
+
     fun updateInputs() {}
 
     @Logged
