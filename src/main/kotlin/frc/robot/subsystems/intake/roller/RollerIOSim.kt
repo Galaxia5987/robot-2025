@@ -47,9 +47,9 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
                     driveSimulation
                         .driveTrainSimulatedChassisSpeedsFieldRelative,
                     driveSimulation.simulatedDriveTrainPose.rotation,
-                    Units.Meter.of(0.4),
-                    Units.MetersPerSecond.of(3.0),
-                    Units.Degrees.of(0.0)
+                    CORAL_OUTTAKE_HEIGHT,
+                    CORAL_OUTTAKE_VELOCITY,
+                    CORAL_OUTTAKE_ANGLE
                 )
             )
     }
