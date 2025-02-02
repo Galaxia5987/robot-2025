@@ -36,24 +36,22 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
     private val controlRequest = VoltageOut(0.0)
 
     private fun visualizeOuttakeGamePieceIfNeeded() {
-        if (intakeSimulation.obtainGamePieceFromIntake()) {
-            SimulatedArena.getInstance()
-                .addGamePieceProjectile(
-                    ReefscapeAlgaeOnFly(
-                        driveSimulation!!.simulatedDriveTrainPose.translation,
-                        Translation2d(
-                            Units.Meters.of(0.3),
-                            Units.Meters.zero()
-                        ),
-                        driveSimulation
-                            .driveTrainSimulatedChassisSpeedsFieldRelative,
-                        driveSimulation.simulatedDriveTrainPose.rotation,
-                        Units.Meter.of(0.4),
-                        Units.MetersPerSecond.of(3.0),
-                        Units.Degrees.of(0.0)
-                    )
-                )
+        if (!intakeSimulation.obtainGamePieceFromIntake()) {
+            return
         }
+        SimulatedArena.getInstance()
+            .addGamePieceProjectile(
+                ReefscapeAlgaeOnFly(
+                    driveSimulation!!.simulatedDriveTrainPose.translation,
+                    Translation2d(Units.Meters.of(0.3), Units.Meters.zero()),
+                    driveSimulation
+                        .driveTrainSimulatedChassisSpeedsFieldRelative,
+                    driveSimulation.simulatedDriveTrainPose.rotation,
+                    Units.Meter.of(0.4),
+                    Units.MetersPerSecond.of(3.0),
+                    Units.Degrees.of(0.0)
+                )
+            )
     }
 
     override fun setVoltage(voltage: Voltage) {
