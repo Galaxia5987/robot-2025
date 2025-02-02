@@ -31,7 +31,6 @@ class ExtenderIOSim : ExtenderIO {
     }
 
     override fun setPosition(position: Distance) {
-        println(position.toAngle(PINION_RADIUS, GEAR_RATIO))
         motor.setControl(
             positionControl.withPosition(
                 position.toAngle(PINION_RADIUS, GEAR_RATIO)
