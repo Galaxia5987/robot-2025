@@ -19,7 +19,7 @@ private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
 private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
 private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
 
-private fun shootCoral(): Command =
+private fun visualizeCoralOuttake(): Command =
     runOnce({
         if (!gripper.hasCoral.asBoolean) return@runOnce
 
@@ -56,7 +56,7 @@ private fun scoreCoral(endTrigger: Trigger): Command =
             .outtake()
             .withTimeout(CORAL_OUTTAKE_TIMEOUT)
             .alongWith(
-                shootCoral().onlyIf { CURRENT_MODE == Mode.SIM }
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE == Mode.SIM }
             ),
         moveDefaultPosition()
     )
