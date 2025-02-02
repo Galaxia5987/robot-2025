@@ -224,7 +224,7 @@ public class TunerConstants {
 
             // Back Right
             kBackRightDriveMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
-            kBackRightSteerMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
+            kBackRightSteerMotorId = AltSwervePorts.REAR_RIGHT_ANGLE_MOTOR_ID;
             kBackRightEncoderId = AltSwervePorts.REAR_RIGHT_ENCODER_ID;
             kBackRightEncoderOffset = Radians.of(-offsets[3]);
             kBackRightSteerMotorInverted = true;
