@@ -133,21 +133,22 @@ public class TunerConstants {
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(22.442)
+                            .withKP(22.792)
                             .withKI(0)
-                            .withKD(1.6859)
-                            .withKS(0.19249)
-                            .withKV(0.22304)
-                            .withKA(0.068728)
+                            .withKD(2.207)
+                            .withKS(0)
+                            .withKV(0.22717)
+                            .withKA(0.1124)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(1.5)
+                            .withKP(1.5
+                            )
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0.22064)
-                            .withKV(0.54210);
+                            .withKS(0.40655)
+                            .withKV(0.54606);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
