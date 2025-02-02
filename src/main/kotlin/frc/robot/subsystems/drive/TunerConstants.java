@@ -128,7 +128,10 @@ public class TunerConstants {
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
                     new double[] {
-                            1.9374177350995647, 2.868544073346149, -0.2162912910918754, 1.1244079175201749
+                        1.9374177350995647,
+                        2.868544073346149,
+                        -0.2162912910918754,
+                        1.1244079175201749
                     };
 
             steerGains =
@@ -143,8 +146,7 @@ public class TunerConstants {
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(1.5
-                            )
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
                             .withKS(0.40655)
