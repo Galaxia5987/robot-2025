@@ -6,8 +6,9 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
@@ -50,6 +51,8 @@ object RobotContainer {
         enableAutoLogOutputFor(this)
     }
 
+    private fun getHeightCommand(): Command = Commands.none()
+
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
@@ -76,11 +79,46 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        fun createScoreCommandMap(): Map<Int, Command> {
+            return mapOf(
+                0 to Commands.none(),
+                1 to
+                    l1(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                2 to
+                    l2(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                3 to
+                    l3(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                4 to
+                    l4(
+                        driverController.a().negate()
+                    ), // TODO: Fill in correct trigger
+                5 to feeder(Trigger { true }) // TODO: Fill in correct trigger
+            )
+        }
+
         driverController
             .back()
             .onTrue(
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
+            )
+
+        driverController
+            .a()
+            .onTrue(
+                Commands.defer(
+                    {
+                        createScoreCommandMap()[
+                            networkTables.getTargetBranchPose()]
+                    },
+                    setOf(gripper, wrist, elevator)
+                )
             )
 
         driverController

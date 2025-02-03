@@ -73,7 +73,10 @@ object Robot : LoggedRobot() {
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
-            SIM -> Logger.addDataReceiver(NT4Publisher())
+            SIM -> {
+                Logger.addDataReceiver(NT4Publisher())
+                Logger.addDataReceiver(WPILOGWriter())
+            }
             REPLAY -> {
                 setUseTiming(false)
                 val logPath = LogFileUtil.findReplayLog()

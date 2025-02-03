@@ -1,5 +1,10 @@
 package frc.robot
 
+import frc.robot.auto.network_tables.*
+import frc.robot.auto.network_tables.NetworkTable
+import frc.robot.auto.network_tables.NetworkTableIO
+import frc.robot.auto.network_tables.NetworkTableIOReal
+import frc.robot.auto.network_tables.NetworkTableIOSim
 import frc.robot.subsystems.climber.Climber
 import frc.robot.subsystems.climber.ClimberIO
 import frc.robot.subsystems.climber.ClimberIOReal
@@ -149,6 +154,18 @@ val wrist =
             Mode.REPLAY ->
                 object : WristIO {
                     override var inputs = LoggedWristInputs()
+                }
+        }
+    )
+
+val networkTables =
+    NetworkTable(
+        when (CURRENT_MODE) {
+            Mode.REAL -> NetworkTableIOReal()
+            Mode.SIM -> NetworkTableIOSim()
+            Mode.REPLAY ->
+                object : NetworkTableIO {
+                    override var inputs = LoggedNetworkTableInputs()
                 }
         }
     )
