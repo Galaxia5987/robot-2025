@@ -140,15 +140,12 @@ object Robot : LoggedRobot() {
     }
 
     override fun simulationPeriodic() {
-        SimulatedArena.getInstance().simulationPeriodic()
-        Logger.recordOutput(
-            "FieldSimulation/Algae",
-            *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae")
-        )
-        Logger.recordOutput(
-            "FieldSimulation/Coral",
-            *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral")
-        )
+        val arena = SimulatedArena.getInstance()
+        arena.simulationPeriodic()
+
+        listOf("Algae", "Coral").forEach { type ->
+            Logger.recordOutput("FieldSimulation/$type", *arena.getGamePiecesArrayByType(type))
+        }
     }
 
     /** This function is called periodically during operator control. */
