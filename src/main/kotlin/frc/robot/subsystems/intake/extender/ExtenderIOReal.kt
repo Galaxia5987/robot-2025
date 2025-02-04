@@ -75,7 +75,6 @@ class ExtenderIOReal : ExtenderIO {
                 position.toAngle(PINION_RADIUS, GEAR_RATIO)
             )
         )
-        println(position.toAngle(PINION_RADIUS, GEAR_RATIO))
     }
 
     override fun setVoltage(voltage: Voltage) {
