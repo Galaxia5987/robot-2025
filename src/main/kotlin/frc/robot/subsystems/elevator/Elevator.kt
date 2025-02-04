@@ -4,6 +4,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
@@ -32,7 +33,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     }
 
     private val tuningHeight =
-        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
+        LoggedNetworkNumber("/Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
@@ -57,9 +58,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
-    fun tuningPosition(): Command =
-        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
-            .withName("Elevator/Tuning")
+    fun tuningPosition(): Command = Commands.defer({
+        runOnce {
+            val height = Units.Meters.of(tuningHeight.get())
+            setpointValue = height
+            io.setHeight(height)
+        }
+            .withName("Elevator/Tuning")}, setOf(this))
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
