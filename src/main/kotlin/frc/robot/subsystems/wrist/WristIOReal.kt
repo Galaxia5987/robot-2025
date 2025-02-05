@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
@@ -30,6 +31,14 @@ class WristIOReal : WristIO {
     private val absoluteEncoder = CANcoder(CANCODER_PORT, REEFMASTER_CANBUS_NAME)
 
     init {
+        val encoderConfig =
+            CANcoderConfiguration().apply {
+                MagnetSensor.MagnetOffset = ENCODER_OFFSET
+                MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive
+            }
+
+        absoluteEncoder.configurator.apply(encoderConfig)
+
         motor.configurator.apply(
             TalonFXConfiguration().apply {
                 MotorOutput =
@@ -74,12 +83,6 @@ class WristIOReal : WristIO {
             }
         )
 
-        val encoderConfig =
-            CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFFSET
-            }
-
-        absoluteEncoder.configurator.apply(encoderConfig)
     }
 
     override fun setAngle(angle: Angle) {
