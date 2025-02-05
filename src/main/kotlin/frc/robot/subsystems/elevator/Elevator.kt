@@ -65,7 +65,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
     fun tuningPosition(): Command = Commands.defer({
-        runOnce {
+        run {
             val height = Units.Meters.of(tuningHeight.get())
             setpointValue = height
             io.setHeight(height)
