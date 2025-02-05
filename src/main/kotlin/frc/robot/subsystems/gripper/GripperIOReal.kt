@@ -52,7 +52,9 @@ class GripperIOReal : GripperIO {
             calculatedDistance = 80.0
         }
 
-        inputs.sensorDistance.mut_replace(Units.Centimeters.of(calculatedDistance))
+        inputs.sensorDistance.mut_replace(
+            Units.Centimeters.of(calculatedDistance)
+        )
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
     }
 }
