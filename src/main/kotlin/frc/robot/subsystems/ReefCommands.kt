@@ -56,7 +56,7 @@ private fun scoreCoral(endTrigger: Trigger): Command =
             .outtake()
             .withTimeout(CORAL_OUTTAKE_TIMEOUT)
             .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE == Mode.SIM }
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
         moveDefaultPosition()
     )
