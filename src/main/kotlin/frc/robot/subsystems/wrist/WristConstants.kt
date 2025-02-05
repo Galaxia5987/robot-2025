@@ -7,8 +7,8 @@ import edu.wpi.first.units.measure.MomentOfInertia
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val MAX_ANGLE: Angle = Units.Rotations.of(0.0)
 val MIN_ANGLE: Angle = Units.Rotations.of(0.0)
-const val ROTOR_TO_SENSOR = (1.0 / 25.0) * (40.0 / 40.0)
-const val SENSOR_TO_MECHANISM = 16.0 / 42.0
+const val ROTOR_TO_SENSOR = 1 / ((1.0 / 25.0) * (40.0 / 40.0))
+const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = ROTOR_TO_SENSOR * SENSOR_TO_MECHANISM
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 const val ENCODER_OFFSET = 0.0
