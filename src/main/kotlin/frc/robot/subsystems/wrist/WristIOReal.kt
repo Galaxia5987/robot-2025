@@ -19,14 +19,15 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
+import frc.robot.REEFMASTER_CANBUS_NAME
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
     private val positionControl = MotionMagicVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
 
-    private val motor: TalonFX = TalonFX(MOTOR_PORT)
-    private val absoluteEncoder = CANcoder(CANCODER_PORT)
+    private val motor: TalonFX = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
+    private val absoluteEncoder = CANcoder(CANCODER_PORT, REEFMASTER_CANBUS_NAME)
 
     init {
         motor.configurator.apply(
