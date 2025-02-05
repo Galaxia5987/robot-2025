@@ -73,11 +73,19 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             )
             .withName("Elevator/setVoltage")
 
-    fun reset(): Command =
-        setVoltage(RESET_VOLTAGE)
-            .until(isStuck)
-            .andThen(runOnce(io::reset))
-            .withName("Elevator/reset")
+    fun manualControl(percentOutput: DoubleSupplier): Command =
+        runOnce { io.setVoltage(Units.Volts.of(percentOutput.asDouble * 12.0 + 0.37)) }
+
+    fun stop(): Command = setVoltage(Units.Volts.zero()).withName("Elevator/stop")
+
+    fun reset(resetTrigger: Trigger): Command =
+        Commands.sequence(
+            runOnce { io.setSoftLimits(false) }
+            .andThen(setVoltage(RESET_VOLTAGE)).until(resetTrigger),
+            runOnce(io::reset),
+            runOnce{ io.setSoftLimits(true) },
+            stop()
+        ).withName("Elevator/reset")
 
     override fun periodic() {
         io.updateInputs()
