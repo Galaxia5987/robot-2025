@@ -12,9 +12,11 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+import java.util.function.DoubleSupplier
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
-    @AutoLogOutput private val mechanism = LoggedMechanism2d(3.0, 3.0)
+    @AutoLogOutput
+    private val mechanism = LoggedMechanism2d(3.0, 3.0)
     private val root = mechanism.getRoot("Elevator", 2.0, 0.0)
     private val elevatorLigament =
         root.append(LoggedMechanismLigament2d("ElevatorLigament", 5.0, 90.0))
@@ -22,7 +24,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
-    @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+    @AutoLogOutput
+    private var setpointName: Positions = Positions.ZERO
 
     @AutoLogOutput
     private val isStuck = Trigger {
@@ -51,10 +54,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l4(): Command = setHeight(Positions.L4).withName("Elevator/L4")
     fun l2Algae(): Command =
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
+
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
+
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
+
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
@@ -64,13 +70,14 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             setpointValue = height
             io.setHeight(height)
         }
-            .withName("Elevator/Tuning")}, setOf(this))
+            .withName("Elevator/Tuning")
+    }, setOf(this))
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
-                { io.setVoltage(voltage) },
-                { io.setVoltage(Units.Volts.zero()) }
-            )
+            { io.setVoltage(voltage) },
+            { io.setVoltage(Units.Volts.zero()) }
+        )
             .withName("Elevator/setVoltage")
 
     fun manualControl(percentOutput: DoubleSupplier): Command =

@@ -2,21 +2,16 @@ package frc.robot.subsystems.elevator
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.MotionMagicConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.Follower
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
-import com.ctre.phoenix6.signals.ReverseLimitSourceValue
-import com.ctre.phoenix6.signals.ReverseLimitTypeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
@@ -26,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.REEFMASTER_CANBUS_NAME
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
-import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
+import frc.robot.main
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -48,10 +43,10 @@ class ElevatorIOReal : ElevatorIO {
             ForwardSoftLimitEnable = true
             ReverseSoftLimitEnable = true
             ForwardSoftLimitThreshold =
-                MAX_HEIGHT.toAngle(SPROCKET_RADIUS, GEAR_RATIO)
+                MAX_HEIGHT_LIMIT.toAngle(SPROCKET_RADIUS, GEAR_RATIO)
                     .`in`(Units.Rotations)
             ReverseSoftLimitThreshold =
-                MIN_HEIGHT.toAngle(PINION_RADIUS, GEAR_RATIO)
+                MIN_HEIGHT_LIMIT.toAngle(PINION_RADIUS, GEAR_RATIO)
                     .`in`(Units.Rotations)
         }
 
