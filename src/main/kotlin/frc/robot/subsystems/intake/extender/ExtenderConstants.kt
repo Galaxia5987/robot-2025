@@ -13,12 +13,12 @@ val RESET_VOLTAGE: Voltage = Units.Volts.of(0.0)
 val PINION_RADIUS: Distance = Units.Millimeters.of(15.22)
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(0.0)
-val POSITION_TOLERANCE: Distance = Units.Meters.of(0.7)
+val POSITION_TOLERANCE: Distance = Units.Centimeters.of(0.7)
 val MAX_EXTENSION: Distance = Units.Meters.of(0.0)
 val MIN_EXTENSION: Distance = Units.Meters.of(0.0)
 const val SAFETY_DEBOUNCE = 1.0
 
-val GAINS = selectGainsBasedOnMode(Gains(), Gains())
+val GAINS = selectGainsBasedOnMode(Gains(), Gains(kP = 0.5, kD = 0.2))
 
 enum class Positions(val position: Distance) {
     EXTENDED(Units.Meters.of(0.3)),

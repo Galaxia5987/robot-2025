@@ -30,10 +30,7 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -41,6 +38,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -63,8 +61,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Drive extends SubsystemBase {
     // TunerConstants doesn't include these constants, so they are declared locally
-    static final double ODOMETRY_FREQUENCY =
-            new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 250.0 : 100.0;
+    static final int ODOMETRY_FREQUENCY =
+            new CANBus(TunerConstants.DrivetrainConstants.CANBusName).isNetworkFD() ? 200 : 100;
     public static final double DRIVE_BASE_RADIUS =
             Math.max(
                     Math.max(
@@ -119,18 +117,22 @@ public class Drive extends SubsystemBase {
 
     static final Lock odometryLock = new ReentrantLock();
     private final GyroIO gyroIO;
+    public Angle[] SwerveTurnAngle =
+            new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
+    public Angle[] SwerveDriveAngle =
+            new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
+
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
     private final SysIdRoutine turnSysId;
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
-
     @AutoLogOutput private Rotation2d desiredHeading;
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
+    public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
-    private SwerveModulePosition[] lastModulePositions = // For delta tracking
+    public SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[] {
                 new SwerveModulePosition(),
                 new SwerveModulePosition(),
@@ -225,6 +227,17 @@ public class Drive extends SubsystemBase {
             module.periodic();
         }
         odometryLock.unlock();
+        SwerveTurnAngle[0] = modules[0].getAngle().getMeasure();
+        SwerveTurnAngle[1] = modules[1].getAngle().getMeasure();
+        SwerveTurnAngle[2] = modules[2].getAngle().getMeasure();
+        SwerveTurnAngle[3] = modules[3].getAngle().getMeasure();
+
+        SwerveDriveAngle[0] = Radians.of(modules[0].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[1] = Radians.of(modules[1].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[2] = Radians.of(modules[2].getWheelRadiusCharacterizationPosition());
+        SwerveDriveAngle[3] = Radians.of(modules[3].getWheelRadiusCharacterizationPosition());
+        Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+        Logger.recordOutput("Odometry/Robot", getPose());
 
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
