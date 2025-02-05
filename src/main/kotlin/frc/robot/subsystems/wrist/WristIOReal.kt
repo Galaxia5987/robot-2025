@@ -33,7 +33,7 @@ class WristIOReal : WristIO {
     init {
         val encoderConfig =
             CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFFSET
+                MagnetSensor.MagnetOffset = ENCODER_OFFSET.`in`(Units.Rotations)
                 MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive
             }
 
