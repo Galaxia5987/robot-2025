@@ -122,8 +122,9 @@ class ElevatorIOReal : ElevatorIO {
                 SPROCKET_RADIUS,
                 ADJUSTED_GEAR_RATIO
             )
-        mainMotor.position.value.timesConversionFactor(ROTATIONS_TO_CENTIMETER)
 
+        inputs.mainMotorCurrent = mainMotor.supplyCurrent.value
+        inputs.auxMotorCurrent = auxMotor.supplyCurrent.value
         inputs.limitSwitchValue = mainMotor.reverseLimit.value.value == 1
     }
 }

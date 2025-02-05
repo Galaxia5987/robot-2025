@@ -41,5 +41,7 @@ class ElevatorIOSim : ElevatorIO {
         inputs.height =
             Units.Rotations.of(motor.position)
                 .toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
+
+        inputs.mainMotorCurrent = motor.appliedCurrent
     }
 }
