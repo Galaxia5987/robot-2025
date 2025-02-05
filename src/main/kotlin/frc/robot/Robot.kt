@@ -144,7 +144,10 @@ object Robot : LoggedRobot() {
         arena.simulationPeriodic()
 
         listOf("Algae", "Coral").forEach { type ->
-            Logger.recordOutput("FieldSimulation/$type", *arena.getGamePiecesArrayByType(type))
+            Logger.recordOutput(
+                "FieldSimulation/$type",
+                *arena.getGamePiecesArrayByType(type)
+            )
         }
     }
 
