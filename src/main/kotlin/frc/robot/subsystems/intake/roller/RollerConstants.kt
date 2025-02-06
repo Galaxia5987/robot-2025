@@ -2,8 +2,8 @@ package frc.robot.subsystems.intake.roller
 
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.MomentOfInertia
-import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.units.measure.*
+import frc.robot.lib.getTranslation2d
 
 val INTAKE_VOLTAGE: Voltage = Units.Volts.of(-0.7 * 12.0)
 val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(0.8 * 12.0)
