@@ -41,7 +41,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     val height: () -> Distance = { io.inputs.height }
 
     private fun setHeight(height: Positions): Command =
-        run {
+        runOnce {
                 setpointValue = height.value
                 setpointName = height
                 io.setHeight(height.value)
