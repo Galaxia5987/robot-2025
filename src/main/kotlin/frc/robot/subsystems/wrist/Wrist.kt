@@ -28,7 +28,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     }
 
     private val tuningAngleDegrees =
-        LoggedNetworkNumber("Tuning/Wrist/Angle", 0.0)
+        LoggedNetworkNumber("/Tuning/Wrist/Angle", 0.0)
 
     val angle: () -> Angle = { io.inputs.angle }
 
@@ -53,7 +53,11 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
     fun tuningAngle(): Command =
-        run { io.setAngle(Units.Degrees.of(tuningAngleDegrees.get())) }
+        run {
+            io.setAngle(Units.Degrees.of(tuningAngleDegrees.get()))
+            setpointName = "Tuning Angle"
+            setpointValue = Units.Degrees.of(tuningAngleDegrees.get())
+        }
             .withName("Wrist/Tuning")
 
     override fun periodic() {
