@@ -10,7 +10,7 @@ import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
-private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
+private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
 private val CORAL_SHOOT_OFFSET =
     getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
