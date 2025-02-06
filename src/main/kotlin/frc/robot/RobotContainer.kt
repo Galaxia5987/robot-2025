@@ -52,7 +52,8 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
-        SimulatedArena.getInstance().resetFieldForAuto()
+        if (CURRENT_MODE == Mode.SIM)
+            SimulatedArena.getInstance().resetFieldForAuto()
 
         enableAutoLogOutputFor(this)
     }
@@ -81,9 +82,10 @@ object RobotContainer {
         )
 
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand =
-            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
-            else getDriveCommandSim()
+        swerveDrive.defaultCommand = getDriveCommandSim()
+//            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
+//            else getDriveCommandSim()
+//        elevator.defaultCommand = elevator.powerControl{driverController.leftTriggerAxis - driverController.rightTriggerAxis}
     }
 
     private fun configureButtonBindings() {
@@ -93,13 +95,6 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
-
-        // TODO: Remove before merging
-        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
-
-        driverController.x().onTrue(l1(driverController.x().negate()))
-        driverController.b().onTrue(l3(driverController.b().negate()))
-        driverController.a().onTrue(l2(driverController.a().negate()))
 
         driverController
             .povUp()
