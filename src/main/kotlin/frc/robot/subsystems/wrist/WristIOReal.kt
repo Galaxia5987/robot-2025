@@ -58,10 +58,10 @@ class WristIOReal : WristIO {
                     }
                 Slot0 =
                     Slot0Configs().apply {
-                        kP = 75.0
-                        kI = 0.0
-                        kD = 0.0
-                        kG = 0.2
+                        kP = GAINS.kP
+                        kI = GAINS.kI
+                        kD = GAINS.kD
+                        kG = GAINS.kG
                         GravityType = GravityTypeValue.Arm_Cosine
                         StaticFeedforwardSign =
                             StaticFeedforwardSignValue.UseClosedLoopSign
