@@ -34,9 +34,9 @@ class WristIOReal : WristIO {
     init {
         val encoderConfig =
             CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFFSET.`in`(Units.Rotations)
+                MagnetSensor.MagnetOffset = -ENCODER_OFFSET.`in`(Units.Rotations)
                 MagnetSensor.SensorDirection =
-                    SensorDirectionValue.CounterClockwise_Positive
+                    SensorDirectionValue.Clockwise_Positive
             }
 
         absoluteEncoder.configurator.apply(encoderConfig)
@@ -46,7 +46,7 @@ class WristIOReal : WristIO {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         NeutralMode = NeutralModeValue.Brake
-                        Inverted = InvertedValue.Clockwise_Positive
+                        Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 Feedback =
                     FeedbackConfigs().apply {
@@ -103,7 +103,7 @@ class WristIOReal : WristIO {
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
         inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
         inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
-            absoluteEncoder.absolutePosition.value
+            absoluteEncoder.position.value - ENCODER_OFFSET
         )
     }
 }
