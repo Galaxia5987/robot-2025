@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.REEFMASTER_CANBUS_NAME
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import frc.robot.lib.toLinear
 import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
@@ -128,9 +129,10 @@ class ElevatorIOReal : ElevatorIO {
                 SPROCKET_RADIUS,
                 ADJUSTED_GEAR_RATIO
             )
-
         inputs.mainMotorCurrent = mainMotor.supplyCurrent.value
         inputs.auxMotorCurrent = auxMotor.supplyCurrent.value
+        inputs.velocity =
+            mainMotor.velocity.value.toLinear(SPROCKET_RADIUS, 1.0)
         inputs.limitSwitchValue = mainMotor.reverseLimit.value.value == 1
     }
 }

@@ -69,5 +69,6 @@ class ClimberIOSim : ClimberIO {
         inputs.appliedVoltage = motor.appliedVoltage
         inputs.latchPosition =
             if (latchServo.output) OPEN_LATCH_POSITION else CLOSE_LATCH_POSITION
+        inputs.angularVelocity = motor.velocity
     }
 }

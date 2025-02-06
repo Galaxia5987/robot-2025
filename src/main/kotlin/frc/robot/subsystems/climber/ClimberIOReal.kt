@@ -70,5 +70,6 @@ class ClimberIOReal : ClimberIO {
             calculatedDistance = 80.0
         }
         inputs.sensorDistance = Units.Meters.of(calculatedDistance)
+        inputs.angularVelocity = mainMotor.velocity.value
     }
 }
