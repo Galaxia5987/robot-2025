@@ -80,7 +80,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         )
             .withName("Elevator/setVoltage")
 
-    fun manualControl(percentOutput: DoubleSupplier): Command =
+    fun powerControl(percentOutput: DoubleSupplier): Command =
         run { io.setVoltage(Units.Volts.of(percentOutput.asDouble * 12.0 + VOLTAGE_CONTROL_KG)) }
 
     fun stop(): Command = setVoltage(Units.Volts.zero()).withName("Elevator/stop")
