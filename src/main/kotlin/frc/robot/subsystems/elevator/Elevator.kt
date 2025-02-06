@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import java.util.function.DoubleSupplier
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -35,12 +36,12 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     }
 
     private val tuningHeight =
-        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
+        LoggedNetworkNumber("/Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
     private fun setHeight(height: Positions): Command =
-        runOnce {
+        run {
                 setpointValue = height.value
                 setpointName = height
                 io.setHeight(height.value)
@@ -53,15 +54,24 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l4(): Command = setHeight(Positions.L4).withName("Elevator/L4")
     fun l2Algae(): Command =
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
+
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
+
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
+
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
     fun tuningPosition(): Command =
-        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
+        defer {
+                run {
+                    val height = Units.Meters.of(tuningHeight.get())
+                    setpointValue = height
+                    io.setHeight(height)
+                }
+            }
             .withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command =
@@ -71,10 +81,28 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             )
             .withName("Elevator/setVoltage")
 
-    fun reset(): Command =
-        setVoltage(RESET_VOLTAGE)
-            .until(isStuck)
-            .andThen(runOnce(io::reset))
+    fun powerControl(percentOutput: DoubleSupplier): Command =
+        run {
+                io.setVoltage(
+                    Units.Volts.of(
+                        percentOutput.asDouble * 12.0 + VOLTAGE_CONTROL_KG
+                    )
+                )
+            }
+            .withName("Elevator/powerControl")
+
+    fun stop(): Command =
+        setVoltage(Units.Volts.zero()).withName("Elevator/stop")
+
+    fun reset(resetTrigger: Trigger): Command =
+        Commands.sequence(
+                runOnce { io.setSoftLimits(false) }
+                    .andThen(setVoltage(RESET_VOLTAGE))
+                    .until(resetTrigger),
+                runOnce(io::reset),
+                runOnce { io.setSoftLimits(true) },
+                stop()
+            )
             .withName("Elevator/reset")
 
     fun characterize(): Command {
