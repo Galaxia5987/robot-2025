@@ -32,15 +32,6 @@ class WristIOReal : WristIO {
         CANcoder(CANCODER_PORT, REEFMASTER_CANBUS_NAME)
 
     init {
-        val encoderConfig =
-            CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = -ENCODER_OFFSET.`in`(Units.Rotations)
-                MagnetSensor.SensorDirection =
-                    SensorDirectionValue.Clockwise_Positive
-            }
-
-        absoluteEncoder.configurator.apply(encoderConfig)
-
         motor.configurator.apply(
             TalonFXConfiguration().apply {
                 MotorOutput =
@@ -84,6 +75,12 @@ class WristIOReal : WristIO {
                     }
             }
         )
+
+        absoluteEncoder.configurator.apply(CANcoderConfiguration().apply {
+            MagnetSensor.MagnetOffset = -ENCODER_OFFSET.`in`(Units.Rotations)
+            MagnetSensor.SensorDirection =
+                SensorDirectionValue.Clockwise_Positive
+        })
     }
 
     override fun setAngle(angle: Angle) {
