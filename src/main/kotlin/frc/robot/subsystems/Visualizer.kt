@@ -1,13 +1,12 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.math.geometry.*
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
-import frc.robot.lib.getPose3d
-import frc.robot.lib.getRotation3d
-import frc.robot.lib.getTranslation3d
+import frc.robot.CURRENT_MODE
+import frc.robot.Mode
+import frc.robot.driveSimulation
+import frc.robot.lib.*
 import frc.robot.roller
 import frc.robot.subsystems.drive.Drive
 import kotlin.math.cos
@@ -70,6 +69,11 @@ class Visualizer {
             )
         return Pair(firstStagePose, secondStagePose)
     }
+
+    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, getRotation3d(0.0))
+
+    @AutoLogOutput(key = "Visualizer/AlgaePoseInRobot")
+    private fun getAlgaePose(): Pose3d? = if (CURRENT_MODE != Mode.REAL && roller.shouldVisualizeAlgaeInSim()) driveSimulation?.simulatedDriveTrainPose?.toPose3d()?.plus(ALGAE_OFFSET) else Pose3d()
 
     private fun getSwerveModulePoseTurn(
         moduleX: Double,

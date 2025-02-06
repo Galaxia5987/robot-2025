@@ -24,6 +24,11 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
             IntakeSimulation.IntakeSide.FRONT,
             1
         )
+
+    override fun getIntakeSimulation(): IntakeSimulation? {
+        return intakeSimulation
+    }
+
     private val motor =
         TalonFXSim(
             1,
