@@ -91,6 +91,5 @@ class LEDs : SubsystemBase() {
                     setPattern(all = LEDPattern.solid(Color.kWhiteSmoke))
                 )
             )
-            .negate()
-            .onTrue(setPattern(all = teamPattern))
+            .onFalse(setPattern(all = teamPattern))
 }
