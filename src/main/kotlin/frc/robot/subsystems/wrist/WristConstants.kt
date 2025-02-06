@@ -26,11 +26,11 @@ val GAINS = selectGainsBasedOnMode(
 enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(100.0)),
     L2(Units.Degrees.of(80.0)),
-    L3(Units.Degrees.of(0.0)),
-    L4(Units.Degrees.of(10.0)),
+    L3(Units.Degrees.of(80.0)),
+    L4(Units.Degrees.of(75.0)),
     L2_ALGAE(Units.Degrees.of(100.0)),
     L3_ALGAE(Units.Degrees.of(100.0)),
-    FEEDER(Units.Degrees.of(45.0)),
+    FEEDER(Units.Degrees.of(25.0)),
     ZERO(Units.Degrees.zero());
 
     fun getLoggingName() =
