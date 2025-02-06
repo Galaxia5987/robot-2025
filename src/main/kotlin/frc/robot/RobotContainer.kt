@@ -1,21 +1,25 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.intake.retractIntake
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.l4
+import org.ironmaple.simulation.SimulatedArena
+import org.littletonrobotics.junction.AutoLogOutput
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -25,6 +29,7 @@ import frc.robot.subsystems.l4
  * and trigger mappings) should be declared here.
  */
 object RobotContainer {
+
     private val driverController = CommandXboxController(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
@@ -47,8 +52,14 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
+        SimulatedArena.getInstance().resetFieldForAuto()
+
         enableAutoLogOutputFor(this)
     }
+
+    @AutoLogOutput(key = "MapleSimPose")
+    private fun getMapleSimPose(): Pose2d? =
+        driveSimulation?.simulatedDriveTrainPose
 
     private fun getDriveCommandReal(): Command =
         DriveCommands.joystickDriveAtAngle(
@@ -82,6 +93,13 @@ object RobotContainer {
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
+
+        // TODO: Remove before merging
+        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
+
+        driverController.x().onTrue(l1(driverController.x().negate()))
+        driverController.b().onTrue(l3(driverController.b().negate()))
+        driverController.a().onTrue(l2(driverController.a().negate()))
 
         driverController
             .povUp()
