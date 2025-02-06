@@ -1,16 +1,11 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.AngleUnit
-import edu.wpi.first.units.DistanceUnit
-import edu.wpi.first.units.Measure
-import edu.wpi.first.units.PerUnit
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
-import kotlin.math.PI
 
 const val VOLTAGE_CONTROL_KG = 0.37
 val MAX_HEIGHT_LIMIT: Distance = Units.Meters.of(0.95)
@@ -24,7 +19,10 @@ val MIN_KG_HEIGHT: Distance = Units.Centimeters.of(3.0)
 val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 
 val GAINS =
-    selectGainsBasedOnMode(Gains(kP = 1.0, kI = 0.08, kD = 0.1, kG = 0.3), Gains(kP = 0.4))
+    selectGainsBasedOnMode(
+        Gains(kP = 1.0, kI = 0.08, kD = 0.1, kG = 0.3),
+        Gains(kP = 0.4)
+    )
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),

@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.REEFMASTER_CANBUS_NAME
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
-import frc.robot.main
+import frc.robot.subsystems.intake.extender.MOTOR_ID
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
 
