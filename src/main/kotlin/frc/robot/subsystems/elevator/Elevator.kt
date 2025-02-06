@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import java.util.function.DoubleSupplier
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import java.util.function.DoubleSupplier
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -66,12 +66,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     fun tuningPosition(): Command =
         defer {
-            run {
-                val height = Units.Meters.of(tuningHeight.get())
-                setpointValue = height
-                io.setHeight(height)
+                run {
+                    val height = Units.Meters.of(tuningHeight.get())
+                    setpointValue = height
+                    io.setHeight(height)
+                }
             }
-        }.withName("Elevator/Tuning")
+            .withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
