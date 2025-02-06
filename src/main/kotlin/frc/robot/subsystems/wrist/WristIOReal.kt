@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.MotionMagicVoltage
+import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
@@ -15,18 +15,21 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
+import frc.robot.REEFMASTER_CANBUS_NAME
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
-    private val positionControl = MotionMagicVoltage(0.0)
+    private val positionControl = PositionVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
 
-    private val motor: TalonFX = TalonFX(MOTOR_PORT)
-    private val absoluteEncoder = CANcoder(CANCODER_PORT)
+    private val motor: TalonFX = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
+    private val absoluteEncoder =
+        CANcoder(CANCODER_PORT, REEFMASTER_CANBUS_NAME)
 
     init {
         motor.configurator.apply(
@@ -34,7 +37,7 @@ class WristIOReal : WristIO {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         NeutralMode = NeutralModeValue.Brake
-                        Inverted = InvertedValue.Clockwise_Positive
+                        Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 Feedback =
                     FeedbackConfigs().apply {
@@ -46,10 +49,10 @@ class WristIOReal : WristIO {
                     }
                 Slot0 =
                     Slot0Configs().apply {
-                        kP = 1.0
-                        kI = 0.0
-                        kD = 0.0
-                        kG = 0.0
+                        kP = GAINS.kP
+                        kI = GAINS.kI
+                        kD = GAINS.kD
+                        kG = GAINS.kG
                         GravityType = GravityTypeValue.Arm_Cosine
                         StaticFeedforwardSign =
                             StaticFeedforwardSignValue.UseClosedLoopSign
@@ -73,12 +76,11 @@ class WristIOReal : WristIO {
             }
         )
 
-        val encoderConfig =
-            CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset = ENCODER_OFFSET
-            }
-
-        absoluteEncoder.configurator.apply(encoderConfig)
+        absoluteEncoder.configurator.apply(CANcoderConfiguration().apply {
+            MagnetSensor.MagnetOffset = -ENCODER_OFFSET.`in`(Units.Rotations)
+            MagnetSensor.SensorDirection =
+                SensorDirectionValue.Clockwise_Positive
+        })
     }
 
     override fun setAngle(angle: Angle) {
@@ -98,7 +100,8 @@ class WristIOReal : WristIO {
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
         inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
         inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
-            absoluteEncoder.absolutePosition.value
+            absoluteEncoder.position.value - ENCODER_OFFSET
         )
+        inputs.velocity.mut_replace(motor.velocity.value)
     }
 }

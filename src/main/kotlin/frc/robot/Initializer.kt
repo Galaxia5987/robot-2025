@@ -1,17 +1,56 @@
 package frc.robot
 
-import frc.robot.subsystems.climber.*
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import frc.robot.subsystems.climber.Climber
+import frc.robot.subsystems.climber.ClimberIO
+import frc.robot.subsystems.climber.ClimberIOReal
+import frc.robot.subsystems.climber.ClimberIOSim
+import frc.robot.subsystems.climber.LoggedClimberInputs
 import frc.robot.subsystems.drive.*
-import frc.robot.subsystems.elevator.*
-import frc.robot.subsystems.gripper.*
-import frc.robot.subsystems.intake.extender.*
-import frc.robot.subsystems.intake.roller.*
-import frc.robot.subsystems.leds.LEDs
+import frc.robot.subsystems.elevator.Elevator
+import frc.robot.subsystems.elevator.ElevatorIO
+import frc.robot.subsystems.elevator.ElevatorIOReal
+import frc.robot.subsystems.elevator.ElevatorIOSim
+import frc.robot.subsystems.elevator.LoggedElevatorInputs
+import frc.robot.subsystems.gripper.Gripper
+import frc.robot.subsystems.gripper.GripperIO
+import frc.robot.subsystems.gripper.GripperIOReal
+import frc.robot.subsystems.gripper.GripperIOSim
+import frc.robot.subsystems.gripper.LoggedGripperInputs
+import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.intake.extender.ExtenderIO
+import frc.robot.subsystems.intake.extender.ExtenderIOReal
+import frc.robot.subsystems.intake.extender.ExtenderIOSim
+import frc.robot.subsystems.intake.extender.LoggedExtenderInputs
+import frc.robot.subsystems.intake.roller.LoggedRollerInputs
+import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.intake.roller.RollerIO
+import frc.robot.subsystems.intake.roller.RollerIOReal
+import frc.robot.subsystems.intake.roller.RollerIOSim
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.subsystems.vision.VisionIOPhotonVision
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim
-import frc.robot.subsystems.wrist.*
+import frc.robot.subsystems.wrist.LoggedWristInputs
+import frc.robot.subsystems.wrist.Wrist
+import frc.robot.subsystems.wrist.WristIO
+import frc.robot.subsystems.wrist.WristIOReal
+import frc.robot.subsystems.wrist.WristIOSim
+import java.lang.Exception
+import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
+
+val driveSimulation: SwerveDriveSimulation? =
+    if (CURRENT_MODE == Mode.SIM)
+        SwerveDriveSimulation(
+                Drive.mapleSimConfig,
+                Pose2d(3.0, 3.0, Rotation2d())
+            )
+            .apply {
+                SimulatedArena.getInstance().addDriveTrainSimulation(this)
+            }
+    else null
 
 private val swerveModuleIOs =
     arrayOf(
@@ -20,10 +59,14 @@ private val swerveModuleIOs =
             TunerConstants.BackLeft,
             TunerConstants.BackRight
         )
-        .map { module ->
+        .mapIndexed { index, module ->
             when (CURRENT_MODE) {
                 Mode.REAL -> ModuleIOTalonFX(module)
-                Mode.SIM -> ModuleIOSim(module)
+                Mode.SIM ->
+                    ModuleIOSim(
+                        driveSimulation?.modules?.get(index)
+                            ?: throw Exception("Sim Swerve Module is null")
+                    )
                 Mode.REPLAY -> object : ModuleIO {}
             }
         }
@@ -32,6 +75,11 @@ private val swerveModuleIOs =
 private val gyroIO =
     when (CURRENT_MODE) {
         Mode.REAL -> GyroIONavX()
+        Mode.SIM ->
+            GyroIOSim(
+                driveSimulation?.gyroSimulation
+                    ?: throw Exception("Gyro simulation is null")
+            )
         else -> object : GyroIO {}
     }
 
@@ -104,7 +152,7 @@ val roller =
     Roller(
         when (CURRENT_MODE) {
             Mode.REAL -> RollerIOReal()
-            Mode.SIM -> RollerIOSim()
+            Mode.SIM -> RollerIOSim(driveSimulation!!)
             Mode.REPLAY ->
                 object : RollerIO {
                     override var inputs = LoggedRollerInputs()
