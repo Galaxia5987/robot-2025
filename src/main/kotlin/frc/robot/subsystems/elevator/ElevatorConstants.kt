@@ -12,6 +12,7 @@ import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 import kotlin.math.PI
 
+const val VOLTAGE_CONTROL_KG = 0.37
 val MAX_HEIGHT_LIMIT: Distance = Units.Meters.of(0.95)
 val MIN_HEIGHT_LIMIT: Distance = Units.Meters.of(0.0)
 val RESET_VOLTAGE: Voltage = Units.Volts.of(-7.0)
