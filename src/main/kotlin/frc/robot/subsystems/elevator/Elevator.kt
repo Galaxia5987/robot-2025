@@ -69,8 +69,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                 setpointValue = height
                 io.setHeight(height)
             }
-                .withName("Elevator/Tuning")
-        }
+        }.withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command =
         startEnd(
