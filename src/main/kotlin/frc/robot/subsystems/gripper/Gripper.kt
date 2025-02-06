@@ -15,7 +15,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     private val kV = 6
     var rollerAngle: Angle = Units.Rotations.zero()
     private val tuningVoltage =
-        LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
+        LoggedNetworkNumber("/Tuning/Gripper/Voltage", 0.0)
 
     @AutoLogOutput
     val hasCoral: Trigger =
