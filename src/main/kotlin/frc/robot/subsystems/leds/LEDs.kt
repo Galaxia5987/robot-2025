@@ -76,7 +76,7 @@ class LEDs : SubsystemBase() {
 
     private var runPattern: Trigger =
         climber.isClimbed
-            .whileTrue(
+            .onTrue(
                 setPattern(
                     all =
                         LEDPattern.rainbow(255, 128)
@@ -87,10 +87,10 @@ class LEDs : SubsystemBase() {
                 )
             )
             .or(
-                gripper.hasCoral.whileTrue(
+                gripper.hasCoral.onTrue(
                     setPattern(all = LEDPattern.solid(Color.kWhiteSmoke))
                 )
             )
             .negate()
-            .whileTrue(setPattern(all = teamPattern))
+            .onTrue(setPattern(all = teamPattern))
 }
