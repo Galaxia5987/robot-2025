@@ -24,7 +24,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
-    @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+    @AutoLogOutput var setpointName: Positions = Positions.ZERO
 
     @AutoLogOutput
     private val isStuck = Trigger {

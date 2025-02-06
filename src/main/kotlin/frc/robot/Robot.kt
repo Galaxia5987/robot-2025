@@ -15,6 +15,7 @@ import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
+import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -135,6 +136,18 @@ object Robot : LoggedRobot() {
     override fun teleopInit() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
+        }
+    }
+
+    override fun simulationPeriodic() {
+        val arena = SimulatedArena.getInstance()
+        arena.simulationPeriodic()
+
+        listOf("Algae", "Coral").forEach { type ->
+            Logger.recordOutput(
+                "FieldSimulation/$type",
+                *arena.getGamePiecesArrayByType(type)
+            )
         }
     }
 

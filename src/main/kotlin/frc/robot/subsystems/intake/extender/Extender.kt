@@ -28,7 +28,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 0.569, 0.0))
 
     private val tuningPositionMeters =
-        LoggedNetworkNumber("Tuning/Extender/Position", 0.0)
+        LoggedNetworkNumber("/Tuning/Extender/Position", 0.0)
 
     val position: () -> Distance = { io.inputs.position }
 
@@ -57,7 +57,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             )
             .withName("Extender/setVoltage")
 
-    fun tuningPosition(): Command = run {
+    fun tuningPosition(): Command = runOnce {
+        setpoint = Units.Meters.of(tuningPositionMeters.get())
         io.setPosition(Units.Meters.of(tuningPositionMeters.get()))
     }
 
