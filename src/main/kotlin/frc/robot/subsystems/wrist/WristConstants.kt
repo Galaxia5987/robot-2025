@@ -7,8 +7,8 @@ import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
-val MAX_ANGLE: Angle = Units.Rotations.of(0.0)
-val MIN_ANGLE: Angle = Units.Rotations.of(0.0)
+val MAX_ANGLE: Angle = Units.Degrees.of(101.0)
+val MIN_ANGLE: Angle = Units.Degrees.of(0.08)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 25.0) * (40.0 / 40.0))
 const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = 1 / ((1.0 / 25.0) * (40.0 / 40.0) * (16.0 / 42.0))
