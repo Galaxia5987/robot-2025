@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.FeedbackConfigs
+import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
@@ -12,6 +13,8 @@ import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import com.ctre.phoenix6.signals.ReverseLimitSourceValue
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
@@ -21,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.REEFMASTER_CANBUS_NAME
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
-import frc.robot.subsystems.intake.extender.MOTOR_ID
+import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -67,6 +70,14 @@ class ElevatorIOReal : ElevatorIO {
                 Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
                 Slot0 = slot0Configs
                 SoftwareLimitSwitch = softLimitsConfig
+                HardwareLimitSwitch =
+                    HardwareLimitSwitchConfigs().apply {
+                        ReverseLimitType = ReverseLimitTypeValue.NormallyOpen
+                        ReverseLimitEnable = true
+                        ReverseLimitSource =
+                            ReverseLimitSourceValue.LimitSwitchPin
+                        ReverseLimitRemoteSensorID = EXTENDER_MOTOR_ID
+                    }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
