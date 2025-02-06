@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.MotionMagicVoltage
+import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
@@ -24,7 +24,7 @@ import frc.robot.REEFMASTER_CANBUS_NAME
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
-    private val positionControl = MotionMagicVoltage(0.0)
+    private val positionControl = PositionVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
