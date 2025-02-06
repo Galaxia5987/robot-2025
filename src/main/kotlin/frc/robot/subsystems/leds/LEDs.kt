@@ -87,7 +87,7 @@ class LEDs : SubsystemBase() {
                 )
             )
             .or(
-                gripper.hasCoral.onTrue(
+                gripper.hasCoral.whileTrue(
                     setPattern(all = LEDPattern.solid(Color.kWhiteSmoke))
                 )
             )
