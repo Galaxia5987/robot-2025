@@ -61,6 +61,20 @@ private fun scoreCoral(endTrigger: Trigger): Command =
         moveDefaultPosition()
     )
 
+private fun scoreCoralL4(endTrigger: Trigger): Command =
+    sequence(
+        waitUntil(endTrigger),
+        gripper
+            .outtake()
+            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .alongWith(
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+            ),
+        wrist.retract(),
+        waitSeconds(0.4),
+        moveDefaultPosition()
+    )
+
 // TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
@@ -76,7 +90,7 @@ fun l3(outtakeTrigger: Trigger): Command =
     parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
 
 fun l3algae(): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
