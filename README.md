@@ -3,7 +3,7 @@
 </div>
 
 ## Robot Code 2025
-This is the code for [REDACTED], our robot for the 2025 FIRST Robotics Competition season, REEFSCAPE.
+This is the code for Neptune, our robot for the 2025 FIRST Robotics Competition season, REEFSCAPE.
 
 ## See Also
  - [Website](https://galaxia5987.com)
