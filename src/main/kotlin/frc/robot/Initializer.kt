@@ -28,6 +28,7 @@ import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.intake.roller.RollerIO
 import frc.robot.subsystems.intake.roller.RollerIOReal
 import frc.robot.subsystems.intake.roller.RollerIOSim
+import frc.robot.subsystems.leds.LEDs
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.subsystems.vision.VisionIOPhotonVision

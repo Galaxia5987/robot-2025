@@ -13,11 +13,9 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.intake.retractIntake
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
-import frc.robot.subsystems.l4
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -95,7 +93,7 @@ object RobotContainer {
             )
 
         // TODO: Remove before merging
-        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
+        //        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
 
         driverController.x().onTrue(l1(driverController.x().negate()))
         driverController.b().onTrue(l3(driverController.b().negate()))

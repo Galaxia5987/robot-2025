@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.climber
 import frc.robot.gripper
@@ -74,22 +73,25 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private var runPattern: Trigger =
-        climber.isClimbed
-            .onTrue(
-                setPattern(
-                    all =
-                        LEDPattern.rainbow(255, 128)
-                            .scrollAtAbsoluteSpeed(
-                                SCROLLING_SPEED_RAINBOW,
-                                LED_SPACING
-                            )
-                )
+    private var climbPattern =
+        climber.isClimbed.onTrue(
+            setPattern(
+                all =
+                    LEDPattern.rainbow(255, 128)
+                        .scrollAtAbsoluteSpeed(
+                            SCROLLING_SPEED_RAINBOW,
+                            LED_SPACING
+                        )
             )
-            .or(
-                gripper.hasCoral.onTrue(
-                    setPattern(all = LEDPattern.solid(Color.kWhiteSmoke))
-                )
-            )
-            .onFalse(setPattern(all = teamPattern))
+        )
+
+    private var gripperPattern =
+        gripper.hasCoral
+            .and(climber.isClimbed.negate())
+            .onTrue(setPattern(all = LEDPattern.solid(Color.kWhiteSmoke)))
+
+    private var defaultPattern =
+        climbPattern
+            .or(gripper.hasCoral)
+            .onFalse((setPattern(all = teamPattern)))
 }
