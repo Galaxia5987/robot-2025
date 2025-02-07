@@ -12,7 +12,7 @@ val SCROLLING_SPEED_TEAM_PATTERN: LinearVelocity = Units.MetersPerSecond.of(0.2)
 
 val BLINKING_TIME: Time = Units.Second.of(2.0)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
-const val STRIP_LENGTH = 62
-const val LED_STRIP_PORT = 1
+const val STRIP_LENGTH = 41
+const val LED_STRIP_PORT = 0
 
 val OFF: LEDPattern = LEDPattern.kOff
