@@ -28,7 +28,7 @@ enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
     L2(Units.Centimeters.of(0.0)),
     L3(Units.Centimeters.of(35.0)),
-    L4(Units.Centimeters.of(100.0)),
+    L4(Units.Centimeters.of(103.0)),
     L2_ALGAE(Units.Centimeters.of(0.0)),
     L3_ALGAE(Units.Centimeters.of(28.0)),
     FEEDER(Units.Centimeters.of(0.0)),
