@@ -93,8 +93,8 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-//         TODO: Remove before merging
-                driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
+        //         TODO: Remove before merging
+        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
 
         driverController.x().onTrue(l1(driverController.x().negate()))
         driverController.b().onTrue(l3(driverController.b().negate()))

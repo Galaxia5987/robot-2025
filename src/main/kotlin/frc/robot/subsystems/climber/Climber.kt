@@ -50,8 +50,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         inputs.angle.isNear(FOLDED_ANGLE, FOLDED_TOLERANCE)
     }
 
-    @AutoLogOutput
-    val isClimbed: Trigger = isFolded.and(isLatchClosed)
+    @AutoLogOutput val isClimbed: Trigger = isFolded.and(isLatchClosed)
 
     @AutoLogOutput
     private val isUnfolded = Trigger {
