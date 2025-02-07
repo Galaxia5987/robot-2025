@@ -65,8 +65,8 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
     sequence(
         waitUntil(endTrigger),
         gripper
-            .outtake()
-            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .fastOuttake()
+            .withTimeout(0.8)
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
