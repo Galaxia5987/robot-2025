@@ -22,7 +22,7 @@ class LEDs : SubsystemBase() {
         ledStrip.start()
         defaultCommand =
             setPattern(all = teamPattern).until {
-                ledBuffer.getLED(1).toHexString() != "#0000000"
+                ledBuffer.getLED(1) != Color.kBlack
             }
     }
 
