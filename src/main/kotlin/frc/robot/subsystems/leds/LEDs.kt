@@ -19,30 +19,6 @@ class LEDs : SubsystemBase() {
     private val rightBuffer =
         ledBuffer.createView(STRIP_LENGTH / 2, STRIP_LENGTH - 1)
 
-    val teamPattern: LEDPattern =
-        when (IS_RED) {
-            false ->
-                LEDPattern.gradient(
-                        LEDPattern.GradientType.kDiscontinuous,
-                        Color.kAqua,
-                        Color.kBlue
-                    )
-                    .scrollAtAbsoluteSpeed(
-                        SCROLLING_SPEED_TEAM_PATTERN,
-                        LED_SPACING
-                    )
-            true ->
-                LEDPattern.gradient(
-                        LEDPattern.GradientType.kDiscontinuous,
-                        Color(255, 0, 148),
-                        Color.kRed
-                    )
-                    .scrollAtAbsoluteSpeed(
-                        SCROLLING_SPEED_TEAM_PATTERN,
-                        LED_SPACING
-                    )
-        }
-
     init {
         ledStrip.start()
     }
