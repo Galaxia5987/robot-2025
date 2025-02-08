@@ -19,7 +19,7 @@
   ],
   "cameras": [
     {
-      "name": "FrontOV",
+      "name": "front",
       "rotations": [
         {
           "axis": "x",
@@ -44,7 +44,7 @@
       "fov": 75
     },
     {
-      "name": "RightOV",
+      "name": "backRight",
       "rotations": [
         {
           "axis": "x",
@@ -71,7 +71,7 @@
       "fov": 75
     },
     {
-      "name": "LeftOV",
+      "name": "backLeft",
       "rotations": [
         {
           "axis": "x",
