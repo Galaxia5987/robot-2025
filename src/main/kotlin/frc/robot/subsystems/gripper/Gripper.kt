@@ -15,7 +15,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     private val kV = 6
     var rollerAngle: Angle = Units.Rotations.zero()
     private val tuningVoltage =
-        LoggedNetworkNumber("Tuning/Gripper/Voltage", 0.0)
+        LoggedNetworkNumber("/Tuning/Gripper/Voltage", 0.0)
 
     @AutoLogOutput
     val hasCoral: Trigger =
@@ -38,8 +38,13 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     fun intake(): Command =
         setVoltage(INTAKE_VOLTAGE).withName("Gripper/Intake")
 
+    fun slowOuttake(): Command =
+        setVoltage(SLOW_OUTTAKE_VOLTAGE).withName("Gripper/SlowOuttake")
+
     fun outtake(): Command =
         setVoltage(OUTTAKE_VOLTAGE).withName("Gripper/Outtake")
+
+    fun fastOuttake(): Command = setVoltage(Units.Volts.of(-10.0))
 
     fun removeAlgae(): Command =
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")

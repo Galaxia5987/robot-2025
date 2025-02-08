@@ -39,6 +39,8 @@ private val CORAL_ROLLER_UP_C2C: Array<Double> =
 private val ALGAE_ROLLER_C2C: Array<Double> =
     arrayOf(0.25335, 0.9) // arrayOf(C2C Distance, Angle (in rad))
 
+private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
+
 class Visualizer {
     private val swerveDrive = frc.robot.swerveDrive
 
@@ -123,6 +125,10 @@ class Visualizer {
         return swervePosesDrive
     }
 
+    private fun getAdjustedWristAngle(angleFromCenter: Double): Double =
+        angleFromCenter - wrist.angle.invoke().`in`(Radians) +
+            WRIST_ANGLE_OFFSET.`in`(Radians)
+
     private fun getGripperRollerPose(
         distanceFromCenter: Double = 0.0,
         angleFromCenter: Double = 0.0
@@ -131,14 +137,12 @@ class Visualizer {
             getTranslation3d(
                 x =
                     INITIAL_WRIST_TRANSLATION.x -
-                        cos(
-                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
-                        ) * distanceFromCenter,
+                        cos(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter,
                 z =
                     (INITIAL_WRIST_TRANSLATION.z +
-                        sin(
-                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
-                        ) * distanceFromCenter +
+                        sin(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter +
                         elevator.height.invoke().`in`(Meters))
             ),
             getRotation3d(pitch = gripper.rollerAngle.`in`(Rotations))
@@ -152,14 +156,12 @@ class Visualizer {
             getTranslation3d(
                 x =
                     INITIAL_WRIST_TRANSLATION.x -
-                        cos(
-                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
-                        ) * distanceFromCenter,
+                        cos(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter,
                 z =
                     (INITIAL_WRIST_TRANSLATION.z +
-                        sin(
-                            angleFromCenter + wrist.angle.invoke().`in`(Radians)
-                        ) * distanceFromCenter +
+                        sin(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter +
                         elevator.height.invoke().`in`(Meters))
             ),
             getRotation3d(pitch = -gripper.rollerAngle.`in`(Rotations))
@@ -193,7 +195,9 @@ class Visualizer {
                         INITIAL_WRIST_TRANSLATION.z +
                             elevator.height.invoke().`in`(Meters)
                 ),
-                getRotation3d(pitch = wrist.angle.invoke())
+                getRotation3d(
+                    pitch = -wrist.angle.invoke() + WRIST_ANGLE_OFFSET
+                )
             )
 
         val coralRollersPoseDown = getGripperRollerPoseInverted()
