@@ -21,20 +21,20 @@ val teamPattern: LEDPattern =
     when (IS_RED) {
         false ->
             LEDPattern.gradient(
-                LEDPattern.GradientType.kDiscontinuous,
-                Color.kAqua,
-                Color.kBlue
-            )
+                    LEDPattern.GradientType.kDiscontinuous,
+                    Color.kAqua,
+                    Color.kBlue
+                )
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
                 )
         true ->
             LEDPattern.gradient(
-                LEDPattern.GradientType.kDiscontinuous,
-                Color(255, 0, 148),
-                Color.kRed
-            )
+                    LEDPattern.GradientType.kDiscontinuous,
+                    Color(255, 0, 148),
+                    Color.kRed
+                )
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
