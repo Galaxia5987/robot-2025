@@ -28,6 +28,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput var setpointName: Positions = Positions.ZERO
 
     @AutoLogOutput
+    var atSetpoint = Trigger { io.inputs.height.isNear(setpointValue, SETPOINT_TOLERANCE)}
+
+    @AutoLogOutput
     private val isStuck = Trigger {
         maxOf(
             io.inputs.mainMotorCurrent.abs(Units.Amps),
