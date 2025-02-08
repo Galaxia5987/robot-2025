@@ -21,29 +21,37 @@ class LEDs : SubsystemBase() {
 
     init {
         ledStrip.start()
+        defaultCommand =
+            setPattern(all = teamPattern).until {
+                ledBuffer.getLED(1).toHexString() != "#0000000"
+            }
     }
 
     fun setPattern(
         left: LEDPattern? = null,
         right: LEDPattern? = null,
         all: LEDPattern? = null
-    ): Command = run {
-        left?.applyTo(leftBuffer)
-        right?.applyTo(rightBuffer)
-        all?.applyTo(ledBuffer)
-    }
+    ): Command =
+        run {
+                left?.applyTo(leftBuffer)
+                right?.applyTo(rightBuffer)
+                all?.applyTo(ledBuffer)
+            }
+            .ignoringDisable(true)
 
     fun setPatternArea(
         primaryPattern: LEDPattern,
         secondaryPattern: LEDPattern? = null,
         section: Array<Int>
-    ): Command = run {
-        val sectionOfBuffer: AddressableLEDBufferView =
-            ledBuffer.createView(section[0], section[1])
-        secondaryPattern?.applyTo(ledBuffer)
-        primaryPattern.applyTo(sectionOfBuffer)
-        ledStrip.setData(ledBuffer)
-    }
+    ): Command =
+        run {
+                val sectionOfBuffer: AddressableLEDBufferView =
+                    ledBuffer.createView(section[0], section[1])
+                secondaryPattern?.applyTo(ledBuffer)
+                primaryPattern.applyTo(sectionOfBuffer)
+                ledStrip.setData(ledBuffer)
+            }
+            .ignoringDisable(true)
 
     override fun periodic() {
         ledStrip.setData(ledBuffer)
@@ -60,7 +68,6 @@ class LEDs : SubsystemBase() {
                         )
             )
         )
-
     private var gripperPattern =
         gripper.hasCoral
             .and(climber.isClimbed.negate())
