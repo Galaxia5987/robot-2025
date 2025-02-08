@@ -2,6 +2,7 @@ package frc.robot.subsystems.leds
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.measure.Dimensionless
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
@@ -17,6 +18,10 @@ val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 41
 const val LED_STRIP_PORT = 0
 
+val blueBrightness: Dimensionless = Units.Percent.of(20.0)
+val redBrightness: Dimensionless = Units.Percent.of(40.0)
+val gradientPink: Color = Color(255, 0, 148)
+
 val teamPattern: LEDPattern =
     when (IS_RED) {
         false ->
@@ -25,6 +30,7 @@ val teamPattern: LEDPattern =
                     Color.kAqua,
                     Color.kBlue
                 )
+                .atBrightness(blueBrightness)
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
@@ -32,9 +38,10 @@ val teamPattern: LEDPattern =
         true ->
             LEDPattern.gradient(
                     LEDPattern.GradientType.kDiscontinuous,
-                    Color(255, 0, 148),
-                    Color.kRed
+                    Color.kRed,
+                    gradientPink
                 )
+                .atBrightness(redBrightness)
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
