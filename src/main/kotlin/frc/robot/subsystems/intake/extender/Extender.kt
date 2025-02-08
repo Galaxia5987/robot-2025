@@ -67,16 +67,15 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     fun retract() =
         setPosition(Positions.RETRACTED).withName("Extender/retract")
 
-
     fun reset(resetTrigger: Trigger): Command =
         sequence(
-            runOnce { io.setSoftLimits(false) }
-                .andThen(setVoltage(RESET_VOLTAGE))
-                .until(resetTrigger),
-            runOnce(io::reset),
-            runOnce { io.setSoftLimits(true) },
-            setVoltage(Units.Volts.zero())
-        )
+                runOnce { io.setSoftLimits(false) }
+                    .andThen(setVoltage(RESET_VOLTAGE))
+                    .until(resetTrigger),
+                runOnce(io::reset),
+                runOnce { io.setSoftLimits(true) },
+                setVoltage(Units.Volts.zero())
+            )
             .withName("Extender/reset")
 
     fun returnToSetpoint(): Command = run {

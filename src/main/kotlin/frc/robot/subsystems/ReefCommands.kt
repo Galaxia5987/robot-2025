@@ -94,11 +94,13 @@ fun l4(outtakeTrigger: Trigger): Command =
 
 fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
-        .until(retractTrigger).andThen(moveDefaultPosition())
+        .until(retractTrigger)
+        .andThen(moveDefaultPosition())
 
 fun l2algae(retractTrigger: Trigger): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
-        .until(retractTrigger).andThen(moveDefaultPosition())
+        .until(retractTrigger)
+        .andThen(moveDefaultPosition())
 
 fun feeder(intakeTrigger: Trigger): Command =
     sequence(

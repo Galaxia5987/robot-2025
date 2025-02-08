@@ -2,7 +2,6 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -97,17 +96,27 @@ object RobotContainer {
         driverController.cross().onTrue(l1(driverController.cross().negate()))
         driverController.square().onTrue(l2(driverController.square().negate()))
         driverController.circle().onTrue(l3(driverController.circle().negate()))
-        driverController.triangle().onTrue(l4(driverController.triangle().negate()))
+        driverController
+            .triangle()
+            .onTrue(l4(driverController.triangle().negate()))
         driverController.R1().whileTrue(intakeAlgae())
-        driverController.L1().onTrue(outtakeAlgae(driverController.L1().negate()))
+        driverController
+            .L1()
+            .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
-        operatorController.start().onTrue(feeder(operatorController.start().negate()))
-        operatorController.povDown().onTrue(elevator.reset(operatorController.povDown().negate()))
-        operatorController.povUp().onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController
+            .start()
+            .onTrue(feeder(operatorController.start().negate()))
+        operatorController
+            .povDown()
+            .onTrue(elevator.reset(operatorController.povDown().negate()))
+        operatorController
+            .povUp()
+            .onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
     fun getAutonomousCommand(): Command =
