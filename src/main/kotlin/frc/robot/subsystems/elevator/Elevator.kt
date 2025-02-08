@@ -28,6 +28,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput var setpointName: Positions = Positions.ZERO
 
     @AutoLogOutput
+    var atSetpoint = Trigger {
+        io.inputs.height.isNear(setpointValue, SETPOINT_TOLERANCE)
+    }
+
+    @AutoLogOutput
     private val isStuck = Trigger {
         maxOf(
             io.inputs.mainMotorCurrent.abs(Units.Amps),
@@ -41,7 +46,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     val height: () -> Distance = { io.inputs.height }
 
     private fun setHeight(height: Positions): Command =
-        run {
+        runOnce {
                 setpointValue = height.value
                 setpointName = height
                 io.setHeight(height.value)
@@ -85,7 +90,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         run {
                 io.setVoltage(
                     Units.Volts.of(
-                        percentOutput.asDouble * 12.0 + VOLTAGE_CONTROL_KG
+                        percentOutput.asDouble * 10.0 + VOLTAGE_CONTROL_KG
                     )
                 )
             }

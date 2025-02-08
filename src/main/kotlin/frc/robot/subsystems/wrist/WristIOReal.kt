@@ -76,11 +76,14 @@ class WristIOReal : WristIO {
             }
         )
 
-        absoluteEncoder.configurator.apply(CANcoderConfiguration().apply {
-            MagnetSensor.MagnetOffset = -ENCODER_OFFSET.`in`(Units.Rotations)
-            MagnetSensor.SensorDirection =
-                SensorDirectionValue.Clockwise_Positive
-        })
+        absoluteEncoder.configurator.apply(
+            CANcoderConfiguration().apply {
+                MagnetSensor.MagnetOffset =
+                    -ENCODER_OFFSET.`in`(Units.Rotations)
+                MagnetSensor.SensorDirection =
+                    SensorDirectionValue.Clockwise_Positive
+            }
+        )
     }
 
     override fun setAngle(angle: Angle) {
