@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
@@ -13,7 +14,6 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.intake.retractIntake
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
@@ -30,7 +30,7 @@ import org.littletonrobotics.junction.AutoLogOutput
  */
 object RobotContainer {
 
-    private val driverController = CommandXboxController(0)
+    private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
@@ -88,51 +88,26 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController
-            .back()
+            .create()
             .onTrue(
                 Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
 
-        // TODO: Remove before merging
-        driverController.y().whileTrue(intakeAlgae()).onFalse(retractIntake())
+        driverController.cross().onTrue(l1(driverController.cross().negate()))
+        driverController.square().onTrue(l2(driverController.square().negate()))
+        driverController.circle().onTrue(l3(driverController.circle().negate()))
+        driverController.triangle().onTrue(l4(driverController.triangle().negate()))
+        driverController.R1().whileTrue(intakeAlgae())
+        driverController.L1().onTrue(outtakeAlgae(driverController.L1().negate()))
+        driverController.R2().whileTrue(gripper.intake())
+        driverController.L2().whileTrue(gripper.outtake())
 
-        driverController.x().onTrue(l1(driverController.x().negate()))
-        driverController.b().onTrue(l3(driverController.b().negate()))
-        driverController.a().onTrue(l2(driverController.a().negate()))
-
-        driverController
-            .povUp()
-            .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kZero))
-        driverController
-            .povRight()
-            .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCW_90deg))
-        driverController
-            .povDown()
-            .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.k180deg))
-        driverController
-            .povLeft()
-            .whileTrue(swerveDrive.setDesiredHeading(Rotation2d.kCCW_90deg))
-
-        driverController.a().onTrue(l1(driverController.a().negate()))
-        driverController.x().onTrue(l2(driverController.x().negate()))
-        driverController.b().onTrue(l3(driverController.b().negate()))
-        driverController.y().onTrue(l4(driverController.y().negate()))
-        driverController
-            .start()
-            .onTrue(feeder(driverController.start().negate()))
-        driverController.rightTrigger().onTrue(gripper.intake())
-        driverController.leftTrigger().onTrue(gripper.outtake())
-        driverController.rightBumper().whileTrue(intakeAlgae())
-        driverController
-            .leftBumper()
-            .onTrue(outtakeAlgae(driverController.leftBumper().negate()))
-
-        operatorController.a().onTrue(climber.fold())
-        operatorController.b().onTrue(climber.unfold())
-        operatorController
-            .rightTrigger()
-            .whileTrue(elevator.setVoltage(voltage))
+        operatorController.x().onTrue(l2algae(operatorController.x().negate()))
+        operatorController.b().onTrue(l3algae(operatorController.b().negate()))
+        operatorController.start().onTrue(feeder(operatorController.start().negate()))
+        operatorController.povDown().onTrue(elevator.reset(operatorController.povDown().negate()))
+        operatorController.povUp().onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
     fun getAutonomousCommand(): Command =
