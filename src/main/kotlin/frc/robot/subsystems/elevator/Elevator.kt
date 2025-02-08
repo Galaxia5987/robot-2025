@@ -85,7 +85,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         run {
                 io.setVoltage(
                     Units.Volts.of(
-                        percentOutput.asDouble * 12.0 + VOLTAGE_CONTROL_KG
+                        percentOutput.asDouble * 10.0 + VOLTAGE_CONTROL_KG
                     )
                 )
             }
