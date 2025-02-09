@@ -102,6 +102,7 @@ public class Drive extends SubsystemBase {
             DriveTrainSimulationConfig.Default()
                     .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
                     .withCustomModuleTranslations(getModuleTranslations())
+                    .withBumperSize(Meters.of(0.851), Meters.of(0.851))
                     .withGyro(COTS.ofNav2X())
                     .withSwerveModule(
                             new SwerveModuleSimulationConfig(
