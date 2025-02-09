@@ -98,7 +98,7 @@ class Visualizer {
                 )
                 ?.withRotation(
                     pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET,
-                    yaw = driveSimulation.simulatedDriveTrainPose.rotation.measure!! //
+                    yaw = driveSimulation.simulatedDriveTrainPose.rotation.measure!!
                 )
         else Pose3d()
 
