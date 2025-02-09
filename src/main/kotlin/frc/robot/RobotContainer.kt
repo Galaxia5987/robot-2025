@@ -31,14 +31,6 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
-    private val swerveDrive = frc.robot.swerveDrive
-    private val vision = frc.robot.vision
-    private val climber = frc.robot.climber
-    private val elevator = frc.robot.elevator
-    private val gripper = frc.robot.gripper
-    private val extender = frc.robot.extender
-    private val roller = frc.robot.roller
-    private val wrist = frc.robot.wrist
     val visualizer: Visualizer
 
     init {
