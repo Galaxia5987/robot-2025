@@ -8,13 +8,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
-import frc.robot.subsystems.l3
-import frc.robot.subsystems.l4
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -31,12 +26,11 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
-    val visualizer: Visualizer
+    val visualizer = Visualizer()
 
     init {
         configureButtonBindings()
         configureDefaultCommands()
-        visualizer = Visualizer()
 
         if (CURRENT_MODE == Mode.SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
