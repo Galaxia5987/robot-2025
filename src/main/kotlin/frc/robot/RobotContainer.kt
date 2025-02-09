@@ -32,8 +32,9 @@ object RobotContainer {
         configureButtonBindings()
         configureDefaultCommands()
 
-        if (CURRENT_MODE == Mode.SIM)
+        if (CURRENT_MODE == Mode.SIM) {
             SimulatedArena.getInstance().resetFieldForAuto()
+        }
 
         enableAutoLogOutputFor(this)
     }
