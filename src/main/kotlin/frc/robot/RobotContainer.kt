@@ -34,7 +34,6 @@ object RobotContainer {
     val visualizer: Visualizer
 
     init {
-
         configureButtonBindings()
         configureDefaultCommands()
         visualizer = Visualizer()
