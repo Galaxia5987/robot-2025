@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import java.util.function.DoubleSupplier
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
@@ -30,8 +31,8 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             )
             .withName("Climber/setVoltage")
 
-    fun powerControl(power: Double): Command =
-        run { setVoltage(Units.Volts.of(power * 12.0)) }
+    fun powerControl(power: DoubleSupplier): Command =
+        run { io.setVoltage(Units.Volts.of(power.asDouble * 12.0)) }
             .withName("Climber/powerControl")
 
     override fun periodic() {
