@@ -70,10 +70,33 @@ class Visualizer {
         return Pair(firstStagePose, secondStagePose)
     }
 
-    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, getRotation3d(0.0))
+    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, Rotation3d())
+    private val CORAL_HEIGHT_OFFSET = getPose3d(z = 0.07)
 
     @AutoLogOutput(key = "Visualizer/AlgaePoseInRobot")
-    private fun getAlgaePose(): Pose3d? = if (CURRENT_MODE != Mode.REAL && roller.shouldVisualizeAlgaeInSim()) driveSimulation?.simulatedDriveTrainPose?.toPose3d()?.plus(ALGAE_OFFSET) else Pose3d()
+    private fun getAlgaePose(): Pose3d? =
+        if (CURRENT_MODE != Mode.REAL && roller.shouldVisualizeAlgaeInSim())
+            driveSimulation
+                ?.simulatedDriveTrainPose
+                ?.toPose3d()
+                ?.plus(ALGAE_OFFSET)
+        else Pose3d()
+
+    @AutoLogOutput(key = "Visualizer/CoralPoseInRobot")
+    private fun getCoralPose(): Pose3d? =
+        if (CURRENT_MODE != Mode.REAL && gripper.hasCoral.asBoolean)
+            driveSimulation
+                ?.simulatedDriveTrainPose
+                ?.toPose3d()
+                ?.plus(
+                    getGripperRollerPose(
+                            CORAL_ROLLER_UP_C2C[0],
+                            CORAL_ROLLER_UP_C2C[1]
+                        )
+                        .minus(CORAL_HEIGHT_OFFSET)
+                )
+                ?.withRotation(pitch = -wrist.angle.invoke() + Degrees.of(25.0))
+        else Pose3d()
 
     private fun getSwerveModulePoseTurn(
         moduleX: Double,
