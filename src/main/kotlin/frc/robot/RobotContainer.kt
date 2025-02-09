@@ -86,7 +86,7 @@ object RobotContainer {
         driverController.apply {
             create()
                 .onTrue(
-                    Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                    Commands.runOnce(swerveDrive::resetGyro)
                         .ignoringDisable(true)
                 )
             (listOf(
