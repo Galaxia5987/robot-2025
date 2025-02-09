@@ -52,15 +52,15 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
+fun visualizeCoralOuttakeIfNeeded(): Command = visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
         waitUntil(endTrigger),
         gripper
             .outtake()
             .withTimeout(CORAL_OUTTAKE_TIMEOUT)
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
+            .alongWith(visualizeCoralOuttakeIfNeeded()),
         moveDefaultPosition()
     )
 

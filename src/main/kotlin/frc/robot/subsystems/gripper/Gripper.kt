@@ -7,6 +7,7 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.subsystems.visualizeCoralOuttakeIfNeeded
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
@@ -38,13 +39,15 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     fun intake(): Command =
         setVoltage(INTAKE_VOLTAGE).withName("Gripper/Intake")
 
+    private fun outtakeCommand(voltage: Voltage): Command = setVoltage(voltage).alongWith(visualizeCoralOuttakeIfNeeded())
+
     fun slowOuttake(): Command =
-        setVoltage(SLOW_OUTTAKE_VOLTAGE).withName("Gripper/SlowOuttake")
+        outtakeCommand(SLOW_OUTTAKE_VOLTAGE).withName("Gripper/SlowOuttake")
 
     fun outtake(): Command =
-        setVoltage(OUTTAKE_VOLTAGE).withName("Gripper/Outtake")
+        outtakeCommand(OUTTAKE_VOLTAGE).withName("Gripper/Outtake")
 
-    fun fastOuttake(): Command = setVoltage(Units.Volts.of(-10.0))
+    fun fastOuttake(): Command = outtakeCommand(FAST_OUTTAKE_VOLTAGE).withName("Gripper/FastOuttake")
 
     fun removeAlgae(): Command =
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
