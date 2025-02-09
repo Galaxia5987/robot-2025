@@ -1,6 +1,5 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
@@ -46,7 +45,6 @@ object RobotContainer {
 
     init {
 
-        registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
         visualizer = Visualizer()
@@ -127,9 +125,4 @@ object RobotContainer {
 
     fun getAutonomousCommand(): Command =
         DriveCommands.wheelRadiusCharacterization(swerveDrive)
-
-    private fun registerAutoCommands() {
-        fun register(name: String, command: Command) =
-            NamedCommands.registerCommand(name, command)
-    }
 }
