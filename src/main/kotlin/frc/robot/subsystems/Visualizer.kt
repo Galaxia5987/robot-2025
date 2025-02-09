@@ -1,13 +1,12 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.math.geometry.*
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
-import frc.robot.lib.getPose3d
-import frc.robot.lib.getRotation3d
-import frc.robot.lib.getTranslation3d
+import frc.robot.CURRENT_MODE
+import frc.robot.Mode
+import frc.robot.driveSimulation
+import frc.robot.lib.*
 import frc.robot.roller
 import frc.robot.subsystems.drive.Drive
 import kotlin.math.cos
@@ -53,6 +52,10 @@ class Visualizer {
 
     private val gripper = frc.robot.gripper
 
+    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, Rotation3d())
+    private val CORAL_HEIGHT_OFFSET = getPose3d(z = 0.07)
+    private val CORAL_ANGLE_OFFSET = Degrees.of(25.0)
+
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
         val secondStageHeight = elevator.height.invoke().`in`(Meters)
@@ -70,6 +73,36 @@ class Visualizer {
             )
         return Pair(firstStagePose, secondStagePose)
     }
+
+    @AutoLogOutput(key = "Visualizer/AlgaePoseInRobot")
+    private fun getAlgaePose(): Pose3d? =
+        if (CURRENT_MODE != Mode.REAL && roller.shouldVisualizeAlgaeInSim())
+            driveSimulation
+                ?.simulatedDriveTrainPose
+                ?.toPose3d()
+                ?.plus(ALGAE_OFFSET)
+        else Pose3d()
+
+    @AutoLogOutput(key = "Visualizer/CoralPoseInRobot")
+    private fun getCoralPose(): Pose3d? =
+        if (CURRENT_MODE != Mode.REAL && gripper.hasCoral.asBoolean)
+            driveSimulation
+                ?.simulatedDriveTrainPose
+                ?.toPose3d()
+                ?.plus(
+                    getGripperRollerPose(
+                            CORAL_ROLLER_UP_C2C[0],
+                            CORAL_ROLLER_UP_C2C[1]
+                        )
+                        .minus(CORAL_HEIGHT_OFFSET)
+                )
+                ?.withRotation(
+                    pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET,
+                    yaw =
+                        driveSimulation.simulatedDriveTrainPose.rotation
+                            .measure!!
+                )
+        else Pose3d()
 
     private fun getSwerveModulePoseTurn(
         moduleX: Double,

@@ -5,6 +5,7 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
@@ -27,6 +28,12 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
     fun getVoltage(): Double {
         return io.inputs.appliedVoltage.baseUnitMagnitude()
     }
+
+    @AutoLogOutput(key = "VisualizeAlgaeInSim")
+    // THIS SHOULD ONLY BE USED IN THE SIMULATION!!
+    fun shouldVisualizeAlgaeInSim(): Boolean =
+        io.getIntakeSimulation()?.gamePiecesAmount != 0
+
     fun intake() = setVoltage(INTAKE_VOLTAGE).withName("Roller/intake")
 
     fun outtake() = setVoltage(OUTTAKE_VOLTAGE).withName("Roller/outtake")

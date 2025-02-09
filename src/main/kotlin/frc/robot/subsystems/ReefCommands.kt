@@ -14,7 +14,7 @@ private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
 private val CORAL_SHOOT_OFFSET =
     getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
-private val GRIPPER_HEIGHT = Units.Meters.of(0.50)
+private val GRIPPER_HEIGHT = Units.Meters.of(0.9)
 private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
 private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
 private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
@@ -49,15 +49,16 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
+fun visualizeCoralOuttakeIfNeeded(): Command =
+    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
         waitUntil(endTrigger),
         gripper
             .outtake()
             .withTimeout(CORAL_OUTTAKE_TIMEOUT)
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
+            .alongWith(visualizeCoralOuttakeIfNeeded()),
         moveDefaultPosition()
     )
 

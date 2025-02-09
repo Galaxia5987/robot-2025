@@ -11,7 +11,10 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 class GripperIOSim : GripperIO {
     override val inputs = LoggedGripperInputs()
     private var sensorDistance =
-        LoggedNetworkNumber("/Tuning/Gripper/SensorDistance", 20.0)
+        LoggedNetworkNumber(
+            "/Tuning/Gripper/SensorDistance",
+            DEFAULT_SENSOR_SIMULATION_DISTANCE.`in`(Units.Centimeters)
+        )
 
     private val motor =
         TalonFXSim(
@@ -32,6 +35,13 @@ class GripperIOSim : GripperIO {
         inputs.sensorDistance.mut_replace(
             Units.Centimeters.of(sensorDistance.get())
         )
+
+        if (inputs.appliedVoltage < Units.Volts.zero()) {
+            sensorDistance.set(
+                DEFAULT_SENSOR_SIMULATION_DISTANCE.`in`(Units.Centimeters)
+            )
+        }
+
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
     }
 }

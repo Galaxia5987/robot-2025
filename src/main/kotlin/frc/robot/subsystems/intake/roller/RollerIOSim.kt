@@ -24,6 +24,11 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
             IntakeSimulation.IntakeSide.FRONT,
             1
         )
+
+    override fun getIntakeSimulation(): IntakeSimulation? {
+        return intakeSimulation
+    }
+
     private val motor =
         TalonFXSim(
             1,
@@ -46,18 +51,18 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
                     driveSimulation
                         .driveTrainSimulatedChassisSpeedsFieldRelative,
                     driveSimulation.simulatedDriveTrainPose.rotation,
-                    CORAL_OUTTAKE_HEIGHT,
-                    CORAL_OUTTAKE_VELOCITY,
-                    CORAL_OUTTAKE_ANGLE
+                    ALGAE_OUTTAKE_HEIGHT,
+                    ALGAE_OUTTAKE_VELOCITY,
+                    ALGAE_OUTTAKE_ANGLE
                 )
             )
     }
 
     override fun setVoltage(voltage: Voltage) {
         motor.setControl(controlRequest.withOutput(voltage))
-        if (voltage != Units.Volts.zero()) {
+        if (voltage < Units.Volts.zero()) {
             intakeSimulation.startIntake()
-        } else {
+        } else if (voltage > Units.Volts.zero()) {
             intakeSimulation.stopIntake()
             visualizeOuttakeGamePieceIfNeeded()
         }
