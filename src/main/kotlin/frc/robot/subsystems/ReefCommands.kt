@@ -14,7 +14,7 @@ private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
 private val CORAL_SHOOT_OFFSET =
     getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
-private val GRIPPER_HEIGHT = Units.Meters.of(0.50)
+private val GRIPPER_HEIGHT = Units.Meters.of(0.9)
 private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
 private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
 private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
