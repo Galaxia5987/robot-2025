@@ -87,37 +87,42 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController
-            .create()
-            .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
-                    .ignoringDisable(true)
-            )
+        driverController.apply {
+            create()
+                .onTrue(
+                    Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                        .ignoringDisable(true)
+                )
+            (listOf(
+                cross() to ::l1,
+                square() to ::l2,
+                circle() to ::l3,
+                triangle() to ::l4,
+                L1() to ::outtakeAlgae
+            ))
+                .forEach { (button, command) ->
+                    button.onTrue(command(button.negate()))
+                }
+            R1().whileTrue(intakeAlgae())
 
-        driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.circle().onTrue(l3(driverController.circle().negate()))
-        driverController
-            .triangle()
-            .onTrue(l4(driverController.triangle().negate()))
-        driverController.R1().whileTrue(intakeAlgae())
-        driverController
-            .L1()
-            .onTrue(outtakeAlgae(driverController.L1().negate()))
-        driverController.R2().whileTrue(gripper.intake())
-        driverController.L2().whileTrue(gripper.outtake())
+            gripper.apply {
+                R2().whileTrue(intake())
+                L2().whileTrue(outtake())
+            }
+        }
 
-        operatorController.x().onTrue(l2algae(operatorController.x().negate()))
-        operatorController.b().onTrue(l3algae(operatorController.b().negate()))
-        operatorController
-            .start()
-            .onTrue(feeder(operatorController.start().negate()))
-        operatorController
-            .povDown()
-            .onTrue(elevator.reset(operatorController.povDown().negate()))
-        operatorController
-            .povUp()
-            .onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController.apply {
+            (listOf(
+                x() to ::l2algae,
+                b() to ::l3algae,
+                start() to ::feeder,
+            ))
+                .forEach { (button, command) ->
+                    button.onTrue(command(button.negate()))
+                }
+            povDown().apply { onTrue(elevator.reset(negate())) }
+            povUp().apply { onTrue(extender.reset(negate())) }
+        }
     }
 
     fun getAutonomousCommand(): Command =
