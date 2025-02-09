@@ -27,7 +27,7 @@ import org.littletonrobotics.junction.AutoLogOutput
  * calls). Instead, the structure of the robot (including subsystems, commands,
  * and trigger mappings) should be declared here.
  */
-object  RobotContainer {
+object RobotContainer {
 
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)

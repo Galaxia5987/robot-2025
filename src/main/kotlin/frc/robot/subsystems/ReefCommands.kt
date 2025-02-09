@@ -1,13 +1,10 @@
 package frc.robot.subsystems
 
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
-import frc.robot.lib.getRotation2d
-import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
@@ -52,7 +49,8 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun visualizeCoralOuttakeIfNeeded(): Command = visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+fun visualizeCoralOuttakeIfNeeded(): Command =
+    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
 
 private fun scoreCoral(endTrigger: Trigger): Command =
     sequence(
