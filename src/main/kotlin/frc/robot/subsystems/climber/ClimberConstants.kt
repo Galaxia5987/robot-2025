@@ -1,17 +1,11 @@
 package frc.robot.subsystems.climber
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Current
-import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
-import frc.robot.lib.Gains
-import frc.robot.lib.selectGainsBasedOnMode
 
 const val GEAR_RATIO = (1.0 / 12.0) * (30.0 / 66.0) * (12.0 / 36.0)
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(0.0)
