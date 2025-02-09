@@ -34,51 +34,6 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
         run { setVoltage(Units.Volts.of(power * 12.0)) }
             .withName("Climber/powerControl")
 
-    fun characterize(): Command {
-        val routineForwards =
-            SysIdRoutine(
-                SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
-                    { state: State ->
-                        Logger.recordOutput("Climber/state", state)
-                    }
-                ),
-                SysIdRoutine.Mechanism(
-                    { voltage: Voltage -> io.setVoltage(voltage) },
-                    null,
-                    this
-                )
-            )
-        val routineBackwards =
-            SysIdRoutine(
-                SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
-                    { state: State ->
-                        Logger.recordOutput("Climber/state", state)
-                    }
-                ),
-                SysIdRoutine.Mechanism(
-                    { voltage: Voltage -> io.setVoltage(voltage) },
-                    null,
-                    this
-                )
-            )
-        return Commands.sequence(
-                routineForwards.dynamic(SysIdRoutine.Direction.kForward),
-                Commands.waitSeconds(1.0),
-                routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
-                Commands.waitSeconds(1.0),
-                routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
-                Commands.waitSeconds(1.0),
-                routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
-            )
-            .withName("Climber/characterize")
-    }
-
     override fun periodic() {
         io.updateInput()
         Logger.processInputs(this::class.simpleName, io.inputs)
