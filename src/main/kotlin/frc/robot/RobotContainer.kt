@@ -1,7 +1,6 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
@@ -41,7 +40,6 @@ object RobotContainer {
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
-    val voltage = Units.Volts.of(1.0)
 
     init {
 
