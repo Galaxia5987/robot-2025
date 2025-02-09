@@ -52,6 +52,10 @@ class Visualizer {
 
     private val gripper = frc.robot.gripper
 
+    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, Rotation3d())
+    private val CORAL_HEIGHT_OFFSET = getPose3d(z = 0.07)
+    private val CORAL_ANGLE_OFFSET = Degrees.of(25.0)
+
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
         val secondStageHeight = elevator.height.invoke().`in`(Meters)
@@ -69,9 +73,6 @@ class Visualizer {
             )
         return Pair(firstStagePose, secondStagePose)
     }
-
-    private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, Rotation3d())
-    private val CORAL_HEIGHT_OFFSET = getPose3d(z = 0.07)
 
     @AutoLogOutput(key = "Visualizer/AlgaePoseInRobot")
     private fun getAlgaePose(): Pose3d? =
@@ -95,7 +96,7 @@ class Visualizer {
                         )
                         .minus(CORAL_HEIGHT_OFFSET)
                 )
-                ?.withRotation(pitch = -wrist.angle.invoke() + Degrees.of(25.0))
+                ?.withRotation(pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET)
         else Pose3d()
 
     private fun getSwerveModulePoseTurn(
