@@ -76,12 +76,12 @@ object RobotContainer {
                         .ignoringDisable(true)
                 )
             (listOf(
-                cross() to ::l1,
-                square() to ::l2,
-                circle() to ::l3,
-                triangle() to ::l4,
-                L1() to ::outtakeAlgae
-            ))
+                    cross() to ::l1,
+                    square() to ::l2,
+                    circle() to ::l3,
+                    triangle() to ::l4,
+                    L1() to ::outtakeAlgae
+                ))
                 .forEach { (button, command) ->
                     button.onTrue(command(button.negate()))
                 }
@@ -95,10 +95,10 @@ object RobotContainer {
 
         operatorController.apply {
             (listOf(
-                x() to ::l2algae,
-                b() to ::l3algae,
-                start() to ::feeder,
-            ))
+                    x() to ::l2algae,
+                    b() to ::l3algae,
+                    start() to ::feeder,
+                ))
                 .forEach { (button, command) ->
                     button.onTrue(command(button.negate()))
                 }
