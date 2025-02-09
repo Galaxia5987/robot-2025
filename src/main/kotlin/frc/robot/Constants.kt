@@ -13,6 +13,9 @@ private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
 val SPEAKER_POSE: Translation2d
     get() = SPEAKER_POSE_BLUE.flipIfNeeded()
 
+const val REEFMASTER_CANBUS_NAME = "reefmaster"
+const val SWERVE_CANBUS_NAME = "swerveDrive"
+
 val CURRENT_MODE: Mode
     get() =
         if (LoggedRobot.isReal()) {

@@ -3,9 +3,13 @@ package frc.robot.subsystems.elevator
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import java.util.function.DoubleSupplier
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -21,7 +25,12 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput
     private var setpointValue: Distance = Units.Millimeters.of(0.0)
 
-    @AutoLogOutput private var setpointName: Positions = Positions.ZERO
+    @AutoLogOutput var setpointName: Positions = Positions.ZERO
+
+    @AutoLogOutput
+    var atSetpoint = Trigger {
+        io.inputs.height.isNear(setpointValue, SETPOINT_TOLERANCE)
+    }
 
     @AutoLogOutput
     private val isStuck = Trigger {
@@ -32,7 +41,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     }
 
     private val tuningHeight =
-        LoggedNetworkNumber("Tuning/Elevator/heightMeters", 0.0)
+        LoggedNetworkNumber("/Tuning/Elevator/heightMeters", 0.0)
 
     val height: () -> Distance = { io.inputs.height }
 
@@ -50,15 +59,24 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l4(): Command = setHeight(Positions.L4).withName("Elevator/L4")
     fun l2Algae(): Command =
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
+
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
+
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
+
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
     fun tuningPosition(): Command =
-        run { io.setHeight(Units.Meters.of(tuningHeight.get())) }
+        defer {
+                run {
+                    val height = Units.Meters.of(tuningHeight.get())
+                    setpointValue = height
+                    io.setHeight(height)
+                }
+            }
             .withName("Elevator/Tuning")
 
     fun setVoltage(voltage: Voltage): Command =
@@ -68,11 +86,74 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             )
             .withName("Elevator/setVoltage")
 
-    fun reset(): Command =
-        setVoltage(RESET_VOLTAGE)
-            .until(isStuck)
-            .andThen(runOnce(io::reset))
+    fun powerControl(percentOutput: DoubleSupplier): Command =
+        run {
+                io.setVoltage(
+                    Units.Volts.of(
+                        percentOutput.asDouble * 10.0 + VOLTAGE_CONTROL_KG
+                    )
+                )
+            }
+            .withName("Elevator/powerControl")
+
+    fun stop(): Command =
+        setVoltage(Units.Volts.zero()).withName("Elevator/stop")
+
+    fun reset(resetTrigger: Trigger): Command =
+        Commands.sequence(
+                runOnce { io.setSoftLimits(false) }
+                    .andThen(setVoltage(RESET_VOLTAGE))
+                    .until(resetTrigger),
+                runOnce(io::reset),
+                runOnce { io.setSoftLimits(true) },
+                stop()
+            )
             .withName("Elevator/reset")
+
+    fun characterize(): Command {
+        val routineForwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(5.0),
+                    Units.Volt.of(6.0),
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Elevator/state", state)
+                    }
+                ),
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    null,
+                    this
+                )
+            )
+        val routineBackwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(5.0),
+                    Units.Volt.of(4.0),
+                    Units.Second.of(1.5),
+                    { state: State ->
+                        Logger.recordOutput("Elevator/state", state)
+                    }
+                ),
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    null,
+                    this
+                )
+            )
+        return Commands.sequence(
+                routineForwards.dynamic(SysIdRoutine.Direction.kForward),
+                Commands.waitSeconds(1.0),
+                routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
+                Commands.waitSeconds(1.0),
+                routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
+                Commands.waitSeconds(1.0),
+                routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
+            )
+            .withName("Elevator/characterize")
+    }
 
     override fun periodic() {
         io.updateInputs()

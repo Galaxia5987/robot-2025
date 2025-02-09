@@ -20,5 +20,7 @@ interface WristIO {
             Units.Degree.zero().mutableCopy()
         var appliedVoltage: MutVoltage = Units.Volts.zero().mutableCopy()
         var sensorDistance: MutDistance = Units.Centimeters.zero().mutableCopy()
+        var velocity: MutAngularVelocity =
+            Units.RotationsPerSecond.zero().mutableCopy()
     }
 }
