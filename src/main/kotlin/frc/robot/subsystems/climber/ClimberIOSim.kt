@@ -20,55 +20,23 @@ class ClimberIOSim : ClimberIO {
 
     private var motor =
         TalonFXSim(
-            2,
+            1,
             GEAR_RATIO,
             MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
             TalonType.KRAKEN_FOC
         )
 
-    private var latchServo =
-        SolenoidSim(PneumaticsModuleType.REVPH, LATCH_SERVO_ID)
-
-    private val stopperMotor =
-        TalonFXSim(
-            DCMotor.getBag(1),
-            STOPPER_GEAR_RATIO,
-            MOMENT_OF_INERTIA_LOCK.`in`(Units.KilogramSquareMeters),
-            1.0
-        )
-
     private var voltageControl = VoltageOut(0.0)
-    private var powerControl = DutyCycleOut(0.0)
-    private var positionController = PositionVoltage(0.0)
-
-    init {
-        motor.setController(PIDController(GAINS.kP, GAINS.kI, GAINS.kD))
-    }
-
-    override fun setLatchPosition(position: Distance) {
-        latchServo.output = position == OPEN_LATCH_POSITION
-    }
-
-    override fun setStopperPower(power: Double) {
-        stopperMotor.setControl(powerControl.withOutput(power))
-    }
 
     override fun setVoltage(voltage: Voltage) {
         motor.setControl(voltageControl.withOutput(voltage))
     }
 
-    override fun setAngle(angle: Angle) {
-        motor.setControl(positionController.withPosition(angle))
-    }
-
     override fun updateInput() {
         motor.update(Timer.getFPGATimestamp())
-        stopperMotor.update(Timer.getFPGATimestamp())
         inputs.angle = Units.Rotations.of(motor.position)
         inputs.appliedVoltage = motor.appliedVoltage
-        inputs.latchPosition =
-            if (latchServo.output) OPEN_LATCH_POSITION else CLOSE_LATCH_POSITION
         inputs.angularVelocity = motor.velocity
     }
 }
