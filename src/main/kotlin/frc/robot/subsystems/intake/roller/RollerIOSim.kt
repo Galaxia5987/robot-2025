@@ -60,9 +60,9 @@ class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
 
     override fun setVoltage(voltage: Voltage) {
         motor.setControl(controlRequest.withOutput(voltage))
-        if (voltage != Units.Volts.zero()) {
+        if (voltage < Units.Volts.zero()) {
             intakeSimulation.startIntake()
-        } else {
+        } else if (voltage > Units.Volts.zero()) {
             intakeSimulation.stopIntake()
             visualizeOuttakeGamePieceIfNeeded()
         }

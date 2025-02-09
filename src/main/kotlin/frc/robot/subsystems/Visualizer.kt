@@ -96,7 +96,10 @@ class Visualizer {
                         )
                         .minus(CORAL_HEIGHT_OFFSET)
                 )
-                ?.withRotation(pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET)
+                ?.withRotation(
+                    pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET,
+                    yaw = driveSimulation.simulatedDriveTrainPose.rotation.measure!! //
+                )
         else Pose3d()
 
     private fun getSwerveModulePoseTurn(

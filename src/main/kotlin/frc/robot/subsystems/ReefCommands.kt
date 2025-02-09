@@ -1,10 +1,13 @@
 package frc.robot.subsystems
 
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
+import frc.robot.lib.getRotation2d
+import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
@@ -16,7 +19,7 @@ private val CORAL_SHOOT_OFFSET =
     getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
 private val GRIPPER_HEIGHT = Units.Meters.of(0.9)
 private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
-private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
+private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-85.0) //
 private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
 
 private fun visualizeCoralOuttake(): Command =
