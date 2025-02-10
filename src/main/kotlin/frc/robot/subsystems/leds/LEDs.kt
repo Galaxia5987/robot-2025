@@ -65,13 +65,20 @@ class LEDs : SubsystemBase() {
                             SCROLLING_SPEED_RAINBOW,
                             LED_SPACING
                         )
+                        .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
             )
         )
     private var gripperPattern =
         gripper.hasCoral
             .and(climber.isClimbed.negate())
-            .onTrue(setPattern(all = LEDPattern.solid(Color.kWhiteSmoke)))
-            .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
+            .onTrue(
+                setPattern(
+                    all =
+                        LEDPattern.solid(Color.kWhiteSmoke)
+                            .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
+                            .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
+                )
+            )
 
     private var defaultPattern =
         climbPattern
