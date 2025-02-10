@@ -18,9 +18,9 @@ val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 41
 const val LED_STRIP_PORT = 0
 
-val blueBrightness: Dimensionless = Units.Percent.of(20.0)
-val redBrightness: Dimensionless = Units.Percent.of(40.0)
-val gradientPink: Color = Color(255, 0, 148)
+val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
+val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
+val GRADIENT_PINK: Color = Color(255, 0, 148)
 
 val teamPattern: LEDPattern =
     when (IS_RED) {
@@ -30,7 +30,7 @@ val teamPattern: LEDPattern =
                     Color.kAqua,
                     Color.kBlue
                 )
-                .atBrightness(blueBrightness)
+                .atBrightness(BLUE_BRIGHTNESS)
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
@@ -39,9 +39,9 @@ val teamPattern: LEDPattern =
             LEDPattern.gradient(
                     LEDPattern.GradientType.kDiscontinuous,
                     Color.kRed,
-                    gradientPink
+                    GRADIENT_PINK
                 )
-                .atBrightness(redBrightness)
+                .atBrightness(RED_BRIGHTNESS)
                 .scrollAtAbsoluteSpeed(
                     SCROLLING_SPEED_TEAM_PATTERN,
                     LED_SPACING
