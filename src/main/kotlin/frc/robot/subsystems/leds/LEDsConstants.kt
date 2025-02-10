@@ -13,7 +13,8 @@ import frc.robot.IS_RED
 val SCROLLING_SPEED_RAINBOW: LinearVelocity = Units.MetersPerSecond.of(0.3)
 val SCROLLING_SPEED_TEAM_PATTERN: LinearVelocity = Units.MetersPerSecond.of(0.2)
 
-val BLINKING_TIME: Time = Units.Second.of(2.0)
+val BLINKING_OFF_TIME: Time = Units.Second.of(0.5)
+val BLINKING_ON_TIME: Time = Units.Second.of(1.0)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 41
 const val LED_STRIP_PORT = 0
