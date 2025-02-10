@@ -17,7 +17,87 @@
     0,
     0
   ],
-  "cameras": [],
+  "cameras": [
+    {
+      "name": "front",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 20
+        },
+        {
+          "axis": "z",
+          "degrees": 20
+        }
+      ],
+      "position": [
+        0.23046, -0.18829, 0.54551
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 75
+    },
+    {
+      "name": "backRight",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 195
+        },
+        {
+          "axis": "z",
+          "degrees": 205
+        }
+      ],
+      "position": [
+        -0.12547,
+        -0.23183,
+        0.55182
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 75
+    },
+    {
+      "name": "backLeft",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 195
+        },
+        {
+          "axis": "z",
+          "degrees": 155
+        }
+      ],
+      "position": [
+        -0.12635,
+        0.23345,
+        0.55208
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 75
+    }
+  ],
   "components": [
     {
       "_comment": "model_0 : Swerve module 0 TURN",
