@@ -10,7 +10,7 @@ import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
-private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.15)
+private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
 private val CORAL_SHOOT_OFFSET =
     getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
@@ -61,6 +61,20 @@ private fun scoreCoral(endTrigger: Trigger): Command =
         moveDefaultPosition()
     )
 
+private fun scoreCoralL4(endTrigger: Trigger): Command =
+    sequence(
+        waitUntil(endTrigger),
+        gripper
+            .fastOuttake()
+            .withTimeout(0.8)
+            .alongWith(
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+            ),
+        wrist.retract(),
+        waitSeconds(0.4),
+        moveDefaultPosition()
+    )
+
 // TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
@@ -76,13 +90,17 @@ fun l3(outtakeTrigger: Trigger): Command =
     parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
 
-fun l3algae(): Command =
+fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
+        .until(retractTrigger)
+        .andThen(moveDefaultPosition())
 
-fun l2algae(): Command =
+fun l2algae(retractTrigger: Trigger): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
+        .until(retractTrigger)
+        .andThen(moveDefaultPosition())
 
 fun feeder(intakeTrigger: Trigger): Command =
     sequence(
