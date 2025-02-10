@@ -24,9 +24,12 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -60,6 +63,12 @@ public class Vision extends SubsystemBase {
      *
      * @param cameraIndex The index of the camera to use.
      */
+
+    @AutoLogOutput(key = "Vision/tX")
+    public Rotation2d logTargetX() {
+        return getTargetX(1);
+    }
+
     public Rotation2d getTargetX(int cameraIndex) {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }

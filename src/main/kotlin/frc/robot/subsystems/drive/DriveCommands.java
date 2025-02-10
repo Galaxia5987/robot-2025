@@ -316,8 +316,8 @@ public class DriveCommands {
                                         })));
     }
 
-    public static Command alignWithBestVisionTarget(Vision vision, int cameraIndex) {
-        return frc.robot.InitializerKt.getSwerveDrive().setDesiredHeading(vision.getTargetX(cameraIndex));
+    public static Command alignWithBestVisionTarget(Vision vision, Drive drive, int cameraIndex, DoubleSupplier ySupplier, DoubleSupplier xSupplier) {
+        return joystickDriveAtAngle(drive, ySupplier, xSupplier, () -> vision.getTargetX(cameraIndex));
     }
 
     private static class WheelRadiusCharacterizationState {
