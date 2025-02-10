@@ -32,10 +32,10 @@ class LEDs : SubsystemBase() {
         all: LEDPattern? = null
     ): Command =
         run {
-            left?.applyTo(leftBuffer)
-            right?.applyTo(rightBuffer)
-            all?.applyTo(ledBuffer)
-        }
+                left?.applyTo(leftBuffer)
+                right?.applyTo(rightBuffer)
+                all?.applyTo(ledBuffer)
+            }
             .ignoringDisable(true)
 
     fun setPatternArea(
@@ -44,12 +44,12 @@ class LEDs : SubsystemBase() {
         section: Array<Int>
     ): Command =
         run {
-            val sectionOfBuffer: AddressableLEDBufferView =
-                ledBuffer.createView(section[0], section[1])
-            secondaryPattern?.applyTo(ledBuffer)
-            primaryPattern.applyTo(sectionOfBuffer)
-            ledStrip.setData(ledBuffer)
-        }
+                val sectionOfBuffer: AddressableLEDBufferView =
+                    ledBuffer.createView(section[0], section[1])
+                secondaryPattern?.applyTo(ledBuffer)
+                primaryPattern.applyTo(sectionOfBuffer)
+                ledStrip.setData(ledBuffer)
+            }
             .ignoringDisable(true)
 
     override fun periodic() {

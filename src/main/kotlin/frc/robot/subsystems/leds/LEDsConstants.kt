@@ -48,7 +48,7 @@ val teamPattern: LEDPattern =
             LEDPattern.gradient(
                     LEDPattern.GradientType.kDiscontinuous,
                     Color.kRed,
-                GRADIENT_PINK
+                    GRADIENT_PINK
                 )
                 .atBrightness(RED_BRIGHTNESS)
                 .scrollAtAbsoluteSpeed(
