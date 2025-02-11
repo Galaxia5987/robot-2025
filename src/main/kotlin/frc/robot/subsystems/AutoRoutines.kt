@@ -27,7 +27,7 @@ private fun AutoTrajectory.score(
 
 private fun AutoTrajectory.intake(
     intakeTrigger: Trigger = done(),
-) = atTimeBeforeEnd().onTrue(feeder(intakeTrigger.debounce(SCORE_TIME.`in`(Seconds))))
+) = atTimeBeforeEnd().onTrue(feeder(intakeTrigger.debounce(INTAKE_FEEDER_TIME.`in`(Seconds))))
 
 private fun leaveRoutine(startingPoint: String): AutoRoutine {
     val name = "$startingPoint leave"
