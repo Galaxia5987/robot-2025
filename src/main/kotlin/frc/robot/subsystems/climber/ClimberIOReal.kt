@@ -7,20 +7,20 @@ import edu.wpi.first.units.measure.Voltage
 class ClimberIOReal : ClimberIO {
     override var inputs: LoggedClimberInputs = LoggedClimberInputs()
 
-    private val mainMotor = TalonFX(MOTOR_ID)
+    private val motor = TalonFX(MOTOR_ID)
     private val voltageControl = VoltageOut(0.0)
 
     init {
-        mainMotor.configurator.apply(MOTOR_CONFIG)
+        motor.configurator.apply(MOTOR_CONFIG)
     }
 
     override fun setVoltage(voltage: Voltage) {
-        mainMotor.setControl(voltageControl.withOutput(voltage))
+        motor.setControl(voltageControl.withOutput(voltage))
     }
 
     override fun updateInput() {
-        inputs.angle = mainMotor.position.value
-        inputs.appliedVoltage = mainMotor.motorVoltage.value
-        inputs.angularVelocity = mainMotor.velocity.value
+        inputs.angle = motor.position.value
+        inputs.appliedVoltage = motor.motorVoltage.value
+        inputs.angularVelocity = motor.velocity.value
     }
 }
