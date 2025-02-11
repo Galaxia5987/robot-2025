@@ -72,11 +72,11 @@ val autoRoutines: Map<String, AutoRoutine> =
             mapOf(
                 "B1L" to arrayOf("B1L"),
                 "B1R" to arrayOf("B1R"),
-                "A2R3LR" to arrayOf("A2R", "2RS", "S3L"),
-                "A2R4LR" to arrayOf("A2R", "3RS", "S4L"),
-                "C5RL4R" to arrayOf("C5R", "5LS", "S4L"),
-                "C6L5RL" to arrayOf("C6L", "6LS", "S5R"),
-                "B1R2LR" to arrayOf("1RS", "S2L", "3LS", "S2R"),
-                "B1L6RL" to arrayOf("1LS", "S6R", "6RS", "S6L")
+                "A2R3LR" to arrayOf("A2R", "2RS", "S3L","3LS","S3R"),
+                "A3LR4L" to arrayOf("A3L", "3LS", "S3R","3RS","S4L"),
+                "C5RL4R" to arrayOf("C5R", "5RS", "S5L","5LS","S4R"),
+                "C6L5RL" to arrayOf("C6L", "6LS", "S5R","5RS","S5L"),
+                "B1R2LR" to arrayOf("B1R", "1RS", "S2L", "2LS","S2R"),
+                "B1L6RL" to arrayOf("B1L", "1LS", "S6R","6RS","S6L")
             )
                 .mapValues { createScoringSequence(it.key, it.value) })

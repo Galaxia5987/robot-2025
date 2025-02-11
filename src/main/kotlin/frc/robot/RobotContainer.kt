@@ -114,15 +114,13 @@ object RobotContainer {
         autoChooser.addDefaultOption("A leave", autoRoutines["A leave"]!!.cmd())
         autoChooser.addAutoRoutine("C6L5RL")
         autoChooser.addAutoRoutine("C5RL4R")
-        autoChooser.addAutoRoutine("routine5RL")
         autoChooser.addAutoRoutine("B1R2LR")
         autoChooser.addAutoRoutine("B1L6RL")
         autoChooser.addAutoRoutine("B1R")
         autoChooser.addAutoRoutine("B1L")
         autoChooser.addAutoRoutine("A3LR4L")
         autoChooser.addAutoRoutine("A2R3LR")
-        autoChooser.addAutoRoutine("routine3LR")
-        autoChooser.addAutoRoutine("CLeave")
-        autoChooser.addAutoRoutine("BLeave")
+        autoChooser.addAutoRoutine("C leave")
+        autoChooser.addAutoRoutine("B leave")
     }
 }
