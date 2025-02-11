@@ -16,7 +16,10 @@ var MOTOR_CONFIG =
     TalonFXConfiguration().apply {
         MotorOutput.apply {
             NeutralMode = NeutralModeValue.Brake
-            Inverted = InvertedValue.Clockwise_Positive
+            Inverted = InvertedValue.CounterClockwise_Positive
+        }
+        Feedback.apply {
+            SensorToMechanismRatio = GEAR_RATIO
         }
         CurrentLimits.apply {
             StatorCurrentLimitEnable = true
