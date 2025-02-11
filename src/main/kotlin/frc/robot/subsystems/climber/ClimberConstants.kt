@@ -7,7 +7,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.MomentOfInertia
 
-const val GEAR_RATIO = 1/ ((1.0 / 9.0) * (1.0 / 3.0) * (1.0 / 3.0) * (30.0 / 60.0))
+const val GEAR_RATIO =
+    1 / ((1.0 / 9.0) * (1.0 / 3.0) * (1.0 / 3.0) * (30.0 / 60.0))
 val UNFOLDED_ANGLE: Angle = Units.Degree.of(0.0)
 val FOLDED_ANGLE: Angle = Units.Degree.of(90.0)
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
@@ -18,9 +19,7 @@ var MOTOR_CONFIG =
             NeutralMode = NeutralModeValue.Brake
             Inverted = InvertedValue.CounterClockwise_Positive
         }
-        Feedback.apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
+        Feedback.apply { SensorToMechanismRatio = GEAR_RATIO }
         CurrentLimits.apply {
             StatorCurrentLimitEnable = true
             SupplyCurrentLimitEnable = true
