@@ -27,6 +27,7 @@ class ClimberIOSim : ClimberIO {
 
     override fun updateInput() {
         motor.update(Timer.getFPGATimestamp())
+        inputs.angle = Units.Rotations.of(motor.position)
         inputs.appliedVoltage = motor.appliedVoltage
         inputs.angularVelocity = motor.velocity
     }

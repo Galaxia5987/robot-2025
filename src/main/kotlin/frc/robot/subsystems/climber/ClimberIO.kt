@@ -14,6 +14,7 @@ interface ClimberIO {
     @Logged
     open class ClimberInputs {
         var appliedVoltage: Voltage = Units.Volts.zero()
+        var angle: Angle = Units.Degree.zero()
         var angularVelocity: AngularVelocity = Units.RotationsPerSecond.zero()
     }
 }
