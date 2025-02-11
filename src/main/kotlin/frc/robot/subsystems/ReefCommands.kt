@@ -49,12 +49,11 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-private fun scoreCoral(endTrigger: Trigger): Command =
+private fun scoreCoral(endTrigger: Trigger, slowOuttake: Boolean = false): Command =
     sequence(
         waitUntil(endTrigger),
-        gripper
-            .outtake()
-            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+        if (slowOuttake) gripper.slowOuttake().withTimeout(CORAL_OUTTAKE_TIMEOUT)
+        else gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT)
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
@@ -78,10 +77,10 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
 // TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
-    parallel(elevator.feeder(), wrist.feeder())
+    parallel(elevator.feeder(), wrist.feeder(), extender.retract())
 
 fun l1(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger, true))
 
 fun l2(outtakeTrigger: Trigger): Command =
     parallel(elevator.l2(), wrist.l2()).andThen(scoreCoral(outtakeTrigger))
@@ -90,7 +89,7 @@ fun l3(outtakeTrigger: Trigger): Command =
     parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
+    parallel(elevator.l4(), wrist.l4(), extender.l4()).andThen(scoreCoralL4(outtakeTrigger))
 
 fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())

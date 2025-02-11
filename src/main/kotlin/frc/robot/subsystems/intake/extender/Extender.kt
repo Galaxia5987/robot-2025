@@ -41,7 +41,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
                     io.setPosition(setpoint)
                 },
                 waitUntil(atSetpoint),
-                setVoltage(Units.Volts.zero())
+                runOnce{io.setVoltage(Units.Volts.zero())}
             )
             .withName("Extender/setPosition")
 
@@ -66,6 +66,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     fun retract() =
         setPosition(Positions.RETRACTED).withName("Extender/retract")
+
+    fun l4() =
+        setPosition(Positions.L4).withName("Extender/l4")
 
     fun reset(resetTrigger: Trigger): Command =
         sequence(
