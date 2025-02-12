@@ -145,7 +145,7 @@ public class Drive extends SubsystemBase {
 
     public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS) {
         this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3]);
-        if (frc.robot.ConstantsKt.getCURRENT_MODE() == Mode.SIM){
+        if (frc.robot.ConstantsKt.getCURRENT_MODE() == Mode.SIM) {
             poseEstimator.resetPose(new Pose2d(3.0, 3.0, new Rotation2d()));
         }
     }

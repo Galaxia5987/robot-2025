@@ -29,7 +29,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.vision.Vision;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -51,8 +50,7 @@ public class DriveCommands {
 
     private static final PIDController xController = new PIDController(2.0, 0.0, 0.0);
 
-    private DriveCommands() {
-    }
+    private DriveCommands() {}
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -154,7 +152,7 @@ public class DriveCommands {
                                             speeds,
                                             isFlipped
                                                     ? drive.getRotation()
-                                                    .plus(new Rotation2d(Math.PI))
+                                                            .plus(new Rotation2d(Math.PI))
                                                     : drive.getRotation()));
                         },
                         drive)
@@ -230,9 +228,7 @@ public class DriveCommands {
                                 }));
     }
 
-    /**
-     * Measures the robot's wheel radius by spinning in a circle.
-     */
+    /** Measures the robot's wheel radius by spinning in a circle. */
     public static Command wheelRadiusCharacterization(Drive drive) {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -310,14 +306,20 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                            Units.metersToInches(
-                                                                    wheelRadius))
+                                                                    Units.metersToInches(
+                                                                            wheelRadius))
                                                             + " inches");
                                         })));
     }
 
-    public static Command alignWithBestVisionTarget(Vision vision, Drive drive, int cameraIndex, DoubleSupplier ySupplier, DoubleSupplier xSupplier) {
-        return joystickDriveAtAngle(drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
+    public static Command alignWithBestVisionTarget(
+            Vision vision,
+            Drive drive,
+            int cameraIndex,
+            DoubleSupplier ySupplier,
+            DoubleSupplier xSupplier) {
+        return joystickDriveAtAngle(
+                drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
     }
 
     private static class WheelRadiusCharacterizationState {
