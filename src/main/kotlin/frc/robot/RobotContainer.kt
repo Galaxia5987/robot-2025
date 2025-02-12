@@ -2,12 +2,14 @@ package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.withRotation
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
@@ -90,7 +92,14 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                Commands.runOnce(
+                        {
+                            swerveDrive::resetGyro
+                            swerveDrive.pose =
+                                swerveDrive.pose.withRotation(Rotation2d())
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
