@@ -3,11 +3,12 @@ package frc.robot.subsystems.leds
 import edu.wpi.first.wpilibj.AddressableLED
 import edu.wpi.first.wpilibj.AddressableLEDBuffer
 import edu.wpi.first.wpilibj.AddressableLEDBufferView
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.climber
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -57,20 +58,23 @@ class LEDs : SubsystemBase() {
     }
 
     private var climbPattern =
-        climber.isClimbed.onTrue(
-            setPattern(
-                all =
-                    LEDPattern.rainbow(255, 128)
-                        .scrollAtAbsoluteSpeed(
-                            SCROLLING_SPEED_RAINBOW,
-                            LED_SPACING
-                        )
-                        .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
+        Trigger {DriverStation.getMatchTime() < 5}
+            .and(Trigger { DriverStation.isTeleop() })
+            .onTrue(
+                setPattern(
+                    all =
+                        LEDPattern.rainbow(255, 128)
+                            .scrollAtAbsoluteSpeed(
+                                SCROLLING_SPEED_RAINBOW,
+                                LED_SPACING
+                            )
+                            .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
+                )
             )
-        )
+
     private var gripperPattern =
         gripper.hasCoral
-            .and(climber.isClimbed.negate())
+            .and(climbPattern.negate())
             .onTrue(
                 setPattern(
                     all =
