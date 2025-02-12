@@ -27,7 +27,7 @@ val CURRENT_MODE: Mode
                 Mode.SIM
             }
         }
-const val ALT_ROBORIO_SERIAL = "033E1B89"
+const val ALT_ROBORIO_SERIAL = ""
 
 val ROBORIO_SERIAL_NUMBER: String
     get() = System.getenv("serialnum") ?: "Sim"

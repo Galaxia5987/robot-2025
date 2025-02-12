@@ -437,9 +437,9 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** Returns the current gyro rotation. */
+    /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.yawPosition;
+        return gyroInputs.connected ? gyroInputs.yawPosition : getPose().getRotation();
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
