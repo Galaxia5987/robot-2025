@@ -28,7 +28,7 @@ public interface VisionIO {
     }
 
     /** Represents the angle to a simple target, not used for pose estimation. */
-    public static record TargetObservation(Rotation2d tx, Rotation2d ty, int id) {}
+    public static record TargetObservation(Rotation2d yaw, Rotation2d pitch, int id) {}
 
     /** Represents a robot pose sample used for pose estimation. */
     public static record PoseObservation(

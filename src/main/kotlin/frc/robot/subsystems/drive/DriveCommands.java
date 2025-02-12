@@ -317,7 +317,7 @@ public class DriveCommands {
     }
 
     public static Command alignWithBestVisionTarget(Vision vision, Drive drive, int cameraIndex, DoubleSupplier ySupplier, DoubleSupplier xSupplier) {
-        return joystickDriveAtAngle(drive, ySupplier, xSupplier, () -> vision.getTargetX(cameraIndex));
+        return joystickDriveAtAngle(drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
     }
 
     private static class WheelRadiusCharacterizationState {

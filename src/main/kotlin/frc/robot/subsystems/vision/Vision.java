@@ -63,13 +63,13 @@ public class Vision extends SubsystemBase {
      * @param cameraIndex The index of the camera to use.
      */
 
-    @AutoLogOutput(key = "Vision/tX")
-    public Rotation2d logTargetX() {
-        return getTargetX(1);
+    @AutoLogOutput(key = "Vision/yawToTarget")
+    public Rotation2d logYawToTarget() {
+        return getYawToTarget(1);
     }
 
-    public Rotation2d getTargetX(int cameraIndex) {
-        return inputs[cameraIndex].latestTargetObservation.tx();
+    public Rotation2d getYawToTarget(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.yaw();
     }
 
     @Override
