@@ -238,34 +238,35 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        -2.9329712664373457,
-                        -1.4818254410975293,
-                        0.11351457830353745,
-                        2.0586022173425302
+                            1.9374177350995647,
+                            2.868544073346149,
+                            -0.2162912910918754,
+                            1.1244079175201749
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(20.256)
+                            .withKP(22.792)
                             .withKI(0)
-                            .withKD(1.5072)
-                            .withKS(0.24997)
-                            .withKV(0.22169)
-                            .withKA(0.060469)
+                            .withKD(2.207)
+                            .withKS(0)
+                            .withKV(0.22717)
+                            .withKA(0.1124)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(0.5)
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0.21055)
-                            .withKV(0.68964);
+                            .withKS(0.40655)
+                            .withKV(0.54606);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-            kSlipCurrent = Amps.of(80.0);
+            kSlipCurrent = Amps.of(78.0);
+            kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -278,15 +279,14 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.8);
-            kMaxOmegaVelocity = RadiansPerSecond.of(5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.5);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
 
             kCoupleRatio = 3.5;
 
-            kDriveGearRatio = 1 / ((1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0));
+            kDriveGearRatio = 1.0 / ((10.0 / 34.0) * (28.0 / 18.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
             kWheelRadius = Centimeter.of(5.1);
 
