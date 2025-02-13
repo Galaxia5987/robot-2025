@@ -24,18 +24,41 @@ val SPEAKER_POSE: Translation2d
 val choreoPoses: Map<String, Pose2d>
     get() {
         val json = Json { ignoreUnknownKeys = true }
-        val jsonObject = json.parseToJsonElement(
-            File("${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor").readText()
-        ).jsonObject
+        val jsonObject =
+            json
+                .parseToJsonElement(
+                    File(
+                            "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
+                        )
+                        .readText()
+                )
+                .jsonObject
 
-        val jsonPoses = jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject ?: return emptyMap()
+        val jsonPoses =
+            jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject
+                ?: return emptyMap()
 
         return jsonPoses.mapValues { (key, pose) ->
             Pose2d(
-                pose.jsonObject["x"]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?: 0.0,
-                pose.jsonObject["y"]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?: 0.0,
+                pose.jsonObject["x"]
+                    ?.jsonObject
+                    ?.get("val")
+                    ?.jsonPrimitive
+                    ?.doubleOrNull
+                    ?: 0.0,
+                pose.jsonObject["y"]
+                    ?.jsonObject
+                    ?.get("val")
+                    ?.jsonPrimitive
+                    ?.doubleOrNull
+                    ?: 0.0,
                 Rotation2d(
-                    pose.jsonObject["heading"]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?: 0.0
+                    pose.jsonObject["heading"]
+                        ?.jsonObject
+                        ?.get("val")
+                        ?.jsonPrimitive
+                        ?.doubleOrNull
+                        ?: 0.0
                 )
             )
         }
