@@ -51,7 +51,7 @@ public class Vision extends SubsystemBase {
         for (int i = 0; i < inputs.length; i++) {
             disconnectedAlerts[i] =
                     new Alert(
-                            "Vision camera " + Integer.toString(i) + " is disconnected.",
+                            "Vision camera " + inputs[i].cameraName + " is disconnected.",
                             AlertType.kWarning);
         }
     }
@@ -74,7 +74,7 @@ public class Vision extends SubsystemBase {
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
-            Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
+            Logger.processInputs("Vision/" + inputs[i].cameraName, inputs[i]);
         }
 
         // Initialize logging values
@@ -155,16 +155,16 @@ public class Vision extends SubsystemBase {
 
             // Log camera datadata
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/TagPoses",
+                    "Vision/" + inputs[cameraIndex].cameraName + "/TagPoses",
                     tagPoses.toArray(new Pose3d[tagPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPoses",
+                    "Vision/" + inputs[cameraIndex].cameraName + "/RobotPoses",
                     robotPoses.toArray(new Pose3d[robotPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
+                    "Vision/" + inputs[cameraIndex].cameraName + "/RobotPosesAccepted",
                     robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
+                    "Vision/" + inputs[cameraIndex].cameraName + "/RobotPosesRejected",
                     robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
             allTagPoses.addAll(tagPoses);
             allRobotPoses.addAll(robotPoses);
