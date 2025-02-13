@@ -67,7 +67,7 @@ public class Vision extends SubsystemBase {
     }
 
     public Rotation2d getYawToTarget(int cameraIndex) {
-        return inputs[cameraIndex].latestTargetObservation.yaw();
+        return inputs[cameraIndex].yawToTarget;
     }
 
     @Override
