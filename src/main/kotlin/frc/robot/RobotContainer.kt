@@ -13,8 +13,6 @@ import frc.robot.lib.withRotation
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
-import frc.robot.subsystems.intake.intakeAlgae
-import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
@@ -109,10 +107,8 @@ object RobotContainer {
         driverController
             .triangle()
             .onTrue(l4(driverController.triangle().negate()))
-        driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
-            .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
 
