@@ -22,6 +22,10 @@ val CURRENT_MODE: Mode
                 Mode.SIM
             }
         }
+
+val USE_MAPLE_SIM: Boolean
+    get() = System.getenv()["isMapleSim"] == "true"
+
 const val ALT_ROBORIO_SERIAL = ""
 
 val ROBORIO_SERIAL_NUMBER: String

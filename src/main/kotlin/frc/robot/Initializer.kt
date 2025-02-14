@@ -23,11 +23,7 @@ import frc.robot.subsystems.intake.extender.ExtenderIO
 import frc.robot.subsystems.intake.extender.ExtenderIOReal
 import frc.robot.subsystems.intake.extender.ExtenderIOSim
 import frc.robot.subsystems.intake.extender.LoggedExtenderInputs
-import frc.robot.subsystems.intake.roller.LoggedRollerInputs
-import frc.robot.subsystems.intake.roller.Roller
-import frc.robot.subsystems.intake.roller.RollerIO
-import frc.robot.subsystems.intake.roller.RollerIOReal
-import frc.robot.subsystems.intake.roller.RollerIOSim
+import frc.robot.subsystems.intake.roller.*
 import frc.robot.subsystems.leds.LEDs
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
@@ -38,12 +34,13 @@ import frc.robot.subsystems.wrist.Wrist
 import frc.robot.subsystems.wrist.WristIO
 import frc.robot.subsystems.wrist.WristIOReal
 import frc.robot.subsystems.wrist.WristIOSim
-import java.lang.Exception
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
+import java.lang.Exception
+import java.util.*
 
 val driveSimulation: SwerveDriveSimulation? =
-    if (CURRENT_MODE == Mode.SIM)
+    if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
         SwerveDriveSimulation(
                 Drive.mapleSimConfig,
                 Pose2d(3.0, 3.0, Rotation2d())
@@ -64,10 +61,12 @@ private val swerveModuleIOs =
             when (CURRENT_MODE) {
                 Mode.REAL -> ModuleIOTalonFX(module)
                 Mode.SIM ->
-                    ModuleIOSim(
+                    if (USE_MAPLE_SIM)
+                    ModuleIOMapleSim(
                         driveSimulation?.modules?.get(index)
                             ?: throw Exception("Sim Swerve Module is null")
                     )
+                    else ModuleIOSim(module)
                 Mode.REPLAY -> object : ModuleIO {}
             }
         }
@@ -77,14 +76,16 @@ private val gyroIO =
     when (CURRENT_MODE) {
         Mode.REAL -> GyroIONavX()
         Mode.SIM ->
+            if (USE_MAPLE_SIM)
             GyroIOSim(
                 driveSimulation?.gyroSimulation
                     ?: throw Exception("Gyro simulation is null")
             )
+            else object : GyroIO {}
         else -> object : GyroIO {}
     }
 
-val swerveDrive = Drive(gyroIO, swerveModuleIOs)
+val swerveDrive = Drive(gyroIO, swerveModuleIOs, Optional.ofNullable(driveSimulation))
 
 private val visionIOs =
     when (CURRENT_MODE) {
@@ -97,7 +98,7 @@ private val visionIOs =
                 VisionIOPhotonVisionSim(
                     it.key,
                     it.value,
-                    driveSimulation!!::getSimulatedDriveTrainPose
+                    if (USE_MAPLE_SIM) driveSimulation!!::getSimulatedDriveTrainPose else swerveDrive::getPose
                 )
             }
         Mode.REPLAY -> emptyList()
@@ -157,7 +158,10 @@ val roller =
     Roller(
         when (CURRENT_MODE) {
             Mode.REAL -> RollerIOReal()
-            Mode.SIM -> RollerIOSim(driveSimulation!!)
+            Mode.SIM ->
+                if (USE_MAPLE_SIM)
+                    RollerIOMapleSim(driveSimulation!!)
+                else RollerIOSim()
             Mode.REPLAY ->
                 object : RollerIO {
                     override var inputs = LoggedRollerInputs()
