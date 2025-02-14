@@ -109,4 +109,11 @@ fun feeder(intakeTrigger: Trigger): Command =
         gripper.intake().until(gripper.hasCoral).andThen(moveDefaultPosition())
     )
 
+fun blockedFeeder(intakeTrigger: Trigger): Command =
+    sequence(
+        parallel(elevator.feeder(), wrist.blockedFeeder()),
+        waitUntil(intakeTrigger),
+        gripper.intake().until(gripper.hasCoral).andThen(moveDefaultPosition())
+    )
+
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())

@@ -14,6 +14,5 @@ val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(-9.0)
 val SLOW_OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(-2.5)
 val REMOVE_ALGAE_VOLTAGE: Voltage = Units.Volts.of(12.0)
 val STOP_VOLTAGE: Voltage = Units.Volts.zero()
-val MOMENT_OF_INERTIA: MomentOfInertia =
-    Units.KilogramSquareMeters.of(0.03)
+val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.03)
 val DEBOUNCE_TIME: Time = Units.Seconds.of(0.2)
