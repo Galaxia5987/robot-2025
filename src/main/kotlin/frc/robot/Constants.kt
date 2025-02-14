@@ -21,48 +21,49 @@ private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
 val SPEAKER_POSE: Translation2d
     get() = SPEAKER_POSE_BLUE.flipIfNeeded()
 
-val choreoPoses: Map<String, Pose2d>
-    get() {
-        val json = Json { ignoreUnknownKeys = true }
-        val jsonObject =
-            json
-                .parseToJsonElement(
-                    File(
-                            "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
-                        )
-                        .readText()
-                )
-                .jsonObject
-
-        val jsonPoses =
-            jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject
-                ?: return emptyMap()
-
-        return jsonPoses.mapValues { (key, pose) ->
-            Pose2d(
-                pose.jsonObject["x"]
-                    ?.jsonObject
-                    ?.get("val")
-                    ?.jsonPrimitive
-                    ?.doubleOrNull
-                    ?: 0.0,
-                pose.jsonObject["y"]
-                    ?.jsonObject
-                    ?.get("val")
-                    ?.jsonPrimitive
-                    ?.doubleOrNull
-                    ?: 0.0,
-                Rotation2d(
-                    pose.jsonObject["heading"]
-                        ?.jsonObject
-                        ?.get("val")
-                        ?.jsonPrimitive
-                        ?.doubleOrNull
-                        ?: 0.0
-                )
+private fun parseChoreoPoses(): Map<String, Pose2d> {
+    val json = Json { ignoreUnknownKeys = true }
+    val jsonObject =
+        json
+            .parseToJsonElement(
+                File(
+                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
+                    )
+                    .readText()
             )
-        }
+            .jsonObject
+
+    val jsonPoses =
+        jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject
+            ?: return emptyMap()
+
+    return jsonPoses.mapValues { (key, pose) ->
+        Pose2d(
+            pose.jsonObject["x"]
+                ?.jsonObject
+                ?.get("val")
+                ?.jsonPrimitive
+                ?.doubleOrNull
+                ?: 0.0,
+            pose.jsonObject["y"]
+                ?.jsonObject
+                ?.get("val")
+                ?.jsonPrimitive
+                ?.doubleOrNull
+                ?: 0.0,
+            Rotation2d(
+                pose.jsonObject["heading"]
+                    ?.jsonObject
+                    ?.get("val")
+                    ?.jsonPrimitive
+                    ?.doubleOrNull
+                    ?: 0.0
+            )
+        )
     }
+}
+
+val choreoPoses = parseChoreoPoses()
 
 const val REEFMASTER_CANBUS_NAME = "reefmaster"
 const val SWERVE_CANBUS_NAME = "swerveDrive"
