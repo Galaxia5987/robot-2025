@@ -1,60 +1,10 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.Filesystem
-import frc.robot.lib.flipIfNeeded
-import java.io.File
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import org.littletonrobotics.junction.LoggedRobot
 
 const val LOOP_TIME = 0.02 // [s]
 const val IS_TUNING_MODE = true
-
-private fun getValueFromJson(element: JsonElement, valName: String): Double =
-    element.jsonObject[valName]
-        ?.jsonObject
-        ?.get("val")
-        ?.jsonPrimitive
-        ?.doubleOrNull
-        ?: throw IllegalArgumentException(
-            "Trying to load non-existent Choreo pose"
-        )
-
-private fun parseChoreoPoses(): Map<String, Pose2d> {
-    val json = Json { ignoreUnknownKeys = true }
-    val jsonObject =
-        json
-            .parseToJsonElement(
-                File(
-                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
-                    )
-                    .readText()
-            )
-            .jsonObject
-
-    val jsonPoses =
-        jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject
-            ?: throw IllegalArgumentException(
-                "Trying to load non-existent Choreo variables"
-            )
-
-    return jsonPoses.mapValues { (key, pose) ->
-        Pose2d(
-            getValueFromJson(pose, "x"),
-            getValueFromJson(pose, "y"),
-            Rotation2d(getValueFromJson(pose, "heading"))
-        )
-    }
-}
-
-val ALIGNMENT_POSES = parseChoreoPoses()
 
 const val REEFMASTER_CANBUS_NAME = "reefmaster"
 const val SWERVE_CANBUS_NAME = "swerveDrive"
