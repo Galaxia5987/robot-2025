@@ -2,7 +2,6 @@ package frc.robot
 
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -99,8 +98,9 @@ object RobotContainer {
                 Commands.runOnce(
                         {
                             swerveDrive::resetGyro
-                            swerveDrive.pose =
+                            swerveDrive.resetOdometry(
                                 swerveDrive.pose.withRotation(Rotation2d())
+                            )
                         },
                         swerveDrive
                     )
