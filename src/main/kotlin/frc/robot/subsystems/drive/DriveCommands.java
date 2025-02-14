@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -33,6 +34,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -320,6 +322,12 @@ public class DriveCommands {
             DoubleSupplier xSupplier) {
         return joystickDriveAtAngle(
                 drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
+    }
+
+    public static Command alignToPose(Pose2d pose) {
+        return Commands.defer(
+                () -> AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
+                Set.of(frc.robot.InitializerKt.getSwerveDrive()));
     }
 
     private static class WheelRadiusCharacterizationState {
