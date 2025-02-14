@@ -122,6 +122,8 @@ dependencies {
 
     implementation 'com.opencsv:opencsv:5.8'
 
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
+
     implementation project(':annotation')
     ksp project(':annotation')
 
