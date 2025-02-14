@@ -3,10 +3,22 @@ package frc.robot.subsystems
 import choreo.auto.AutoFactory
 import choreo.auto.AutoRoutine
 import choreo.auto.AutoTrajectory
+import choreo.trajectory.SwerveSample
+import choreo.trajectory.Trajectory
 import edu.wpi.first.units.Units.Seconds
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.swerveDrive
+import org.littletonrobotics.junction.Logger
+
+private fun logTrajectory(trajectory: Trajectory<SwerveSample?>, isFinished: Boolean) {
+    Logger.recordOutput(
+        "Odometry/Trajectory",
+        *(if (IS_RED) trajectory.flipped() else trajectory).samples().toTypedArray()
+    )
+    Logger.recordOutput("Odometry/TrajectoryFinished", isFinished)
+}
 
 private val autoFactory =
     AutoFactory(
@@ -14,7 +26,8 @@ private val autoFactory =
         swerveDrive::resetOdometry,
         swerveDrive::followPath,
         true,
-        swerveDrive
+        swerveDrive,
+        ::logTrajectory
     )
 
 private fun AutoTrajectory.atTimeBeforeEnd(
