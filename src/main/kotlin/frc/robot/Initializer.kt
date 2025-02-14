@@ -85,7 +85,7 @@ private val gyroIO =
     }
 
 val swerveDrive =
-    Drive(gyroIO, swerveModuleIOs, driveSimulation!!::setSimulationWorldPose)
+    Drive(gyroIO, swerveModuleIOs)
 
 private val visionIOs =
     when (CURRENT_MODE) {

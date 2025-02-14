@@ -123,7 +123,7 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
-    private final Consumer<Pose2d> resetSimulationPoseCallBack;
+    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
 
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
@@ -147,14 +147,14 @@ public class Drive extends SubsystemBase {
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
     public Drive(
-            GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
+            GyroIO gyroIO, ModuleIO[] moduleIOS) {
         this(
                 gyroIO,
                 moduleIOS[0],
                 moduleIOS[1],
                 moduleIOS[2],
-                moduleIOS[3],
-                resetSimulationPoseCallBack);
+                moduleIOS[3]
+        );
     }
 
     public Drive(
@@ -162,10 +162,14 @@ public class Drive extends SubsystemBase {
             ModuleIO flModuleIO,
             ModuleIO frModuleIO,
             ModuleIO blModuleIO,
-            ModuleIO brModuleIO,
-            Consumer<Pose2d> resetSimulationPoseCallBack) {
+            ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-        this.resetSimulationPoseCallBack = resetSimulationPoseCallBack;
+
+        if (frc.robot.InitializerKt.getDriveSimulation() != null) {
+            this.resetSimulationPoseCallBack =
+                    frc.robot.InitializerKt.getDriveSimulation()::setSimulationWorldPose;
+        }
+
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -472,7 +476,9 @@ public class Drive extends SubsystemBase {
 
     /** Resets the current odometry pose. */
     public void resetOdometry(Pose2d pose) {
-        resetSimulationPoseCallBack.accept(pose);
+        if (resetSimulationPoseCallBack != null) {
+            resetSimulationPoseCallBack.accept(pose);
+        }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
