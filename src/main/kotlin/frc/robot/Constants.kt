@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.flipIfNeeded
 import java.io.File
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -20,6 +21,9 @@ private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
 
 val SPEAKER_POSE: Translation2d
     get() = SPEAKER_POSE_BLUE.flipIfNeeded()
+
+private fun getValueFromJson(element: JsonElement, valName: String): Double =
+    element.jsonObject[valName]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?: 0.0
 
 private fun parseChoreoPoses(): Map<String, Pose2d> {
     val json = Json { ignoreUnknownKeys = true }
@@ -39,27 +43,10 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
 
     return jsonPoses.mapValues { (key, pose) ->
         Pose2d(
-            pose.jsonObject["x"]
-                ?.jsonObject
-                ?.get("val")
-                ?.jsonPrimitive
-                ?.doubleOrNull
-                ?: 0.0,
-            pose.jsonObject["y"]
-                ?.jsonObject
-                ?.get("val")
-                ?.jsonPrimitive
-                ?.doubleOrNull
-                ?: 0.0,
-            Rotation2d(
-                pose.jsonObject["heading"]
-                    ?.jsonObject
-                    ?.get("val")
-                    ?.jsonPrimitive
-                    ?.doubleOrNull
-                    ?: 0.0
+            getValueFromJson(pose, "x"),
+            getValueFromJson(pose, "y"),
+            Rotation2d(getValueFromJson(pose, "heading"))
             )
-        )
     }
 }
 
