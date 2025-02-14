@@ -3,8 +3,8 @@ package frc.robot.autonomous
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.Filesystem
-import kotlinx.serialization.json.*
 import java.io.File
+import kotlinx.serialization.json.*
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
     element.jsonObject[valName]
@@ -22,8 +22,8 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
         json
             .parseToJsonElement(
                 File(
-                    "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
-                )
+                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
+                    )
                     .readText()
             )
             .jsonObject
