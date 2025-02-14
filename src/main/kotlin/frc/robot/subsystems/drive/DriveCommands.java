@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -28,10 +29,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.vision.Vision;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -47,6 +50,8 @@ public class DriveCommands {
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
     private static final SlewRateLimiter SLEW_RATE_LIMITER = new SlewRateLimiter(1.5);
+
+    private static final PIDController xController = new PIDController(2.0, 0.0, 0.0);
 
     private DriveCommands() {}
 
@@ -309,6 +314,22 @@ public class DriveCommands {
                                                                             wheelRadius))
                                                             + " inches");
                                         })));
+    }
+
+    public static Command alignWithBestVisionTarget(
+            Vision vision,
+            Drive drive,
+            int cameraIndex,
+            DoubleSupplier ySupplier,
+            DoubleSupplier xSupplier) {
+        return joystickDriveAtAngle(
+                drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
+    }
+
+    public static Command alignToPose(Pose2d pose) {
+        return Commands.defer(
+                () -> AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
+                Set.of(frc.robot.InitializerKt.getSwerveDrive()));
     }
 
     private static class WheelRadiusCharacterizationState {

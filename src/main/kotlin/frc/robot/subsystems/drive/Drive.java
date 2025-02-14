@@ -40,6 +40,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -83,9 +85,9 @@ public class Drive extends SubsystemBase {
                                     TunerConstants.BackRight.LocationY)));
 
     // PathPlanner config constants
-    private static final double ROBOT_MASS_KG = 74.088;
-    private static final double ROBOT_MOI = 6.883;
-    private static final double WHEEL_COF = 1.2;
+    private static final Mass ROBOT_MASS_KG = Kilograms.of(52.757);
+    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(5.095);
+    private static final double WHEEL_COF = 1.542;
     private static final RobotConfig PP_CONFIG =
             new RobotConfig(
                     ROBOT_MASS_KG,
@@ -102,7 +104,7 @@ public class Drive extends SubsystemBase {
 
     public static final DriveTrainSimulationConfig mapleSimConfig =
             DriveTrainSimulationConfig.Default()
-                    .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
+                    .withRobotMass(ROBOT_MASS_KG)
                     .withCustomModuleTranslations(getModuleTranslations())
                     .withGyro(COTS.ofNav2X())
                     .withSwerveModule(
@@ -183,7 +185,7 @@ public class Drive extends SubsystemBase {
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                        new PIDConstants(10.0, 0.0, 0.0), new PIDConstants(10.0, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -192,7 +194,7 @@ public class Drive extends SubsystemBase {
                 (activePath) -> {
                     Logger.recordOutput(
                             "Odometry/Trajectory",
-                            activePath.toArray(new Pose2d[activePath.size()]));
+                            activePath.toArray(new Pose2d[0]));
                 });
         PathPlannerLogging.setLogTargetPoseCallback(
                 (targetPose) -> {
