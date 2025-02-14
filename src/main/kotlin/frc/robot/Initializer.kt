@@ -84,8 +84,7 @@ private val gyroIO =
         else -> object : GyroIO {}
     }
 
-val swerveDrive =
-    Drive(gyroIO, swerveModuleIOs)
+val swerveDrive = Drive(gyroIO, swerveModuleIOs)
 
 private val visionIOs =
     when (CURRENT_MODE) {

@@ -58,12 +58,13 @@ object RobotContainer {
         driveSimulation?.simulatedDriveTrainPose
 
     private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand = DriveCommands.joystickDrive(
-            swerveDrive,
-            { driverController.leftY },
-            { driverController.leftX },
-            { -driverController.rightX * 0.6 }
-        )
+        swerveDrive.defaultCommand =
+            DriveCommands.joystickDrive(
+                swerveDrive,
+                { driverController.leftY },
+                { driverController.leftX },
+                { -driverController.rightX * 0.6 }
+            )
 
         climber.defaultCommand =
             climber.powerControl {
@@ -75,7 +76,7 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro,swerveDrive)
+                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
                     .ignoringDisable(true)
             )
 
