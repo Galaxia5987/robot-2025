@@ -1,24 +1,18 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.NamedCommands
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.lib.withRotation
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
-import frc.robot.subsystems.l3
-import frc.robot.subsystems.l4
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -86,6 +80,11 @@ object RobotContainer {
         swerveDrive.defaultCommand =
             if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
             else getDriveCommandSim()
+
+        climber.defaultCommand =
+            climber.powerControl({
+                MathUtil.applyDeadband(operatorController.leftY, 0.15)
+            })
     }
 
     private fun configureButtonBindings() {
