@@ -167,7 +167,7 @@ public class TunerConstants {
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
-            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
+            kCANBus = new CANBus("rio", "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.5);
 
@@ -304,7 +304,7 @@ public class TunerConstants {
 
             // Front Left
             kFrontLeftDriveMotorId = SwervePorts.FRONT_LEFT_DRIVE_MOTOR_ID;
-            kFrontLeftSteerMotorId = SwervePorts.FRONT_LEFT_ANGLE_MOTOR_ID;
+            kFrontLeftSteerMotorId = SwervePorts.FRONT_RIGHT_ANGLE_MOTOR_ID;
             kFrontLeftEncoderId = SwervePorts.FRONT_LEFT_ENCODER_ID;
             kFrontLeftEncoderOffset = Radians.of(-offsets[0]);
             kFrontLeftSteerMotorInverted = true;
@@ -337,7 +337,7 @@ public class TunerConstants {
 
             // Back Right
             kBackRightDriveMotorId = SwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
-            kBackRightSteerMotorId = SwervePorts.REAR_RIGHT_ANGLE_MOTOR_ID;
+            kBackRightSteerMotorId = SwervePorts.FRONT_LEFT_ANGLE_MOTOR_ID;
             kBackRightEncoderId = SwervePorts.REAR_RIGHT_ENCODER_ID;
             kBackRightEncoderOffset = Radians.of(-offsets[3]);
             kBackRightSteerMotorInverted = true;
