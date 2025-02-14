@@ -8,11 +8,6 @@ import org.littletonrobotics.junction.LoggedRobot
 const val LOOP_TIME = 0.02 // [s]
 const val IS_TUNING_MODE = true
 
-private val SPEAKER_POSE_BLUE = Translation2d(0.0, 5.5479442)
-
-val SPEAKER_POSE: Translation2d
-    get() = SPEAKER_POSE_BLUE.flipIfNeeded()
-
 const val REEFMASTER_CANBUS_NAME = "reefmaster"
 const val SWERVE_CANBUS_NAME = "swerveDrive"
 
