@@ -66,9 +66,9 @@ object RobotContainer {
         )
 
         climber.defaultCommand =
-            climber.powerControl({
+            climber.powerControl {
                 MathUtil.applyDeadband(operatorController.leftY, 0.15)
-            })
+            }
     }
 
     private fun configureButtonBindings() {
