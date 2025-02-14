@@ -146,8 +146,15 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
-        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], resetSimulationPoseCallBack);
+    public Drive(
+            GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
+        this(
+                gyroIO,
+                moduleIOS[0],
+                moduleIOS[1],
+                moduleIOS[2],
+                moduleIOS[3],
+                resetSimulationPoseCallBack);
     }
 
     public Drive(
