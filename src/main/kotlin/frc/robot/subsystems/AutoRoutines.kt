@@ -11,7 +11,7 @@ import frc.robot.swerveDrive
 private val autoFactory =
     AutoFactory(
         swerveDrive::getPose,
-        swerveDrive::setPose,
+        swerveDrive::resetOdometry,
         swerveDrive::followPath,
         true,
         swerveDrive
