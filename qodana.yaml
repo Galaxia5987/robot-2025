@@ -10,3 +10,4 @@ exclude:
       - src/main/kotlin/frc/robot/subsystems/drive
       - annotation
       - src/main/kotlin/frc/robot/subsystems/vision
+      - src/main/kotlin/frc/robot/lib
