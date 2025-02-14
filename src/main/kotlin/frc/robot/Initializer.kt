@@ -28,6 +28,7 @@ import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.intake.roller.RollerIO
 import frc.robot.subsystems.intake.roller.RollerIOReal
 import frc.robot.subsystems.intake.roller.RollerIOSim
+import frc.robot.subsystems.leds.LEDs
 import frc.robot.subsystems.vision.Vision
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.subsystems.vision.VisionIOPhotonVision
@@ -83,7 +84,8 @@ private val gyroIO =
         else -> object : GyroIO {}
     }
 
-val swerveDrive = Drive(gyroIO, swerveModuleIOs)
+val swerveDrive =
+    Drive(gyroIO, swerveModuleIOs)
 
 private val visionIOs =
     when (CURRENT_MODE) {
@@ -93,7 +95,11 @@ private val visionIOs =
             }
         Mode.SIM ->
             VisionConstants.OVNameToTransform.map {
-                VisionIOPhotonVisionSim(it.key, it.value, swerveDrive::getPose)
+                VisionIOPhotonVisionSim(
+                    it.key,
+                    it.value,
+                    driveSimulation!!::getSimulatedDriveTrainPose
+                )
             }
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
@@ -171,3 +177,5 @@ val wrist =
                 }
         }
     )
+
+val leds = LEDs()
