@@ -95,8 +95,7 @@ object RobotContainer {
                 Commands.runOnce(
                         {
                             swerveDrive::resetGyro
-                            swerveDrive.pose =
-                                swerveDrive.pose.withRotation(Rotation2d())
+                            swerveDrive.resetOdometry(swerveDrive.pose.withRotation(Rotation2d()))
                         },
                         swerveDrive
                     )
