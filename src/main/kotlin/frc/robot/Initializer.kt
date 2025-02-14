@@ -84,7 +84,8 @@ private val gyroIO =
         else -> object : GyroIO {}
     }
 
-val swerveDrive = Drive(gyroIO, swerveModuleIOs, driveSimulation!!::setSimulationWorldPose)
+val swerveDrive =
+    Drive(gyroIO, swerveModuleIOs, driveSimulation!!::setSimulationWorldPose)
 
 private val visionIOs =
     when (CURRENT_MODE) {
@@ -94,7 +95,11 @@ private val visionIOs =
             }
         Mode.SIM ->
             VisionConstants.OVNameToTransform.map {
-                VisionIOPhotonVisionSim(it.key, it.value, driveSimulation!!::getSimulatedDriveTrainPose)
+                VisionIOPhotonVisionSim(
+                    it.key,
+                    it.value,
+                    driveSimulation!!::getSimulatedDriveTrainPose
+                )
             }
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
