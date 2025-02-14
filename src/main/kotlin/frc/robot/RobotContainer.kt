@@ -10,13 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.lib.withRotation
-import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.feeder
-import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
-import frc.robot.subsystems.l3
-import frc.robot.subsystems.l4
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -34,14 +28,6 @@ object RobotContainer {
     private val testController = CommandXboxController(2)
 
     private val swerveDrive = frc.robot.swerveDrive
-    private val vision = frc.robot.vision
-    private val climber = frc.robot.climber
-    private val elevator = frc.robot.elevator
-    private val gripper = frc.robot.gripper
-    private val extender = frc.robot.extender
-    private val roller = frc.robot.roller
-    private val wrist = frc.robot.wrist
-    val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
     init {
@@ -49,7 +35,6 @@ object RobotContainer {
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
-        visualizer = Visualizer()
 
         if (CURRENT_MODE == Mode.SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
@@ -100,29 +85,6 @@ object RobotContainer {
                     )
                     .ignoringDisable(true)
             )
-
-        driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.circle().onTrue(l3(driverController.circle().negate()))
-        driverController
-            .triangle()
-            .onTrue(l4(driverController.triangle().negate()))
-        driverController
-            .L1()
-        driverController.R2().whileTrue(gripper.intake())
-        driverController.L2().whileTrue(gripper.outtake())
-
-        operatorController.x().onTrue(l2algae(operatorController.x().negate()))
-        operatorController.b().onTrue(l3algae(operatorController.b().negate()))
-        operatorController
-            .start()
-            .onTrue(feeder(operatorController.start().negate()))
-        operatorController
-            .povDown()
-            .onTrue(elevator.reset(operatorController.povDown().negate()))
-        operatorController
-            .povUp()
-            .onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
     fun getAutonomousCommand(): Command =
