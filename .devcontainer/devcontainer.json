@@ -1,0 +1,11 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
+    "postCreateCommand": "cd /opt && wget 'https://github.com/wpilibsuite/vscode-wpilib/releases/download/v2025.3.1/vscode-wpilib-2025.3.1.vsix'",
+    "features": {
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": ["/opt/vscode-wpilib-2025.3.1.vsix","vscjava.vscode-java-pack","vscjava.vscode-gradle", "mathiasfrohlich.kotlin", "eamodio.gitlens"]
+      }
+    }
+  }
