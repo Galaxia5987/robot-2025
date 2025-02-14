@@ -57,29 +57,13 @@ object RobotContainer {
     private fun getMapleSimPose(): Pose2d? =
         driveSimulation?.simulatedDriveTrainPose
 
-    private fun getDriveCommandReal(): Command =
-        DriveCommands.joystickDriveAtAngle(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { swerveDrive.desiredHeading },
-            )
-            .alongWith(
-                swerveDrive.updateDesiredHeading { -driverController.rightX }
-            )
-
-    private fun getDriveCommandSim(): Command =
-        DriveCommands.joystickDrive(
+    private fun configureDefaultCommands() {
+        swerveDrive.defaultCommand = DriveCommands.joystickDrive(
             swerveDrive,
             { driverController.leftY },
             { driverController.leftX },
             { -driverController.rightX * 0.6 }
         )
-
-    private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand =
-            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
-            else getDriveCommandSim()
 
         climber.defaultCommand =
             climber.powerControl({
