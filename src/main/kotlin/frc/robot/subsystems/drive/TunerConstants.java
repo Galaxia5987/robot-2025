@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.ALT_ROBORIO_SERIAL;
+import static frc.robot.ConstantsKt.SWERVE_CANBUS_NAME;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.*;
@@ -127,17 +128,20 @@ public class TunerConstants {
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
                     new double[] {
-                        5.393476450205914, 5.3627968344482015, -3.5619033894704586, -1.1965050145508
+                        1.9374177350995647,
+                        2.868544073346149,
+                        -0.2162912910918754,
+                        1.1244079175201749
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(22.442)
+                            .withKP(22.792)
                             .withKI(0)
-                            .withKD(1.6859)
-                            .withKS(0.19249)
-                            .withKV(0.22304)
-                            .withKA(0.068728)
+                            .withKD(2.207)
+                            .withKS(0)
+                            .withKV(0.22717)
+                            .withKA(0.1124)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
@@ -145,13 +149,13 @@ public class TunerConstants {
                             .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0.22064)
-                            .withKV(0.54210);
+                            .withKS(0.40655)
+                            .withKV(0.54606);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-            kSlipCurrent = Amps.of(80.0);
+            kSlipCurrent = Amps.of(70.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
             driveInitialConfigs = new TalonFXConfiguration();
@@ -163,9 +167,9 @@ public class TunerConstants {
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
-            kCANBus = new CANBus("rio", "./logs/example.hoot");
+            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.8);
+            kSpeedAt12Volts = MetersPerSecond.of(3.5);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -223,7 +227,7 @@ public class TunerConstants {
 
             // Back Right
             kBackRightDriveMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
-            kBackRightSteerMotorId = AltSwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
+            kBackRightSteerMotorId = AltSwervePorts.REAR_RIGHT_ANGLE_MOTOR_ID;
             kBackRightEncoderId = AltSwervePorts.REAR_RIGHT_ENCODER_ID;
             kBackRightEncoderOffset = Radians.of(-offsets[3]);
             kBackRightSteerMotorInverted = true;
@@ -234,34 +238,35 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        -2.9329712664373457,
-                        -1.4818254410975293,
-                        0.11351457830353745,
-                        2.0586022173425302
+                        -3.0587576910439687,
+                        -0.5092816215780329,
+                        -1.5493205957644975,
+                        0.010737865515199488
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(20.256)
+                            .withKP(22.792)
                             .withKI(0)
-                            .withKD(1.5072)
-                            .withKS(0.24997)
-                            .withKV(0.22169)
-                            .withKA(0.060469)
+                            .withKD(2.207)
+                            .withKS(0)
+                            .withKV(0.22717)
+                            .withKA(0.1124)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
                     new Slot0Configs()
-                            .withKP(0.5)
+                            .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0.21055)
-                            .withKV(0.68964);
+                            .withKS(0.40655)
+                            .withKV(0.54606);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-            kSlipCurrent = Amps.of(80.0);
+            kSlipCurrent = Amps.of(78.0);
+            kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -272,17 +277,16 @@ public class TunerConstants {
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
-            kCANBus = new CANBus("rio", "./logs/example.hoot");
+            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.8);
-            kMaxOmegaVelocity = RadiansPerSecond.of(5);
+            kSpeedAt12Volts = MetersPerSecond.of(3.5);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
 
             kCoupleRatio = 3.5;
 
-            kDriveGearRatio = 1 / ((1 / 2.0) * (24.0 / 22.0) * (15.0 / 45.0));
+            kDriveGearRatio = 1.0 / ((10.0 / 34.0) * (28.0 / 18.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
             kWheelRadius = Centimeter.of(5.1);
 

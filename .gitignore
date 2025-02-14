@@ -164,10 +164,9 @@ annotation/build/
 # Simulation GUI and other tools window save file
 *-window.json
 
-/src/main/kotlin/frc/robot/BuildConstants.java
-
 simgui*
 networktables.json
 /.idea
 /ctre_sim/
 /log-downloader/venv/
+/src/main/kotlin/frc/robot/BuildConstants.java

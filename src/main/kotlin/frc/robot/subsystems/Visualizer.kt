@@ -1,70 +1,237 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.units.Units.Meters
-import edu.wpi.first.units.Units.Radians
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
+import frc.robot.lib.getTranslation3d
+import frc.robot.roller
+import frc.robot.subsystems.drive.Drive
+import kotlin.math.cos
+import kotlin.math.sin
 import org.littletonrobotics.junction.AutoLogOutput
 
-class Visualizer(
-    private val extenderPosition: () -> Distance,
-    private val intakeRollerAngle: () -> Angle,
-    private val elevatorHeight: () -> Distance,
-    private val wristAngle: () -> Angle,
-    private val coralRollersAngle: () -> Angle,
-    private val algaeRemoverAngle: () -> Angle,
-    private val climberAngle: () -> Angle,
-) {
+private val swerveModulePose: Array<Translation2d> =
+    Drive.getModuleTranslations()
+
+private val INITIAL_INTAKE_TRANSLATION =
+    getTranslation3d(x = Meters.of(-0.32), z = Meters.of(0.35))
+private val INITIAL_INTAKE_Roller_TRANSLATION =
+    getTranslation3d(x = Meters.of(-0.32 + 0.62890), z = Meters.of(0.35))
+
+private val INITIAL_WRIST_TRANSLATION =
+    getTranslation3d(x = Meters.of(0.27434), z = Meters.of(0.79707))
+
+private val INITIAL_Elevator_1_TRANSLATION =
+    getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.14345040))
+
+private val INITIAL_Elevator_2_TRANSLATION =
+    getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.20545040))
+
+private val INITIAL_CLIMBER_TRANSLATION =
+    getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
+private val kWheelRadius = Meters.of(0.0508)
+private val CORAL_ROLLER_UP_C2C: Array<Double> =
+    arrayOf(0.14, 0.4) // arrayOf(C2C Distance, Angle (in rad))
+private val ALGAE_ROLLER_C2C: Array<Double> =
+    arrayOf(0.25335, 0.9) // arrayOf(C2C Distance, Angle (in rad))
+
+private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
+
+class Visualizer {
+    private val swerveDrive = frc.robot.swerveDrive
+
+    private val climb = frc.robot.climber
+
+    private val elevator = frc.robot.elevator
+
+    private val extender = frc.robot.extender
+    private val wrist = frc.robot.wrist
+
+    private val gripper = frc.robot.gripper
+
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
-        val secondStageHeight = elevatorHeight.invoke().`in`(Meters)
+
+        val secondStageHeight = elevator.height.invoke().`in`(Meters)
         val firstStageHeight = secondStageHeight / 2.0
 
-        val firstStagePose = getPose3d(z = firstStageHeight)
-        val secondStagePose = getPose3d(z = secondStageHeight)
+        val firstStagePose =
+            getPose3d(
+                x = INITIAL_Elevator_1_TRANSLATION.x,
+                z = firstStageHeight + INITIAL_Elevator_1_TRANSLATION.z
+            )
+        val secondStagePose =
+            getPose3d(
+                x = INITIAL_Elevator_2_TRANSLATION.x,
+                z = secondStageHeight + INITIAL_Elevator_2_TRANSLATION.z
+            )
         return Pair(firstStagePose, secondStagePose)
     }
 
+    private fun getSwerveModulePoseTurn(
+        moduleX: Double,
+        moduleY: Double,
+        moduleYaw: Angle
+    ): Pose3d {
+        return Pose3d(
+            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Meters)),
+            getRotation3d(yaw = moduleYaw)
+        )
+    }
+
+    private fun getSwerveModulePoseDrive(
+        moduleX: Double,
+        moduleY: Double,
+        moduleYaw: Angle,
+        modulePitch: Angle
+    ): Pose3d {
+
+        return Pose3d(
+            Translation3d(moduleX, moduleY, kWheelRadius.`in`(Meters)),
+            getRotation3d(yaw = moduleYaw, pitch = modulePitch)
+        )
+    }
+
+    private fun getAllSwerveModulePoseTurn(): Array<Pose3d> {
+        val swervePosesTurn: Array<Pose3d> =
+            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
+        for (i in 0..3) {
+            swervePosesTurn[i] =
+                getSwerveModulePoseTurn(
+                    swerveModulePose[i].x,
+                    swerveModulePose[i].y,
+                    swerveDrive.SwerveTurnAngle[i]
+                )
+        }
+        return swervePosesTurn
+    }
+
+    private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
+        val swervePosesDrive: Array<Pose3d> =
+            arrayOf(Pose3d(), Pose3d(), Pose3d(), Pose3d())
+
+        for (i in 0..3) {
+            swervePosesDrive[i] =
+                getSwerveModulePoseDrive(
+                    swerveModulePose[i].x,
+                    swerveModulePose[i].y,
+                    swerveDrive.SwerveTurnAngle[i],
+                    swerveDrive.SwerveDriveAngle[i]
+                )
+        }
+        return swervePosesDrive
+    }
+
+    private fun getAdjustedWristAngle(angleFromCenter: Double): Double =
+        angleFromCenter - wrist.angle.invoke().`in`(Radians) +
+            WRIST_ANGLE_OFFSET.`in`(Radians)
+
+    private fun getGripperRollerPose(
+        distanceFromCenter: Double = 0.0,
+        angleFromCenter: Double = 0.0
+    ): Pose3d {
+        return getPose3d(
+            getTranslation3d(
+                x =
+                    INITIAL_WRIST_TRANSLATION.x -
+                        cos(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter,
+                z =
+                    (INITIAL_WRIST_TRANSLATION.z +
+                        sin(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter +
+                        elevator.height.invoke().`in`(Meters))
+            ),
+            getRotation3d(pitch = gripper.rollerAngle.`in`(Rotations))
+        )
+    }
+    private fun getGripperRollerPoseInverted(
+        distanceFromCenter: Double = 0.0,
+        angleFromCenter: Double = 0.0
+    ): Pose3d {
+        return getPose3d(
+            getTranslation3d(
+                x =
+                    INITIAL_WRIST_TRANSLATION.x -
+                        cos(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter,
+                z =
+                    (INITIAL_WRIST_TRANSLATION.z +
+                        sin(getAdjustedWristAngle(angleFromCenter)) *
+                            distanceFromCenter +
+                        elevator.height.invoke().`in`(Meters))
+            ),
+            getRotation3d(pitch = -gripper.rollerAngle.`in`(Rotations))
+        )
+    }
+
     @AutoLogOutput
-    fun visualizeSubsystems(): Array<Pose3d> {
-        val intakePose = getPose3d(x = extenderPosition.invoke().`in`(Meters))
+    fun getSubsystemsPoses(): Array<Pose3d> {
+        val swervePosesTurn = getAllSwerveModulePoseTurn()
+        val swervePosesDrive = getAllSwerveModulePoseDrive()
+
+        val intakePose =
+            getPose3d(
+                INITIAL_INTAKE_TRANSLATION +
+                    (getTranslation3d(x = extender.position.invoke()))
+            )
         val intakeRollerPose =
-            intakePose.rotateBy(
-                getRotation3d(pitch = intakeRollerAngle.invoke().`in`(Radians))
+            getPose3d(
+                INITIAL_INTAKE_Roller_TRANSLATION +
+                    getTranslation3d(x = extender.position.invoke()),
+                getRotation3d(pitch = roller.rollerAngle.`in`(Rotations))
             )
 
         val (firstStagePose, secondStagePose) = getElevatorPoses()
         val wristPose =
-            secondStagePose.rotateBy(
-                getRotation3d(pitch = wristAngle.invoke().`in`(Radians))
+            getPose3d(
+                getTranslation3d(
+                    x = INITIAL_WRIST_TRANSLATION.x,
+                    y = INITIAL_WRIST_TRANSLATION.y,
+                    z =
+                        INITIAL_WRIST_TRANSLATION.z +
+                            elevator.height.invoke().`in`(Meters)
+                ),
+                getRotation3d(
+                    pitch = -wrist.angle.invoke() + WRIST_ANGLE_OFFSET
+                )
             )
 
-        val coralRollersPose =
-            wristPose.rotateBy(
-                getRotation3d(pitch = coralRollersAngle.invoke().`in`(Radians))
-            )
+        val coralRollersPoseDown = getGripperRollerPoseInverted()
+        val coralRollersPoseUp =
+            getGripperRollerPose(CORAL_ROLLER_UP_C2C[0], CORAL_ROLLER_UP_C2C[1])
+
         val algaeRemoverPose =
-            wristPose.rotateBy(
-                getRotation3d(pitch = algaeRemoverAngle.invoke().`in`(Radians))
+            getGripperRollerPoseInverted(
+                ALGAE_ROLLER_C2C[0],
+                ALGAE_ROLLER_C2C[1]
             )
 
         val climberPose =
             getPose3d(
-                rotation =
-                    getRotation3d(pitch = climberAngle.invoke().`in`(Radians))
+                translation = INITIAL_CLIMBER_TRANSLATION,
+                rotation = getRotation3d(pitch = climb.angle.invoke())
             )
 
         return arrayOf(
+            swervePosesTurn[0],
+            swervePosesDrive[0],
+            swervePosesTurn[1],
+            swervePosesDrive[1],
+            swervePosesTurn[2],
+            swervePosesDrive[2],
+            swervePosesTurn[3],
+            swervePosesDrive[3],
             intakePose,
             intakeRollerPose,
             firstStagePose,
             secondStagePose,
             wristPose,
-            // The two identical poses are for the upper and lower rollers.
-            coralRollersPose,
-            coralRollersPose,
+            coralRollersPoseDown,
+            coralRollersPoseUp,
             algaeRemoverPose,
             climberPose
         )

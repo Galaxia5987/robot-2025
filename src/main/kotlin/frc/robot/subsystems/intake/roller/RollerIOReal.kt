@@ -3,15 +3,16 @@ package frc.robot.subsystems.intake.roller
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.DutyCycleOut
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.units.measure.Voltage
 
 class RollerIOReal : RollerIO {
     override val inputs = LoggedRollerInputs()
     private val motor = TalonFX(MOTOR_ID)
-    private val controlRequest = DutyCycleOut(0.0).withEnableFOC(true)
+    private val controlRequest = VoltageOut(0.0).withEnableFOC(true)
 
     init {
         val motorConfig =
@@ -32,8 +33,8 @@ class RollerIOReal : RollerIO {
         motor.configurator.apply(motorConfig)
     }
 
-    override fun setPower(power: Double) {
-        motor.setControl(controlRequest.withOutput(power))
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(controlRequest.withOutput(voltage))
     }
 
     override fun updateInputs() {

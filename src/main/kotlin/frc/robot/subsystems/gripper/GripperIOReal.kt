@@ -7,13 +7,20 @@ import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
+import edu.wpi.first.math.filter.MedianFilter
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj.AnalogInput
+import frc.robot.REEFMASTER_CANBUS_NAME
 
 class GripperIOReal : GripperIO {
     override val inputs = LoggedGripperInputs()
 
-    private val motor = TalonFX(MOTOR_PORT)
+    private val motor = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
     private val control = VoltageOut(0.0).withEnableFOC(true)
+
+    private val sensor = AnalogInput(SENSOR_PORT)
+    private val distanceFilter = MedianFilter(3)
 
     init {
         motor.configurator.apply(
@@ -39,6 +46,15 @@ class GripperIOReal : GripperIO {
     }
 
     override fun updateInputs() {
+        var calculatedDistance =
+            distanceFilter.calculate(4800 / (200 * sensor.voltage - 20.0))
+        if (calculatedDistance < 0) {
+            calculatedDistance = 80.0
+        }
+
+        inputs.sensorDistance.mut_replace(
+            Units.Centimeters.of(calculatedDistance)
+        )
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
     }
 }

@@ -6,9 +6,12 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 class GripperIOSim : GripperIO {
     override val inputs = LoggedGripperInputs()
+    private var sensorDistance =
+        LoggedNetworkNumber("/Tuning/Gripper/SensorDistance", 20.0)
 
     private val motor =
         TalonFXSim(
@@ -26,6 +29,9 @@ class GripperIOSim : GripperIO {
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
+        inputs.sensorDistance.mut_replace(
+            Units.Centimeters.of(sensorDistance.get())
+        )
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
     }
 }

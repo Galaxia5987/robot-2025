@@ -43,5 +43,6 @@ class WristIOSim : WristIO {
         motor.update(Timer.getFPGATimestamp())
         inputs.angle.mut_replace(motor.position, Units.Rotations)
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
+        inputs.velocity.mut_replace(motor.velocity)
     }
 }

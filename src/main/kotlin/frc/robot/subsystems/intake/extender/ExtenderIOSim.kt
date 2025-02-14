@@ -11,6 +11,7 @@ import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
+import frc.robot.lib.toLinear
 
 class ExtenderIOSim : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
@@ -24,7 +25,7 @@ class ExtenderIOSim : ExtenderIO {
         )
     private val positionControl = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
-    private val controller = PIDController(1.0, 0.0, 0.0)
+    private val controller = PIDController(GAINS.kP, GAINS.kI, GAINS.kD)
 
     init {
         motor.setController(controller)
@@ -50,5 +51,6 @@ class ExtenderIOSim : ExtenderIO {
                 .toDistance(PINION_RADIUS, GEAR_RATIO)
         inputs.motorCurrent = motor.appliedCurrent
         inputs.appliedVoltage = motor.appliedVoltage
+        inputs.velocity = motor.velocity.toLinear(PINION_RADIUS, GEAR_RATIO)
     }
 }
