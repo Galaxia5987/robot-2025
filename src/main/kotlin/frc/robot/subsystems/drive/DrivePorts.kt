@@ -87,10 +87,10 @@ object AltSwervePorts {
             REAR_RIGHT_ANGLE_MOTOR_ID
         )
 
-    const val FRONT_LEFT_ENCODER_ID: Int = 10
-    const val FRONT_RIGHT_ENCODER_ID: Int = 20
-    const val REAR_LEFT_ENCODER_ID: Int = 30
-    const val REAR_RIGHT_ENCODER_ID: Int = 40
+    const val FRONT_LEFT_ENCODER_ID: Int = 1
+    const val FRONT_RIGHT_ENCODER_ID: Int = 8
+    const val REAR_LEFT_ENCODER_ID: Int = 0
+    const val REAR_RIGHT_ENCODER_ID: Int = 9
 
     val ENCODER_IDS: IntArray =
         intArrayOf(
