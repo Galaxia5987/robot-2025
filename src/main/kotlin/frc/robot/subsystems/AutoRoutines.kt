@@ -85,21 +85,14 @@ private fun createScoringSequence(
 }
 
 val autoRoutines: Map<String, AutoRoutine> =
-    mapOf(
-            "A leave" to leaveRoutine("A"),
-            "B leave" to leaveRoutine("B"),
-            "C leave" to leaveRoutine("C")
-        )
-        .plus(
-            mapOf(
-                    "B1L" to arrayOf("B1L"),
-                    "B1R" to arrayOf("B1R"),
-                    "A2R3LR" to arrayOf("A2R", "2RS", "S3L", "3LS", "S3R"),
-                    "A3LR4L" to arrayOf("A3L", "3LS", "S3R", "3RS", "S4L"),
-                    "C5RL4R" to arrayOf("C5R", "5RS", "S5L", "5LS", "S4R"),
-                    "C6L5RL" to arrayOf("C6L", "6LS", "S5R", "5RS", "S5L"),
-                    "B1R2LR" to arrayOf("B1R", "1RS", "S2L", "2LS", "S2R"),
-                    "B1L6RL" to arrayOf("B1L", "1LS", "S6R", "6RS", "S6L")
-                )
-                .mapValues { createScoringSequence(it.key, it.value) }
-        )
+    listOf("A", "B", "C").associate { "$it leave" to leaveRoutine(it) } +
+        mapOf(
+            "B1L" to "B1L",
+            "B1R" to "B1R",
+            "A2R3LR" to "A2R,2RS,S3L,3LS,S3R",
+            "A3LR4L" to "A3L,3LS,S3R,3RS,S4L",
+            "C5RL4R" to "C5R,5RS,S5L,5LS,S4R",
+            "C6L5RL" to "C6L,6LS,S5R,5RS,S5L",
+            "B1R2LR" to "B1R,1RS,S2L,2LS,S2R",
+            "B1L6RL" to "B1L,1LS,S6R,6RS,S6L",
+        ).mapValues { createScoringSequence(it.key, it.value.split(",")) }
