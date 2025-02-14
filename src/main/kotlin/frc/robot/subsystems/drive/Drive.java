@@ -52,6 +52,7 @@ import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
@@ -122,6 +123,8 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
+    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
+
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
@@ -139,12 +142,19 @@ public class Drive extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS) {
-        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3]);
+    public Drive(
+            GyroIO gyroIO, ModuleIO[] moduleIOS) {
+        this(
+                gyroIO,
+                moduleIOS[0],
+                moduleIOS[1],
+                moduleIOS[2],
+                moduleIOS[3]
+        );
     }
 
     public Drive(
@@ -154,6 +164,12 @@ public class Drive extends SubsystemBase {
             ModuleIO blModuleIO,
             ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
+
+        if (frc.robot.InitializerKt.getDriveSimulation() != null) {
+            this.resetSimulationPoseCallBack =
+                    frc.robot.InitializerKt.getDriveSimulation()::setSimulationWorldPose;
+        }
+
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -169,7 +185,7 @@ public class Drive extends SubsystemBase {
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
                 this::getPose,
-                this::setPose,
+                this::resetOdometry,
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
@@ -459,7 +475,10 @@ public class Drive extends SubsystemBase {
     }
 
     /** Resets the current odometry pose. */
-    public void setPose(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
+        if (resetSimulationPoseCallBack != null) {
+            resetSimulationPoseCallBack.accept(pose);
+        }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
