@@ -47,7 +47,7 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
-        if (CURRENT_MODE == Mode.SIM)
+        if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
         enableAutoLogOutputFor(this)
