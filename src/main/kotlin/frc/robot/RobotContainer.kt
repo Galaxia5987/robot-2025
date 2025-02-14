@@ -92,15 +92,7 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(
-                        {
-                            swerveDrive::resetGyro
-                            swerveDrive.resetOdometry(
-                                swerveDrive.pose.withRotation(Rotation2d())
-                            )
-                        },
-                        swerveDrive
-                    )
+                Commands.runOnce(swerveDrive::resetGyro,swerveDrive)
                     .ignoringDisable(true)
             )
 
