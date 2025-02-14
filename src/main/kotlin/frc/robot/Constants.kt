@@ -1,8 +1,6 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj.DriverStation
-import frc.robot.lib.flipIfNeeded
 import org.littletonrobotics.junction.LoggedRobot
 
 const val LOOP_TIME = 0.02 // [s]
