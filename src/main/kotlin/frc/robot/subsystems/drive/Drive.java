@@ -124,8 +124,6 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
-    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
-
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
@@ -158,11 +156,6 @@ public class Drive extends SubsystemBase {
             ModuleIO blModuleIO,
             ModuleIO brModuleIO) {
         this.gyroIO = gyroIO;
-
-        if (frc.robot.InitializerKt.getDriveSimulation() != null) {
-            this.resetSimulationPoseCallBack =
-                    frc.robot.InitializerKt.getDriveSimulation()::setSimulationWorldPose;
-        }
 
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
@@ -470,9 +463,6 @@ public class Drive extends SubsystemBase {
 
     /** Resets the current odometry pose. */
     public void resetOdometry(Pose2d pose) {
-        if (resetSimulationPoseCallBack != null) {
-            resetSimulationPoseCallBack.accept(pose);
-        }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 

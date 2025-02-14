@@ -122,7 +122,7 @@ object RobotContainer {
     }
 
     private fun registerAutoRoutines() {
-        autoChooser.addDefaultOption("A leave", autoRoutines["A leave"]!!.cmd())
+        autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
         autoRoutines.forEach{ autoChooser.addAutoRoutine(it.key)}
     }
 }

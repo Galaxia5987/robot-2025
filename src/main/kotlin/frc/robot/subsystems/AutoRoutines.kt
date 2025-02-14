@@ -49,7 +49,7 @@ private fun AutoTrajectory.intake(
         )
 
 private fun leaveRoutine(startingPoint: String): AutoRoutine {
-    val name = "$startingPoint leave"
+    val name = "$startingPoint Leave"
     val routine = autoFactory.newRoutine(name)
     val trajectory = routine.trajectory(name)
 
@@ -85,7 +85,7 @@ private fun createScoringSequence(
 }
 
 val autoRoutines: Map<String, AutoRoutine> =
-    listOf("A", "B", "C").associate { "$it leave" to leaveRoutine(it) } +
+    listOf("A", "B", "C").associate { "$it Leave" to leaveRoutine(it) } +
         mapOf(
             "B1L" to "B1L",
             "B1R" to "B1R",
