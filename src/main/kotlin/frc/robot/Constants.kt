@@ -13,6 +13,7 @@ import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.littletonrobotics.junction.LoggedRobot
+import java.util.MissingFormatArgumentException
 
 const val LOOP_TIME = 0.02 // [s]
 const val IS_TUNING_MODE = true
@@ -23,7 +24,8 @@ val SPEAKER_POSE: Translation2d
     get() = SPEAKER_POSE_BLUE.flipIfNeeded()
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
-    element.jsonObject[valName]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?: 0.0
+    element.jsonObject[valName]?.jsonObject?.get("val")?.jsonPrimitive?.doubleOrNull ?:
+    throw IllegalArgumentException("Trying to load non-existent Choreo pose")
 
 private fun parseChoreoPoses(): Map<String, Pose2d> {
     val json = Json { ignoreUnknownKeys = true }
@@ -39,7 +41,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
 
     val jsonPoses =
         jsonObject["variables"]?.jsonObject?.get("poses")?.jsonObject
-            ?: return emptyMap()
+            ?: throw IllegalArgumentException("Trying to load non-existent Choreo variables")
 
     return jsonPoses.mapValues { (key, pose) ->
         Pose2d(
