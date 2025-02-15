@@ -50,10 +50,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -122,6 +125,8 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
+    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
+
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
@@ -139,12 +144,12 @@ public class Drive extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS) {
-        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3]);
+    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
+        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
     }
 
     public Drive(
@@ -152,8 +157,14 @@ public class Drive extends SubsystemBase {
             ModuleIO flModuleIO,
             ModuleIO frModuleIO,
             ModuleIO blModuleIO,
-            ModuleIO brModuleIO) {
+            ModuleIO brModuleIO,
+            Optional<SwerveDriveSimulation> driveSimulation) {
         this.gyroIO = gyroIO;
+
+        driveSimulation.ifPresent(swerveDriveSimulation ->
+                this.resetSimulationPoseCallBack = swerveDriveSimulation::setSimulationWorldPose
+        );
+
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -169,7 +180,7 @@ public class Drive extends SubsystemBase {
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
                 this::getPose,
-                this::setPose,
+                this::resetOdometry,
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
@@ -434,9 +445,9 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
-    /** Returns the current gyro rotation. */
+    /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.yawPosition;
+        return gyroInputs.connected ? gyroInputs.yawPosition : getPose().getRotation();
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -459,7 +470,10 @@ public class Drive extends SubsystemBase {
     }
 
     /** Resets the current odometry pose. */
-    public void setPose(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
+        if (frc.robot.ConstantsKt.getUSE_MAPLE_SIM()) {
+            resetSimulationPoseCallBack.accept(pose);
+        }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 

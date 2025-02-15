@@ -46,12 +46,14 @@ public class DriveCommands {
     private static final double FF_RAMP_RATE = 1; // Volts/Sec
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+    private static final SlewRateLimiter SLEW_RATE_LIMITER = new SlewRateLimiter(1.5);
 
     private DriveCommands() {}
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
-        double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+        double linearMagnitude =
+                SLEW_RATE_LIMITER.calculate(MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND));
         Rotation2d linearDirection = new Rotation2d(Math.atan2(y, x));
 
         // Square magnitude for more precise control
