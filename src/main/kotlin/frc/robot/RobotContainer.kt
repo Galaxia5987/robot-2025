@@ -115,14 +115,8 @@ object RobotContainer {
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
-    private fun LoggedDashboardChooser<Command>.addAutoRoutine(
-        routineName: String
-    ) {
-        this.addOption(routineName, autoRoutines[routineName]?.cmd())
-    }
-
     private fun registerAutoRoutines() {
         autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
-        autoRoutines.forEach { autoChooser.addAutoRoutine(it.key) }
+        autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
     }
 }
