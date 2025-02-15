@@ -51,10 +51,12 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -144,8 +146,8 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS) {
-        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3]);
+    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
+        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
     }
 
     public Drive(
@@ -153,9 +155,14 @@ public class Drive extends SubsystemBase {
             ModuleIO flModuleIO,
             ModuleIO frModuleIO,
             ModuleIO blModuleIO,
-            ModuleIO brModuleIO) {
+            ModuleIO brModuleIO,
+            Optional<SwerveDriveSimulation> driveSimulation) {
         this.gyroIO = gyroIO;
 
+        driveSimulation.ifPresent(swerveDriveSimulation ->
+                this.resetSimulationPoseCallBack = swerveDriveSimulation::setSimulationWorldPose
+        );
+      
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -462,6 +469,9 @@ public class Drive extends SubsystemBase {
 
     /** Resets the current odometry pose. */
     public void resetOdometry(Pose2d pose) {
+        if (frc.robot.ConstantsKt.getUSE_MAPLE_SIM()) {
+            resetSimulationPoseCallBack.accept(pose);
+        }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
