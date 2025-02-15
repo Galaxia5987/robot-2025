@@ -200,7 +200,7 @@ public class Drive extends SubsystemBase {
                 (activePath) -> {
                     Logger.recordOutput(
                             "Odometry/Trajectory",
-                            activePath.toArray(new Pose2d[0]));
+                            activePath.toArray(new Pose2d[activePath.size()]));
                 });
         PathPlannerLogging.setLogTargetPoseCallback(
                 (targetPose) -> {
