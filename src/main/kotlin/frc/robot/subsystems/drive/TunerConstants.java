@@ -125,7 +125,7 @@ public class TunerConstants {
         // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
         Slot0Configs steerGains;
         double[] offsets;
-        if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
+
             offsets =
                     new double[] {
                         1.9374177350995647,
@@ -235,117 +235,6 @@ public class TunerConstants {
 
             kBackRightXPos = Meters.of(-0.24);
             kBackRightYPos = Meters.of(-0.24);
-        } else {
-            offsets =
-                    new double[] {
-                        -3.0587576910439687,
-                        -0.5092816215780329,
-                        -1.5493205957644975,
-                        0.010737865515199488
-                    };
-
-            steerGains =
-                    new Slot0Configs()
-                            .withKP(22.792)
-                            .withKI(0)
-                            .withKD(2.207)
-                            .withKS(0)
-                            .withKV(0.22717)
-                            .withKA(0.1124)
-                            .withStaticFeedforwardSign(
-                                    StaticFeedforwardSignValue.UseClosedLoopSign);
-            driveGains =
-                    new Slot0Configs()
-                            .withKP(1.5)
-                            .withKI(0)
-                            .withKD(0)
-                            .withKS(0.40655)
-                            .withKV(0.54606);
-
-            kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
-            kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
-
-            kSlipCurrent = Amps.of(78.0);
-            kMaxOmegaVelocity = RadiansPerSecond.of(7);
-
-            driveInitialConfigs = new TalonFXConfiguration();
-            steerInitialConfigs =
-                    new TalonFXConfiguration()
-                            .withCurrentLimits(
-                                    new CurrentLimitsConfigs()
-                                            .withStatorCurrentLimit(60)
-                                            .withStatorCurrentLimitEnable(true));
-            encoderInitialConfigs = new CANcoderConfiguration();
-
-            kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
-
-            kSpeedAt12Volts = MetersPerSecond.of(3.5);
-
-            kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
-            kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
-
-            kCoupleRatio = 3.5;
-
-            kDriveGearRatio = 1.0 / ((10.0 / 34.0) * (28.0 / 18.0) * (15.0 / 45.0));
-            kSteerGearRatio = 11.3142;
-            kWheelRadius = Centimeter.of(5.1);
-
-            kInvertLeftSide = true;
-            kInvertRightSide = true;
-
-            kPigeonId = 1;
-
-            // These are only used for simulation
-            kSteerInertia = 0.004;
-            kDriveInertia = 0.025;
-            // Simulated voltage necessary to overcome friction
-            kSteerFrictionVoltage = Volts.of(0.25);
-            kDriveFrictionVoltage = Volts.of(0.25);
-
-            // Front Left
-            kFrontLeftDriveMotorId = SwervePorts.FRONT_LEFT_DRIVE_MOTOR_ID;
-            kFrontLeftSteerMotorId = SwervePorts.FRONT_RIGHT_ANGLE_MOTOR_ID;
-            kFrontLeftEncoderId = SwervePorts.FRONT_LEFT_ENCODER_ID;
-            kFrontLeftEncoderOffset = Radians.of(-offsets[0]);
-            kFrontLeftSteerMotorInverted = true;
-            kFrontLeftCANcoderInverted = false;
-
-            kFrontLeftXPos = Meters.of(0.24);
-            kFrontLeftYPos = Meters.of(0.24);
-
-            // Front Right
-            kFrontRightDriveMotorId = SwervePorts.FRONT_RIGHT_DRIVE_MOTOR_ID;
-            kFrontRightSteerMotorId = SwervePorts.FRONT_RIGHT_ANGLE_MOTOR_ID;
-            kFrontRightEncoderId = SwervePorts.FRONT_RIGHT_ENCODER_ID;
-            kFrontRightEncoderOffset = Radians.of(-offsets[1]);
-            kFrontRightSteerMotorInverted = true;
-            kFrontRightCANcoderInverted = false;
-
-            kFrontRightXPos = Meters.of(0.24);
-            kFrontRightYPos = Meters.of(-0.24);
-
-            // Back Left
-            kBackLeftDriveMotorId = SwervePorts.REAR_LEFT_DRIVE_MOTOR_ID;
-            kBackLeftSteerMotorId = SwervePorts.REAR_LEFT_ANGLE_MOTOR_ID;
-            kBackLeftEncoderId = SwervePorts.REAR_LEFT_ENCODER_ID;
-            kBackLeftEncoderOffset = Radians.of(-offsets[2]);
-            kBackLeftSteerMotorInverted = true;
-            kBackLeftCANcoderInverted = false;
-
-            kBackLeftXPos = Meters.of(-0.24);
-            kBackLeftYPos = Meters.of(0.24);
-
-            // Back Right
-            kBackRightDriveMotorId = SwervePorts.REAR_RIGHT_DRIVE_MOTOR_ID;
-            kBackRightSteerMotorId = SwervePorts.FRONT_LEFT_ANGLE_MOTOR_ID;
-            kBackRightEncoderId = SwervePorts.REAR_RIGHT_ENCODER_ID;
-            kBackRightEncoderOffset = Radians.of(-offsets[3]);
-            kBackRightSteerMotorInverted = true;
-            kBackRightCANcoderInverted = false;
-
-            kBackRightXPos = Meters.of(-0.24);
-            kBackRightYPos = Meters.of(-0.24);
-        }
 
         DrivetrainConstants =
                 new SwerveDrivetrainConstants()
