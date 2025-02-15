@@ -317,6 +317,22 @@ public class DriveCommands {
                                         })));
     }
 
+    public static Command alignWithBestVisionTarget(
+            Vision vision,
+            Drive drive,
+            int cameraIndex,
+            DoubleSupplier ySupplier,
+            DoubleSupplier xSupplier) {
+        return joystickDriveAtAngle(
+                drive, ySupplier, xSupplier, () -> vision.getYawToTarget(cameraIndex));
+    }
+
+    public static Command alignToPose(Pose2d pose) {
+        return Commands.defer(
+                () -> AutoBuilder.pathfindToPoseFlipped(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
+                Set.of(frc.robot.InitializerKt.getSwerveDrive()));
+    }
+
     private static class WheelRadiusCharacterizationState {
         double[] positions = new double[4];
         Rotation2d lastAngle = new Rotation2d();
