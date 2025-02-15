@@ -148,7 +148,8 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
+    public Drive(
+            GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
         this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
     }
 
@@ -161,9 +162,10 @@ public class Drive extends SubsystemBase {
             Optional<SwerveDriveSimulation> driveSimulation) {
         this.gyroIO = gyroIO;
 
-        driveSimulation.ifPresent(swerveDriveSimulation ->
-                this.resetSimulationPoseCallBack = swerveDriveSimulation::setSimulationWorldPose
-        );
+        driveSimulation.ifPresent(
+                swerveDriveSimulation ->
+                        this.resetSimulationPoseCallBack =
+                                swerveDriveSimulation::setSimulationWorldPose);
 
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
