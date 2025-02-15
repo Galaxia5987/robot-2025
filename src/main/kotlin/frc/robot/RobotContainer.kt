@@ -1,15 +1,19 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.getPose2d
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
@@ -17,6 +21,7 @@ import frc.robot.subsystems.intake.outtakeAlgae
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -113,7 +118,18 @@ object RobotContainer {
             .onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
-    fun getAutonomousCommand(): Command = autoChooser.get()
+    fun getAutonomousCommand(): Command {
+        try {
+            // Load the path you want to follow using its name in the GUI
+            var exampleChoreoTraj: PathPlannerPath = PathPlannerPath.fromChoreoTrajectory("C6L5RL")
+            swerveDrive.resetOdometry(getPose2d(9.94,6.814, Rotation2d.kZero))
+            // Create a path following command using AutoBuilder. This will also trigger event markers.
+            return AutoBuilder.followPath(exampleChoreoTraj)
+        } catch (e: Exception) {
+            DriverStation.reportError("Big oops: " + e.message, e.stackTrace)
+            return Commands.none()
+        }
+    }
 
     private fun LoggedDashboardChooser<Command>.addAutoRoutine(
         routineName: String
