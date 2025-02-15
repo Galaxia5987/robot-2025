@@ -13,7 +13,7 @@ const val ROTOR_TO_SENSOR = 1 / ((1.0 / 25.0) * (40.0 / 40.0))
 const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = 1 / ((1.0 / 25.0) * (40.0 / 40.0) * (16.0 / 42.0))
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
-val ENCODER_OFFSET: Angle = Units.Radians.of(-12.138389974539079)
+val ENCODER_OFFSET: Angle = Units.Radians.of(-5.844466801844293)
 
 val GAINS = selectGainsBasedOnMode(Gains(kP = 75.0, kG = 0.2), Gains())
 
