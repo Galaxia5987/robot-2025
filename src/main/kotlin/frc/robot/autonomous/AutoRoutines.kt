@@ -6,7 +6,6 @@ import choreo.auto.AutoTrajectory
 import choreo.trajectory.SwerveSample
 import choreo.trajectory.Trajectory
 import edu.wpi.first.units.Units.Seconds
-import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.subsystems.feeder
@@ -37,20 +36,16 @@ private val autoFactory =
         ::logTrajectory
     )
 
-private fun AutoTrajectory.atTimeBeforeEnd(
-    time: Time = Seconds.one(),
-): Trigger = atTime(getRawTrajectory().totalTime - time.`in`(Seconds))
-
 private fun AutoTrajectory.score(
     outtakeTrigger: Trigger = done(),
 ) =
-    atTimeBeforeEnd()
+    atTimeBeforeEnd(SCORE_TIME.`in`(Seconds))
         .onTrue(l4(outtakeTrigger.debounce(SCORE_TIME.`in`(Seconds))))
 
 private fun AutoTrajectory.intake(
     intakeTrigger: Trigger = done(),
 ) =
-    atTimeBeforeEnd()
+    atTimeBeforeEnd(INTAKE_FEEDER_TIME.`in`(Seconds))
         .onTrue(
             feeder(intakeTrigger.debounce(INTAKE_FEEDER_TIME.`in`(Seconds)))
         )
