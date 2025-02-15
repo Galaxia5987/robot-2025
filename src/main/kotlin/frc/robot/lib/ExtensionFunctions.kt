@@ -119,5 +119,5 @@ fun CommandXboxController.rumbleCommand(): Command {
     return Commands.startEnd({ this.setRumble(1.0) }, { this.setRumble(0.0) })
 }
 
-fun Trigger.startEnd(command: (endTrigger: Trigger) ->Command): Trigger =
+fun Trigger.startEnd(command: (endTrigger: Trigger) -> Command): Trigger =
     this.onTrue(command(this.negate()))

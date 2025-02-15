@@ -10,9 +10,9 @@ import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
-import org.littletonrobotics.junction.AutoLogOutput
 import kotlin.math.cos
 import kotlin.math.sin
+import org.littletonrobotics.junction.AutoLogOutput
 
 private val swerveModulePose: Array<Translation2d> =
     Drive.getModuleTranslations()
