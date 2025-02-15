@@ -69,7 +69,7 @@ object Robot : LoggedRobot() {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
                     0,
-                    PowerDistribution.ModuleType.kCTRE
+                    PowerDistribution.ModuleType.kRev
                 )
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
