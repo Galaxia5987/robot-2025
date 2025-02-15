@@ -20,7 +20,7 @@ val GAINS = selectGainsBasedOnMode(Gains(2.0), Gains(kP = 0.5, kD = 0.2))
 enum class Positions(val position: Distance) {
     EXTENDED(Units.Meters.of(0.34)),
     RETRACTED(Units.Meters.of(0.0)),
-    L4(Units.Meters.of(0.36));
+    L4(Units.Meters.of(0.275));
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {

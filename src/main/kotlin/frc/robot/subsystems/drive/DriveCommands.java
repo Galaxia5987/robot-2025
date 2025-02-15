@@ -311,6 +311,10 @@ public class DriveCommands {
                                         })));
     }
 
+    public static Command lockWithX(Drive drive) {
+        return Commands.runOnce(drive::stopWithX);
+    }
+
     private static class WheelRadiusCharacterizationState {
         double[] positions = new double[4];
         Rotation2d lastAngle = new Rotation2d();

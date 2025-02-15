@@ -41,7 +41,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
                     io.setPosition(setpoint)
                 },
                 waitUntil(atSetpoint),
-                runOnce{io.setVoltage(Units.Volts.zero())}
+                runOnce { io.setVoltage(Units.Volts.zero()) }
             )
             .withName("Extender/setPosition")
 
@@ -67,8 +67,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     fun retract() =
         setPosition(Positions.RETRACTED).withName("Extender/retract")
 
-    fun l4() =
-        setPosition(Positions.L4).withName("Extender/l4")
+    fun l4() = setPosition(Positions.L4).withName("Extender/l4")
 
     fun reset(resetTrigger: Trigger): Command =
         sequence(
@@ -134,6 +133,11 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
+    val hasBeenPushed = Trigger {
+        io.inputs.position < setpoint && setpoint == Positions.L4.position
+    }
+
+    @AutoLogOutput
     val isExtended = Trigger {
         io.inputs.position.isNear(
             Positions.EXTENDED.position,
@@ -159,7 +163,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
-    private var atSetpoint = Trigger {
+    var atSetpoint = Trigger {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 

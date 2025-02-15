@@ -3,9 +3,11 @@ package frc.robot.subsystems
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
 import frc.robot.lib.getTranslation2d
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
@@ -49,14 +51,21 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-private fun scoreCoral(endTrigger: Trigger, slowOuttake: Boolean = false): Command =
+private fun scoreCoral(
+    endTrigger: Trigger,
+    slowOuttake: Boolean = false
+): Command =
     sequence(
         waitUntil(endTrigger),
-        if (slowOuttake) gripper.slowOuttake().withTimeout(CORAL_OUTTAKE_TIMEOUT)
-        else gripper.outtake().withTimeout(CORAL_OUTTAKE_TIMEOUT)
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
+        if (slowOuttake)
+            gripper.slowOuttake().withTimeout(CORAL_OUTTAKE_TIMEOUT)
+        else
+            gripper
+                .outtake()
+                .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                ),
         moveDefaultPosition()
     )
 
@@ -80,7 +89,8 @@ private fun moveDefaultPosition(): Command =
     parallel(elevator.feeder(), wrist.feeder(), extender.retract())
 
 fun l1(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger, true))
+    parallel(elevator.l1(), wrist.l1())
+        .andThen(scoreCoral(outtakeTrigger, true))
 
 fun l2(outtakeTrigger: Trigger): Command =
     parallel(elevator.l2(), wrist.l2()).andThen(scoreCoral(outtakeTrigger))
@@ -89,7 +99,12 @@ fun l3(outtakeTrigger: Trigger): Command =
     parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4(), extender.l4()).andThen(scoreCoralL4(outtakeTrigger))
+    parallel(elevator.l4(), wrist.l4(), extender.l4())
+        .until(extender.atSetpoint)
+        .andThen(WaitCommand(0.5))
+        .until(extender.hasBeenPushed)
+        .andThen(DriveCommands.lockWithX(swerveDrive))
+        .andThen(scoreCoralL4(outtakeTrigger))
 
 fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
