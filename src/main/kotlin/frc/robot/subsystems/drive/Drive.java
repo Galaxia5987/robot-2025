@@ -54,6 +54,7 @@ import frc.robot.lib.LocalADStarAK;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -124,6 +125,8 @@ public class Drive extends SubsystemBase {
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
+
+    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
 
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
