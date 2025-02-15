@@ -85,8 +85,8 @@ object RobotContainer {
             L1().startEnd(::outtakeAlgae)
             R1().whileTrue(intakeAlgae())
 
-            R2().whileTrue(gripper.intake())
             L2().whileTrue(gripper.outtake())
+            R2().whileTrue(gripper.intake())
         }
 
         operatorController.apply {
@@ -94,6 +94,7 @@ object RobotContainer {
             b().startEnd(::l3algae)
 
             start().startEnd(::feeder)
+            back().startEnd(::blockedFeeder)
 
             povDown().startEnd(elevator::reset)
             povUp().startEnd(extender::reset)
