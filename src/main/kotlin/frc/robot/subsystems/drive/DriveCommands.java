@@ -327,7 +327,7 @@ public class DriveCommands {
 
     public static Command alignToPose(Pose2d pose) {
         return Commands.defer(
-                () -> AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
+                () -> AutoBuilder.pathfindToPoseFlipped(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
                 Set.of(frc.robot.InitializerKt.getSwerveDrive()));
     }
 

@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.pathplanner.lib.path.PathConstraints;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
 import frc.robot.ConstantsKt;
 
@@ -287,8 +288,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.5);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(1.0);
+            kSpeedAt12Volts = MetersPerSecond.of(5);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -365,9 +366,7 @@ public class TunerConstants {
 
         DrivetrainConstants =
                 new SwerveDrivetrainConstants()
-                        .withCANBusName(kCANBus.getName())
-                        .withPigeon2Id(kPigeonId)
-                        .withPigeon2Configs(pigeonConfigs);
+                        .withCANBusName(kCANBus.getName());
 
         SwerveModuleConstantsFactory<
                         TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>

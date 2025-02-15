@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -85,6 +86,7 @@ object RobotContainer {
         driverController
             .triangle()
             .onTrue(l4(driverController.triangle().negate()))
+        driverController.square().whileTrue(DriveCommands.alignToPose(Pose2d(5.0,5.0, Rotation2d.kZero)))
         driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
