@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.startEnd
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
@@ -75,35 +76,27 @@ object RobotContainer {
                     Commands.runOnce(swerveDrive::resetGyro)
                         .ignoringDisable(true)
                 )
-            (listOf(
-                    cross() to ::l1,
-                    square() to ::l2,
-                    circle() to ::l3,
-                    triangle() to ::l4,
-                    L1() to ::outtakeAlgae
-                ))
-                .forEach { (button, command) ->
-                    button.onTrue(command(button.negate()))
-                }
+
+            cross().startEnd(::l1)
+            square().startEnd(::l2)
+            circle().startEnd(::l3)
+            triangle().startEnd(::l4)
+
+            L1().startEnd(::outtakeAlgae)
             R1().whileTrue(intakeAlgae())
 
-            gripper.apply {
-                R2().whileTrue(intake())
-                L2().whileTrue(outtake())
-            }
+            R2().whileTrue(gripper.intake())
+            L2().whileTrue(gripper.outtake())
         }
 
         operatorController.apply {
-            (listOf(
-                    x() to ::l2algae,
-                    b() to ::l3algae,
-                    start() to ::feeder,
-                ))
-                .forEach { (button, command) ->
-                    button.onTrue(command(button.negate()))
-                }
-            povDown().apply { onTrue(elevator.reset(negate())) }
-            povUp().apply { onTrue(extender.reset(negate())) }
+            x().startEnd(::l2algae)
+            b().startEnd(::l3algae)
+
+            start().startEnd(::feeder)
+
+            povDown().startEnd(elevator::reset)
+            povUp().startEnd(extender::reset)
         }
     }
 
