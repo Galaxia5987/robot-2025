@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.InitializerKt;
 import frc.robot.subsystems.vision.Vision;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -328,7 +329,7 @@ public class DriveCommands {
     public static Command alignToPose(Pose2d pose) {
         return Commands.defer(
                 () -> AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, 0.0),
-                Set.of(frc.robot.InitializerKt.getSwerveDrive()));
+                Set.of(InitializerKt.getSwerveDrive()));
     }
 
     private static class WheelRadiusCharacterizationState {
