@@ -53,6 +53,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+import frc.robot.lib.math.GalacticSlewRateLimiter;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -151,7 +152,11 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
+    private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
+    private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
+
+    public Drive(
+            GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
         this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
     }
 
@@ -164,10 +169,11 @@ public class Drive extends SubsystemBase {
             Optional<SwerveDriveSimulation> driveSimulation) {
         this.gyroIO = gyroIO;
 
-        driveSimulation.ifPresent(swerveDriveSimulation ->
-                this.resetSimulationPoseCallBack = swerveDriveSimulation::setSimulationWorldPose
-        );
-      
+        driveSimulation.ifPresent(
+                swerveDriveSimulation ->
+                        this.resetSimulationPoseCallBack =
+                                swerveDriveSimulation::setSimulationWorldPose);
+
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -309,6 +315,12 @@ public class Drive extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
+        // Accel limits
+        speeds.vxMetersPerSecond =
+                slewRateLimiterX.withLimit(10.0).calculate(speeds.vxMetersPerSecond);
+        speeds.vyMetersPerSecond =
+                slewRateLimiterY.withLimit(10.0).calculate(speeds.vyMetersPerSecond);
+
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
