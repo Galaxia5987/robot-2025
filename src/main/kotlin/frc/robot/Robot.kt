@@ -68,7 +68,7 @@ object Robot : LoggedRobot() {
         when (CURRENT_MODE) {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
-                    0,
+                    1,
                     PowerDistribution.ModuleType.kRev
                 )
                 Logger.addDataReceiver(WPILOGWriter())
