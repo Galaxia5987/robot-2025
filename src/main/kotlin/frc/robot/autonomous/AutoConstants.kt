@@ -25,7 +25,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
         json
             .parseToJsonElement(
                 File(
-                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
+                        "${Filesystem.getDeployDirectory()}/choreo/AutoPaths.chor"
                     )
                     .readText()
             )
