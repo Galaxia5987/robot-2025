@@ -18,5 +18,5 @@ fun alignWithBestVisionTarget(
         vision.getYawToTarget(cameraIndex)
     }
 
-fun pathFindToPose(pose: Pose2d?): Command =
+fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
