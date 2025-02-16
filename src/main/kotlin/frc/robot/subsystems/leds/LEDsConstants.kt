@@ -21,11 +21,11 @@ const val LED_STRIP_PORT = 0
 val GRIPPER_PATTERN_BRIGHTNESS: Dimensionless =
     Units.Percent.of(
         50.0
-    ) // TODO need to change the brightness of the gripper white to fit the real world !
+    )
 val CLIMBER_PATTERN_BRIGHTNESS: Dimensionless =
     Units.Percent.of(
         50.0
-    ) // TODO need to change the brightness of the climber rainbow to fit the real world !
+    )
 
 val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
