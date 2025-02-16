@@ -55,6 +55,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import frc.robot.lib.math.GalacticSlewRateLimiter;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
@@ -147,6 +148,9 @@ public class Drive extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+    private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
+    private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
 
     public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
         this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
@@ -306,6 +310,10 @@ public class Drive extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
+        //Accel limits
+        speeds.vxMetersPerSecond = slewRateLimiterX.withLimit(10.0).calculate(speeds.vxMetersPerSecond);
+        speeds.vyMetersPerSecond = slewRateLimiterY.withLimit(10.0).calculate(speeds.vyMetersPerSecond);
+
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
