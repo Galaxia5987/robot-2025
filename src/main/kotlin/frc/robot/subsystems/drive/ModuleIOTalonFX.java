@@ -80,7 +80,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final StatusSignal<Current> driveCurrent;
 
     // Inputs from turn motor
-    private final StatusSignal<Angle> turnAbsolutePosition;
+    private final Angle turnAbsolutePosition;
     private final StatusSignal<Angle> turnPosition;
     private final Queue<Double> turnPositionQueue;
     private final StatusSignal<AngularVelocity> turnVelocity;
@@ -126,15 +126,8 @@ public class ModuleIOTalonFX implements ModuleIO {
         turnConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnConfig.Slot0 = constants.SteerMotorGains;
         turnConfig.Feedback.FeedbackRemoteSensorID = constants.EncoderId;
-        turnConfig.Feedback.FeedbackSensorSource =
-                switch (constants.FeedbackSource) {
-                    case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
-                    case FusedCANcoder -> FeedbackSensorSourceValue.FusedCANcoder;
-                    case SyncCANcoder -> FeedbackSensorSourceValue.SyncCANcoder;
-                    default -> throw new RuntimeException(
-                            "You are using an unsupported swerve configuration, which this template does not support without manual customization. The 2025 release of Phoenix supports some swerve configurations which were not available during 2025 beta testing, preventing any development and support from the AdvantageKit developers.");
-                };
-        turnConfig.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
+        turnConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        turnConfig.Feedback.SensorToMechanismRatio = constants.SteerMotorGearRatio;
         turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.SteerMotorGearRatio;
         turnConfig.MotionMagic.MotionMagicAcceleration =
                 turnConfig.MotionMagic.MotionMagicCruiseVelocity / 0.100;
@@ -148,6 +141,9 @@ public class ModuleIOTalonFX implements ModuleIO {
         tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
 
         // Configure encoder
+        encoder.setAssumedFrequency(50);
+        encoder.setInverted(constants.EncoderInverted);
+        tryUntilOk(5, () -> turnTalon.setPosition(encoder.get() - constants.EncoderOffset, 0.25));
 
         // Create timestamp queue
         timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
@@ -161,7 +157,7 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveCurrent = driveTalon.getStatorCurrent();
 
         // Create turn status signals
-        turnAbsolutePosition = encoder.getAbsolutePosition();
+        turnAbsolutePosition = edu.wpi.first.units.Units.Rotations.of(encoder.get());
         turnPosition = turnTalon.getPosition();
         turnPositionQueue =
                 PhoenixOdometryThread.getInstance().registerSignal(turnTalon.getPosition());
@@ -177,7 +173,6 @@ public class ModuleIOTalonFX implements ModuleIO {
                 driveVelocity,
                 driveAppliedVolts,
                 driveCurrent,
-                turnAbsolutePosition,
                 turnVelocity,
                 turnAppliedVolts,
                 turnCurrent);
@@ -193,7 +188,6 @@ public class ModuleIOTalonFX implements ModuleIO {
         var turnStatus =
                 BaseStatusSignal.refreshAll(
                         turnPosition, turnVelocity, turnAppliedVolts, turnCurrent);
-        var turnEncoderStatus = BaseStatusSignal.refreshAll(turnAbsolutePosition);
 
         // Update drive inputs
         inputs.driveConnected = driveConnectedDebounce.calculate(driveStatus.isOK());
@@ -204,10 +198,8 @@ public class ModuleIOTalonFX implements ModuleIO {
 
         // Update turn inputs
         inputs.turnConnected = turnConnectedDebounce.calculate(turnStatus.isOK());
-        inputs.turnEncoderConnected =
-                turnEncoderConnectedDebounce.calculate(turnEncoderStatus.isOK());
-        inputs.turnAbsolutePosition =
-                Rotation2d.fromRotations(turnAbsolutePosition.getValueAsDouble());
+        inputs.turnEncoderConnected = encoder.isConnected();
+        inputs.turnAbsolutePosition = new Rotation2d(turnAbsolutePosition);
         inputs.turnPosition = Rotation2d.fromRotations(turnPosition.getValueAsDouble());
         inputs.turnPositionRad = inputs.turnPosition.getRadians();
         inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnVelocity.getValueAsDouble());
