@@ -18,7 +18,6 @@ import static frc.robot.ConstantsKt.LOOP_TIME;
 
 import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -539,18 +538,10 @@ public class Drive extends SubsystemBase {
         var pose = getPose();
 
         var targetSpeeds = sample.getChassisSpeeds();
-        targetSpeeds.vxMetersPerSecond += xController.calculate(
-                pose.getX(),
-                sample.x
-        );
-        targetSpeeds.vyMetersPerSecond += yController.calculate(
-                pose.getY(),
-                sample.y
-        );
-        targetSpeeds.omegaRadiansPerSecond += rotationController.calculate(
-                pose.getRotation().getRadians(),
-                sample.heading
-        );
+        targetSpeeds.vxMetersPerSecond += xController.calculate(pose.getX(), sample.x);
+        targetSpeeds.vyMetersPerSecond += yController.calculate(pose.getY(), sample.y);
+        targetSpeeds.omegaRadiansPerSecond +=
+                rotationController.calculate(pose.getRotation().getRadians(), sample.heading);
 
         runVelocity(targetSpeeds);
     }
