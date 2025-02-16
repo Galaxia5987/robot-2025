@@ -1,11 +1,14 @@
 package frc.robot.subsystems
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
 import frc.robot.lib.getTranslation2d
+import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.elevator.Positions
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
@@ -91,6 +94,13 @@ fun l3(outtakeTrigger: Trigger): Command =
 
 fun l4(outtakeTrigger: Trigger): Command =
     parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
+
+fun pathfindFeeder(outtakeTrigger: Trigger): Command =
+    AutoBuilder.pathfindThenFollowPath(
+            PathPlannerPath.fromPathFile("Feeder"),
+            TunerConstants.PATH_CONSTRAINTS
+        )
+        .andThen(feeder(outtakeTrigger))
 
 fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
