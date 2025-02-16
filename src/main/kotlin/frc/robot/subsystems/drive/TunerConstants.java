@@ -273,8 +273,7 @@ public class TunerConstants {
                             .withCurrentLimits(
                                     new CurrentLimitsConfigs()
                                             .withStatorCurrentLimit(70)
-                                            .withStatorCurrentLimitEnable(true)
-                            );
+                                            .withStatorCurrentLimitEnable(true));
             steerInitialConfigs =
                     new TalonFXConfiguration()
                             .withCurrentLimits(

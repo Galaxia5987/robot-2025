@@ -7,9 +7,10 @@ import edu.wpi.first.math.MathSharedStore
 import edu.wpi.first.math.MathUtil
 
 /**
- * A class that limits the rate of change of an input value. Useful for implementing voltage,
- * setpoint, and/or output ramps. A slew-rate limit is most appropriate when the quantity being
- * controlled is a velocity or a voltage; when controlling a position, consider using a [ ] instead.
+ * A class that limits the rate of change of an input value. Useful for
+ * implementing voltage, setpoint, and/or output ramps. A slew-rate limit is
+ * most appropriate when the quantity being controlled is a velocity or a
+ * voltage; when controlling a position, consider using a [ ] instead.
  */
 class GalacticSlewRateLimiter(
     private var m_positiveRateLimit: Double,
@@ -19,13 +20,13 @@ class GalacticSlewRateLimiter(
     private var m_prevTime: Double
 
     /**
-     * Creates a new SlewRateLimiter with the given positive and negative rate limits and initial
-     * value.
+     * Creates a new SlewRateLimiter with the given positive and negative rate
+     * limits and initial value.
      *
-     * @param positiveRateLimit The rate-of-change limit in the positive direction, in units per
-     * second. This is expected to be positive.
-     * @param negativeRateLimit The rate-of-change limit in the negative direction, in units per
-     * second. This is expected to be negative.
+     * @param positiveRateLimit The rate-of-change limit in the positive
+     * direction, in units per second. This is expected to be positive.
+     * @param negativeRateLimit The rate-of-change limit in the negative
+     * direction, in units per second. This is expected to be negative.
      * @param initialValue The initial value of the input.
      */
     init {
@@ -33,8 +34,8 @@ class GalacticSlewRateLimiter(
     }
 
     /**
-     * Creates a new SlewRateLimiter with the given positive rate limit and negative rate limit of
-     * -rateLimit.
+     * Creates a new SlewRateLimiter with the given positive rate limit and
+     * negative rate limit of -rateLimit.
      *
      * @param rateLimit The rate-of-change limit, in units per second.
      */
@@ -44,7 +45,8 @@ class GalacticSlewRateLimiter(
      * Filters the input to limit its slew rate.
      *
      * @param input The input value whose slew rate is to be limited.
-     * @return The filtered value, which will not change faster than the slew rate.
+     * @return The filtered value, which will not change faster than the slew
+     * rate.
      */
     fun calculate(input: Double): Double {
         val currentTime = MathSharedStore.getTimestamp()
@@ -69,7 +71,8 @@ class GalacticSlewRateLimiter(
     }
 
     /**
-     * Resets the slew rate limiter to the specified value; ignores the rate limit when doing so.
+     * Resets the slew rate limiter to the specified value; ignores the rate
+     * limit when doing so.
      *
      * @param value The value to reset to.
      */
@@ -78,7 +81,7 @@ class GalacticSlewRateLimiter(
         m_prevTime = MathSharedStore.getTimestamp()
     }
 
-    fun withLimit(limit: Double): GalacticSlewRateLimiter{
+    fun withLimit(limit: Double): GalacticSlewRateLimiter {
         m_positiveRateLimit = limit
         m_negativeRateLimit = -limit
         return this
