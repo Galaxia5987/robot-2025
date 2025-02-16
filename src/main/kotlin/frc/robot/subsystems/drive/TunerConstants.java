@@ -268,7 +268,13 @@ public class TunerConstants {
             kSlipCurrent = Amps.of(78.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
-            driveInitialConfigs = new TalonFXConfiguration();
+            driveInitialConfigs =
+                    new TalonFXConfiguration()
+                            .withCurrentLimits(
+                                    new CurrentLimitsConfigs()
+                                            .withStatorCurrentLimit(70)
+                                            .withStatorCurrentLimitEnable(true)
+                            );
             steerInitialConfigs =
                     new TalonFXConfiguration()
                             .withCurrentLimits(
