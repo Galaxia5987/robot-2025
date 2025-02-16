@@ -3,6 +3,9 @@ package frc.robot.autonomous
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.Filesystem
+import frc.robot.CURRENT_MODE
+import frc.robot.Mode
+import frc.robot.lib.flipIfNeeded
 import java.io.File
 import kotlinx.serialization.json.*
 
@@ -43,4 +46,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
     }
 }
 
-val ALIGNMENT_POSES = parseChoreoPoses()
+val ALIGNMENT_POSES = parseChoreoPoses().mapValues { it.value.flipIfNeeded() }
+    get() = if (CURRENT_MODE == Mode.SIM) {
+        parseChoreoPoses().mapValues { it.value.flipIfNeeded() }
+    } else field
