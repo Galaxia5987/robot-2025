@@ -9,15 +9,14 @@ import frc.robot.swerveDrive
 import frc.robot.vision
 import java.util.function.DoubleSupplier
 
-
 fun alignWithBestVisionTarget(
     cameraIndex: Int,
     ySupplier: DoubleSupplier,
     xSupplier: DoubleSupplier
 ): Command =
-    DriveCommands.joystickDriveAtAngle(
-        swerveDrive, ySupplier, xSupplier
-    ) { vision.getYawToTarget(cameraIndex) }
+    DriveCommands.joystickDriveAtAngle(swerveDrive, ySupplier, xSupplier) {
+        vision.getYawToTarget(cameraIndex)
+    }
 
 fun alignToPose(pose: Pose2d?): Command =
-        AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
+    AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)

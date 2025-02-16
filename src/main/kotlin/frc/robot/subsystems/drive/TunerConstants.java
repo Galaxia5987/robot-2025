@@ -13,7 +13,6 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 import com.pathplanner.lib.path.PathConstraints;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.*;
 import frc.robot.ConstantsKt;
 
@@ -364,9 +363,7 @@ public class TunerConstants {
                         kMaxOmegaVelocity.in(RadiansPerSecond),
                         kMaxAngularAcceleration.in(RadiansPerSecondPerSecond));
 
-        DrivetrainConstants =
-                new SwerveDrivetrainConstants()
-                        .withCANBusName(kCANBus.getName());
+        DrivetrainConstants = new SwerveDrivetrainConstants().withCANBusName(kCANBus.getName());
 
         SwerveModuleConstantsFactory<
                         TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>

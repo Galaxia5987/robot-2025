@@ -46,7 +46,9 @@ public interface VisionIO {
         PHOTONVISION
     }
 
-    public default String getName() {return "";}
+    public default String getName() {
+        return "";
+    }
 
     public default void updateInputs(VisionIOInputs inputs) {}
 }
