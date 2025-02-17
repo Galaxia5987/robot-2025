@@ -48,13 +48,21 @@ fun alignToPose(
     )
         return Commands.none()
 
-    val xController = PIDController(5.0, 0.0, 0.2)
-    val yController = PIDController(5.0, 0.0, 0.2)
+    val xController = PIDController(
+        ALIGNMENT_X_GAINS.kP,
+        ALIGNMENT_X_GAINS.kI,
+        ALIGNMENT_X_GAINS.kD
+    )
+    val yController = PIDController(
+        ALIGNMENT_Y_GAINS.kP,
+        ALIGNMENT_Y_GAINS.kI,
+        ALIGNMENT_Y_GAINS.kD
+    )
     val rotationController =
         PIDController(
-            5.0,
-            0.0,
-            0.2,
+            ALIGNMENT_ROTATION_GAINS.kP,
+            ALIGNMENT_ROTATION_GAINS.kI,
+            ALIGNMENT_ROTATION_GAINS.kD,
         )
     rotationController.enableContinuousInput(-Math.PI, Math.PI)
 
