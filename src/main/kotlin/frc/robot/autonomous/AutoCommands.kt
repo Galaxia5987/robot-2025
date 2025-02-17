@@ -12,22 +12,10 @@ import frc.robot.IS_RED
 import frc.robot.Mode
 import frc.robot.lib.distanceFromPoint
 import frc.robot.subsystems.drive.Drive
-import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
 import frc.robot.swerveDrive
-import frc.robot.vision
-import java.util.function.DoubleSupplier
 import java.util.function.Supplier
 import org.littletonrobotics.junction.Logger
-
-fun alignWithBestVisionTarget(
-    cameraIndex: Int,
-    ySupplier: DoubleSupplier,
-    xSupplier: DoubleSupplier
-): Command =
-    DriveCommands.joystickDriveAtAngle(swerveDrive, ySupplier, xSupplier) {
-        vision.getYawToTarget(cameraIndex)
-    }
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
