@@ -18,7 +18,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.Units.Radians
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 
