@@ -5,8 +5,10 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
 import frc.robot.Mode
@@ -46,13 +48,19 @@ fun alignToPose(
         )
     rotationController.enableContinuousInput(-Math.PI, Math.PI)
 
+    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    rotationController.setTolerance(
+        ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
+    )
+
     return Commands.run(
         {
             val robotPose = robotPoseSupplier.get()
             val targetPose = targetPoseSupplier.get()
 
             Logger.recordOutput(
-                "PIDsetpoint",
+                "Odometry/AlignmentSetpoint",
                 Pose2d(
                     xController.setpoint,
                     yController.setpoint,
@@ -73,30 +81,17 @@ fun alignToPose(
             drive.runVelocity(
                 if (
                     robotPose.distanceFromPoint(targetPose.translation) <=
-                    MAX_ALIGNMENT_DISTANCE
+                        MAX_ALIGNMENT_DISTANCE
                 )
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                    targetSpeeds,
-                    if (IS_RED && CURRENT_MODE == Mode.REAL)
-                        drive.rotation + Rotation2d.k180deg
-                    else drive.rotation
+                        targetSpeeds,
+                        if (IS_RED && CURRENT_MODE == Mode.REAL)
+                            drive.rotation + Rotation2d.k180deg
+                        else drive.rotation
                     )
                 else ChassisSpeeds()
             )
         },
         swerveDrive
     )
-}
-
-fun pathFindThenAlign(
-    drive: Drive,
-    robotPoseSupplier: Supplier<Pose2d>,
-    targetPoseSupplier: Supplier<Pose2d>
-): Command {
-    return pathFindToPose(targetPoseSupplier.get())
-        .until {
-            robotPoseSupplier.get().distanceFromPoint(targetPoseSupplier.get().translation) <=
-                MAX_ALIGNMENT_DISTANCE
-        }
-        .andThen(alignToPose(drive, robotPoseSupplier, targetPoseSupplier))
 }
