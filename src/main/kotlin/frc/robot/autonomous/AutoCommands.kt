@@ -5,15 +5,12 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
 import frc.robot.Mode
 import frc.robot.lib.distanceFromPoint
-import frc.robot.lib.getPose2d
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
@@ -37,13 +34,15 @@ fun pathFindToPose(pose: Pose2d): Command =
 
 fun alignToPose(
     drive: Drive,
-    robotPose: Supplier<Pose2d>,
+    robotPoseSupplier: Supplier<Pose2d>,
     targetPoseSupplier: Supplier<Pose2d>
 ): Command {
+    val robotPose = robotPoseSupplier.get()
+    val targetPose = targetPoseSupplier.get()
+
     if (
         robotPose
-            .get()
-            .distanceFromPoint(targetPoseSupplier.get().translation) >
+            .distanceFromPoint(targetPose.translation) >
             MAX_ALIGNMENT_DISTANCE
     )
         return Commands.none()
@@ -76,12 +75,10 @@ fun alignToPose(
             )
         )
 
-        val targetPose = targetPoseSupplier.get()
-
 val targetSpeeds = ChassisSpeeds(
-    xController.calculate(robotPose.get().x, targetPose.x),
-    yController.calculate(robotPose.get().y, targetPose.y),
-    rotationController.calculate(robotPose.get().rotation.radians, targetPose.rotation.radians)
+    xController.calculate(robotPose.x, targetPose.x),
+    yController.calculate(robotPose.y, targetPose.y),
+    rotationController.calculate(robotPose.rotation.radians, targetPose.rotation.radians)
 )
 
         drive.runVelocity(
