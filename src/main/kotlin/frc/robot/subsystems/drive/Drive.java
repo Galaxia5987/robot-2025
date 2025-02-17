@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+import frc.robot.lib.math.GalacticSlewRateLimiter;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -149,6 +150,9 @@ public class Drive extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+    private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
+    private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
@@ -310,6 +314,12 @@ public class Drive extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
+        // Accel limits
+        speeds.vxMetersPerSecond =
+                slewRateLimiterX.withLimit(10.0).calculate(speeds.vxMetersPerSecond);
+        speeds.vyMetersPerSecond =
+                slewRateLimiterY.withLimit(10.0).calculate(speeds.vyMetersPerSecond);
+
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
