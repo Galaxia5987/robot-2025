@@ -87,7 +87,7 @@ fun alignToPose(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 targetSpeeds,
                 if (isFlipped && CURRENT_MODE == Mode.REAL)
-                    drive.rotation.plus(Rotation2d(Math.PI))
+                    drive.rotation + Rotation2d.k180deg
                 else drive.rotation
             )
         )
