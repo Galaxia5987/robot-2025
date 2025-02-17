@@ -70,22 +70,17 @@ fun alignToPose(
 
         val targetPose = targetPoseSupplier.get()
 
-        val targetSpeeds = ChassisSpeeds()
-        targetSpeeds.vxMetersPerSecond =
-            xController.calculate(robotPose.get().x, targetPose.x)
-        targetSpeeds.vyMetersPerSecond =
-            yController.calculate(robotPose.get().y, targetPose.y)
-        targetSpeeds.omegaRadiansPerSecond =
-            rotationController.calculate(
-                robotPose.get().rotation.radians,
-                targetPose.rotation.radians
-            )
+val targetSpeeds = ChassisSpeeds(
+    xController.calculate(robotPose.get().x, targetPose.x),
+    yController.calculate(robotPose.get().y, targetPose.y),
+    rotationController.calculate(robotPose.get().rotation.radians, targetPose.rotation.radians)
+)
 
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 targetSpeeds,
                 if (IS_RED && CURRENT_MODE == Mode.REAL)
-                    drive.rotation.plus(Rotation2d(Math.PI))
+                    drive.rotation + Rotation2d.k180deg
                 else drive.rotation
             )
         )
