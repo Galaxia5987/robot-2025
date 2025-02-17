@@ -2,6 +2,9 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.Filesystem
 import java.io.File
 import kotlinx.serialization.json.*
@@ -21,9 +24,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
     val jsonObject =
         json
             .parseToJsonElement(
-                File(
-                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
-                    )
+                File("${Filesystem.getDeployDirectory()}/choreo/AutoPaths.chor")
                     .readText()
             )
             .jsonObject
@@ -44,3 +45,9 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
 }
 
 val ALIGNMENT_POSES = parseChoreoPoses()
+
+val INTAKE_FEEDER_DISTANCE: Distance = Units.Meters.of(0.0)
+val INTAKE_FEEDER_TIME: Time = Units.Seconds.of(0.5)
+val SCORE_DISTANCE: Distance = Units.Meters.of(0.0)
+val SCORE_TIME: Time = Units.Seconds.of(0.8)
+val AUTO_DISTANCE_TOLERANCE: Distance = Units.Centimeters.of(2.0)

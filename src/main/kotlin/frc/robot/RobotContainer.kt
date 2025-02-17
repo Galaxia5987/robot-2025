@@ -1,13 +1,14 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.autonomous.autoRoutines
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
@@ -15,6 +16,7 @@ import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -40,11 +42,13 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
-    init {
+    private val autoChooser = LoggedDashboardChooser<Command>("Auto Chooser")
 
-        registerAutoCommands()
+    init {
+        registerAutoRoutines()
         configureButtonBindings()
         configureDefaultCommands()
+        SmartDashboard.putData(autoChooser.sendableChooser)
         visualizer = Visualizer()
 
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
@@ -109,11 +113,10 @@ object RobotContainer {
             .onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
-    fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+    fun getAutonomousCommand(): Command = autoChooser.get()
 
-    private fun registerAutoCommands() {
-        fun register(name: String, command: Command) =
-            NamedCommands.registerCommand(name, command)
+    private fun registerAutoRoutines() {
+        autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
+        autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
     }
 }

@@ -16,6 +16,7 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
 
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -29,6 +30,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -524,5 +526,23 @@ public class Drive extends SubsystemBase {
             new Translation2d(
                     TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
+    }
+
+    public void followPath(SwerveSample sample) {
+        PIDController xController = new PIDController(5.0, 0.0, 0.0);
+        PIDController yController = new PIDController(5.0, 0.0, 0.0);
+        PIDController rotationController = new PIDController(1.0, 0.0, 0.0);
+
+        rotationController.enableContinuousInput(-Math.PI, Math.PI);
+
+        var pose = getPose();
+
+        var targetSpeeds = sample.getChassisSpeeds();
+        targetSpeeds.vxMetersPerSecond += xController.calculate(pose.getX(), sample.x);
+        targetSpeeds.vyMetersPerSecond += yController.calculate(pose.getY(), sample.y);
+        targetSpeeds.omegaRadiansPerSecond +=
+                rotationController.calculate(pose.getRotation().getRadians(), sample.heading);
+
+        runVelocity(targetSpeeds);
     }
 }
