@@ -25,14 +25,6 @@ fun alignToPose(
     robotPoseSupplier: Supplier<Pose2d>,
     targetPoseSupplier: Supplier<Pose2d>
 ): Command {
-    val robotPose = robotPoseSupplier.get()
-    val targetPose = targetPoseSupplier.get()
-
-    if (
-        robotPose.distanceFromPoint(targetPose.translation) >
-            MAX_ALIGNMENT_DISTANCE
-    )
-        return Commands.none()
 
     val xController =
         PIDController(
@@ -56,6 +48,9 @@ fun alignToPose(
 
     return Commands.run(
         {
+            val robotPose = robotPoseSupplier.get()
+            val targetPose = targetPoseSupplier.get()
+
             Logger.recordOutput(
                 "PIDsetpoint",
                 Pose2d(
@@ -76,14 +71,32 @@ fun alignToPose(
                 )
 
             drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
+                if (
+                    robotPose.distanceFromPoint(targetPose.translation) <=
+                    MAX_ALIGNMENT_DISTANCE
+                )
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
                     targetSpeeds,
                     if (IS_RED && CURRENT_MODE == Mode.REAL)
                         drive.rotation + Rotation2d.k180deg
                     else drive.rotation
-                )
+                    )
+                else ChassisSpeeds()
             )
         },
         swerveDrive
     )
+}
+
+fun pathFindThenAlign(
+    drive: Drive,
+    robotPoseSupplier: Supplier<Pose2d>,
+    targetPoseSupplier: Supplier<Pose2d>
+): Command {
+    return pathFindToPose(targetPoseSupplier.get())
+        .until {
+            robotPoseSupplier.get().distanceFromPoint(targetPoseSupplier.get().translation) <=
+                MAX_ALIGNMENT_DISTANCE
+        }
+        .andThen(alignToPose(drive, robotPoseSupplier, targetPoseSupplier))
 }
