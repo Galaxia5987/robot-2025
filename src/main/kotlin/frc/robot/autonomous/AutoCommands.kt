@@ -41,22 +41,23 @@ fun alignToPose(
     val targetPose = targetPoseSupplier.get()
 
     if (
-        robotPose
-            .distanceFromPoint(targetPose.translation) >
+        robotPose.distanceFromPoint(targetPose.translation) >
             MAX_ALIGNMENT_DISTANCE
     )
         return Commands.none()
 
-    val xController = PIDController(
-        ALIGNMENT_X_GAINS.kP,
-        ALIGNMENT_X_GAINS.kI,
-        ALIGNMENT_X_GAINS.kD
-    )
-    val yController = PIDController(
-        ALIGNMENT_Y_GAINS.kP,
-        ALIGNMENT_Y_GAINS.kI,
-        ALIGNMENT_Y_GAINS.kD
-    )
+    val xController =
+        PIDController(
+            ALIGNMENT_X_GAINS.kP,
+            ALIGNMENT_X_GAINS.kI,
+            ALIGNMENT_X_GAINS.kD
+        )
+    val yController =
+        PIDController(
+            ALIGNMENT_Y_GAINS.kP,
+            ALIGNMENT_Y_GAINS.kI,
+            ALIGNMENT_Y_GAINS.kD
+        )
     val rotationController =
         PIDController(
             ALIGNMENT_ROTATION_GAINS.kP,
@@ -65,29 +66,36 @@ fun alignToPose(
         )
     rotationController.enableContinuousInput(-Math.PI, Math.PI)
 
-    return Commands.run({
-        Logger.recordOutput(
-            "PIDsetpoint",
-            Pose2d(
-                xController.setpoint,
-                yController.setpoint,
-                Rotation2d.fromRadians(rotationController.setpoint)
+    return Commands.run(
+        {
+            Logger.recordOutput(
+                "PIDsetpoint",
+                Pose2d(
+                    xController.setpoint,
+                    yController.setpoint,
+                    Rotation2d.fromRadians(rotationController.setpoint)
+                )
             )
-        )
 
-val targetSpeeds = ChassisSpeeds(
-    xController.calculate(robotPose.x, targetPose.x),
-    yController.calculate(robotPose.y, targetPose.y),
-    rotationController.calculate(robotPose.rotation.radians, targetPose.rotation.radians)
-)
+            val targetSpeeds =
+                ChassisSpeeds(
+                    xController.calculate(robotPose.x, targetPose.x),
+                    yController.calculate(robotPose.y, targetPose.y),
+                    rotationController.calculate(
+                        robotPose.rotation.radians,
+                        targetPose.rotation.radians
+                    )
+                )
 
-        drive.runVelocity(
-            ChassisSpeeds.fromFieldRelativeSpeeds(
-                targetSpeeds,
-                if (IS_RED && CURRENT_MODE == Mode.REAL)
-                    drive.rotation + Rotation2d.k180deg
-                else drive.rotation
+            drive.runVelocity(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    targetSpeeds,
+                    if (IS_RED && CURRENT_MODE == Mode.REAL)
+                        drive.rotation + Rotation2d.k180deg
+                    else drive.rotation
+                )
             )
-        )
-    }, swerveDrive)
+        },
+        swerveDrive
+    )
 }
