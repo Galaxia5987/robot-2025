@@ -27,62 +27,30 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
 
-    private val swerveDrive = frc.robot.swerveDrive
-    val voltage = Units.Volts.of(1.0)
-
     init {
 
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
 
-        if (CURRENT_MODE == Mode.SIM)
-            SimulatedArena.getInstance().resetFieldForAuto()
-
         enableAutoLogOutputFor(this)
     }
 
-    @AutoLogOutput(key = "MapleSimPose")
-    private fun getMapleSimPose(): Pose2d? =
-        driveSimulation?.simulatedDriveTrainPose
-
-    private fun getDriveCommandReal(): Command =
-        DriveCommands.joystickDriveAtAngle(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { swerveDrive.desiredHeading },
-            )
-            .alongWith(
-                swerveDrive.updateDesiredHeading { -driverController.rightX }
-            )
-
-    private fun getDriveCommandSim(): Command =
+    private fun configureDefaultCommands() {
+        swerveDrive.defaultCommand =
         DriveCommands.joystickDrive(
             swerveDrive,
             { driverController.leftY },
             { driverController.leftX },
             { -driverController.rightX * 0.6 }
         )
-
-    private fun configureDefaultCommands() {
-        swerveDrive.defaultCommand =
-            if (CURRENT_MODE == Mode.REAL) getDriveCommandReal()
-            else getDriveCommandSim()
     }
 
     private fun configureButtonBindings() {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(
-                        {
-                            swerveDrive::resetGyro
-                            swerveDrive.pose =
-                                swerveDrive.pose.withRotation(Rotation2d())
-                        },
-                        swerveDrive
-                    )
+                Commands.runOnce(swerveDrive::resetGyro)
                     .ignoringDisable(true)
             )
     }
