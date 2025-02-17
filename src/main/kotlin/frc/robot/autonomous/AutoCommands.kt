@@ -69,7 +69,7 @@ fun alignToPose(
     return Commands.run({
         Logger.recordOutput(
             "PIDsetpoint",
-            getPose2d(
+            Pose2d(
                 xController.setpoint,
                 yController.setpoint,
                 Rotation2d.fromRadians(rotationController.setpoint)
