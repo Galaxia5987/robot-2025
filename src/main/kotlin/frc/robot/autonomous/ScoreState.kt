@@ -1,13 +1,10 @@
 package frc.robot.autonomous
 
-import com.pathplanner.lib.pathfinding.Pathfinder
-import com.pathplanner.lib.pathfinding.Pathfinding
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.ConditionalCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.gripper
 import frc.robot.lib.distanceFromPoint
 import frc.robot.swerveDrive
 
@@ -39,5 +36,9 @@ fun score(): Command =
 fun endScore(): Command =
     ConditionalCommand(
         selectedHeightCommand(Trigger { true }),
-        Commands.runOnce({swerveDrive.stop()})
-    ) { swerveDrive.pose.distanceFromPoint(selectedScorePose.invoke().translation) <= LINEAR_ALIGNMENT_TOLERANCE }
+        Commands.runOnce({ swerveDrive.stop() })
+    ) {
+        swerveDrive.pose.distanceFromPoint(
+            selectedScorePose.invoke().translation
+        ) <= LINEAR_ALIGNMENT_TOLERANCE
+    }

@@ -11,5 +11,5 @@ enum class ScoreHeight(val command: (Trigger) -> Command) {
     L1({ trigger -> l1(trigger) }),
     L2({ trigger -> l2(trigger) }),
     L3({ trigger -> l3(trigger) }),
-    L4({ trigger -> l4(trigger) });
+    L4({ trigger -> l4(trigger) })
 }
