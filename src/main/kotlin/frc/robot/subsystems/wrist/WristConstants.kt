@@ -17,12 +17,12 @@ val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 
 enum class Angles(val angle: Angle) {
-    L1(Units.Degrees.of(100.0)),
-    L2(Units.Degrees.of(80.0)),
-    L3(Units.Degrees.of(95.0)),
-    L4(Units.Degrees.of(87.0)),
-    L2_ALGAE(Units.Degrees.of(100.0)),
-    L3_ALGAE(Units.Degrees.of(100.0)),
+    L1(Units.Degrees.of(122.0)),
+    L2(Units.Degrees.of(122.0)),
+    L3(Units.Degrees.of(135.0)),
+    L4(Units.Degrees.of(122.0)),
+    L2_ALGAE(Units.Degrees.of(80.0)),
+    L3_ALGAE(Units.Degrees.of(135.0)),
     FEEDER(Units.Degrees.of(30.0)),
     BLOCKED_FEEDER(Units.Degrees.of(42.0)),
     ZERO(Units.Degrees.zero());
