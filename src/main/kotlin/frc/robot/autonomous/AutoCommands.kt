@@ -69,16 +69,11 @@ fun alignToPose(
 
         val targetPose = targetPoseSupplier.get()
 
-        val targetSpeeds = ChassisSpeeds()
-        targetSpeeds.vxMetersPerSecond =
-            xController.calculate(robotPose.get().x, targetPose.x)
-        targetSpeeds.vyMetersPerSecond =
-            yController.calculate(robotPose.get().y, targetPose.y)
-        targetSpeeds.omegaRadiansPerSecond =
-            rotationController.calculate(
-                robotPose.get().rotation.radians,
-                targetPose.rotation.radians
-            )
+val targetSpeeds = ChassisSpeeds(
+    xController.calculate(robotPose.get().x, targetPose.x),
+    yController.calculate(robotPose.get().y, targetPose.y),
+    rotationController.calculate(robotPose.get().rotation.radians, targetPose.rotation.radians)
+)
 
         val isFlipped =
             DriverStation.getAlliance().isPresent &&
