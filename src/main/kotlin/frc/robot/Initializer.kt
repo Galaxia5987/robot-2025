@@ -4,11 +4,12 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.subsystems.drive.*
 import java.lang.Exception
+import java.util.*
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 
 val driveSimulation: SwerveDriveSimulation? =
-    if (CURRENT_MODE == Mode.SIM)
+    if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
         SwerveDriveSimulation(
                 Drive.mapleSimConfig,
                 Pose2d(3.0, 3.0, Rotation2d())
@@ -29,10 +30,12 @@ private val swerveModuleIOs =
             when (CURRENT_MODE) {
                 Mode.REAL -> ModuleIOTalonFX(module)
                 Mode.SIM ->
-                    ModuleIOSim(
-                        driveSimulation?.modules?.get(index)
-                            ?: throw Exception("Sim Swerve Module is null")
-                    )
+                    if (USE_MAPLE_SIM)
+                        ModuleIOMapleSim(
+                            driveSimulation?.modules?.get(index)
+                                ?: throw Exception("Sim Swerve Module is null")
+                        )
+                    else ModuleIOSim(module)
                 Mode.REPLAY -> object : ModuleIO {}
             }
         }
@@ -42,11 +45,14 @@ private val gyroIO =
     when (CURRENT_MODE) {
         Mode.REAL -> GyroIONavX()
         Mode.SIM ->
-            GyroIOSim(
-                driveSimulation?.gyroSimulation
-                    ?: throw Exception("Gyro simulation is null")
-            )
+            if (USE_MAPLE_SIM)
+                GyroIOSim(
+                    driveSimulation?.gyroSimulation
+                        ?: throw Exception("Gyro simulation is null")
+                )
+            else object : GyroIO {}
         else -> object : GyroIO {}
     }
 
-val swerveDrive = Drive(gyroIO, swerveModuleIOs)
+val swerveDrive =
+    Drive(gyroIO, swerveModuleIOs, Optional.ofNullable(driveSimulation))
