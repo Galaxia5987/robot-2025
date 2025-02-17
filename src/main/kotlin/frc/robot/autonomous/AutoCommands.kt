@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.CURRENT_MODE
+import frc.robot.IS_RED
 import frc.robot.Mode
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.getPose2d
@@ -80,13 +81,10 @@ fun alignToPose(
                 targetPose.rotation.radians
             )
 
-        val isFlipped =
-            DriverStation.getAlliance().isPresent &&
-                DriverStation.getAlliance().get() == Alliance.Red
         drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
                 targetSpeeds,
-                if (isFlipped && CURRENT_MODE == Mode.REAL)
+                if (IS_RED && CURRENT_MODE == Mode.REAL)
                     drive.rotation.plus(Rotation2d(Math.PI))
                 else drive.rotation
             )
