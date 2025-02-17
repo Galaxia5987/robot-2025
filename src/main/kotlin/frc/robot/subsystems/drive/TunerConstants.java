@@ -259,8 +259,8 @@ public class TunerConstants {
                             .withKP(1.5)
                             .withKI(0)
                             .withKD(0)
-                            .withKS(0.40655)
-                            .withKV(0.54606);
+                            .withKS(0.32976)
+                            .withKV(0.81162);
 
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -268,7 +268,12 @@ public class TunerConstants {
             kSlipCurrent = Amps.of(78.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
-            driveInitialConfigs = new TalonFXConfiguration();
+            driveInitialConfigs =
+                    new TalonFXConfiguration()
+                            .withCurrentLimits(
+                                    new CurrentLimitsConfigs()
+                                            .withStatorCurrentLimit(70)
+                                            .withStatorCurrentLimitEnable(true));
             steerInitialConfigs =
                     new TalonFXConfiguration()
                             .withCurrentLimits(
