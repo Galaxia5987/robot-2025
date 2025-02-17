@@ -15,6 +15,6 @@ enum class ScorePose(val pose: () -> Pose2d) {
     `5R`({ ALIGNMENT_POSES["R5"]!! }),
     `6L`({ ALIGNMENT_POSES["L6"]!! }),
     `6R`({ ALIGNMENT_POSES["R6"]!! }),
-    S1({ ALIGNMENT_POSES["S1"]!!}),
-    S2({ ALIGNMENT_POSES["S2"]!!})
+    S1({ ALIGNMENT_POSES["S1"]!! }),
+    S2({ ALIGNMENT_POSES["S2"]!! })
 }
