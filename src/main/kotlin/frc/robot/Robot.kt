@@ -7,12 +7,9 @@ import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.Mode.REAL
-import frc.robot.Mode.REPLAY
-import frc.robot.Mode.SIM
+import frc.robot.Mode.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -67,10 +64,7 @@ object Robot : LoggedRobot() {
 
         when (CURRENT_MODE) {
             REAL -> {
-                LoggedPowerDistribution.getInstance(
-                    0,
-                    PowerDistribution.ModuleType.kCTRE
-                )
+                LoggedPowerDistribution.getInstance()
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }

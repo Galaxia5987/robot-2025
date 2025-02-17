@@ -5,10 +5,10 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
+import frc.robot.*
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
-import frc.robot.roller
 import frc.robot.subsystems.drive.Drive
 import kotlin.math.cos
 import kotlin.math.sin
@@ -42,17 +42,6 @@ private val ALGAE_ROLLER_C2C: Array<Double> =
 private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
 
 class Visualizer {
-    private val swerveDrive = frc.robot.swerveDrive
-
-    private val climb = frc.robot.climber
-
-    private val elevator = frc.robot.elevator
-
-    private val extender = frc.robot.extender
-    private val wrist = frc.robot.wrist
-
-    private val gripper = frc.robot.gripper
-
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
         val secondStageHeight = elevator.height.invoke().`in`(Meters)
@@ -213,7 +202,7 @@ class Visualizer {
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
-                rotation = getRotation3d(pitch = climb.angle.invoke())
+                rotation = getRotation3d(pitch = climber.angle.invoke())
             )
 
         return arrayOf(
