@@ -158,14 +158,18 @@ public class TunerConstants {
             kSlipCurrent = Amps.of(78.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
 
-            driveInitialConfigs = new TalonFXConfiguration();
-            steerInitialConfigs =
-                    new TalonFXConfiguration()
-                            .withCurrentLimits(
-                                    new CurrentLimitsConfigs()
-                                            .withStatorCurrentLimit(60)
-                                            .withStatorCurrentLimitEnable(true));
-            encoderInitialConfigs = new CANcoderConfiguration();
+        driveInitialConfigs = new TalonFXConfiguration()
+                .withCurrentLimits(
+                        new CurrentLimitsConfigs()
+                                .withStatorCurrentLimit(60)
+                                .withStatorCurrentLimitEnable(true));
+        steerInitialConfigs =
+                new TalonFXConfiguration()
+                        .withCurrentLimits(
+                                new CurrentLimitsConfigs()
+                                        .withStatorCurrentLimit(60)
+                                        .withStatorCurrentLimitEnable(true));
+        encoderInitialConfigs = new CANcoderConfiguration();
 
             kCANBus = new CANBus("rio", "./logs/example.hoot");
 
