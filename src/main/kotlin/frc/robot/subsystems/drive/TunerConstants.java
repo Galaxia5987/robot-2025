@@ -50,6 +50,11 @@ public class TunerConstants {
                     TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             BackRight;
 
+    // These form the slew limit function
+    public static final double SLEW_LIMIT_C = 10.0;
+    public static final double SLEW_LIMIT_A = 6.0;
+    public static final double SLEW_LIMIT_B = -13.0;
+
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
