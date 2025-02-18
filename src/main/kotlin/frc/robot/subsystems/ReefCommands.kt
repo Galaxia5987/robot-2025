@@ -79,7 +79,7 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
 // TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
-    sequence(elevator.feeder(), waitUntil(elevator.atSetpoint) , wrist.feeder())
+    sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.feeder())
 
 fun l1(outtakeTrigger: Trigger): Command =
     parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))

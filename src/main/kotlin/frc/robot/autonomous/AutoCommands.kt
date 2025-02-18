@@ -22,58 +22,62 @@ fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
 fun align2d(drive: Drive, isLeft: Boolean): Command {
-    val yController = PIDController(
-        ALIGNMENT_Y_GAINS.kP,
-        ALIGNMENT_Y_GAINS.kI,
-        ALIGNMENT_Y_GAINS.kD
-    )
-    val xController = PIDController(
-        ALIGNMENT_X_GAINS.kP,
-        ALIGNMENT_X_GAINS.kI,
-        ALIGNMENT_X_GAINS.kD,
-    )
+    val yController =
+        PIDController(
+            ALIGNMENT_Y_GAINS.kP,
+            ALIGNMENT_Y_GAINS.kI,
+            ALIGNMENT_Y_GAINS.kD
+        )
+    val xController =
+        PIDController(
+            ALIGNMENT_X_GAINS.kP,
+            ALIGNMENT_X_GAINS.kI,
+            ALIGNMENT_X_GAINS.kD,
+        )
 
-    return Commands.run(
-        {
+    return Commands.run({
             drive.runVelocity(
                 ChassisSpeeds(
                     yController.calculate(
                         vision.getTyToTarget(1).radians,
                         ALIGNED_TY
-                    ), //TODO: make sure 1 is front camera
+                    ), // TODO: make sure 1 is front camera
                     0.0,
                     0.0
                 )
             )
-        }
-    ).until { yController.atSetpoint() }
+        })
+        .until { yController.atSetpoint() }
         .andThen(
             Commands.either(
-                Commands.run(
-                    {
-                        drive.runVelocity(
-                            ChassisSpeeds(
-                                0.0,
-                                xController.calculate(vision.getTxToTarget(1).radians, ALIGNED_TX_LEFT),
-                                0.0
-                            )
+                Commands.run({
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            0.0,
+                            xController.calculate(
+                                vision.getTxToTarget(1).radians,
+                                ALIGNED_TX_LEFT
+                            ),
+                            0.0
                         )
-                    }
-                ),
-                Commands.run(
-                    {
-                        drive.runVelocity(
-                            ChassisSpeeds(
-                                0.0,
-                                xController.calculate(vision.getTxToTarget(1).radians, ALIGNED_TX_RIGHT),
-                                0.0
-                            )
+                    )
+                }),
+                Commands.run({
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            0.0,
+                            xController.calculate(
+                                vision.getTxToTarget(1).radians,
+                                ALIGNED_TX_RIGHT
+                            ),
+                            0.0
                         )
-                    }
-                ),
+                    )
+                }),
                 { isLeft }
             )
-        ).until{xController.atSetpoint()}
+        )
+        .until { xController.atSetpoint() }
 }
 
 fun alignToPose(
@@ -102,32 +106,38 @@ fun alignToPose(
     )
 
     return Commands.run(
-        {
-            val robotPose = robotPoseSupplier.get()
-            val targetPose = targetPoseSupplier.get()
+            {
+                val robotPose = robotPoseSupplier.get()
+                val targetPose = targetPoseSupplier.get()
 
-            val radius = (robotPose.translation - targetPose.translation).norm
-            val output = radialController.calculate(radius, 0.0)
-            val fieldRelativeAngle = targetPose.translation.rotationToPoint(robotPose.translation)
-            val targetSpeeds =
-                ChassisSpeeds(
-                    output * fieldRelativeAngle.cos,
-                    output * fieldRelativeAngle.sin,
-                    rotationController.calculate(
-                        robotPose.rotation.radians,
-                        targetPose.rotation.radians
+                val radius =
+                    (robotPose.translation - targetPose.translation).norm
+                val output = radialController.calculate(radius, 0.0)
+                val fieldRelativeAngle =
+                    targetPose.translation.rotationToPoint(
+                        robotPose.translation
+                    )
+                val targetSpeeds =
+                    ChassisSpeeds(
+                        output * fieldRelativeAngle.cos,
+                        output * fieldRelativeAngle.sin,
+                        rotationController.calculate(
+                            robotPose.rotation.radians,
+                            targetPose.rotation.radians
+                        )
+                    )
+
+                drive.runVelocity(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        targetSpeeds,
+                        if (IS_RED && CURRENT_MODE == Mode.REAL)
+                            drive.rotation + Rotation2d.k180deg
+                        else drive.rotation
                     )
                 )
-
-            drive.runVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    targetSpeeds,
-                    if (IS_RED && CURRENT_MODE == Mode.REAL)
-                        drive.rotation + Rotation2d.k180deg
-                    else drive.rotation
-                )
-            )
-        },
-        swerveDrive
-    ).until { radialController.atSetpoint() }.andThen(Commands.runOnce({ drive.runVelocity(ChassisSpeeds()) }))
+            },
+            swerveDrive
+        )
+        .until { radialController.atSetpoint() }
+        .andThen(Commands.runOnce({ drive.runVelocity(ChassisSpeeds()) }))
 }
