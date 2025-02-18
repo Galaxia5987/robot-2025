@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -92,6 +94,7 @@ object Robot : LoggedRobot() {
         enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
+        PathfindingCommand.warmupCommand().schedule()
     }
 
     /**

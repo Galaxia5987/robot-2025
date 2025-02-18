@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.autonomous.*
+import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
@@ -64,7 +66,7 @@ object RobotContainer {
                 { driverController.leftY },
                 { driverController.leftX },
                 { -driverController.rightX * 0.6 }
-            )
+            ).alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
 
         climber.defaultCommand =
             climber.powerControl {
@@ -81,8 +83,16 @@ object RobotContainer {
             )
 
         driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.circle().onTrue(l3(driverController.circle().negate()))
+//        driverController.square().onTrue(l2(driverController.square().negate()))
+        driverController.square().and(IS_WITHIN_AUTO_SCORE_DISTANCE).onTrue(autoScore()).onFalse(endAutoScore())
+//        driverController.circle().onTrue(l3(driverController.circle().negate()))
+        driverController.circle().whileTrue(
+            alignToPose(
+                frc.robot.swerveDrive,
+                { frc.robot.swerveDrive.pose },
+                selectedScorePose
+            )
+        )
         driverController
             .triangle()
             .onTrue(l4(driverController.triangle().negate()))

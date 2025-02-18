@@ -21,7 +21,6 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.REEFMASTER_CANBUS_NAME
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
 import frc.robot.lib.toLinear
@@ -31,8 +30,8 @@ import org.littletonrobotics.junction.AutoLogOutput
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
-    private val mainMotor = TalonFX(MAIN_ID, REEFMASTER_CANBUS_NAME)
-    private val auxMotor = TalonFX(AUX_ID, REEFMASTER_CANBUS_NAME)
+    private val mainMotor = TalonFX(MAIN_ID)
+    private val auxMotor = TalonFX(AUX_ID)
     private val mainMotorPositionRequest = PositionVoltage(0.0)
     private val voltageControl = VoltageOut(0.0)
     private val slot0Configs =

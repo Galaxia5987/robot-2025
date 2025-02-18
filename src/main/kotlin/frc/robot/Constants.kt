@@ -6,7 +6,6 @@ import org.littletonrobotics.junction.LoggedRobot
 const val LOOP_TIME = 0.02 // [s]
 const val IS_TUNING_MODE = true
 
-const val REEFMASTER_CANBUS_NAME = "reefmaster"
 const val SWERVE_CANBUS_NAME = "swerveDrive"
 
 val CURRENT_MODE: Mode
