@@ -60,8 +60,8 @@ public class Vision extends SubsystemBase {
      *
      * @param cameraIndex The index of the camera to use.
      */
-    public Rotation2d getYawToTarget(int cameraIndex) {
-        return inputs[cameraIndex].yawToTarget;
+    public Rotation2d getTxToTarget(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
     @Override
