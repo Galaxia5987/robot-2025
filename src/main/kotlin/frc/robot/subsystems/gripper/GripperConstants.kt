@@ -10,8 +10,8 @@ const val GEAR_RATIO = 1.0
 
 val DISTANCE_THRESHOLD: Distance = Units.Centimeters.of(14.2)
 val INTAKE_VOLTAGE: Voltage = Units.Volts.of(7.5)
-val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(-9.0)
-val SLOW_OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(-2.5)
+val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(9.0)
+val SLOW_OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(2.5)
 val REMOVE_ALGAE_VOLTAGE: Voltage = Units.Volts.of(12.0)
 val STOP_VOLTAGE: Voltage = Units.Volts.zero()
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.03)
