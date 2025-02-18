@@ -11,16 +11,11 @@ import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
 import frc.robot.Mode
-import frc.robot.lib.distanceFromPoint
+import frc.robot.lib.rotationToPoint
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
 import frc.robot.swerveDrive
-import org.littletonrobotics.junction.AutoLogOutput
 import java.util.function.Supplier
-import org.littletonrobotics.junction.Logger
-
-@AutoLogOutput
-var atAlignmentSetpoint = false
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
@@ -31,17 +26,11 @@ fun alignToPose(
     targetPoseSupplier: Supplier<Pose2d>
 ): Command {
 
-    val xController =
+    val radialController =
         PIDController(
             ALIGNMENT_X_GAINS.kP,
             ALIGNMENT_X_GAINS.kI,
             ALIGNMENT_X_GAINS.kD
-        )
-    val yController =
-        PIDController(
-            ALIGNMENT_Y_GAINS.kP,
-            ALIGNMENT_Y_GAINS.kI,
-            ALIGNMENT_Y_GAINS.kD
         )
     val rotationController =
         PIDController(
@@ -51,8 +40,7 @@ fun alignToPose(
         )
     rotationController.enableContinuousInput(-Math.PI, Math.PI)
 
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    radialController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
@@ -62,28 +50,18 @@ fun alignToPose(
             val robotPose = robotPoseSupplier.get()
             val targetPose = targetPoseSupplier.get()
 
-            Logger.recordOutput(
-                "Odometry/AlignmentSetpoint",
-                Pose2d(
-                    xController.setpoint,
-                    yController.setpoint,
-                    Rotation2d.fromRadians(rotationController.setpoint)
-                )
-            )
-
-            Logger.recordOutput("Odometry/AtAlignmentSetpoint", atAlignmentSetpoint)
-
+            val radius = (robotPose.translation - targetPose.translation).norm
+            val output = radialController.calculate(radius, 0.0)
+            val fieldRelativeAngle = targetPose.translation.rotationToPoint(robotPose.translation)
             val targetSpeeds =
                 ChassisSpeeds(
-                    xController.calculate(robotPose.x, targetPose.x),
-                    yController.calculate(robotPose.y, targetPose.y),
+                    output * fieldRelativeAngle.cos,
+                    output * fieldRelativeAngle.sin,
                     rotationController.calculate(
                         robotPose.rotation.radians,
                         targetPose.rotation.radians
                     )
                 )
-
-            atAlignmentSetpoint = yController.atSetpoint() && xController.atSetpoint()
 
             drive.runVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -95,5 +73,5 @@ fun alignToPose(
             )
         },
         swerveDrive
-    )
+    ).until { radialController.atSetpoint() }.andThen(Commands.runOnce({ drive.runVelocity(ChassisSpeeds()) }))
 }
