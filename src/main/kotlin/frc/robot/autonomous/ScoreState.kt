@@ -31,7 +31,7 @@ fun autoScore(): Command =
                 swerveDrive,
                 { swerveDrive.pose },
                 selectedScorePose
-            ).until { atAlignmentSetpoint }.andThen(Commands.runOnce({ println(" ALIGN_TO_POSE ENDED!!!") }))
+            )
         )).onlyIf { swerveDrive.pose.distanceFromPoint(selectedScorePose.invoke().translation) <= MAX_ALIGNMENT_DISTANCE }.alongWith(Commands.runOnce({ println("AUTO SCORE CALLED!!!") }))
 
 fun endAutoScore(): Command =
