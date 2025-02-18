@@ -27,7 +27,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
-    private var atSetpoint: Trigger = Trigger {
+    var atSetpoint: Trigger = Trigger {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
@@ -57,6 +57,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun blockedFeeder(): Command = setAngle(Angles.BLOCKED_FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
+    fun max(): Command = setAngle(Angles.MAX)
     fun tuningAngle(): Command =
         run {
                 io.setAngle(Units.Degrees.of(tuningAngleDegrees.get()))
