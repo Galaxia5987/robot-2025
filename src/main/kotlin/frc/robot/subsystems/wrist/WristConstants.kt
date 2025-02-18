@@ -1,5 +1,6 @@
 package frc.robot.subsystems.wrist
 
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.MomentOfInertia
@@ -7,8 +8,8 @@ import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
-val MAX_ANGLE: Angle = Units.Degrees.of(101.0)
-val MIN_ANGLE: Angle = Units.Degrees.of(0.08)
+val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.385)
+val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 9.0) * (20.0 / 66.0))
 const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = 1 / ((1.0 / 9.0) * (20.0 / 66.0) * (16.0 / 42.0))

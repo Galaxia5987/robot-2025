@@ -59,10 +59,8 @@ class WristIOReal : WristIO {
                     SoftwareLimitSwitchConfigs().apply {
                         ForwardSoftLimitEnable = true
                         ReverseSoftLimitEnable = true
-                        ForwardSoftLimitThreshold =
-                            MAX_ANGLE.`in`(Units.Rotations)
-                        ReverseSoftLimitThreshold =
-                            MIN_ANGLE.`in`(Units.Rotations)
+                        ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
+                        ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
                     }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
