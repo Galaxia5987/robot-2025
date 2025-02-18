@@ -10,7 +10,7 @@ import frc.robot.lib.selectGainsBasedOnMode
 const val VOLTAGE_CONTROL_KG = 0.37
 val MAX_HEIGHT_LIMIT: Distance = Units.Meters.of(0.95)
 val MIN_HEIGHT_LIMIT: Distance = Units.Meters.of(0.01)
-val SETPOINT_TOLERANCE: Distance = Units.Centimeters.of(1.0)
+val SETPOINT_TOLERANCE: Distance = Units.Centimeters.of(7.0)
 val RESET_VOLTAGE: Voltage = Units.Volts.of(-7.0)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(50.0)
 const val GEAR_RATIO = (12.0 / 72.0) * (12.0 / 12.0)
@@ -28,11 +28,11 @@ val GAINS =
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
     L2(Units.Centimeters.of(0.0)),
-    L3(Units.Centimeters.of(46.0)),
-    L4(Units.Centimeters.of(107.0)),
+    L3(Units.Centimeters.of(30.0)),
+    L4(Units.Centimeters.of(100.0)),
     L2_ALGAE(Units.Centimeters.of(0.0)),
-    L3_ALGAE(Units.Centimeters.of(28.0)),
-    FEEDER(Units.Centimeters.of(0.0)),
+    L3_ALGAE(Units.Centimeters.of(14.0)),
+    FEEDER(Units.Centimeters.of(5.0)),
     ZERO(Units.Centimeters.zero());
 
     fun getLoggingName() =

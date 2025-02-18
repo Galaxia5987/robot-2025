@@ -11,12 +11,11 @@ import edu.wpi.first.math.filter.MedianFilter
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.AnalogInput
-import frc.robot.REEFMASTER_CANBUS_NAME
 
 class GripperIOReal : GripperIO {
     override val inputs = LoggedGripperInputs()
 
-    private val motor = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
+    private val motor = TalonFX(MOTOR_PORT)
     private val control = VoltageOut(0.0).withEnableFOC(true)
 
     private val sensor = AnalogInput(SENSOR_PORT)
