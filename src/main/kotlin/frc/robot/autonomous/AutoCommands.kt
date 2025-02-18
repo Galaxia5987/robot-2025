@@ -15,8 +15,12 @@ import frc.robot.lib.distanceFromPoint
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
 import frc.robot.swerveDrive
+import org.littletonrobotics.junction.AutoLogOutput
 import java.util.function.Supplier
 import org.littletonrobotics.junction.Logger
+
+@AutoLogOutput
+var atAlignmentSetpoint = false
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
@@ -67,6 +71,8 @@ fun alignToPose(
                 )
             )
 
+            Logger.recordOutput("Odometry/AtAlignmentSetpoint", atAlignmentSetpoint)
+
             val targetSpeeds =
                 ChassisSpeeds(
                     xController.calculate(robotPose.x, targetPose.x),
@@ -77,18 +83,15 @@ fun alignToPose(
                     )
                 )
 
+            atAlignmentSetpoint = yController.atSetpoint() && xController.atSetpoint()
+
             drive.runVelocity(
-                if (
-                    robotPose.distanceFromPoint(targetPose.translation) <=
-                        MAX_ALIGNMENT_DISTANCE
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    targetSpeeds,
+                    if (IS_RED && CURRENT_MODE == Mode.REAL)
+                        drive.rotation + Rotation2d.k180deg
+                    else drive.rotation
                 )
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                        targetSpeeds,
-                        if (IS_RED && CURRENT_MODE == Mode.REAL)
-                            drive.rotation + Rotation2d.k180deg
-                        else drive.rotation
-                    )
-                else ChassisSpeeds()
             )
         },
         swerveDrive

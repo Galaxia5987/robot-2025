@@ -5,35 +5,36 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.ConditionalCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.RobotContainer
 import frc.robot.lib.distanceFromPoint
 import frc.robot.swerveDrive
 
-private val selectedScorePose: () -> Pose2d = ScorePose.`1L`.pose
 // TODO: Add implementation for actual value
+val IS_WITHIN_AUTO_SCORE_DISTANCE =
+    { swerveDrive.pose.distanceFromPoint(selectedScorePose.invoke().translation) <= MAX_ALIGNMENT_DISTANCE }
 
+val selectedScorePose: () -> Pose2d = ScorePose.`5L`.pose
+
+// TODO: Add implementation for actual value
 private val selectedHeightPose: () -> ScoreHeight = { ScoreHeight.L3 }
-// TODO: Add implementation for actual value
 
-private fun selectedScorePosePathfindingCommand(): Command =
-    pathFindToPose(selectedScorePose.invoke())
+//private fun selectedScorePosePathfindingCommand(): Command =
+//    pathFindToPose(selectedScorePose.invoke())
 
 private fun selectedHeightCommand(outtakeTrigger: Trigger): Command =
     selectedHeightPose.invoke().command.invoke(outtakeTrigger)
 
-fun score(): Command =
-    selectedScorePosePathfindingCommand()
-        .andThen(
-            selectedHeightCommand(Trigger { false })
-                .alongWith(
-                    alignToPose(
-                        swerveDrive,
-                        { swerveDrive.pose },
-                        selectedScorePose
-                    )
-                )
-        )
+fun autoScore(): Command =
+    (selectedHeightCommand(Trigger { false })
+        .alongWith(
+            alignToPose(
+                swerveDrive,
+                { swerveDrive.pose },
+                selectedScorePose
+            ).until { atAlignmentSetpoint }.andThen(Commands.runOnce({ println(" ALIGN_TO_POSE ENDED!!!") }))
+        )).onlyIf { swerveDrive.pose.distanceFromPoint(selectedScorePose.invoke().translation) <= MAX_ALIGNMENT_DISTANCE }.alongWith(Commands.runOnce({ println("AUTO SCORE CALLED!!!") }))
 
-fun endScore(): Command =
+fun endAutoScore(): Command =
     ConditionalCommand(
         selectedHeightCommand(Trigger { true }),
         Commands.runOnce({ swerveDrive.stop() })
