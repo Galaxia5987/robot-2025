@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.*
-import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
@@ -62,11 +61,12 @@ object RobotContainer {
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand =
             DriveCommands.joystickDrive(
-                swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
-                { -driverController.rightX * 0.6 }
-            ).alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
+                    swerveDrive,
+                    { driverController.leftY },
+                    { driverController.leftX },
+                    { -driverController.rightX * 0.6 }
+                )
+                .alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
 
         climber.defaultCommand =
             climber.powerControl {
