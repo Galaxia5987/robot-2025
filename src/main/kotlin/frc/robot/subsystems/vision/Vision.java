@@ -64,6 +64,10 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
+    public Rotation2d getTyToTarget(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.ty();
+    }
+
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
