@@ -55,6 +55,11 @@ public class TunerConstants {
 
     public static PathConstraints PATH_CONSTRAINTS;
 
+    // These form the slew limit function
+    public static final double SLEW_LIMIT_C = 10.0;
+    public static final double SLEW_LIMIT_A = 6.0;
+    public static final double SLEW_LIMIT_B = -13.0;
+
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
@@ -245,10 +250,10 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        -3.072563518134939,
+                        -3.055689729468197,
                         -0.5200194870932323,
-                        1.5922720578252956,
-                        0.009203884727313847
+                        1.59073807703741,
+                        0.0015339807878856412
                     };
 
             steerGains =

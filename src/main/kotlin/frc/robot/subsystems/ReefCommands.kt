@@ -73,15 +73,13 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
-        wrist.retract(),
-        waitSeconds(0.4),
         moveDefaultPosition()
     )
 
 // TODO: Add Coral Simulation
 
 private fun moveDefaultPosition(): Command =
-    parallel(elevator.feeder(), wrist.feeder())
+    sequence(elevator.feeder(), waitUntil(elevator.atSetpoint) , wrist.feeder())
 
 fun l1(outtakeTrigger: Trigger): Command =
     parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))
