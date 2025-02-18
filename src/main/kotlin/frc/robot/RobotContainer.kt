@@ -83,16 +83,8 @@ object RobotContainer {
             )
 
         driverController.cross().onTrue(l1(driverController.cross().negate()))
-//        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.square().and(IS_WITHIN_AUTO_SCORE_DISTANCE).onTrue(autoScore()).onFalse(endAutoScore())
-//        driverController.circle().onTrue(l3(driverController.circle().negate()))
-        driverController.circle().whileTrue(
-            alignToPose(
-                frc.robot.swerveDrive,
-                { frc.robot.swerveDrive.pose },
-                selectedScorePose
-            )
-        )
+        driverController.square().onTrue(l2(driverController.square().negate()))
+        driverController.circle().onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
             .onTrue(l4(driverController.triangle().negate()))
