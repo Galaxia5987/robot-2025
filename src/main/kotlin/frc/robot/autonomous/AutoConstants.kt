@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
 import frc.robot.lib.flipIfNeeded
@@ -59,6 +60,7 @@ val ALIGNMENT_X_GAINS = Gains(4.0, 0.0, 0.2)
 val ALIGNMENT_Y_GAINS = Gains(4.0, 0.0, 0.2)
 val ALIGNMENT_ROTATION_GAINS = Gains(5.0, 0.0, 0.0)
 
+val ALIGN_SPEED: LinearVelocity = Units.MetersPerSecond.of(1.5)
 val ALIGNED_TY = 0.0
 val ALIGNED_TX_LEFT = 0.0
 val ALIGNED_TX_RIGHT = 0.0

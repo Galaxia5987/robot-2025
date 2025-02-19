@@ -38,16 +38,13 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
     return Commands.run({
             drive.runVelocity(
                 ChassisSpeeds(
-                    yController.calculate(
-                        vision.getTyToTarget(1).radians,
-                        ALIGNED_TY
-                    ), // TODO: make sure 1 is front camera
+                    ALIGN_SPEED.`in`(Units.MetersPerSecond),
                     0.0,
                     0.0
                 )
             )
         })
-        .until { yController.atSetpoint() }
+        .until { vision.getTyToTarget(1).radians == ALIGNED_TY } // TODO: make sure 1 is front camera
         .andThen(
             Commands.either(
                 Commands.run({
