@@ -21,58 +21,33 @@ import java.util.function.Supplier
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
-fun align2d(drive: Drive, isLeft: Boolean): Command {
-    val yController =
-        PIDController(
-            ALIGNMENT_Y_GAINS.kP,
-            ALIGNMENT_Y_GAINS.kI,
-            ALIGNMENT_Y_GAINS.kD
-        )
-    val xController =
-        PIDController(
-            ALIGNMENT_X_GAINS.kP,
-            ALIGNMENT_X_GAINS.kI,
-            ALIGNMENT_X_GAINS.kD,
-        )
-
-    return Commands.run({
+private fun pidDrive(
+    drive: Drive,
+    controller: PIDController,
+    error: () -> Double,
+): Command {
+    return drive
+        .run {
             drive.runVelocity(
-                ChassisSpeeds(ALIGN_SPEED.`in`(Units.MetersPerSecond), 0.0, 0.0)
+                ChassisSpeeds(0.0, controller.calculate(error.invoke()), 0.0)
             )
-        })
-        .until {
-            vision.getTyToTarget(1).radians == ALIGNED_TY
-        } // TODO: make sure 1 is front camera
-        .andThen(
-            Commands.either(
-                Commands.run({
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            0.0,
-                            xController.calculate(
-                                vision.getTxToTarget(1).radians,
-                                ALIGNED_TX_LEFT
-                            ),
-                            0.0
-                        )
-                    )
-                }),
-                Commands.run({
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            0.0,
-                            xController.calculate(
-                                vision.getTxToTarget(1).radians,
-                                ALIGNED_TX_RIGHT
-                            ),
-                            0.0
-                        )
-                    )
-                }),
-                { isLeft }
-            )
-        )
-        .until { xController.atSetpoint() }
+        }
+        .until(controller::atSetpoint)
+}
+
+fun align2d(drive: Drive, isLeft: Boolean): Command {
+    val yController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setpoint = ALIGNED_TY
+    yController.setTolerance(0.0) // TODO: Change
+    val yError = { vision.getTyToTarget(1).radians }
+
+    val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
+    xController.setpoint = if (isLeft) ALIGNED_TX_LEFT else ALIGNED_TX_RIGHT
+    xController.setTolerance(0.0) // TODO: Change
+    val xError = { vision.getTxToTarget(1).radians }
+
+    return pidDrive(drive, yController, yError)
+        .andThen(pidDrive(drive, xController, xError))
 }
 
 fun alignToPose(
