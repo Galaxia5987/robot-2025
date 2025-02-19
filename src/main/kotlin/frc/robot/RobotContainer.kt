@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.*
@@ -29,6 +30,9 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
+    private val highController = CommandGenericHID(3)
+    private val poseController = CommandGenericHID(4)
+
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
