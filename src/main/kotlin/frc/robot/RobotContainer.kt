@@ -98,8 +98,6 @@ object RobotContainer {
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
-        driverController.povLeft().whileTrue(align2d(swerveDrive, true))
-        driverController.povRight().whileTrue(align2d(swerveDrive, false))
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
