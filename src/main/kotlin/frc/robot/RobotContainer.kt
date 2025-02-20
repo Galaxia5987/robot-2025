@@ -54,6 +54,7 @@ object RobotContainer {
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
+        swerveDrive.resetGyro(Units.Degrees.of(180.0))
         enableAutoLogOutputFor(this)
     }
 
@@ -81,7 +82,7 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                Commands.runOnce({swerveDrive.resetGyro(Units.Degrees.of(0.0))}, swerveDrive)
                     .ignoringDisable(true)
             )
 
