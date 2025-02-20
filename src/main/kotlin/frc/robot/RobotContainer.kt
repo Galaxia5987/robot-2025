@@ -33,7 +33,6 @@ object RobotContainer {
     private val highController = CommandGenericHID(3)
     private val poseController = CommandGenericHID(4)
 
-
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
     private val climber = frc.robot.climber
@@ -113,10 +112,13 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+
+        testController.a().onTrue(intakeBit(testController.a().negate()))
+        testController.y().onTrue(feederL4Bit(testController.y().negate()))
     }
 
     fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+        DriveCommands.timedLeave(swerveDrive, 2.5)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
