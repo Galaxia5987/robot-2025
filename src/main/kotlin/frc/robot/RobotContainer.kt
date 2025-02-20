@@ -87,7 +87,8 @@ object RobotContainer {
             )
 
         driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
+//        driverController.square().onTrue(l2(driverController.square().negate()))
+        driverController.square().onTrue(align2d(swerveDrive, false))
         driverController.circle().onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()

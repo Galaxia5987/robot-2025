@@ -65,12 +65,12 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
                     0.0
                 )
             )
-        }.until(Trigger { xController.atSetpoint() }.debounce(0.4)),
+        }.until(Trigger { xController.atSetpoint() }.debounce(0.1)),
         drive.run {
             drive.runVelocity(
                 ChassisSpeeds(0.0, 0.0, rotationController.calculate(vision.getYawToTarget(1).get().radians))
             )
-        }.until(Trigger { rotationController.atSetpoint() }.debounce(0.4)),
+        }.until(Trigger { rotationController.atSetpoint() }.debounce(0.1)),
         drive.run {
             drive.runVelocity(
                 ChassisSpeeds(
@@ -79,7 +79,7 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
                     0.0
                 )
             )
-        }.until(Trigger { yController.atSetpoint() }.debounce(0.4))
+        }.until(Trigger(yController::atSetpoint).debounce(0.1))
     )
 }
 
