@@ -6,9 +6,11 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.autoRoutines
+import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
@@ -30,6 +32,9 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
+    private val highController = CommandGenericHID(3)
+    private val poseController = CommandGenericHID(4)
+
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
@@ -115,8 +120,8 @@ object RobotContainer {
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
-    private fun registerAutoRoutines() {
-        autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
-        autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
+    private fun registerAutoCommands() {
+        fun register(name: String, command: Command) =
+            NamedCommands.registerCommand(name, command)
     }
 }

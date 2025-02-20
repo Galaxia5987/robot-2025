@@ -50,7 +50,7 @@ public class Vision extends SubsystemBase {
         for (int i = 0; i < inputs.length; i++) {
             disconnectedAlerts[i] =
                     new Alert(
-                            "Vision camera " + Integer.toString(i) + " is disconnected.",
+                            "Vision camera " + io[i].getName() + " is disconnected.",
                             AlertType.kWarning);
         }
     }
@@ -60,15 +60,23 @@ public class Vision extends SubsystemBase {
      *
      * @param cameraIndex The index of the camera to use.
      */
-    public Rotation2d getTargetX(int cameraIndex) {
+    public Rotation2d getTxToTarget(int cameraIndex) {
         return inputs[cameraIndex].latestTargetObservation.tx();
+    }
+
+    public Rotation2d getTyToTarget(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.ty();
+    }
+
+    public Rotation2d getYawToTarget(int cameraIndex) {
+        return inputs[cameraIndex].yawToTarget;
     }
 
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
-            Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
+            Logger.processInputs("Vision/" + io[i].getName(), inputs[i]);
         }
 
         // Initialize logging values
@@ -149,16 +157,16 @@ public class Vision extends SubsystemBase {
 
             // Log camera datadata
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/TagPoses",
+                    "Vision/" + io[cameraIndex].getName() + "/TagPoses",
                     tagPoses.toArray(new Pose3d[tagPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPoses",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPoses",
                     robotPoses.toArray(new Pose3d[robotPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPosesAccepted",
                     robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPosesRejected",
                     robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
             allTagPoses.addAll(tagPoses);
             allRobotPoses.addAll(robotPoses);

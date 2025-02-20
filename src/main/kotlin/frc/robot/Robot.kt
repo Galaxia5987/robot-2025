@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
@@ -68,8 +69,8 @@ object Robot : LoggedRobot() {
         when (CURRENT_MODE) {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
-                    0,
-                    PowerDistribution.ModuleType.kCTRE
+                    1,
+                    PowerDistribution.ModuleType.kRev
                 )
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
@@ -92,6 +93,7 @@ object Robot : LoggedRobot() {
         enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
+        PathfindingCommand.warmupCommand().schedule()
     }
 
     /**

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.units.measure.*;
 import frc.robot.ConstantsKt;
 
@@ -34,6 +35,8 @@ public class TunerConstants {
     // This needs to be tuned to your individual robot
     public static LinearVelocity kSpeedAt12Volts;
     public static AngularVelocity kMaxOmegaVelocity;
+    public static LinearAcceleration kMaxAcceleration;
+    public static AngularAcceleration kMaxAngularAcceleration;
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
@@ -49,6 +52,13 @@ public class TunerConstants {
     public static SwerveModuleConstants<
                     TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             BackRight;
+
+    public static PathConstraints PATH_CONSTRAINTS;
+
+    // These form the slew limit function
+    public static final double SLEW_LIMIT_C = 10.0;
+    public static final double SLEW_LIMIT_A = 6.0;
+    public static final double SLEW_LIMIT_B = -13.0;
 
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -157,6 +167,7 @@ public class TunerConstants {
 
             kSlipCurrent = Amps.of(70.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
+            kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -170,6 +181,7 @@ public class TunerConstants {
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.5);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(1.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -238,10 +250,10 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        -3.0587576910439687,
-                        -0.5092816215780329,
-                        -1.5493205957644975,
-                        0.010737865515199488
+                        -3.055689729468197,
+                        -0.5200194870932323,
+                        1.59073807703741,
+                        0.0015339807878856412
                     };
 
             steerGains =
@@ -267,6 +279,7 @@ public class TunerConstants {
 
             kSlipCurrent = Amps.of(78.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
+            kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
 
             driveInitialConfigs =
                     new TalonFXConfiguration()
@@ -284,7 +297,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.5);
+            kSpeedAt12Volts = MetersPerSecond.of(5);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -352,11 +366,14 @@ public class TunerConstants {
             kBackRightYPos = Meters.of(-0.24);
         }
 
-        DrivetrainConstants =
-                new SwerveDrivetrainConstants()
-                        .withCANBusName(kCANBus.getName())
-                        .withPigeon2Id(kPigeonId)
-                        .withPigeon2Configs(pigeonConfigs);
+        PATH_CONSTRAINTS =
+                new PathConstraints(
+                        kSpeedAt12Volts.in(MetersPerSecond),
+                        kMaxAcceleration.in(MetersPerSecondPerSecond),
+                        kMaxOmegaVelocity.in(RadiansPerSecond),
+                        kMaxAngularAcceleration.in(RadiansPerSecondPerSecond));
+
+        DrivetrainConstants = new SwerveDrivetrainConstants().withCANBusName(kCANBus.getName());
 
         SwerveModuleConstantsFactory<
                         TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
