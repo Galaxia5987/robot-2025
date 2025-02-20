@@ -2,12 +2,14 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
 import frc.robot.Mode
@@ -16,6 +18,7 @@ import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
 import frc.robot.swerveDrive
 import frc.robot.vision
+import org.littletonrobotics.junction.Logger
 import java.util.function.Supplier
 
 fun pathFindToPose(pose: Pose2d): Command =
@@ -42,27 +45,42 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
-    val rotationError = { drive.rotation.radians }
 
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
     xController.setpoint = if (isLeft) ALIGNED_TX_LEFT else ALIGNED_TX_RIGHT
     xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = { -vision.getTranslationToBestTarget(1).y }
 
-    return pidDrive(drive, rotationController, rotationError)
-        .andThen(
-            Commands.run({
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            ALIGN_SPEED.`in`(Units.MetersPerSecond),
-                            0.0,
-                            0.0
-                        )
-                    )
-                })
-                .until { vision.getTyToTarget(1).radians == ALIGNED_TY }
-        )
-        .andThen(pidDrive(drive, xController, xError))
+    val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    yController.setpoint = 0.0
+    val yError = { -vision.getTranslationToBestTarget(1).x }
+
+    return Commands.sequence(
+        drive.run {
+            drive.runVelocity(
+                ChassisSpeeds(
+                    0.0,
+                    xController.calculate(xError.invoke()),
+                    0.0
+                )
+            )
+        }.until(Trigger { xController.atSetpoint() }.debounce(0.4)),
+        drive.run {
+            drive.runVelocity(
+                ChassisSpeeds(0.0, 0.0, rotationController.calculate(vision.getYawToTarget(1).get().radians))
+            )
+        }.until(Trigger { rotationController.atSetpoint() }.debounce(0.4)),
+        drive.run {
+            drive.runVelocity(
+                ChassisSpeeds(
+                    yController.calculate(yError.invoke()),
+                    0.0,
+                    0.0
+                )
+            )
+        }.until(Trigger { yController.atSetpoint() }.debounce(0.4))
+    )
 }
 
 fun alignToPose(
@@ -91,38 +109,38 @@ fun alignToPose(
     )
 
     return Commands.run(
-            {
-                val robotPose = robotPoseSupplier.get()
-                val targetPose = targetPoseSupplier.get()
+        {
+            val robotPose = robotPoseSupplier.get()
+            val targetPose = targetPoseSupplier.get()
 
-                val radius =
-                    (robotPose.translation - targetPose.translation).norm
-                val output = radialController.calculate(radius, 0.0)
-                val fieldRelativeAngle =
-                    targetPose.translation.rotationToPoint(
-                        robotPose.translation
-                    )
-                val targetSpeeds =
-                    ChassisSpeeds(
-                        output * fieldRelativeAngle.cos,
-                        output * fieldRelativeAngle.sin,
-                        rotationController.calculate(
-                            robotPose.rotation.radians,
-                            targetPose.rotation.radians
-                        )
-                    )
-
-                drive.runVelocity(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                        targetSpeeds,
-                        if (IS_RED && CURRENT_MODE == Mode.REAL)
-                            drive.rotation + Rotation2d.k180deg
-                        else drive.rotation
+            val radius =
+                (robotPose.translation - targetPose.translation).norm
+            val output = radialController.calculate(radius, 0.0)
+            val fieldRelativeAngle =
+                targetPose.translation.rotationToPoint(
+                    robotPose.translation
+                )
+            val targetSpeeds =
+                ChassisSpeeds(
+                    output * fieldRelativeAngle.cos,
+                    output * fieldRelativeAngle.sin,
+                    rotationController.calculate(
+                        robotPose.rotation.radians,
+                        targetPose.rotation.radians
                     )
                 )
-            },
-            swerveDrive
-        )
+
+            drive.runVelocity(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    targetSpeeds,
+                    if (IS_RED && CURRENT_MODE == Mode.REAL)
+                        drive.rotation + Rotation2d.k180deg
+                    else drive.rotation
+                )
+            )
+        },
+        swerveDrive
+    )
         .until { radialController.atSetpoint() }
         .andThen(Commands.runOnce({ drive.runVelocity(ChassisSpeeds()) }))
 }

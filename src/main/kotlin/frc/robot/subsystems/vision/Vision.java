@@ -20,6 +20,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
@@ -27,6 +28,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -64,12 +67,20 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].latestTargetObservation.tx();
     }
 
+    public int getBestTargetID(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.id();
+    }
+
     public Rotation2d getTyToTarget(int cameraIndex) {
         return inputs[cameraIndex].latestTargetObservation.ty();
     }
 
-    public Rotation2d getYawToTarget(int cameraIndex) {
-        return inputs[cameraIndex].yawToTarget;
+    public Supplier<Rotation2d> getYawToTarget(int cameraIndex) {
+        return () -> inputs[cameraIndex].yawToTarget;
+    }
+
+    public Translation2d getTranslationToBestTarget(int cameraIndex) {
+        return inputs[cameraIndex].translationToBestTarget;
     }
 
     @Override
