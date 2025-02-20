@@ -40,7 +40,7 @@ private fun AutoTrajectory.score(
     outtakeTrigger: Trigger = done(),
 ) =
     atTimeBeforeEnd(SCORE_TIME.`in`(Seconds))
-        .onTrue(l4(outtakeTrigger.debounce(SCORE_TIME.`in`(Seconds))))
+        .onTrue(l4(outtakeTrigger))
 
 private fun AutoTrajectory.intake(
     intakeTrigger: Trigger = done(),
