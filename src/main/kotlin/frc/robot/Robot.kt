@@ -125,7 +125,7 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
         // Make sure command is compiled beforehand, otherwise there will be a delay.
-        autonomousCommand = RobotContainer.getAutonomousCommand()
+        autonomousCommand = RobotContainer.getAutonomousCommand().invoke()
 
         // Schedule the autonomous command
         autonomousCommand.schedule()

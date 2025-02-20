@@ -67,5 +67,5 @@ val ALIGNED_TX_RIGHT = 0.0
 val INTAKE_FEEDER_DISTANCE: Distance = Units.Meters.of(0.0)
 val INTAKE_FEEDER_TIME: Time = Units.Seconds.of(0.5)
 val SCORE_DISTANCE: Distance = Units.Meters.of(0.0)
-val SCORE_TIME: Time = Units.Seconds.of(0.8)
+val SCORE_TIME: Time = Units.Seconds.of(1.2)
 val AUTO_DISTANCE_TOLERANCE: Distance = Units.Centimeters.of(2.0)

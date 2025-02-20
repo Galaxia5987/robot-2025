@@ -5,12 +5,16 @@ import choreo.auto.AutoRoutine
 import choreo.auto.AutoTrajectory
 import choreo.trajectory.SwerveSample
 import choreo.trajectory.Trajectory
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Seconds
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
+import frc.robot.elevator
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.l4
 import frc.robot.swerveDrive
+import frc.robot.wrist
 import org.littletonrobotics.junction.Logger
 
 private fun logTrajectory(
@@ -37,7 +41,7 @@ private val autoFactory =
     )
 
 private fun AutoTrajectory.score(
-    outtakeTrigger: Trigger = done(),
+    outtakeTrigger: Trigger = done().and(elevator.atSetpoint).and(wrist.atSetpoint),
 ) =
     atTimeBeforeEnd(SCORE_TIME.`in`(Seconds))
         .onTrue(l4(outtakeTrigger))

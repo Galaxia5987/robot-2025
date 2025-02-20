@@ -538,9 +538,9 @@ public class Drive extends SubsystemBase {
     }
 
     public void followPath(SwerveSample sample) {
-        PIDController xController = new PIDController(5.0, 0.0, 0.0);
-        PIDController yController = new PIDController(5.0, 0.0, 0.0);
-        PIDController rotationController = new PIDController(1.0, 0.0, 0.0);
+        PIDController xController = new PIDController(3.0, 0.0, 0.5);
+        PIDController yController = new PIDController(3.0, 0.0, 0.5);
+        PIDController rotationController = new PIDController(2.5, 0.0, 0.0);
 
         rotationController.enableContinuousInput(-Math.PI, Math.PI);
 

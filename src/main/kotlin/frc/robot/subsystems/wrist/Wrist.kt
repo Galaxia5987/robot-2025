@@ -43,6 +43,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     private fun setAngle(angle: Angles): Command =
         runOnce {
                 io.setAngle(angle.angle)
+                println(angle.angle.`in`(Units.Degrees))
                 setpointName = angle.getLoggingName()
                 setpointValue = angle.angle
             }

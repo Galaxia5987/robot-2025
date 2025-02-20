@@ -7,7 +7,7 @@ import edu.wpi.first.units.measure.MomentOfInertia
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
-val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
+val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(2.0)
 val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.385)
 val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 9.0) * (20.0 / 66.0))
@@ -15,7 +15,7 @@ const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = 1 / ((1.0 / 9.0) * (20.0 / 66.0) * (16.0 / 42.0))
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 
-val ABSOLUTE_ENCDOER_MAGNET_OFFSET = Units.Rotations.of(0.39)
+val ABSOLUTE_ENCDOER_MAGNET_OFFSET = Units.Rotations.of(0.393)
 
 val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 

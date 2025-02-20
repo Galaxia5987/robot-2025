@@ -1,5 +1,9 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.commands.FollowPathCommand
+import com.pathplanner.lib.commands.PathPlannerAuto
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
@@ -9,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.autoRoutines
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
@@ -118,8 +123,7 @@ object RobotContainer {
             .onTrue(extender.reset(operatorController.povUp().negate()))
     }
 
-    fun getAutonomousCommand(): Command = autoChooser.get()
-
+    fun getAutonomousCommand(): () -> Command = { autoChooser.get() }
     private fun registerAutoRoutines() {
         autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
         autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
