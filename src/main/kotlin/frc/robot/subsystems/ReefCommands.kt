@@ -80,18 +80,27 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
 
 private fun moveDefaultPosition(): Command =
     sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.feeder())
+        .withName("Reef/Move default position")
 
 fun l1(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l1(), wrist.l1())
+        .andThen(scoreCoral(outtakeTrigger))
+        .withName("Reef/L1")
 
 fun l2(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l2(), wrist.l2()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l2(), wrist.l2())
+        .andThen(scoreCoral(outtakeTrigger))
+        .withName("Reef/L2")
 
 fun l3(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
+    parallel(elevator.l3(), wrist.l3())
+        .andThen(scoreCoral(outtakeTrigger))
+        .withName("Reef/L3")
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
+    parallel(elevator.l4(), wrist.l4())
+        .andThen(scoreCoralL4(outtakeTrigger))
+        .withName("Reef/L4")
 
 fun pathfindFeeder(outtakeTrigger: Trigger): Command =
     AutoBuilder.pathfindThenFollowPath(
@@ -109,19 +118,34 @@ fun l2algae(retractTrigger: Trigger): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
         .until(retractTrigger)
         .andThen(moveDefaultPosition())
+        .withName("Reef/L2 Algae")
+
+fun l3algae(retractTrigger: Trigger): Command =
+    parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
+        .until(retractTrigger)
+        .andThen(moveDefaultPosition())
+        .withName("Reef/L3 Algae")
 
 fun feeder(intakeTrigger: Trigger): Command =
     sequence(
-        parallel(elevator.feeder(), wrist.feeder()),
-        waitUntil(intakeTrigger),
-        gripper.intake().until(gripper.hasCoral).andThen(moveDefaultPosition())
-    )
+            parallel(elevator.feeder(), wrist.feeder()),
+            waitUntil(intakeTrigger),
+            gripper
+                .intake()
+                .until(gripper.hasCoral)
+                .andThen(moveDefaultPosition())
+        )
+        .withName("Reef/Feeder")
 
 fun blockedFeeder(intakeTrigger: Trigger): Command =
     sequence(
-        parallel(elevator.feeder(), wrist.blockedFeeder()),
-        waitUntil(intakeTrigger),
-        gripper.intake().until(gripper.hasCoral).andThen(moveDefaultPosition())
-    )
+            parallel(elevator.feeder(), wrist.blockedFeeder()),
+            waitUntil(intakeTrigger),
+            gripper
+                .intake()
+                .until(gripper.hasCoral)
+                .andThen(moveDefaultPosition())
+        )
+        .withName("Reef/Blocked Feeder")
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())

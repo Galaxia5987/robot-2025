@@ -10,10 +10,12 @@ import frc.robot.subsystems.l4
 
 fun intakeBit(outtakeTrigger: Trigger): Command =
     sequence(
-        intakeAlgae().until(outtakeTrigger),
-        roller.outtake().withTimeout(Seconds.of(0.8)),
-        extender.retract().withTimeout(0.5)
-    )
+            intakeAlgae().until(outtakeTrigger),
+            roller.outtake().withTimeout(Seconds.of(0.8)),
+            extender.retract().withTimeout(0.5)
+        )
+        .withName("Bits/Intake")
 
 fun feederL4Bit(outtakeTrigger: Trigger): Command =
-    sequence(feeder(Trigger {true}), l4(outtakeTrigger))
+    sequence(feeder(Trigger { true }), l4(outtakeTrigger))
+        .withName("Bits/Feeder-->L4")
