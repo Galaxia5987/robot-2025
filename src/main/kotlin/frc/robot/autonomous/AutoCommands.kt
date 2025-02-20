@@ -47,7 +47,7 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
     xController.setpoint = if (isLeft) ALIGNED_TX_LEFT else ALIGNED_TX_RIGHT
     xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    val xError = { vision.getTxToTarget(1).radians }
+    val xError = { -vision.getTranslationToBestTarget(1).y }
 
     return pidDrive(drive, rotationController, rotationError)
         .andThen(
