@@ -120,8 +120,8 @@ object RobotContainer {
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
-    private fun registerAutoCommands() {
-        fun register(name: String, command: Command) =
-            NamedCommands.registerCommand(name, command)
+    private fun registerAutoRoutines() {
+        autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
+        autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
     }
 }
