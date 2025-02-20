@@ -119,7 +119,7 @@ object RobotContainer {
     }
 
     fun getAutonomousCommand(): Command =
-        DriveCommands.timedLeave(swerveDrive, 2.5)
+        DriveCommands.timedLeave(swerveDrive, 1.0)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

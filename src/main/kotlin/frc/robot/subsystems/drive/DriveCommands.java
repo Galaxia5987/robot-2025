@@ -310,7 +310,7 @@ public class DriveCommands {
     }
 
     public static Command timedLeave(Drive drive, double timeSeconds) {
-        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(2.0, 0.0, 0.0)))
+        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
                 .withTimeout(timeSeconds);
     }
 
