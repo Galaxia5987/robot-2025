@@ -8,9 +8,5 @@ import java.util.function.BooleanSupplier
 fun intakeAlgae(): Command = extender.extend().alongWith(roller.intake())
 
 fun outtakeAlgae(retractTrigger: BooleanSupplier): Command =
-    roller.outtake().until(retractTrigger).andThen(retractIntake())
+    roller.outtake().until(retractTrigger).andThen(extender.retract())
 
-fun farOuttakeAlgae(retractTrigger: BooleanSupplier): Command =
-    roller.farOuttake().until(retractTrigger).andThen(retractIntake())
-
-fun retractIntake(): Command = extender.retract()
