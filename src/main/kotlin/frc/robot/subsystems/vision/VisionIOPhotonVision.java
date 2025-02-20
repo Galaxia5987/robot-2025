@@ -62,7 +62,7 @@ public class VisionIOPhotonVision implements VisionIO {
                                 result.getBestTarget().fiducialId);
                 inputs.translationToBestTarget = result.getBestTarget().bestCameraToTarget.getTranslation().toTranslation2d();
                 inputs.yawToTarget =
-                        Rotation2d.fromRadians(
+                        Rotation2d.fromDegrees(
                                 result.getBestTarget().getYaw());
             } else {
                 inputs.latestTargetObservation =
