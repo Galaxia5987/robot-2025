@@ -1,8 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.commands.FollowPathCommand
-import com.pathplanner.lib.commands.PathPlannerAuto
+import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.autoRoutines
-import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
@@ -56,6 +54,7 @@ object RobotContainer {
 
     init {
         registerAutoRoutines()
+        registerNamedCommands()
         configureButtonBindings()
         configureDefaultCommands()
         SmartDashboard.putData(autoChooser.sendableChooser)
@@ -127,5 +126,11 @@ object RobotContainer {
     private fun registerAutoRoutines() {
         autoChooser.addDefaultOption("A Leave", autoRoutines["A Leave"]!!.cmd())
         autoRoutines.forEach { autoChooser.addOption(it.key, it.value.cmd()) }
+    }
+
+    private fun registerNamedCommands(){
+        NamedCommands.registerCommand("L4", l4(Trigger{false}))
+        NamedCommands.registerCommand("Score", l4(Trigger{true}))
+        NamedCommands.registerCommand("Feed", feeder(Trigger{true}))
     }
 }
