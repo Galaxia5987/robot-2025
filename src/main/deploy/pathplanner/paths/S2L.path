@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.359034090909091,
-        "y": 4.0
+        "x": 1.2352195945945947,
+        "y": 7.058699324324324
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.81826486944345,
-        "y": 4.0
+        "x": 2.7174831081081083,
+        "y": 6.5942567567567565
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": "S1"
     },
     {
       "anchor": {
-        "x": 5.764,
-        "y": 3.85
+        "x": 5.306503378378378,
+        "y": 5.052702702702702
       },
       "prevControl": {
-        "x": 6.595734128310606,
-        "y": 3.85
+        "x": 5.3756756756756765,
+        "y": 5.438091216216216
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "1L"
+      "linkedName": "2L"
     }
   ],
   "rotationTargets": [],
@@ -34,15 +34,25 @@
   "eventMarkers": [
     {
       "name": "L4",
-      "waypointRelativePos": 0.8116545265348567,
+      "waypointRelativePos": 0.7302564102564088,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
+        }
+      }
     },
     {
       "name": "Score",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Score"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -55,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.00360653780305
+    "rotation": -119.91920868855752
   },
   "reversed": false,
-  "folder": "B1L6RL",
+  "folder": "B1R2LR",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.9258300016274
+    "rotation": 124.50852298766848
   },
   "useDefaultConstraints": true
 }
