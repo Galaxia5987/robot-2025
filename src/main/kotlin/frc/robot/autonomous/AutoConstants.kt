@@ -58,7 +58,7 @@ val MAX_ALIGNMENT_DISTANCE: Distance = Units.Meters.of(2.0)
 
 val ALIGNMENT_X_GAINS = Gains(10.0, 0.0, 0.0)
 val ALIGNMENT_Y_GAINS = Gains(4.0, 0.0, 0.0)
-val ALIGNMENT_ROTATION_GAINS = Gains(0.4, 0.0, 0.0)
+val ALIGNMENT_ROTATION_GAINS = Gains(4.0, 0.0, 0.0)
 
 val ALIGNED_TX_LEFT = 0.0
 val ALIGNED_TX_RIGHT = 0.0
