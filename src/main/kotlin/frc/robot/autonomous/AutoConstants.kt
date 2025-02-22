@@ -8,7 +8,6 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
-import frc.robot.lib.flipIfNeeded
 import java.io.File
 import kotlinx.serialization.json.*
 
@@ -50,7 +49,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
 }
 
 val ALIGNMENT_POSES
-    get() = parseChoreoPoses().mapValues { it.value.flipIfNeeded() }
+    get() = parseChoreoPoses()
 
 val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.2)
