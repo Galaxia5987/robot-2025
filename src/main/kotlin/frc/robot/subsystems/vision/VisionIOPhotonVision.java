@@ -15,9 +15,7 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,10 +58,14 @@ public class VisionIOPhotonVision implements VisionIO {
                                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
                                 Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
                                 result.getBestTarget().fiducialId);
-                inputs.translationToBestTarget = result.getBestTarget().bestCameraToTarget.getTranslation().toTranslation2d();
-                inputs.yawToTarget = result.getBestTarget().bestCameraToTarget.getRotation().toRotation2d();
-//                        Rotation2d.fromDegrees(
-//                                result.getBestTarget().getYaw());
+                inputs.translationToBestTarget =
+                        result.getBestTarget()
+                                .bestCameraToTarget
+                                .getTranslation()
+                                .rotateBy(robotToCamera.getRotation())
+                                .plus(robotToCamera.getTranslation());
+                inputs.yawToTarget =
+                        result.getBestTarget().bestCameraToTarget.getRotation().toRotation2d();
             } else {
                 inputs.latestTargetObservation =
                         new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
