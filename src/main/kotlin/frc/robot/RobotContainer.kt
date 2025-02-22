@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.getPose2d
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
@@ -34,7 +36,6 @@ object RobotContainer {
     private val highController = CommandGenericHID(3)
     private val poseController = CommandGenericHID(4)
 
-
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
     private val climber = frc.robot.climber
@@ -45,6 +46,16 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
+
+    private val Reef3: Pose2d =
+        getPose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
+    private val Reef4: Pose2d = getPose2d(2.93, 4.030)
+    private val Reef5: Pose2d =
+        getPose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
+    private val Reef6: Pose2d =
+        getPose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
+
+    private val selectedPose: Pose2d = Reef6
 
     init {
 
@@ -99,10 +110,20 @@ object RobotContainer {
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
-        driverController.povLeft().whileTrue(align2d(swerveDrive, true, l3(driverController.povLeft().negate())))
-            .onFalse(l3(Trigger {true}))
-        driverController.povRight().whileTrue(align2d(swerveDrive, false, l3(driverController.povRight().negate())))
-            .onFalse(l3(Trigger {true}))
+        driverController
+            .povLeft()
+            .whileTrue(
+                pathFindToPose(selectedPose)
+                    .andThen(alignToPose(swerveDrive, true, l4()))
+            )
+            .onFalse(l4(Trigger { true }))
+        driverController
+            .povRight()
+            .whileTrue(
+                pathFindToPose(selectedPose)
+                    .andThen(alignToPose(swerveDrive, false, l4()))
+            )
+            .onFalse(l4(Trigger { true }))
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
