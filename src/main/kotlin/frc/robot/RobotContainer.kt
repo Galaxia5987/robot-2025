@@ -47,13 +47,17 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
+    private val Reef1: Pose2d =
+        Pose2d(6.063, 3.980, Rotation2d.k180deg)
+    private val Reef2: Pose2d =
+        Pose2d(5.315, 5.366, Rotation2d.fromDegrees(-120.0))
     private val Reef3: Pose2d =
-        getPose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
+        Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
     private val Reef4: Pose2d = getPose2d(2.93, 4.030)
     private val Reef5: Pose2d =
-        getPose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
+        Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
     private val Reef6: Pose2d =
-        getPose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
+        Pose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
 
     private val selectedPose: Pose2d = Reef6
 
