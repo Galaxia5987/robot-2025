@@ -63,3 +63,4 @@ val ALIGNMENT_Y_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 
 val ALIGNED_TX_LEFT = -0.156
 val ALIGNED_TX_RIGHT = 0.175
+val ALIGNED_ROTATION = Rotation2d.fromDegrees(155.0)

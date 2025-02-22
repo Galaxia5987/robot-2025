@@ -21,7 +21,7 @@ fun pathFindToPose(pose: Pose2d): Command =
 fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
-    rotationController.setpoint = Rotation2d.fromDegrees(155.0).radians
+    rotationController.setpoint = ALIGNED_ROTATION.radians
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
