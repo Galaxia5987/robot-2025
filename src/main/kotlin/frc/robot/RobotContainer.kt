@@ -47,8 +47,7 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
-    private val Reef1: Pose2d =
-        Pose2d(6.063, 3.980, Rotation2d.k180deg)
+    private val Reef1: Pose2d = Pose2d(6.063, 3.980, Rotation2d.k180deg)
     private val Reef2: Pose2d =
         Pose2d(5.315, 5.366, Rotation2d.fromDegrees(-120.0))
     private val Reef3: Pose2d =

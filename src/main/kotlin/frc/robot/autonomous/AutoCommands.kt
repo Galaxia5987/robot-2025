@@ -65,5 +65,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                 )
             }
         )
-        .alongWith(Commands.run({ Logger.recordOutput("Vision/YError", yError) }))
+        .alongWith(
+            Commands.run({ Logger.recordOutput("Vision/YError", yError) })
+        )
 }
