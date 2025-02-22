@@ -26,22 +26,22 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
 
-    val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setpoint = if (isLeft) -ALIGNED_TX_LEFT else -ALIGNED_TX_RIGHT
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    val xError = { -vision.getTranslationToBestTarget(1).y }
-
-    val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    val yController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setpoint = if (isLeft) -ALIGNED_TX_LEFT else -ALIGNED_TX_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    yController.setpoint = 0.0
-    val yError = { -vision.getTranslationToBestTarget(1).x }
+    val yError = { -vision.getTranslationToBestTarget(1).y }
+
+    val xController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    xController.setpoint = 0.0
+    val xError = { -vision.getTranslationToBestTarget(1).x }
     return Commands.sequence(
             drive
                 .run {
                     drive.runVelocity(
                         ChassisSpeeds(
                             0.0,
-                            xController.calculate(xError.invoke()),
+                            yController.calculate(yError.invoke()),
                             -rotationController.calculate(
                                 vision.getYawToTarget(1).get().radians
                             )
@@ -50,7 +50,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                 }
                 .until(
                     Trigger {
-                            xController.atSetpoint() &&
+                            yController.atSetpoint() &&
                                 rotationController.atSetpoint()
                         }
                         .debounce(0.15)
@@ -69,5 +69,5 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                 )
             }
         )
-        .alongWith(Commands.run({ Logger.recordOutput("XError", xError) }))
+        .alongWith(Commands.run({ Logger.recordOutput("XError", yError) }))
 }
