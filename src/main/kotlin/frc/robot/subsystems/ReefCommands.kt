@@ -84,14 +84,12 @@ private fun moveDefaultPosition(): Command =
 fun l1(outtakeTrigger: Trigger): Command =
     l1().andThen(scoreCoral(outtakeTrigger))
 
-fun l1(): Command =
-    parallel(elevator.l1(), wrist.l1())
+fun l1(): Command = parallel(elevator.l1(), wrist.l1())
 
 fun l2(outtakeTrigger: Trigger): Command =
     l2().andThen(scoreCoral(outtakeTrigger))
 
-fun l2(): Command =
-    parallel(elevator.l2(), wrist.l2())
+fun l2(): Command = parallel(elevator.l2(), wrist.l2())
 
 fun l3(outtakeTrigger: Trigger): Command =
     l3().andThen(scoreCoral(outtakeTrigger))
