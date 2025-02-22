@@ -31,10 +31,6 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = { -vision.getTranslationToBestTarget(1).y }
 
-    val xController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    xController.setpoint = 0.0
-    val xError = { -vision.getTranslationToBestTarget(1).x }
     return Commands.sequence(
             drive
                 .run {
