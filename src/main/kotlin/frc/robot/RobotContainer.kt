@@ -82,7 +82,6 @@ object RobotContainer {
                     { driverController.leftX },
                     { -driverController.rightX * 0.6 }
                 )
-                .alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
 
         climber.defaultCommand =
             climber.powerControl {
@@ -139,7 +138,26 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+
+        val buttonMappings = listOf(
+            9,  // L1
+            10, // R1
+            8,  // L2
+            4,  // L3
+            12, // R3
+            7,  // L4
+            1,  // R4
+            6,  // L5
+            2,  // R5
+            5,  // L6
+            3   // R6
+        )
+
+        buttonMappings.forEach { buttonId ->
+            poseController.button(buttonId).onTrue(setPoseBasedOnButton(buttonId))
+        }
     }
+
 
     fun getAutonomousCommand(): Command =
         DriveCommands.wheelRadiusCharacterization(swerveDrive)
