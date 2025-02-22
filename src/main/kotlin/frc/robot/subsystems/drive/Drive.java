@@ -347,6 +347,12 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
     }
 
+    public void setAngle(Rotation2d angle) {
+        for (int i = 0; i < 4; i++) {
+            modules[i].runSetpoint(new SwerveModuleState(0.0, angle));
+        }
+    }
+
     /** Runs the drive in a straight line with the specified drive output. */
     public void runCharacterization(double output) {
         for (int i = 0; i < 4; i++) {

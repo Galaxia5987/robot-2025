@@ -2,13 +2,13 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
@@ -38,16 +38,16 @@ private fun pidDrive(
         .until(controller::atSetpoint)
 }
 
-fun align2d(drive: Drive, isLeft: Boolean): Command {
+fun align2d(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
-    rotationController.setpoint = 0.0
+    rotationController.setpoint = Rotation2d.fromDegrees(155.0).radians
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
 
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setpoint = if (isLeft) ALIGNED_TX_LEFT else ALIGNED_TX_RIGHT
+    xController.setpoint = if (isLeft) -ALIGNED_TX_LEFT else -ALIGNED_TX_RIGHT
     xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = { -vision.getTranslationToBestTarget(1).y }
 
@@ -62,20 +62,24 @@ fun align2d(drive: Drive, isLeft: Boolean): Command {
                 ChassisSpeeds(
                     0.0,
                     xController.calculate(xError.invoke()),
-                    rotationController.calculate(vision.getYawToTarget(1).get().radians)
+                    -rotationController.calculate(vision.getYawToTarget(1).get().radians)
                 )
             )
-        }.until(Trigger { xController.atSetpoint() && rotationController.atSetpoint() }.debounce(0.1)),
+        }.until(Trigger { xController.atSetpoint() && rotationController.atSetpoint() }.debounce(0.3)),
+        drive.runOnce { drive.setAngle(Rotation2d.kZero) },
+        WaitCommand(0.3),
         drive.run {
             drive.runVelocity(
                 ChassisSpeeds(
-                    yController.calculate(yError.invoke()),
+                    ALIGNMENT_Y_VELOCITY.`in`(Units.MetersPerSecond),
                     0.0,
                     0.0
                 )
             )
-        }.until(Trigger(yController::atSetpoint).debounce(0.1))
-    )
+        }.alongWith(scoreCommand)
+    ).alongWith(Commands.run({
+        Logger.recordOutput("XError", xError)
+    }))
 }
 
 fun alignToPose(

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
@@ -87,8 +88,7 @@ object RobotContainer {
             )
 
         driverController.cross().onTrue(l1(driverController.cross().negate()))
-//        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.square().onTrue(align2d(swerveDrive, false))
+        driverController.square().onTrue(l2(driverController.square().negate()))
         driverController.circle().onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
@@ -99,8 +99,10 @@ object RobotContainer {
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
-        driverController.povLeft().whileTrue(align2d(swerveDrive, true))
-        driverController.povRight().whileTrue(align2d(swerveDrive, false))
+        driverController.povLeft().whileTrue(align2d(swerveDrive, true, l3(driverController.povLeft().negate())))
+            .onFalse(l3(Trigger {true}))
+        driverController.povRight().whileTrue(align2d(swerveDrive, false, l3(driverController.povRight().negate())))
+            .onFalse(l3(Trigger {true}))
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
