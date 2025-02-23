@@ -17,30 +17,34 @@ val IS_WITHIN_AUTO_SCORE_DISTANCE = {
     ) <= MAX_ALIGNMENT_DISTANCE
 }
 
-var selectedScorePose: () -> Pose2d = { Pose2d() }
+var selectedScorePose: () -> Pose2d = { Reef1 }
 
 private var selectedHeightPose: () -> ScoreHeight = { ScoreHeight.L3 }
 
 var isLeft = { false }
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
-    return Commands.defer({
-        runOnce({
-            selectedScorePose = {
-                buttonToPoseMap[buttonID]?.first
-                    ?: throw Exception("No pose for button $buttonID!!!")
-            }
-            isLeft = {
-                buttonToPoseMap[buttonID]?.second
-                    ?: throw Exception("isLeft not configured for $buttonID!!!")
-            }
-            Logger.recordOutput(
-                "ScoreState/SelectedScorePose",
-                selectedScorePose.invoke().flipIfNeeded()
-            )
-
-        })
-    }, setOf())
+    return Commands.defer(
+        {
+            runOnce({
+                selectedScorePose = {
+                    buttonToPoseMap[buttonID]?.first
+                        ?: throw Exception("No pose for button $buttonID!!!")
+                }
+                isLeft = {
+                    buttonToPoseMap[buttonID]?.second
+                        ?: throw Exception(
+                            "isLeft not configured for $buttonID!!!"
+                        )
+                }
+                Logger.recordOutput(
+                    "ScoreState/SelectedScorePose",
+                    selectedScorePose.invoke().flipIfNeeded()
+                )
+            })
+        },
+        setOf()
+    )
 }
 
 private fun selectedHeightCommand(outtakeTrigger: Trigger): Command =

@@ -99,9 +99,7 @@ object RobotContainer {
         driverController.L2().whileTrue(gripper.outtake())
         driverController
             .povLeft()
-            .whileTrue(
-                alignCommand(l4())
-            )
+            .whileTrue(alignCommand({ l4() }))
             .onFalse(l4(Trigger { true }))
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))

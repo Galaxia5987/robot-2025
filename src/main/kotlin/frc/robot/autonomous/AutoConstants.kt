@@ -21,18 +21,18 @@ private val Reef6: Pose2d = Pose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
 
 val buttonToPoseMap =
     mapOf(
-        9 to Pair(Reef4 ,true),   // L1
+        9 to Pair(Reef4, true), // L1
         10 to Pair(Reef4, false), // R1
-        8 to Pair(Reef3, true),   // L2
+        8 to Pair(Reef3, true), // L2
         11 to Pair(Reef5, false), // R2
-        4 to Pair(Reef3, true),   // L3
+        4 to Pair(Reef3, true), // L3
         12 to Pair(Reef5, false), // R3
-        7 to Pair(Reef2, true),   // L4
-        1 to Pair(Reef6, false),  // R4
-        6 to Pair(Reef2, true),   // L5
-        2 to Pair(Reef6, false),  // R5
-        5 to Pair(Reef1, true),   // L6
-        3 to Pair(Reef1, false)   // R6
+        7 to Pair(Reef2, true), // L4
+        1 to Pair(Reef6, false), // R4
+        6 to Pair(Reef2, true), // L5
+        2 to Pair(Reef6, false), // R5
+        5 to Pair(Reef1, true), // L6
+        3 to Pair(Reef1, false) // R6
     )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =

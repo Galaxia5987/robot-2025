@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.ScheduleCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.elevator
@@ -24,7 +25,7 @@ import org.littletonrobotics.junction.Logger
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
-fun alignToPose(drive: Drive, isLeft: () -> Boolean, scoreCommand: Command): Command {
+fun alignToPose(drive: Drive, isLeft: () -> Boolean, scoreCommand: () -> Command): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
     rotationController.setpoint = ALIGNED_ROTATION.radians
@@ -63,9 +64,7 @@ fun alignToPose(drive: Drive, isLeft: () -> Boolean, scoreCommand: Command): Com
                     .debounce(0.15)
             ),
         drive
-            .runOnce { drive.setAngle(Rotation2d.kZero) }
-            .alongWith(scoreCommand),
-        WaitCommand(0.3),
+            .runOnce { drive.setAngle(Rotation2d.kZero) }.alongWith(scoreCommand.invoke()),
         drive.run {
             drive.runVelocity(
                 ChassisSpeeds(
@@ -85,9 +84,10 @@ fun alignToPose(drive: Drive, isLeft: () -> Boolean, scoreCommand: Command): Com
         )
 }
 
-fun alignCommand(scoreCommand: Command): Command = Commands.defer({
+fun alignCommand(scoreCommand: () -> Command): Command = Commands.defer({
     pathFindToPose(selectedScorePose.invoke())
-        .andThen(alignToPose(swerveDrive, isLeft, scoreCommand))}, setOf(swerveDrive, elevator, gripper, wrist))
+        .andThen(alignToPose(swerveDrive, isLeft, scoreCommand))
+}, setOf(swerveDrive, elevator, gripper, wrist))
 
 private var aligning = false
 
