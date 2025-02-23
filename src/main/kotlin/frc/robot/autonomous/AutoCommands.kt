@@ -34,6 +34,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val yError = { -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y }
 
     return Commands.sequence(
+        Commands.runOnce({ aligning = true}),
         DriveCommands.driveCommand(
             drive, ChassisSpeeds(
                 0.0,
@@ -62,8 +63,12 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                 0.0
             )
         )
-    )
+    ).apply { handleInterrupt { aligning = false } }
         .alongWith(
             Commands.run({ Logger.recordOutput("Auto Alignment/YError", yError) })
         )
 }
+
+private var aligning = false
+
+val IS_ALIGNING = Trigger { aligning }
