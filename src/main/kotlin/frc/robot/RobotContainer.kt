@@ -3,7 +3,6 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -13,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.lib.getPose2d
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
@@ -47,19 +45,6 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
-    private val Reef1: Pose2d = Pose2d(6.063, 3.980, Rotation2d.k180deg)
-    private val Reef2: Pose2d =
-        Pose2d(5.315, 5.366, Rotation2d.fromDegrees(-120.0))
-    private val Reef3: Pose2d =
-        Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
-    private val Reef4: Pose2d = getPose2d(2.93, 4.030)
-    private val Reef5: Pose2d =
-        Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
-    private val Reef6: Pose2d =
-        Pose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
-
-    private val selectedPose: Pose2d = Reef6
-
     init {
 
         registerAutoCommands()
@@ -80,12 +65,11 @@ object RobotContainer {
     private fun configureDefaultCommands() {
         swerveDrive.defaultCommand =
             DriveCommands.joystickDrive(
-                    swerveDrive,
-                    { driverController.leftY },
-                    { driverController.leftX },
-                    { -driverController.rightX * 0.6 }
-                )
-                .alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
+                swerveDrive,
+                { driverController.leftY },
+                { driverController.leftX },
+                { -driverController.rightX * 0.6 }
+            )
 
         climber.defaultCommand =
             climber.powerControl {
@@ -116,14 +100,14 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(
-                pathFindToPose(selectedPose)
+                pathFindToPose(selectedScorePose.invoke())
                     .andThen(alignToPose(swerveDrive, true, l4()))
             )
             .onFalse(l4(Trigger { true }))
         driverController
             .povRight()
             .whileTrue(
-                pathFindToPose(selectedPose)
+                pathFindToPose(selectedScorePose.invoke())
                     .andThen(alignToPose(swerveDrive, false, l4()))
             )
             .onFalse(l4(Trigger { true }))
@@ -142,6 +126,28 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+
+        val buttonMappings =
+            listOf(
+                9,  // L1
+                10, // R1
+                11, // R2
+                8,  // L2
+                4,  // L3
+                12, // R3
+                7,  // L4
+                1,  // R4
+                6,  // L5
+                2,  // R5
+                5,  // L6
+                3   // R6
+            )
+
+        buttonMappings.forEach { buttonId ->
+            poseController
+                .button(buttonId)
+                .onTrue(setPoseBasedOnButton(buttonId))
+        }
     }
 
     fun getAutonomousCommand(): Command =

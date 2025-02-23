@@ -8,8 +8,32 @@ import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
+import frc.robot.lib.getPose2d
 import java.io.File
 import kotlinx.serialization.json.*
+
+private val Reef1: Pose2d = Pose2d(6.063, 3.980, Rotation2d.k180deg)
+private val Reef2: Pose2d = Pose2d(5.315, 5.366, Rotation2d.fromDegrees(-120.0))
+private val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
+private val Reef4: Pose2d = getPose2d(2.93, 4.030)
+private val Reef5: Pose2d = Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
+private val Reef6: Pose2d = Pose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
+
+val buttonToPoseMap =
+    mapOf(
+        9 to Reef4, // L1
+        10 to Reef4, // R1
+        8 to Reef3, // L2
+        11 to Reef5, // R2
+        4 to Reef3, // L3
+        12 to Reef5, // R3
+        7 to Reef2, // L4
+        1 to Reef6, // R4
+        6 to Reef2, // L5
+        2 to Reef6, // R5
+        5 to Reef1, // L6
+        3 to Reef1 // R6
+    )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
     element.jsonObject[valName]
