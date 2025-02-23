@@ -122,8 +122,9 @@ object RobotContainer {
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
         operatorController
-            .y()
-            .whileTrue(elevator.setVoltage(Units.Volts.of(7.0)))
+            .rightTrigger()
+            .whileTrue(elevator.setVoltage(Units.Volts.of(6.0)))
+        operatorController.leftTrigger().whileTrue(elevator.setVoltage(Units.Volts.of(-6.0)))
 
         testController.a().onTrue(intakeBit(testController.a().negate()))
         testController.y().onTrue(feederL4Bit(testController.y().negate()))
