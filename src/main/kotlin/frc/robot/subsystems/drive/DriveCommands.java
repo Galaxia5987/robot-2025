@@ -309,6 +309,11 @@ public class DriveCommands {
                                         })));
     }
 
+    public static Command timedLeave(Drive drive, double timeSeconds) {
+        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
+                .withTimeout(timeSeconds);
+    }
+
     private static class WheelRadiusCharacterizationState {
         double[] positions = new double[4];
         Rotation2d lastAngle = new Rotation2d();

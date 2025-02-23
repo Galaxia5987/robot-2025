@@ -6,13 +6,17 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -28,6 +32,8 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
+    private val heightController = CommandGenericHID(3)
+    private val poseController = CommandGenericHID(4)
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
@@ -50,6 +56,9 @@ object RobotContainer {
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
+        if (IS_RED) {
+            swerveDrive.resetGyro(Units.Degrees.of(180.0))
+        }
         enableAutoLogOutputFor(this)
     }
 
@@ -76,7 +85,14 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                Commands.runOnce(
+                        {
+                            swerveDrive.resetGyro(
+                                Units.Degrees.of(if (IS_RED) 0.0 else 180.0)
+                            )
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
@@ -107,10 +123,25 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController
+            .rightTrigger()
+            .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftTrigger()
+            .whileTrue(elevator.setVoltage(-ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .rightBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+
+        testController.a().onTrue(intakeBit(testController.a().negate()))
+        testController.y().onTrue(feederL4Bit(testController.y().negate()))
     }
 
     fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+        DriveCommands.timedLeave(swerveDrive, 1.0)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

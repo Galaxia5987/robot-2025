@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
@@ -92,6 +93,34 @@ object Robot : LoggedRobot() {
         enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
+        PathfindingCommand.warmupCommand().schedule()
+
+        val commandCounts = HashMap<String, Int>()
+        val logCommandFunction =
+            { command: Command, active: Boolean, verb: String ->
+                val name = command.name
+                val count =
+                    commandCounts.getOrDefault(name, 0) +
+                        (if (active) 1 else -1)
+                commandCounts[name] = count
+                Logger.recordOutput(
+                    "Commands/Unique/" +
+                        name +
+                        "_" +
+                        Integer.toHexString(command.hashCode()),
+                    active
+                )
+                Logger.recordOutput("Commands/All/$name", count > 0)
+            }
+        CommandScheduler.getInstance().onCommandInitialize {
+            logCommandFunction(it, true, "initialized")
+        }
+        CommandScheduler.getInstance().onCommandFinish {
+            logCommandFunction(it, false, "finished")
+        }
+        CommandScheduler.getInstance().onCommandInterrupt { command ->
+            logCommandFunction(command, false, "interrupted")
+        }
     }
 
     /**
