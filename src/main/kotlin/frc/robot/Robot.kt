@@ -112,7 +112,6 @@ object Robot : LoggedRobot() {
                     active
                 )
                 Logger.recordOutput("Commands/All/$name", count > 0)
-                DataLogManager.log("[Commands] Command \"$name\" $verb")
             }
         CommandScheduler.getInstance().onCommandInitialize {
             logCommandFunction(it, true, "initialized")
