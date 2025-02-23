@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.autonomous.IS_ALIGNING
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -78,6 +79,7 @@ class LEDs : SubsystemBase() {
     private var gripperPattern =
         gripper.hasCoral
             .and(climbPattern.negate())
+            .and(IS_ALIGNING.negate())
             .onTrue(
                 setPattern(
                     all =
@@ -86,6 +88,16 @@ class LEDs : SubsystemBase() {
                             .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
                 )
             )
+
+    private var alignPattern =
+        IS_ALIGNING.and(climbPattern.negate()).onTrue(
+            setPattern(
+                all =
+                    LEDPattern.solid(Color.kPurple)
+                        .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
+                        .atBrightness(ALIGN_PATTERN_BRIGHTNESS)
+            )
+        )
 
     private var defaultPattern =
         climbPattern
