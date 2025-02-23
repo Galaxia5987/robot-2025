@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
+import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.vision
 import org.littletonrobotics.junction.Logger
 
@@ -29,7 +30,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint = if (isLeft) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    val yError = { -vision.getTranslationToBestTarget(1).y }
+    val yError = { -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y }
 
     return Commands.sequence(
             drive
@@ -39,7 +40,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                             0.0,
                             yController.calculate(yError.invoke()),
                             -rotationController.calculate(
-                                vision.getYawToTarget(1).get().radians
+                                vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians
                             )
                         )
                     )
