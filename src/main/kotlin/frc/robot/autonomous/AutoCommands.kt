@@ -8,76 +8,75 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.CURRENT_MODE
-import frc.robot.IS_RED
-import frc.robot.Mode
-import frc.robot.lib.rotationToPoint
+import edu.wpi.first.wpilibj2.command.WaitCommand
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.Drive
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
-import frc.robot.swerveDrive
-import java.util.function.Supplier
+import frc.robot.subsystems.vision.VisionConstants
+import frc.robot.vision
+import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
-fun alignToPose(
-    drive: Drive,
-    robotPoseSupplier: Supplier<Pose2d>,
-    targetPoseSupplier: Supplier<Pose2d>
-): Command {
-
-    val radialController =
-        PIDController(
-            ALIGNMENT_X_GAINS.kP,
-            ALIGNMENT_X_GAINS.kI,
-            ALIGNMENT_X_GAINS.kD
-        )
+fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val rotationController =
-        PIDController(
-            ALIGNMENT_ROTATION_GAINS.kP,
-            ALIGNMENT_ROTATION_GAINS.kI,
-            ALIGNMENT_ROTATION_GAINS.kD,
-        )
-    rotationController.enableContinuousInput(-Math.PI, Math.PI)
-
-    radialController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+        ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
+    rotationController.setpoint = ALIGNED_ROTATION.radians
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
+    val yawToTarget = {vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians}
 
-    return Commands.run(
-            {
-                val robotPose = robotPoseSupplier.get()
-                val targetPose = targetPoseSupplier.get()
+    val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setpoint = if (isLeft) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
+    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    val yError = {
+        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
+    }
 
-                val radius =
-                    (robotPose.translation - targetPose.translation).norm
-                val output = radialController.calculate(radius, 0.0)
-                val fieldRelativeAngle =
-                    targetPose.translation.rotationToPoint(
-                        robotPose.translation
-                    )
-                val targetSpeeds =
+    return Commands.sequence(
+            Commands.runOnce({ aligning = true }),
+            DriveCommands.driveCommand(
+                    drive,
                     ChassisSpeeds(
-                        output * fieldRelativeAngle.cos,
-                        output * fieldRelativeAngle.sin,
-                        rotationController.calculate(
-                            robotPose.rotation.radians,
-                            targetPose.rotation.radians
-                        )
-                    )
-
-                drive.runVelocity(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                        targetSpeeds,
-                        if (IS_RED && CURRENT_MODE == Mode.REAL)
-                            drive.rotation + Rotation2d.k180deg
-                        else drive.rotation
+                        0.0,
+                        yController.calculate(yError.invoke()),
+                        -rotationController.calculate(yawToTarget.invoke())
                     )
                 )
-            },
-            swerveDrive
+                .until(
+                    Trigger {
+                            yController.atSetpoint() &&
+                                rotationController.atSetpoint()
+                        }
+                        .debounce(0.15)
+                ),
+            drive
+                .runOnce { drive.setAngle(Rotation2d.kZero) }
+                .alongWith(scoreCommand),
+            WaitCommand(0.3),
+            DriveCommands.driveCommand(
+                drive,
+                ChassisSpeeds(
+                    ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
+                    0.0,
+                    0.0
+                )
+            ).withTimeout(10.0)
+        ).finallyDo(Runnable{ aligning = false })
+        .alongWith(
+            Commands.run({
+                Logger.recordOutput("Auto Alignment/YError", yError)
+            })
         )
-        .until { radialController.atSetpoint() }
-        .andThen(Commands.runOnce({ drive.runVelocity(ChassisSpeeds()) }))
 }
+
+private var aligning = false
+
+val IS_ALIGNING = Trigger { aligning }
+
+@AutoLogOutput(key = "Auto Alignment/is aligning")
+private fun getIsAligning() = IS_ALIGNING

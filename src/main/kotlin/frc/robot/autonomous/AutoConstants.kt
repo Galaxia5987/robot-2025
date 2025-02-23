@@ -5,9 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
-import frc.robot.lib.flipIfNeeded
 import java.io.File
 import kotlinx.serialization.json.*
 
@@ -49,12 +49,17 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
 }
 
 val ALIGNMENT_POSES
-    get() = parseChoreoPoses().mapValues { it.value.flipIfNeeded() }
+    get() = parseChoreoPoses()
 
-val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(5.0)
-val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(2.0)
+val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
+val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.2)
 val MAX_ALIGNMENT_DISTANCE: Distance = Units.Meters.of(2.0)
 
-val ALIGNMENT_X_GAINS = Gains(4.0, 0.0, 0.2)
-val ALIGNMENT_Y_GAINS = Gains(4.0, 0.0, 0.2)
-val ALIGNMENT_ROTATION_GAINS = Gains(5.0, 0.0, 0.0)
+val ALIGNMENT_Y_GAINS = Gains(4.0, 0.0, 0.0)
+val ALIGNMENT_ROTATION_GAINS = Gains(3.0, 0.0, 0.0)
+
+val ALIGNMENT_FORWARD_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
+
+val ALIGNED_Y_LEFT = -0.156
+val ALIGNED_Y_RIGHT = 0.175
+val ALIGNED_ROTATION = Rotation2d.fromDegrees(155.0)

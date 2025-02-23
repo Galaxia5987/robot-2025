@@ -17,9 +17,7 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
@@ -27,6 +25,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -55,13 +54,16 @@ public class Vision extends SubsystemBase {
         }
     }
 
-    /**
-     * Returns the X angle to the best target, which can be used for simple servoing with vision.
-     *
-     * @param cameraIndex The index of the camera to use.
-     */
-    public Rotation2d getYawToTarget(int cameraIndex) {
-        return inputs[cameraIndex].yawToTarget;
+    public int getBestTargetID(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.id();
+    }
+
+    public Supplier<Rotation2d> getYawToTarget(int cameraIndex) {
+        return () -> inputs[cameraIndex].yawToTarget;
+    }
+
+    public Translation3d getTranslationToBestTarget(int cameraIndex) {
+        return inputs[cameraIndex].translationToBestTarget;
     }
 
     @Override

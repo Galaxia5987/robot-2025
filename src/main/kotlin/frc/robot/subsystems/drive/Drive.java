@@ -193,7 +193,7 @@ public class Drive extends SubsystemBase {
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(6.0, 0.0, 0.5), new PIDConstants(14.0, 0.0, 0.0)),
+                        new PIDConstants(4.0, 0.0, 2.0), new PIDConstants(14.0, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -345,6 +345,12 @@ public class Drive extends SubsystemBase {
 
         // Log optimized setpoints (runSetpoint mutates each state)
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+    }
+
+    public void setAngle(Rotation2d angle) {
+        for (int i = 0; i < 4; i++) {
+            modules[i].runSetpoint(new SwerveModuleState(0.0, angle));
+        }
     }
 
     /** Runs the drive in a straight line with the specified drive output. */

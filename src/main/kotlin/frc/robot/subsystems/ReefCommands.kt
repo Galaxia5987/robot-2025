@@ -82,16 +82,24 @@ private fun moveDefaultPosition(): Command =
     sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.feeder())
 
 fun l1(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l1(), wrist.l1()).andThen(scoreCoral(outtakeTrigger))
+    l1().andThen(scoreCoral(outtakeTrigger))
+
+fun l1(): Command = parallel(elevator.l1(), wrist.l1())
 
 fun l2(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l2(), wrist.l2()).andThen(scoreCoral(outtakeTrigger))
+    l2().andThen(scoreCoral(outtakeTrigger))
+
+fun l2(): Command = parallel(elevator.l2(), wrist.l2())
 
 fun l3(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l3(), wrist.l3()).andThen(scoreCoral(outtakeTrigger))
+    l3().andThen(scoreCoral(outtakeTrigger))
+
+fun l3(): Command = parallel(elevator.l3(), wrist.l3())
 
 fun l4(outtakeTrigger: Trigger): Command =
-    parallel(elevator.l4(), wrist.l4()).andThen(scoreCoralL4(outtakeTrigger))
+    l4().andThen(scoreCoralL4(outtakeTrigger))
+
+fun l4(): Command = parallel(elevator.l4(), wrist.l4())
 
 fun pathfindFeeder(outtakeTrigger: Trigger): Command =
     AutoBuilder.pathfindThenFollowPath(
