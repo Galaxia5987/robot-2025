@@ -31,41 +31,52 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint = if (isLeft) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    val yError = { -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y }
+    val yError = {
+        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
+    }
 
     return Commands.sequence(
-        Commands.runOnce({ aligning = true}),
-        DriveCommands.driveCommand(
-            drive, ChassisSpeeds(
-                0.0,
-                yController.calculate(yError.invoke()),
-                -rotationController.calculate(
-                    vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians
+            Commands.runOnce({ aligning = true }),
+            DriveCommands.driveCommand(
+                    drive,
+                    ChassisSpeeds(
+                        0.0,
+                        yController.calculate(yError.invoke()),
+                        -rotationController.calculate(
+                            vision
+                                .getYawToTarget(
+                                    VisionConstants.frontCameraIndex
+                                )
+                                .get()
+                                .radians
+                        )
+                    )
+                )
+                .until(
+                    Trigger {
+                            yController.atSetpoint() &&
+                                rotationController.atSetpoint()
+                        }
+                        .debounce(0.15)
+                ),
+            drive
+                .runOnce { drive.setAngle(Rotation2d.kZero) }
+                .alongWith(scoreCommand),
+            WaitCommand(0.3),
+            DriveCommands.driveCommand(
+                drive,
+                ChassisSpeeds(
+                    ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
+                    0.0,
+                    0.0
                 )
             )
         )
-            .until(
-                Trigger {
-                    yController.atSetpoint() &&
-                            rotationController.atSetpoint()
-                }
-                    .debounce(0.15)
-            ),
-        drive
-            .runOnce { drive.setAngle(Rotation2d.kZero) }
-            .alongWith(scoreCommand),
-        WaitCommand(0.3),
-        DriveCommands.driveCommand(
-            drive,
-            ChassisSpeeds(
-                ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
-                0.0,
-                0.0
-            )
-        )
-    ).apply { handleInterrupt { aligning = false } }
+        .apply { handleInterrupt { aligning = false } }
         .alongWith(
-            Commands.run({ Logger.recordOutput("Auto Alignment/YError", yError) })
+            Commands.run({
+                Logger.recordOutput("Auto Alignment/YError", yError)
+            })
         )
 }
 

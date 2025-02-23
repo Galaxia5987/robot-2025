@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -48,8 +47,7 @@ public class DriveCommands {
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
-    private DriveCommands() {
-    }
+    private DriveCommands() {}
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -151,7 +149,7 @@ public class DriveCommands {
                                             speeds,
                                             isFlipped
                                                     ? drive.getRotation()
-                                                    .plus(new Rotation2d(Math.PI))
+                                                            .plus(new Rotation2d(Math.PI))
                                                     : drive.getRotation()));
                         },
                         drive)
@@ -161,11 +159,7 @@ public class DriveCommands {
     }
 
     public static Command driveCommand(Drive drive, ChassisSpeeds chassisSpeeds) {
-        return drive.run(() ->
-                drive.runVelocity(
-                        chassisSpeeds
-                )
-        );
+        return drive.run(() -> drive.runVelocity(chassisSpeeds));
     }
 
     /**
@@ -235,9 +229,7 @@ public class DriveCommands {
                                 }));
     }
 
-    /**
-     * Measures the robot's wheel radius by spinning in a circle.
-     */
+    /** Measures the robot's wheel radius by spinning in a circle. */
     public static Command wheelRadiusCharacterization(Drive drive) {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -315,8 +307,8 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                            Units.metersToInches(
-                                                                    wheelRadius))
+                                                                    Units.metersToInches(
+                                                                            wheelRadius))
                                                             + " inches");
                                         })));
     }

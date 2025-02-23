@@ -90,14 +90,15 @@ class LEDs : SubsystemBase() {
             )
 
     private var alignPattern =
-        IS_ALIGNING.and(climbPattern.negate()).onTrue(
-            setPattern(
-                all =
-                    LEDPattern.solid(Color.kPurple)
-                        .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
-                        .atBrightness(ALIGN_PATTERN_BRIGHTNESS)
+        IS_ALIGNING.and(climbPattern.negate())
+            .onTrue(
+                setPattern(
+                    all =
+                        LEDPattern.solid(Color.kPurple)
+                            .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
+                            .atBrightness(ALIGN_PATTERN_BRIGHTNESS)
+                )
             )
-        )
 
     private var defaultPattern =
         climbPattern
