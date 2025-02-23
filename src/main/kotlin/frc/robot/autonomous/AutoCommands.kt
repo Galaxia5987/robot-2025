@@ -26,8 +26,8 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
 
-    val yController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    yController.setpoint = if (isLeft) -ALIGNED_TX_LEFT else -ALIGNED_TX_RIGHT
+    val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setpoint = if (isLeft) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = { -vision.getTranslationToBestTarget(1).y }
 
@@ -58,7 +58,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
             drive.run {
                 drive.runVelocity(
                     ChassisSpeeds(
-                        ALIGNMENT_Y_VELOCITY.`in`(Units.MetersPerSecond),
+                        ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
                         0.0,
                         0.0
                     )
