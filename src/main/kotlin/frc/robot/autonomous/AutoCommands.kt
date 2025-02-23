@@ -66,8 +66,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                     0.0
                 )
             ).withTimeout(10.0)
-        )
-        .apply { handleInterrupt { aligning = false } }
+        ).finallyDo(Runnable{ aligning = false })
         .alongWith(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/YError", yError)
@@ -79,5 +78,5 @@ private var aligning = false
 
 val IS_ALIGNING = Trigger { aligning }
 
-@AutoLogOutput
+@AutoLogOutput(key = "Auto Alignment/is aligning")
 private fun getIsAligning() = IS_ALIGNING
