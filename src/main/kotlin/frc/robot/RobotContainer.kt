@@ -30,7 +30,7 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
-    private val highController = CommandGenericHID(3)
+    private val heightController = CommandGenericHID(3)
     private val poseController = CommandGenericHID(4)
 
     private val swerveDrive = frc.robot.swerveDrive
