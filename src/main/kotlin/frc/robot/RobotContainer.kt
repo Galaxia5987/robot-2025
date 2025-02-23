@@ -31,7 +31,7 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
-    private val highController = CommandGenericHID(3)
+    private val heightController = CommandGenericHID(3)
     private val poseController = CommandGenericHID(4)
 
     private val swerveDrive = frc.robot.swerveDrive
@@ -100,18 +100,9 @@ object RobotContainer {
         driverController
             .povLeft()
             .whileTrue(
-                pathFindToPose(selectedScorePose.invoke())
-                    .andThen(alignToPose(swerveDrive, true, l4()))
+                alignCommand(l4())
             )
             .onFalse(l4(Trigger { true }))
-        driverController
-            .povRight()
-            .whileTrue(
-                pathFindToPose(selectedScorePose.invoke())
-                    .andThen(alignToPose(swerveDrive, false, l4()))
-            )
-            .onFalse(l4(Trigger { true }))
-
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
         operatorController
@@ -129,18 +120,18 @@ object RobotContainer {
 
         val buttonMappings =
             listOf(
-                9,  // L1
+                9, // L1
                 10, // R1
                 11, // R2
-                8,  // L2
-                4,  // L3
+                8, // L2
+                4, // L3
                 12, // R3
-                7,  // L4
-                1,  // R4
-                6,  // L5
-                2,  // R5
-                5,  // L6
-                3   // R6
+                7, // L4
+                1, // R4
+                6, // L5
+                2, // R5
+                5, // L6
+                3 // R6
             )
 
         buttonMappings.forEach { buttonId ->
