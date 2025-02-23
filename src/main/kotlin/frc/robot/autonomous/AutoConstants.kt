@@ -49,8 +49,7 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
     }
 }
 
-val ALIGNMENT_POSES
-    get() = parseChoreoPoses().mapValues { it.value.flipIfNeeded() }
+val ALIGNMENT_POSES = parseChoreoPoses()
 
 val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(5.0)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(2.0)
