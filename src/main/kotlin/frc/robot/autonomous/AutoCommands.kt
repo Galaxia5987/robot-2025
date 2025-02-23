@@ -66,8 +66,7 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                     0.0
                 )
             ).withTimeout(10.0)
-        )
-        .apply { handleInterrupt { aligning = false } }
+        ).handleInterrupt { aligning = false }
         .alongWith(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/YError", yError)
