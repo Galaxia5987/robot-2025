@@ -15,6 +15,7 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.vision
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 fun pathFindToPose(pose: Pose2d): Command =
@@ -77,3 +78,6 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
 private var aligning = false
 
 val IS_ALIGNING = Trigger { aligning }
+
+@AutoLogOutput
+private fun getIsAligning() = IS_ALIGNING
