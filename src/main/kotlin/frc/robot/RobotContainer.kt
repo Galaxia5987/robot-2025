@@ -13,6 +13,8 @@ import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import org.ironmaple.simulation.SimulatedArena
@@ -123,10 +125,10 @@ object RobotContainer {
             .onTrue(extender.reset(operatorController.povUp().negate()))
         operatorController
             .rightTrigger()
-            .whileTrue(elevator.setVoltage(Units.Volts.of(6.0)))
-        operatorController.leftTrigger().whileTrue(elevator.setVoltage(Units.Volts.of(-6.0)))
-        operatorController.rightBumper().whileTrue(wrist.setVoltage(Units.Volts.of(4.0)))
-        operatorController.leftBumper().whileTrue(wrist.setVoltage(Units.Volts.of(-4.0)))
+            .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController.leftTrigger().whileTrue(elevator.setVoltage(-ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController.rightBumper().whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+        operatorController.leftBumper().whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
         testController.a().onTrue(intakeBit(testController.a().negate()))
         testController.y().onTrue(feederL4Bit(testController.y().negate()))

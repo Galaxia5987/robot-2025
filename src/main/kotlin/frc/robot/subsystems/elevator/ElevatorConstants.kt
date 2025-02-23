@@ -18,6 +18,7 @@ const val SECOND_STAGE_RATIO = 2.0
 const val ADJUSTED_GEAR_RATIO = SECOND_STAGE_RATIO * GEAR_RATIO
 val MIN_KG_HEIGHT: Distance = Units.Centimeters.of(3.0)
 val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
+val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
 
 val GAINS =
     selectGainsBasedOnMode(
