@@ -72,7 +72,6 @@ object RobotContainer {
                     { driverController.leftX },
                     { -driverController.rightX * 0.6 }
                 )
-                .alongWith(Commands.runOnce({ println("JOYSTICK DRIVE") }))
 
         climber.defaultCommand =
             climber.powerControl {
