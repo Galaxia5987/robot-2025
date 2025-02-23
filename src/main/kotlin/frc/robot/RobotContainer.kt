@@ -14,9 +14,9 @@ import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -126,9 +126,15 @@ object RobotContainer {
         operatorController
             .rightTrigger()
             .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
-        operatorController.leftTrigger().whileTrue(elevator.setVoltage(-ELEVATOR_MANUAL_CONTROL_VOLTAGE))
-        operatorController.rightBumper().whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
-        operatorController.leftBumper().whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftTrigger()
+            .whileTrue(elevator.setVoltage(-ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .rightBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
         testController.a().onTrue(intakeBit(testController.a().negate()))
         testController.y().onTrue(feederL4Bit(testController.y().negate()))
