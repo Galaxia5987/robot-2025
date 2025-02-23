@@ -125,6 +125,8 @@ object RobotContainer {
             .rightTrigger()
             .whileTrue(elevator.setVoltage(Units.Volts.of(6.0)))
         operatorController.leftTrigger().whileTrue(elevator.setVoltage(Units.Volts.of(-6.0)))
+        operatorController.rightBumper().whileTrue(wrist.setVoltage(Units.Volts.of(4.0)))
+        operatorController.leftBumper().whileTrue(wrist.setVoltage(Units.Volts.of(-4.0)))
 
         testController.a().onTrue(intakeBit(testController.a().negate()))
         testController.y().onTrue(feederL4Bit(testController.y().negate()))

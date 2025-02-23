@@ -36,7 +36,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     val angle: () -> Angle = { io.inputs.angle }
 
-    private fun setVoltage(voltage: Voltage): Command = runOnce {
+    fun setVoltage(voltage: Voltage): Command = runOnce {
         io.setVoltage(voltage)
     }
 
