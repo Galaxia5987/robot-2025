@@ -26,6 +26,7 @@ val CLIMBER_PATTERN_BRIGHTNESS: Dimensionless =
     Units.Percent.of(
         50.0
     ) // TODO need to change the brightness of the climber rainbow to fit the real world !
+val ALIGN_PATTERN_BRIGHTNESS: Dimensionless = Units.Percent.of(50.0)
 
 val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)

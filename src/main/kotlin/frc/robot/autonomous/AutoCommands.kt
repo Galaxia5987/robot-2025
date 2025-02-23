@@ -11,8 +11,11 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.Drive
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
+import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.vision
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 fun pathFindToPose(pose: Pose2d): Command =
@@ -21,36 +24,32 @@ fun pathFindToPose(pose: Pose2d): Command =
 fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
-    rotationController.setpoint = Rotation2d.fromDegrees(155.0).radians
+    rotationController.setpoint = ALIGNED_ROTATION.radians
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
-
-    val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setpoint = if (isLeft) -ALIGNED_TX_LEFT else -ALIGNED_TX_RIGHT
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    val xError = { -vision.getTranslationToBestTarget(1).y }
+    val yawToTarget = {vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians}
 
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
+    yController.setpoint = if (isLeft) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
-    yController.setpoint = 0.0
-    val yError = { -vision.getTranslationToBestTarget(1).x }
+    val yError = {
+        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
+    }
+
     return Commands.sequence(
-            drive
-                .run {
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            0.0,
-                            xController.calculate(xError.invoke()),
-                            -rotationController.calculate(
-                                vision.getYawToTarget(1).get().radians
-                            )
-                        )
+            Commands.runOnce({ aligning = true }),
+            DriveCommands.driveCommand(
+                    drive,
+                    ChassisSpeeds(
+                        0.0,
+                        yController.calculate(yError.invoke()),
+                        -rotationController.calculate(yawToTarget.invoke())
                     )
-                }
+                )
                 .until(
                     Trigger {
-                            xController.atSetpoint() &&
+                            yController.atSetpoint() &&
                                 rotationController.atSetpoint()
                         }
                         .debounce(0.15)
@@ -59,15 +58,26 @@ fun alignToPose(drive: Drive, isLeft: Boolean, scoreCommand: Command): Command {
                 .runOnce { drive.setAngle(Rotation2d.kZero) }
                 .alongWith(scoreCommand),
             WaitCommand(0.3),
-            drive.run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        ALIGNMENT_Y_VELOCITY.`in`(Units.MetersPerSecond),
-                        0.0,
-                        0.0
-                    )
+            DriveCommands.driveCommand(
+                drive,
+                ChassisSpeeds(
+                    ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
+                    0.0,
+                    0.0
                 )
-            }
+            ).withTimeout(10.0)
         )
-        .alongWith(Commands.run({ Logger.recordOutput("XError", xError) }))
+        .apply { handleInterrupt { aligning = false } }
+        .alongWith(
+            Commands.run({
+                Logger.recordOutput("Auto Alignment/YError", yError)
+            })
+        )
 }
+
+private var aligning = false
+
+val IS_ALIGNING = Trigger { aligning }
+
+@AutoLogOutput
+private fun getIsAligning() = IS_ALIGNING

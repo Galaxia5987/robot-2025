@@ -31,7 +31,7 @@ public class VisionIOPhotonVision implements VisionIO {
      * Creates a new VisionIOPhotonVision.
      *
      * @param name The configured name of the camera.
-     * @param rotationSupplier The 3D position of the camera relative to the robot.
+     * @param robotToCamera The 3D position of the camera relative to the robot.
      */
     public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
         camera = new PhotonCamera(name);
@@ -68,8 +68,8 @@ public class VisionIOPhotonVision implements VisionIO {
                         result.getBestTarget().bestCameraToTarget.getRotation().toRotation2d();
             } else {
                 inputs.latestTargetObservation =
-                        new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
-                inputs.yawToTarget = new Rotation2d();
+                        new TargetObservation(Rotation2d.kZero, Rotation2d.kZero, 0);
+                inputs.yawToTarget = Rotation2d.kZero;
             }
 
             // Add pose observation
