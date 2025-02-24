@@ -1,10 +1,8 @@
 package frc.robot.lib
 
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.AngularVelocity
-import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.LinearVelocity
+import edu.wpi.first.units.Units.Seconds
+import edu.wpi.first.units.measure.*
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -97,3 +95,6 @@ fun CommandGenericHID.rumble(): Command {
         { hid.setRumble(GenericHID.RumbleType.kBothRumble, 1.0) },
         { hid.setRumble(GenericHID.RumbleType.kBothRumble, 0.0) })
 }
+
+fun (() -> Boolean).debounce(time: Double): Trigger = Trigger(this).debounce(time)
+fun (() -> Boolean).debounce(time: Time): Trigger = Trigger(this).debounce(time.`in`(Seconds))
