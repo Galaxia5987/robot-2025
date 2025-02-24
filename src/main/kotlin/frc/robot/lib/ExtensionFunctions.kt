@@ -1,6 +1,5 @@
 package frc.robot.lib
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
@@ -9,13 +8,10 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.WrapperCommand
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import kotlin.math.PI
-import kotlin.math.hypot
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.LogTable
-
-fun ChassisSpeeds.getSpeed() = hypot(vxMetersPerSecond, vyMetersPerSecond)
+import kotlin.math.PI
 
 fun List<Any>.toDoubleArray(): DoubleArray {
     return this.map { it as Double }.toTypedArray().toDoubleArray()
@@ -65,20 +61,6 @@ inline fun <reified T : List<Any>> LogTable.get(
     return if (T::class == MutableList::class) result.toMutableList() as T
     else result as T
 }
-
-fun Command.handleInterrupt(command: Command): WrapperCommand =
-    handleInterrupt {
-        command.schedule()
-    }
-
-fun Command.finallyDo(command: Command): WrapperCommand =
-    finallyDo(
-        Runnable {
-            this.cancel()
-            if (command.isScheduled) command.cancel()
-            command.schedule()
-        }
-    )
 
 fun Distance.toAngle(radius: Distance, gearRatio: Double): Angle =
     this.timesConversionFactor(
