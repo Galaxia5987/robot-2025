@@ -34,10 +34,10 @@ public class VisionConstants {
     // (Not used by Limelight, configure in web UI instead)
     public static Transform3d robotToFrontOV =
             new Transform3d(
-                    0.23046,
-                    -0.18829,
-                    0.54551,
-                    new Rotation3d(0.0, Math.toRadians(20.0), Math.toRadians(20.0)));
+                    0.23246,
+                    -0.18929,
+                    0.54793,
+                    new Rotation3d(0.0, Math.toRadians(30.0), Math.toRadians(20.0)));
     public static Transform3d robotToRightOV =
             new Transform3d(
                     -0.12547,
@@ -82,4 +82,6 @@ public class VisionConstants {
     public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
     public static double angularStdDevMegatag2Factor =
             Double.POSITIVE_INFINITY; // No rotation data available
+
+    public static int frontCameraIndex = 1;
 }

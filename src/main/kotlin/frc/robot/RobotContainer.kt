@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
@@ -96,12 +97,44 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
-        driverController.circle().onTrue(l3(driverController.circle().negate()))
+        driverController
+            .cross()
+            .and(heightController.button(12))
+            .onTrue(l1(driverController.cross().negate()))
+        driverController
+            .square()
+            .and(heightController.button(12))
+            .onTrue(l2(driverController.square().negate()))
+        driverController
+            .circle()
+            .and(heightController.button(12))
+            .onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
+            .and(heightController.button(12))
             .onTrue(l4(driverController.triangle().negate()))
+
+        driverController
+            .cross()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l1() }))
+            .onFalse(l1(Trigger { true }))
+        driverController
+            .square()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l2() }))
+            .onFalse(l2(Trigger { true }))
+        driverController
+            .circle()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l3() }))
+            .onFalse(l3(Trigger { true }))
+        driverController
+            .triangle()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l4() }))
+            .onFalse(l4(Trigger { true }))
+
         driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
@@ -138,10 +171,32 @@ object RobotContainer {
 
         testController.a().onTrue(intakeBit(testController.a().negate()))
         testController.y().onTrue(feederL4Bit(testController.y().negate()))
+
+        val buttonMappings =
+            listOf(
+                9, // L1
+                10, // R1
+                11, // R2
+                8, // L2
+                4, // L3
+                12, // R3
+                7, // L4
+                1, // R4
+                6, // L5
+                2, // R5
+                5, // L6
+                3 // R6
+            )
+
+        buttonMappings.forEach { buttonId ->
+            poseController
+                .button(buttonId)
+                .onTrue(setPoseBasedOnButton(buttonId))
+        }
     }
 
     fun getAutonomousCommand(): Command =
-        DriveCommands.timedLeave(swerveDrive, 1.0)
+        DriveCommands.wheelRadiusCharacterization(swerveDrive)
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

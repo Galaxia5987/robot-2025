@@ -15,12 +15,14 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
         public boolean connected = false;
+        public Translation3d translationToBestTarget = new Translation3d();
         public TargetObservation latestTargetObservation =
                 new TargetObservation(new Rotation2d(), new Rotation2d(), 0);
         public PoseObservation[] poseObservations = new PoseObservation[0];
