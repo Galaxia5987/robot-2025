@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.000168918918919,
-        "y": 5.220692567567567
+        "x": 5.070799180327868,
+        "y": 5.361629098360655
       },
       "prevControl": {
-        "x": 5.089104729729729,
-        "y": 5.695016891891892
+        "x": 5.159734991138678,
+        "y": 5.83595342268498
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,30 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4",
-      "waypointRelativePos": 0.8041025641025679,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "L4"
-        }
-      }
-    },
-    {
-      "name": "Score",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Score"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 2.5,
@@ -68,7 +45,7 @@
     "rotation": -119.91920868855752
   },
   "reversed": false,
-  "folder": "B1R2LR",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 124.50852298766848

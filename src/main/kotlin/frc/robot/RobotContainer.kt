@@ -1,6 +1,8 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
@@ -117,7 +119,7 @@ object RobotContainer {
         driverController
             .cross()
             .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l1() }))
+            .whileTrue(alignCommand { l1() })
             .onFalse(l1(Trigger { true }))
         driverController
             .square()
@@ -127,12 +129,12 @@ object RobotContainer {
         driverController
             .circle()
             .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l3() }))
+            .whileTrue(alignCommand { l3() })
             .onFalse(l3(Trigger { true }))
         driverController
             .triangle()
             .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l4() }))
+            .whileTrue(alignCommand { l4() })
             .onFalse(l4(Trigger { true }))
 
         driverController.R1().whileTrue(intakeAlgae())
@@ -195,8 +197,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+    fun getAutonomousCommand(): Command = B1R()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

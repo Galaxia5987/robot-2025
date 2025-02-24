@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.276858108108108,
-        "y": 2.9874155405405403
+        "x": 5.38247950819672,
+        "y": 2.7842725409836064
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.563429054054054,
-        "y": 2.295692567567568
+        "x": 5.669050454142666,
+        "y": 2.092549568010634
       },
       "isLocked": false,
       "linkedName": "6R"
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Feed",
-      "waypointRelativePos": 0.861538461538462,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 2.5,
@@ -52,7 +45,7 @@
     "rotation": -126.60707481260755
   },
   "reversed": false,
-  "folder": "B1L6RL",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 120.37912601136831

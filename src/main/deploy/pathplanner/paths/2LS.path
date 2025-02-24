@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.306503378378378,
-        "y": 5.052702702702702
+        "x": 5.406454918032787,
+        "y": 5.25373975409836
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.415202702702702,
-        "y": 5.42820945945946
+        "x": 5.515154242357111,
+        "y": 5.6292465108551175
       },
       "isLocked": false,
       "linkedName": "2L"
@@ -31,19 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Feed",
-      "waypointRelativePos": 0.9025641025641035,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Feed"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 2.5,
@@ -57,7 +45,7 @@
     "rotation": 124.50852298766848
   },
   "reversed": false,
-  "folder": "B1R2LR",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -119.91920868855752
