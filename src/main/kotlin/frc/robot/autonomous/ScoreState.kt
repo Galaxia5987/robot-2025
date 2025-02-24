@@ -19,8 +19,6 @@ val IS_WITHIN_AUTO_SCORE_DISTANCE = {
 
 var selectedScorePose: () -> Pose2d = { Reef1 }
 
-private var selectedHeightPose: () -> ScoreHeight = { ScoreHeight.L3 }
-
 var isLeft = { false }
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
@@ -46,6 +44,3 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
         setOf()
     )
 }
-
-private fun selectedHeightCommand(outtakeTrigger: Trigger): Command =
-    selectedHeightPose.invoke().command.invoke(outtakeTrigger)
