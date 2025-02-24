@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.elevator
 import frc.robot.gripper
@@ -34,9 +35,6 @@ fun alignToPose(
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
-    //    val yawToTarget = {
-    //        vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians
-    //    }
 
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint =
@@ -47,34 +45,35 @@ fun alignToPose(
     }
 
     return Commands.sequence(
-            Commands.runOnce({ aligning = true }),
-            drive
-                .run {
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            0.0,
-                            yController.calculate(yError.invoke()),
-                            -rotationController.calculate(
-                                vision
-                                    .getYawToTarget(
-                                        VisionConstants.frontCameraIndex
-                                    )
-                                    .get()
-                                    .radians
-                            )
+        Commands.runOnce({ aligning = true }),
+        drive
+            .run {
+                drive.runVelocity(
+                    ChassisSpeeds(
+                        0.0,
+                        yController.calculate(yError.invoke()),
+                        -rotationController.calculate(
+                            vision
+                                .getYawToTarget(
+                                    VisionConstants.frontCameraIndex
+                                )
+                                .get()
+                                .radians
                         )
                     )
+                )
+            }
+            .until(
+                Trigger {
+                    yController.atSetpoint() &&
+                            rotationController.atSetpoint()
                 }
-                .until(
-                    Trigger {
-                            yController.atSetpoint() &&
-                                rotationController.atSetpoint()
-                        }
-                        .debounce(0.15)
-                ),
-            drive
-                .runOnce { drive.setAngle(Rotation2d.kZero) }
-                .alongWith(scoreCommand.invoke()),
+                    .debounce(0.15)
+            ),
+        drive
+            .runOnce { drive.setAngle(Rotation2d.kZero) }
+            .alongWith(scoreCommand.invoke()),
+        WaitCommand(0.4),
             drive.run {
                 drive.runVelocity(
                     ChassisSpeeds(
@@ -84,8 +83,8 @@ fun alignToPose(
                     )
                 )
             }
-            //            .withTimeout(10.0)
-            )
+            .withTimeout(10.0)
+    )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
             Commands.run({
