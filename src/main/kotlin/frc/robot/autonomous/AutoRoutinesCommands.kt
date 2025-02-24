@@ -1,14 +1,11 @@
 package frc.robot.autonomous
 
-import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
-import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.l4
@@ -16,18 +13,56 @@ import frc.robot.swerveDrive
 
 fun B1L(): Command =
     Commands.sequence(
-        Commands.runOnce({swerveDrive.resetOdometry(PathPlannerPath.fromPathFile("B1R").startingDifferentialPose.flipIfNeeded())}),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
-        alignCommand { l4() }.withTimeout(3.0),
-        l4(Trigger { true })
+        Commands.runOnce({
+            selectedScorePose = {Reef1}
+            isLeft = {true}
+        }),
+        alignCommand(::l4).withTimeout(4.0),
+        l4(Trigger {true})
     )
 
 fun B1R(): Command =
     Commands.sequence(
-        Commands.runOnce({swerveDrive.resetOdometry(PathPlannerPath.fromPathFile("B1L").startingDifferentialPose.flipIfNeeded())}),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
-        alignCommand { l4() }.withTimeout(3.0),
-        l4(Trigger { true })
+        Commands.runOnce({
+            selectedScorePose = {Reef1}
+            isLeft = {false}
+        }),
+        alignCommand(::l4).withTimeout(4.0),
+        l4(Trigger {true})
+    )
+
+fun C6R(): Command =
+    Commands.sequence(
+        Commands.runOnce({
+            selectedScorePose = {Reef6}
+            isLeft = {false}
+        }),
+        alignCommand(::l4).withTimeout(4.0),
+        l4(Trigger {true})
+    )
+
+fun S6L(): Command =
+    Commands.sequence(
+        Commands.runOnce({
+            selectedScorePose = {Reef6}
+            isLeft = {true}
+        }),
+        alignCommand(::l4).withTimeout(4.0),
+        l4(Trigger {true})
+    )
+
+fun autoFeed(): Command =
+    Commands.sequence(
+        pathFindToPose(FeederRight),
+        feeder(Trigger{true})
+    )
+
+
+fun C6RL(): Command =
+    Commands.sequence(
+        C6R(),
+        autoFeed(),
+        S6L()
     )
 
 fun dumbAuto(): Command = Commands.sequence(

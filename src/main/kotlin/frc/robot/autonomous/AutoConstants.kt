@@ -10,15 +10,21 @@ import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getPose2d
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.io.File
-import kotlinx.serialization.json.*
 
 val Reef1: Pose2d = Pose2d(6.033, 4.000, Rotation2d.k180deg)
-private val Reef2: Pose2d = Pose2d(5.215, 5.266, Rotation2d.fromDegrees(-120.0))
-private val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
-private val Reef4: Pose2d = getPose2d(2.93, 4.030)
-private val Reef5: Pose2d = Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
-private val Reef6: Pose2d = Pose2d(5.205, 2.764, Rotation2d.fromDegrees(120.0))
+val Reef2: Pose2d = Pose2d(5.215, 5.266, Rotation2d.fromDegrees(-120.0))
+val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
+val Reef4: Pose2d = getPose2d(2.93, 4.030)
+val Reef5: Pose2d = Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
+val Reef6: Pose2d = Pose2d(5.205, 2.764, Rotation2d.fromDegrees(120.0))
+val FeederRight: Pose2d = Pose2d(1.197, 1.0, Rotation2d.fromDegrees(-120.0))
+val FeederLeft: Pose2d = Pose2d(1.197, 7.031, Rotation2d.fromDegrees(120.0))
 
 val buttonToPoseMap =
     mapOf(
