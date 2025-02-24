@@ -117,14 +117,6 @@ fun alignToPose(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/YError", yError)
                 Logger.recordOutput("Auto Alignment/XError", xError)
-                Logger.recordOutput(
-                    "AlignmentRotationSetpointTest",
-                    VisionConstants.aprilTagLayout
-                        .getTagPose(bestTargetID)
-                        .getOrNull()
-                        ?.rotation
-                        ?.toRotation2d()
-                )
             })
         )
 }
