@@ -158,6 +158,10 @@ public class DriveCommands {
                 .beforeStarting(angleController::reset);
     }
 
+    public static Command driveCommand(Drive drive, ChassisSpeeds chassisSpeeds) {
+        return drive.run(() -> drive.runVelocity(chassisSpeeds));
+    }
+
     /**
      * Measures the velocity feedforward constants for the drive motors.
      *
