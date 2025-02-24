@@ -20,6 +20,7 @@ import frc.robot.vision
 import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import kotlin.jvm.optionals.getOrNull
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
@@ -44,54 +45,67 @@ fun alignToPose(
         -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
     }
 
+    var bestTargetID = 6
+
     return Commands.sequence(
-            Commands.runOnce({ aligning = true }),
-            drive
-                .run {
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            0.0,
-                            yController.calculate(yError.invoke()),
-                            -rotationController.calculate(
-                                vision
-                                    .getYawToTarget(
-                                        VisionConstants.frontCameraIndex
-                                    )
-                                    .get()
-                                    .radians
-                            )
+        Commands.runOnce({
+            aligning = true
+            bestTargetID = vision.getBestTargetID(VisionConstants.frontCameraIndex)
+        }),
+        drive
+            .run {
+                drive.runVelocity(
+                    ChassisSpeeds(
+                        0.0,
+                        yController.calculate(yError.invoke()),
+                        -rotationController.calculate(
+                            vision
+                                .getYawToTarget(
+                                    VisionConstants.frontCameraIndex
+                                )
+                                .get()
+                                .radians
                         )
                     )
+                )
+            }
+            .until(
+                Trigger {
+                    yController.atSetpoint() &&
+                            rotationController.atSetpoint()
                 }
-                .until(
-                    Trigger {
-                            yController.atSetpoint() &&
-                                rotationController.atSetpoint()
-                        }
-                        .debounce(0.15)
-                ),
-            drive
-                .runOnce { drive.setAngle(Rotation2d.kZero) }
-                .alongWith(scoreCommand.invoke()),
-            WaitCommand(0.4),
-            drive
-                .run {
-                    drive.runVelocity(
-                        ChassisSpeeds(
-                            ALIGNMENT_FORWARD_VELOCITY.`in`(
-                                Units.MetersPerSecond
-                            ),
-                            0.0,
-                            0.0
-                        )
+                    .debounce(0.15)
+            ),
+        drive
+            .runOnce {
+                rotationController.setpoint = drive.rotation.radians
+                drive.setAngle(Rotation2d.kZero)
+            }
+            .alongWith(scoreCommand.invoke()),
+        WaitCommand(0.4),
+        drive
+            .run {
+                drive.runVelocity(
+                    ChassisSpeeds(
+                        ALIGNMENT_FORWARD_VELOCITY.`in`(
+                            Units.MetersPerSecond
+                        ),
+                        if (vision.getBestTargetID(VisionConstants.frontCameraIndex) != 0) yController.calculate(yError.invoke())
+                        else 0.0,
+                        rotationController.calculate(drive.rotation.radians)
                     )
-                }
-                .withTimeout(10.0)
-        )
+                )
+            }
+            .withTimeout(10.0)
+    )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/YError", yError)
+                Logger.recordOutput(
+                    "AlignmentRotationSetpointTest",
+                    VisionConstants.aprilTagLayout.getTagPose(bestTargetID).getOrNull()?.rotation?.toRotation2d()
+                )
             })
         )
 }
