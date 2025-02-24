@@ -45,46 +45,49 @@ fun alignToPose(
     }
 
     return Commands.sequence(
-        Commands.runOnce({ aligning = true }),
-        drive
-            .run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        0.0,
-                        yController.calculate(yError.invoke()),
-                        -rotationController.calculate(
-                            vision
-                                .getYawToTarget(
-                                    VisionConstants.frontCameraIndex
-                                )
-                                .get()
-                                .radians
+            Commands.runOnce({ aligning = true }),
+            drive
+                .run {
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            0.0,
+                            yController.calculate(yError.invoke()),
+                            -rotationController.calculate(
+                                vision
+                                    .getYawToTarget(
+                                        VisionConstants.frontCameraIndex
+                                    )
+                                    .get()
+                                    .radians
+                            )
                         )
                     )
-                )
-            }
-            .until(
-                Trigger {
-                    yController.atSetpoint() &&
-                            rotationController.atSetpoint()
                 }
-                    .debounce(0.15)
-            ),
-        drive
-            .runOnce { drive.setAngle(Rotation2d.kZero) }
-            .alongWith(scoreCommand.invoke()),
-        WaitCommand(0.4),
-            drive.run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
-                        0.0,
-                        0.0
+                .until(
+                    Trigger {
+                            yController.atSetpoint() &&
+                                rotationController.atSetpoint()
+                        }
+                        .debounce(0.15)
+                ),
+            drive
+                .runOnce { drive.setAngle(Rotation2d.kZero) }
+                .alongWith(scoreCommand.invoke()),
+            WaitCommand(0.4),
+            drive
+                .run {
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            ALIGNMENT_FORWARD_VELOCITY.`in`(
+                                Units.MetersPerSecond
+                            ),
+                            0.0,
+                            0.0
+                        )
                     )
-                )
-            }
-            .withTimeout(10.0)
-    )
+                }
+                .withTimeout(10.0)
+        )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
             Commands.run({
