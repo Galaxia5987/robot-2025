@@ -14,8 +14,10 @@ import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 
@@ -55,6 +57,9 @@ object RobotContainer {
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
+        if (IS_RED) {
+            swerveDrive.resetGyro(Units.Degrees.of(180.0))
+        }
         enableAutoLogOutputFor(this)
     }
 
@@ -81,7 +86,14 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(swerveDrive::resetGyro, swerveDrive)
+                Commands.runOnce(
+                        {
+                            swerveDrive.resetGyro(
+                                Units.Degrees.of(if (IS_RED) 0.0 else 180.0)
+                            )
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
@@ -129,10 +141,7 @@ object RobotContainer {
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake())
-        driverController
-            .povLeft()
-            .whileTrue(alignCommand({ l4() }))
-            .onFalse(l4(Trigger { true }))
+
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
         operatorController
@@ -147,6 +156,21 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController
+            .rightTrigger()
+            .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftTrigger()
+            .whileTrue(elevator.setVoltage(-ELEVATOR_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .rightBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+        operatorController
+            .leftBumper()
+            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+
+        testController.a().onTrue(intakeBit(testController.a().negate()))
+        testController.y().onTrue(feederL4Bit(testController.y().negate()))
 
         val buttonMappings =
             listOf(
