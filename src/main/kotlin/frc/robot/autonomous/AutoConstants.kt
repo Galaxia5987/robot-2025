@@ -81,7 +81,7 @@ val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.2)
 val MAX_ALIGNMENT_DISTANCE: Distance = Units.Meters.of(2.0)
 
-val ALIGNMENT_Y_GAINS = Gains(4.4, 0.0, 1.0)
+val ALIGNMENT_Y_GAINS = Gains(4.4, 0.0, 1.6)
 val ALIGNMENT_ROTATION_GAINS = Gains(3.0, 0.0, 0.0)
 
 val ALIGNMENT_FORWARD_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
