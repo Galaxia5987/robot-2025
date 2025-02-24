@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.elevator
 import frc.robot.gripper
@@ -34,9 +35,6 @@ fun alignToPose(
     rotationController.setTolerance(
         ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians)
     )
-    //    val yawToTarget = {
-    //        vision.getYawToTarget(VisionConstants.frontCameraIndex).get().radians
-    //    }
 
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint =
@@ -75,17 +73,21 @@ fun alignToPose(
             drive
                 .runOnce { drive.setAngle(Rotation2d.kZero) }
                 .alongWith(scoreCommand.invoke()),
-            drive.run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
-                        0.0,
-                        0.0
+            WaitCommand(0.4),
+            drive
+                .run {
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            ALIGNMENT_FORWARD_VELOCITY.`in`(
+                                Units.MetersPerSecond
+                            ),
+                            0.0,
+                            0.0
+                        )
                     )
-                )
-            }
-            //            .withTimeout(10.0)
-            )
+                }
+                .withTimeout(10.0)
+        )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
             Commands.run({
