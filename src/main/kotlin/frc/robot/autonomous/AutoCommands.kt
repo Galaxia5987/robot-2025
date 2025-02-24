@@ -45,6 +45,13 @@ fun alignToPose(
         -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
     }
 
+    val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
+    xController.setpoint = -0.535
+    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    val xError = {
+        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).x
+    }
+
     var bestTargetID = 6
 
     return Commands.sequence(
@@ -56,23 +63,24 @@ fun alignToPose(
             .run {
                 drive.runVelocity(
                     ChassisSpeeds(
-                        0.0,
+                        xController.calculate(xError.invoke()),
                         yController.calculate(yError.invoke()),
-                        -rotationController.calculate(
-                            vision
-                                .getYawToTarget(
-                                    VisionConstants.frontCameraIndex
-                                )
-                                .get()
-                                .radians
-                        )
+                        if (vision.getBestTargetID(VisionConstants.frontCameraIndex) == bestTargetID)
+                            -rotationController.calculate(
+                                vision
+                                    .getYawToTarget(
+                                        VisionConstants.frontCameraIndex
+                                    )
+                                    .get()
+                                    .radians
+                            ) else 0.0
                     )
                 )
             }
             .until(
                 Trigger {
                     yController.atSetpoint() &&
-                            rotationController.atSetpoint()
+                            rotationController.atSetpoint() && xController.atSetpoint()
                 }
                     .debounce(0.15)
             ),
@@ -90,9 +98,8 @@ fun alignToPose(
                         ALIGNMENT_FORWARD_VELOCITY.`in`(
                             Units.MetersPerSecond
                         ),
-                        if (vision.getBestTargetID(VisionConstants.frontCameraIndex) != 0) yController.calculate(yError.invoke())
-                        else 0.0,
-                        rotationController.calculate(drive.rotation.radians)
+                        0.0,
+                        0.0
                     )
                 )
             }
@@ -102,6 +109,7 @@ fun alignToPose(
         .alongWith(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/YError", yError)
+                Logger.recordOutput("Auto Alignment/XError", xError)
                 Logger.recordOutput(
                     "AlignmentRotationSetpointTest",
                     VisionConstants.aprilTagLayout.getTagPose(bestTargetID).getOrNull()?.rotation?.toRotation2d()
