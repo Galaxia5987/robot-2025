@@ -13,7 +13,7 @@ import frc.robot.lib.getPose2d
 import java.io.File
 import kotlinx.serialization.json.*
 
-val Reef1: Pose2d = Pose2d(5.983, 4.000, Rotation2d.k180deg)
+val Reef1: Pose2d = Pose2d(6.033, 4.000, Rotation2d.k180deg)
 private val Reef2: Pose2d = Pose2d(5.215, 5.266, Rotation2d.fromDegrees(-120.0))
 private val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
 private val Reef4: Pose2d = getPose2d(2.93, 4.030)
