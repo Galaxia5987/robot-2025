@@ -61,8 +61,8 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].latestTargetObservation.id();
     }
 
-    public Supplier<Rotation2d> getYawToTarget(int cameraIndex) {
-        return () -> inputs[cameraIndex].yawToTarget;
+    public Rotation2d getYawToTarget(int cameraIndex) {
+        return inputs[cameraIndex].yawToTarget;
     }
 
     public Translation3d getTranslationToBestTarget(int cameraIndex) {

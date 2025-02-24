@@ -27,9 +27,11 @@ fun LogTable.put(key: String, defaultValue: List<Any>) {
     when {
         defaultValue.all { it is Double } ->
             put(key, defaultValue.toDoubleArray())
+
         defaultValue.all { it is Int } -> put(key, defaultValue.toIntArray())
         defaultValue.all { it is Boolean } ->
             put(key, defaultValue.toBooleanArray())
+
         else ->
             throw IllegalArgumentException(
                 "Unsupported List type: ${defaultValue::class.simpleName}"
@@ -39,7 +41,7 @@ fun LogTable.put(key: String, defaultValue: List<Any>) {
 
 inline fun <reified T : List<Any>> LogTable.get(
     key: String,
-    defaultValue: T
+    defaultValue: T,
 ): T {
     val type = defaultValue::class
 
@@ -47,10 +49,13 @@ inline fun <reified T : List<Any>> LogTable.get(
         when {
             defaultValue.all { it is Double } ->
                 get(key, defaultValue.toDoubleArray()).toList()
+
             defaultValue.all { it is Int } ->
                 get(key, defaultValue.toIntArray()).toList()
+
             defaultValue.all { it is Boolean } ->
                 get(key, defaultValue.toBooleanArray()).toList()
+
             else ->
                 throw IllegalArgumentException(
                     "Unable to LogTable.get List of type: ${type.simpleName}"
@@ -74,7 +79,7 @@ fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
 
 fun LinearVelocity.toAngular(
     radius: Distance,
-    gearRatio: Double
+    gearRatio: Double,
 ): AngularVelocity =
     this.timesConversionFactor(
         Units.RotationsPerSecond.per(Units.MetersPerSecond)
@@ -83,7 +88,7 @@ fun LinearVelocity.toAngular(
 
 fun AngularVelocity.toLinear(
     radius: Distance,
-    gearRatio: Double
+    gearRatio: Double,
 ): LinearVelocity =
     this.timesConversionFactor(
         Units.MetersPerSecond.per(Units.RotationsPerSecond)

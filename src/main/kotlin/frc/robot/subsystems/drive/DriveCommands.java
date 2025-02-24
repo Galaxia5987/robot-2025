@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.InitializerKt;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -227,6 +229,16 @@ public class DriveCommands {
                                     System.out.println("\tkS: " + formatter.format(kS));
                                     System.out.println("\tkV: " + formatter.format(kV));
                                 }));
+    }
+
+    public static Command runVelocity(ChassisSpeeds speeds) {
+        var drive = InitializerKt.getSwerveDrive();
+        return drive.run(() -> drive.runVelocity(speeds));
+    }
+
+    public static Command setAngle(Rotation2d angle) {
+        var drive = InitializerKt.getSwerveDrive();
+        return drive.runOnce(() -> drive.setAngle(angle));
     }
 
     /** Measures the robot's wheel radius by spinning in a circle. */
