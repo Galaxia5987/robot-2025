@@ -28,18 +28,18 @@ public class GyroIONavX implements GyroIO {
 
     public GyroIONavX() {
         yawTimestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
-        yawPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(navX::getAngle);
+        yawPositionQueue = PhoenixOdometryThread.getInstance().registerSignal(navX::getYaw);
     }
 
     @Override
-    public void zeroGyro(Angle angle) {
-        navX.setAngleAdjustment(angle.in(edu.wpi.first.units.Units.Degrees));
+    public void zeroGyro() {
+        navX.zeroYaw();
     }
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
         inputs.connected = navX.isConnected();
-        inputs.yawPosition = Rotation2d.fromDegrees(-navX.getAngle());
+        inputs.yawPosition = Rotation2d.fromDegrees(-navX.getYaw());
         inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getRawGyroZ());
 
         inputs.odometryYawTimestamps =

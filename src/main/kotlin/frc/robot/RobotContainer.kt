@@ -57,9 +57,6 @@ object RobotContainer {
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
-        if (IS_RED) {
-            swerveDrive.resetGyro(Units.Degrees.of(180.0))
-        }
         enableAutoLogOutputFor(this)
     }
 
@@ -88,9 +85,7 @@ object RobotContainer {
             .onTrue(
                 Commands.runOnce(
                         {
-                            swerveDrive.resetGyro(
-                                Units.Degrees.of(if (IS_RED) 0.0 else 180.0)
-                            )
+                            swerveDrive.resetGyro()
                         },
                         swerveDrive
                     )
