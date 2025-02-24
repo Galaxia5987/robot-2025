@@ -18,9 +18,9 @@ import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.swerveDrive
 import frc.robot.vision
 import frc.robot.wrist
+import kotlin.jvm.optionals.getOrNull
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
-import kotlin.jvm.optionals.getOrNull
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
@@ -55,56 +55,63 @@ fun alignToPose(
     var bestTargetID = 6
 
     return Commands.sequence(
-        Commands.runOnce({
-            aligning = true
-            bestTargetID = vision.getBestTargetID(VisionConstants.frontCameraIndex)
-        }),
-        drive
-            .run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        xController.calculate(xError.invoke()),
-                        yController.calculate(yError.invoke()),
-                        if (vision.getBestTargetID(VisionConstants.frontCameraIndex) == bestTargetID)
-                            -rotationController.calculate(
-                                vision
-                                    .getYawToTarget(
-                                        VisionConstants.frontCameraIndex
-                                    )
-                                    .get()
-                                    .radians
-                            ) else 0.0
+            Commands.runOnce({
+                aligning = true
+                bestTargetID =
+                    vision.getBestTargetID(VisionConstants.frontCameraIndex)
+            }),
+            drive
+                .run {
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            xController.calculate(xError.invoke()),
+                            yController.calculate(yError.invoke()),
+                            if (
+                                vision.getBestTargetID(
+                                    VisionConstants.frontCameraIndex
+                                ) == bestTargetID
+                            )
+                                -rotationController.calculate(
+                                    vision
+                                        .getYawToTarget(
+                                            VisionConstants.frontCameraIndex
+                                        )
+                                        .get()
+                                        .radians
+                                )
+                            else 0.0
+                        )
                     )
-                )
-            }
-            .until(
-                Trigger {
-                    yController.atSetpoint() &&
-                            rotationController.atSetpoint() && xController.atSetpoint()
                 }
-                    .debounce(0.15)
-            ),
-        drive
-            .runOnce {
-                rotationController.setpoint = drive.rotation.radians
-                drive.setAngle(Rotation2d.kZero)
-            }
-            .alongWith(scoreCommand.invoke()),
-        WaitCommand(0.4),
-        drive
-            .run {
-                drive.runVelocity(
-                    ChassisSpeeds(
-                        ALIGNMENT_FORWARD_VELOCITY.`in`(
-                            Units.MetersPerSecond
-                        ),
-                        0.0,
-                        0.0
+                .until(
+                    Trigger {
+                            yController.atSetpoint() &&
+                                rotationController.atSetpoint() &&
+                                xController.atSetpoint()
+                        }
+                        .debounce(0.15)
+                ),
+            drive
+                .runOnce {
+                    rotationController.setpoint = drive.rotation.radians
+                    drive.setAngle(Rotation2d.kZero)
+                }
+                .alongWith(scoreCommand.invoke()),
+            WaitCommand(0.4),
+            drive
+                .run {
+                    drive.runVelocity(
+                        ChassisSpeeds(
+                            ALIGNMENT_FORWARD_VELOCITY.`in`(
+                                Units.MetersPerSecond
+                            ),
+                            0.0,
+                            0.0
+                        )
                     )
-                )
-            }
-            .withTimeout(10.0)
-    )
+                }
+                .withTimeout(10.0)
+        )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
             Commands.run({
@@ -112,7 +119,11 @@ fun alignToPose(
                 Logger.recordOutput("Auto Alignment/XError", xError)
                 Logger.recordOutput(
                     "AlignmentRotationSetpointTest",
-                    VisionConstants.aprilTagLayout.getTagPose(bestTargetID).getOrNull()?.rotation?.toRotation2d()
+                    VisionConstants.aprilTagLayout
+                        .getTagPose(bestTargetID)
+                        .getOrNull()
+                        ?.rotation
+                        ?.toRotation2d()
                 )
             })
         )
