@@ -2,7 +2,6 @@ package frc.robot.compositions.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
@@ -18,7 +17,6 @@ import frc.robot.swerveDrive
 import frc.robot.vision
 import org.littletonrobotics.junction.AutoLogOutput
 
-fun pathFindToPose(pose: Pose2d): Command = AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
 @AutoLogOutput(key = "Auto Alignment/Is aligning")
 private var aligning = false
@@ -68,5 +66,5 @@ private fun pidDrive(isLeft: Boolean): ParallelRaceGroup? {
 }
 
 fun alignCommand(scoreCommand: Command): Command = swerveDrive.defer {
-    pathFindToPose(selectedScorePose)
+    AutoBuilder.pathfindToPoseFlipped(selectedScorePose, PATH_CONSTRAINTS, 0.0)
 }.andThen(alignToPose(isLeft, scoreCommand))
