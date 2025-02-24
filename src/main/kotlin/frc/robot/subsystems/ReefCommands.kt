@@ -83,32 +83,24 @@ private fun moveDefaultPosition(): Command =
         .withName("Reef/Move default position")
 
 fun l1(outtakeTrigger: Trigger): Command =
-    l1().andThen(scoreCoral(outtakeTrigger))
-        .withName("Reef/L1")
+    l1().andThen(scoreCoral(outtakeTrigger)).withName("Reef/L1")
 
-fun l1(): Command = parallel(elevator.l1(), wrist.l1())
-    .withName("Reef/Move L1")
+fun l1(): Command = parallel(elevator.l1(), wrist.l1()).withName("Reef/Move L1")
 
 fun l2(outtakeTrigger: Trigger): Command =
-    l2().andThen(scoreCoral(outtakeTrigger))
-        .withName("Reef/L2")
+    l2().andThen(scoreCoral(outtakeTrigger)).withName("Reef/L2")
 
-fun l2(): Command = parallel(elevator.l2(), wrist.l2())
-    .withName("Reef/Move L2")
+fun l2(): Command = parallel(elevator.l2(), wrist.l2()).withName("Reef/Move L2")
 
 fun l3(outtakeTrigger: Trigger): Command =
-    l3().andThen(scoreCoral(outtakeTrigger))
-        .withName("Reef/L3")
+    l3().andThen(scoreCoral(outtakeTrigger)).withName("Reef/L3")
 
-fun l3(): Command = parallel(elevator.l3(), wrist.l3())
-    .withName("Reef/Move L3")
+fun l3(): Command = parallel(elevator.l3(), wrist.l3()).withName("Reef/Move L3")
 
 fun l4(outtakeTrigger: Trigger): Command =
-    l4().andThen(scoreCoralL4(outtakeTrigger))
-        .withName("Reef/L4")
+    l4().andThen(scoreCoralL4(outtakeTrigger)).withName("Reef/L4")
 
-fun l4(): Command = parallel(elevator.l4(), wrist.l4())
-    .withName("Reef/Move L4")
+fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 
 fun pathfindFeeder(outtakeTrigger: Trigger): Command =
     AutoBuilder.pathfindThenFollowPath(
