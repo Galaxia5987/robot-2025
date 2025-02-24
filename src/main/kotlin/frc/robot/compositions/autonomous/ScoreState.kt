@@ -1,4 +1,4 @@
-package frc.robot.autonomous
+package frc.robot.compositions.autonomous
 
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake
+package frc.robot.compositions
 
 import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.extender

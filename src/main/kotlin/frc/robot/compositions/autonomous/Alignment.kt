@@ -1,4 +1,4 @@
-package frc.robot.autonomous
+package frc.robot.compositions.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.controller.PIDController
