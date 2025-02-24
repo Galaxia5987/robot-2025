@@ -13,12 +13,12 @@ import frc.robot.lib.getPose2d
 import java.io.File
 import kotlinx.serialization.json.*
 
-val Reef1: Pose2d = Pose2d(6.063, 3.980, Rotation2d.k180deg)
-private val Reef2: Pose2d = Pose2d(5.315, 5.366, Rotation2d.fromDegrees(-120.0))
+val Reef1: Pose2d = Pose2d(5.983, 4.000, Rotation2d.k180deg)
+private val Reef2: Pose2d = Pose2d(5.215, 5.266, Rotation2d.fromDegrees(-120.0))
 private val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
 private val Reef4: Pose2d = getPose2d(2.93, 4.030)
 private val Reef5: Pose2d = Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
-private val Reef6: Pose2d = Pose2d(5.255, 2.624, Rotation2d.fromDegrees(120.0))
+private val Reef6: Pose2d = Pose2d(5.205, 2.764, Rotation2d.fromDegrees(120.0))
 
 val buttonToPoseMap =
     mapOf(
@@ -81,7 +81,7 @@ val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.2)
 val MAX_ALIGNMENT_DISTANCE: Distance = Units.Meters.of(2.0)
 
-val ALIGNMENT_Y_GAINS = Gains(4.0, 0.0, 0.0)
+val ALIGNMENT_Y_GAINS = Gains(4.4, 0.0, 1.0)
 val ALIGNMENT_ROTATION_GAINS = Gains(3.0, 0.0, 0.0)
 
 val ALIGNMENT_FORWARD_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
