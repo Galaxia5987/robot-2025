@@ -36,6 +36,6 @@ fun dumbAuto(): Command = Commands.sequence(
     Commands.runOnce({swerveDrive.setAngle(Rotation2d.kZero)}),
     WaitCommand(0.8),
     DriveCommands.timedLeave(swerveDrive, 1.2),
-    alignToPose(swerveDrive, {true}, ::l4).withTimeout(5.5),
+    alignToPose(swerveDrive, {true}, ::l4).withTimeout(3.5),
     l4(Trigger {true})
 )
