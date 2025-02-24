@@ -170,3 +170,4 @@ networktables.json
 /ctre_sim/
 /log-downloader/venv/
 /src/main/kotlin/frc/robot/BuildConstants.java
+/.github/workflows/qodana.sarif.json
