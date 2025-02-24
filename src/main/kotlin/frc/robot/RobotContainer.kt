@@ -85,27 +85,43 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().and(heightController.button(12))
+        driverController
+            .cross()
+            .and(heightController.button(12))
             .onTrue(l1(driverController.cross().negate()))
-        driverController.square().and(heightController.button(12))
+        driverController
+            .square()
+            .and(heightController.button(12))
             .onTrue(l2(driverController.square().negate()))
-        driverController.circle().and(heightController.button(12))
+        driverController
+            .circle()
+            .and(heightController.button(12))
             .onTrue(l3(driverController.circle().negate()))
-        driverController.triangle().and(heightController.button(12))
+        driverController
+            .triangle()
+            .and(heightController.button(12))
             .onTrue(l4(driverController.triangle().negate()))
 
-        driverController.cross().and(heightController.button(12).negate())
-            .whileTrue(alignCommand({l1()}))
-            .onFalse(l1(Trigger {true}))
-        driverController.square().and(heightController.button(12).negate())
-            .whileTrue(alignCommand({l2()}))
-            .onFalse(l2(Trigger {true}))
-        driverController.circle().and(heightController.button(12).negate())
-            .whileTrue(alignCommand({l3()}))
-            .onFalse(l3(Trigger {true}))
-        driverController.triangle().and(heightController.button(12).negate())
-            .whileTrue(alignCommand({l4()}))
-            .onFalse(l4(Trigger {true}))
+        driverController
+            .cross()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l1() }))
+            .onFalse(l1(Trigger { true }))
+        driverController
+            .square()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l2() }))
+            .onFalse(l2(Trigger { true }))
+        driverController
+            .circle()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l3() }))
+            .onFalse(l3(Trigger { true }))
+        driverController
+            .triangle()
+            .and(heightController.button(12).negate())
+            .whileTrue(alignCommand({ l4() }))
+            .onFalse(l4(Trigger { true }))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
