@@ -110,10 +110,8 @@ fun AngularVelocity.toLinear(
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
 
-fun CommandXboxController.setRumble(strength: Double) {
-    this.hid.setRumble(GenericHID.RumbleType.kBothRumble, strength)
-}
-
-fun CommandXboxController.rumbleCommand(): Command {
-    return Commands.startEnd({ this.setRumble(1.0) }, { this.setRumble(0.0) })
+fun CommandGenericHID.rumble(): Command {
+    return Commands.startEnd(
+        { hid.setRumble(GenericHID.RumbleType.kBothRumble, 1.0) },
+        { hid.setRumble(GenericHID.RumbleType.kBothRumble, 0.0) })
 }
