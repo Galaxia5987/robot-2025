@@ -39,7 +39,7 @@ fun C6L(): Command =
             selectedScorePose = { Reef6 }
             isLeft = { true }
         }),
-        alignCommandWithPath (::l4).withTimeout(5.0),
+        alignCommandWithPath (::l4).withTimeout(5.6),
         l4(Trigger { true })
     )
 
@@ -57,15 +57,15 @@ fun autoFeed(): Command =
     Commands.sequence(
         Commands.run({ swerveDrive.runVelocity(
             ChassisSpeeds(
-                -ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
+                -1.0,
                 0.0,
-                4.0)
+                2.8)
         )}).withTimeout(0.5),
         pathFindToPose(FeederRight),
         DriveCommands.joystickDrive(swerveDrive, {0.0}, {0.0}, {0.0}).withTimeout(0.02),
         Commands.run({ swerveDrive.runVelocity(
             ChassisSpeeds(
-                ALIGNMENT_FORWARD_VELOCITY.`in`(Units.MetersPerSecond),
+                1.2,
                 0.0,
                 0.0)
         )}).raceWith(
