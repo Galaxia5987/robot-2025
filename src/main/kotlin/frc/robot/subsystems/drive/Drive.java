@@ -139,6 +139,8 @@ public class Drive extends SubsystemBase {
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
     @AutoLogOutput private Rotation2d desiredHeading;
 
+    private Rotation2d gyroOffset = Rotation2d.kZero;
+
     public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
     public SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -474,7 +476,7 @@ public class Drive extends SubsystemBase {
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.connected ? gyroInputs.yawPosition : getPose().getRotation();
+        return gyroInputs.connected ? gyroInputs.yawPosition.plus(gyroOffset) : getPose().getRotation();
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -504,8 +506,9 @@ public class Drive extends SubsystemBase {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
-    public void resetGyro() {
+    public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
+        gyroOffset = offset;
         desiredHeading = new Rotation2d();
     }
 
