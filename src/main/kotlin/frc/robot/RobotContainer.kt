@@ -145,6 +145,10 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController.povLeft()
+            .onTrue(Commands.runOnce({ isLeft = {true}}))
+        operatorController.povRight()
+            .onTrue(Commands.runOnce({ isLeft = {false}}))
         operatorController
             .rightTrigger()
             .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
@@ -184,7 +188,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = B1R()
+    fun getAutonomousCommand(): Command = C6R()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
