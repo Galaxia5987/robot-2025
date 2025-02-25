@@ -2,7 +2,6 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
@@ -19,7 +18,7 @@ fun B1L(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { true }
         }),
-        alignCommandWithPath (::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4).withTimeout(4.0),
         l4(Trigger { true })
     )
 
@@ -29,7 +28,7 @@ fun B1R(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { false }
         }),
-        alignCommandWithPath (::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4).withTimeout(4.0),
         l4(Trigger { true })
     )
 
@@ -39,7 +38,7 @@ fun C6L(): Command =
             selectedScorePose = { Reef6 }
             isLeft = { true }
         }),
-        alignCommandWithPath (::l4).withTimeout(5.6),
+        alignCommandWithPath(::l4).withTimeout(5.6),
         l4(Trigger { true })
     )
 
@@ -49,27 +48,19 @@ fun S5R(): Command =
             selectedScorePose = { Reef5 }
             isLeft = { false }
         }),
-        alignCommandWithPath (::l4).withTimeout(6.5),
+        alignCommandWithPath(::l4).withTimeout(6.5),
         l4(Trigger { true })
     )
 
 fun autoFeed(): Command =
     Commands.sequence(
-        Commands.run({ swerveDrive.runVelocity(
-            ChassisSpeeds(
-                -1.0,
-                0.0,
-                2.8)
-        )}).withTimeout(0.5),
+        Commands.run({ swerveDrive.runVelocity(ChassisSpeeds(-1.0, 0.0, 2.8)) })
+            .withTimeout(0.5),
         pathFindToPose(FeederRight),
-        DriveCommands.joystickDrive(swerveDrive, {0.0}, {0.0}, {0.0}).withTimeout(0.02),
-        Commands.run({ swerveDrive.runVelocity(
-            ChassisSpeeds(
-                1.2,
-                0.0,
-                0.0)
-        )}).raceWith(
-        feeder(Trigger { true }))
+        DriveCommands.joystickDrive(swerveDrive, { 0.0 }, { 0.0 }, { 0.0 })
+            .withTimeout(0.02),
+        Commands.run({ swerveDrive.runVelocity(ChassisSpeeds(1.2, 0.0, 0.0)) })
+            .raceWith(feeder(Trigger { true }))
     )
 
 fun C6L5R(): Command = Commands.sequence(C6L(), autoFeed(), S5R())

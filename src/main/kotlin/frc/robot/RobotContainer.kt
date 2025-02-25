@@ -85,19 +85,16 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce({ swerveDrive.resetGyro(Rotation2d.kZero) }, swerveDrive)
+                Commands.runOnce(
+                        { swerveDrive.resetGyro(Rotation2d.kZero) },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
-        driverController
-            .cross()
-            .onTrue(l1(driverController.cross().negate()))
-        driverController
-            .square()
-            .onTrue(l2(driverController.square().negate()))
-        driverController
-            .circle()
-            .onTrue(l3(driverController.circle().negate()))
+        driverController.cross().onTrue(l1(driverController.cross().negate()))
+        driverController.square().onTrue(l2(driverController.square().negate()))
+        driverController.circle().onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
             .onTrue(l4(driverController.triangle().negate()))
@@ -123,10 +120,12 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
-        operatorController.povLeft()
-            .onTrue(Commands.runOnce({ isLeft = {true}}))
-        operatorController.povRight()
-            .onTrue(Commands.runOnce({ isLeft = {false}}))
+        operatorController
+            .povLeft()
+            .onTrue(Commands.runOnce({ isLeft = { true } }))
+        operatorController
+            .povRight()
+            .onTrue(Commands.runOnce({ isLeft = { false } }))
         operatorController
             .rightTrigger()
             .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
