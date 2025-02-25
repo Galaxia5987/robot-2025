@@ -84,7 +84,6 @@ fun alignToPose(
                                         .get()
                                         .radians
                                 ))
-                                    .also { shouldScore = {true} }
                             else{
                                 ChassisSpeeds(0.0, 0.0, 0.0)
                             }
@@ -98,6 +97,7 @@ fun alignToPose(
                         }
                         .debounce(0.15)
                 ),
+            Commands.runOnce({shouldScore = {true} }),
             drive
                 .runOnce {
                     rotationController.setpoint = drive.rotation.radians
