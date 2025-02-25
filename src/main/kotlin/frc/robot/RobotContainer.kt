@@ -3,13 +3,13 @@ package frc.robot
 import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.*
@@ -54,12 +54,11 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
+        swerveDrive.resetGyro(Rotation2d.k180deg)
+
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
-        if (IS_RED) {
-            swerveDrive.resetGyro(Units.Degrees.of(180.0))
-        }
         enableAutoLogOutputFor(this)
     }
 
@@ -86,61 +85,29 @@ object RobotContainer {
         driverController
             .create()
             .onTrue(
-                Commands.runOnce(
-                        {
-                            swerveDrive.resetGyro(
-                                Units.Degrees.of(if (IS_RED) 0.0 else 180.0)
-                            )
-                        },
-                        swerveDrive
-                    )
+                Commands.runOnce({ swerveDrive.resetGyro(Rotation2d.kZero) }, swerveDrive)
                     .ignoringDisable(true)
             )
 
         driverController
             .cross()
-            .and(heightController.button(12))
             .onTrue(l1(driverController.cross().negate()))
         driverController
             .square()
-            .and(heightController.button(12))
             .onTrue(l2(driverController.square().negate()))
         driverController
             .circle()
-            .and(heightController.button(12))
             .onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
-            .and(heightController.button(12))
             .onTrue(l4(driverController.triangle().negate()))
-
-        driverController
-            .cross()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l1() }))
-            .onFalse(l1(Trigger { true }))
-        driverController
-            .square()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l2() }))
-            .onFalse(l2(Trigger { true }))
-        driverController
-            .circle()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l3() }))
-            .onFalse(l3(Trigger { true }))
-        driverController
-            .triangle()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l4() }))
-            .onFalse(l4(Trigger { true }))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
-        driverController.L2().whileTrue(gripper.outtake())
+        driverController.L2().whileTrue(gripper.outtake(true))
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
@@ -156,6 +123,10 @@ object RobotContainer {
         operatorController
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
+        operatorController.povLeft()
+            .onTrue(Commands.runOnce({ isLeft = {true}}))
+        operatorController.povRight()
+            .onTrue(Commands.runOnce({ isLeft = {false}}))
         operatorController
             .rightTrigger()
             .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
@@ -195,8 +166,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command =
-        DriveCommands.wheelRadiusCharacterization(swerveDrive)
+    fun getAutonomousCommand(): Command = C6L5R()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

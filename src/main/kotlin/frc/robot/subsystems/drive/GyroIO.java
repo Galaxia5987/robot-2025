@@ -14,7 +14,6 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Angle;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
@@ -27,7 +26,7 @@ public interface GyroIO {
         public Rotation2d[] odometryYawPositions = new Rotation2d[] {};
     }
 
-    public default void zeroGyro(Angle angle) {}
+    public default void zeroGyro() {}
 
     public default void updateInputs(GyroIOInputs inputs) {}
 }
