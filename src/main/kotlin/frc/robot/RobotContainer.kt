@@ -132,7 +132,7 @@ object RobotContainer {
             .L1()
             .onTrue(outtakeAlgae(driverController.L1().negate()))
         driverController.R2().whileTrue(gripper.intake())
-        driverController.L2().whileTrue(gripper.outtake())
+        driverController.L2().whileTrue(gripper.outtake(true))
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.subsystems.gripper.STOP_VOLTAGE
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -37,7 +38,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     val angle: () -> Angle = { io.inputs.angle }
 
     fun setVoltage(voltage: Voltage): Command = runOnce {
-        io.setVoltage(voltage)
+        startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
     }
 
     private fun setAngle(angle: Angles): Command =
