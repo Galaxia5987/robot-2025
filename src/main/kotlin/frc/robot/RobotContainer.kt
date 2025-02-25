@@ -108,22 +108,22 @@ object RobotContainer {
             .cross()
             .and(heightController.button(12).negate())
             .whileTrue(alignCommand { l1() })
-            .onFalse(l1(Trigger { true }))
+            .onFalse(finishAlign(::l1))
         driverController
             .square()
             .and(heightController.button(12).negate())
-            .whileTrue(alignCommand({ l2() }))
-            .onFalse(l2(Trigger { true }))
+            .whileTrue(alignCommand { l2() })
+            .onFalse(finishAlign(::l2))
         driverController
             .circle()
             .and(heightController.button(12).negate())
             .whileTrue(alignCommand { l3() })
-            .onFalse(l3(Trigger { true }))
+            .onFalse(finishAlign(::l3))
         driverController
             .triangle()
             .and(heightController.button(12).negate())
             .whileTrue(alignCommand { l4() })
-            .onFalse(l4(Trigger { true }))
+            .onFalse(finishAlign(::l4))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController

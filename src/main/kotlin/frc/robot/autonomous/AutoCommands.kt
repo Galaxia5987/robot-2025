@@ -14,6 +14,7 @@ import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.TunerConstants.PATH_CONSTRAINTS
+import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.swerveDrive
 import frc.robot.vision
@@ -57,20 +58,24 @@ fun alignToPose(
     return Commands.sequence(
             Commands.runOnce({
                 aligning = true
+                shouldScore = {false}
                 bestTargetID =
                     vision.getBestTargetID(VisionConstants.frontCameraIndex)
             }),
             drive
                 .run {
                     drive.runVelocity(
-                        ChassisSpeeds(
-                            xController.calculate(xError.invoke()),
-                            yController.calculate(yError.invoke()),
                             if (
                                 vision.getBestTargetID(
                                     VisionConstants.frontCameraIndex
                                 ) == bestTargetID
+                                && vision.getBestTargetID(
+                                    VisionConstants.frontCameraIndex
+                                ) != 0
                             )
+                                ChassisSpeeds(
+                                    xController.calculate(xError.invoke()),
+                                    yController.calculate(yError.invoke()),
                                 -rotationController.calculate(
                                     vision
                                         .getYawToTarget(
@@ -78,9 +83,11 @@ fun alignToPose(
                                         )
                                         .get()
                                         .radians
-                                )
-                            else 0.0
-                        )
+                                ))
+                                    .also { shouldScore = {true} }
+                            else{
+                                ChassisSpeeds(0.0, 0.0, 0.0)
+                            }
                     )
                 }
                 .until(
@@ -121,17 +128,26 @@ fun alignToPose(
         )
 }
 
+fun finishAlign(scoreCommand: (Trigger)->Command): Command =
+    Commands.defer({
+        Commands.either(
+            scoreCommand(Trigger {true}),
+            moveDefaultPosition(),
+            shouldScore
+        )
+    }, setOf(elevator, wrist, gripper))
+
 fun alignCommand(scoreCommand: () -> Command): Command =
     Commands.defer(
         {
-            pathFindToPose(selectedScorePose.invoke())
-                .andThen(alignToPose(swerveDrive, isLeft, scoreCommand))
+            alignToPose(swerveDrive, isLeft, scoreCommand)
         },
         setOf(swerveDrive, elevator, gripper, wrist)
     )
 
 private var aligning = false
 
+var shouldScore = {false}
 val IS_ALIGNING = Trigger { aligning }
 
 @AutoLogOutput(key = "Auto Alignment/is aligning")

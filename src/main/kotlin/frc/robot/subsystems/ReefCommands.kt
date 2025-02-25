@@ -78,7 +78,7 @@ private fun scoreCoralL4(endTrigger: Trigger): Command =
 
 // TODO: Add Coral Simulation
 
-private fun moveDefaultPosition(): Command =
+fun moveDefaultPosition(): Command =
     sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.feeder())
         .withName("Reef/Move default position")
 
