@@ -67,8 +67,6 @@ fun C6L5R(): Command = Commands.sequence(C6L(), autoFeed(), S5R())
 
 fun dumbAuto(): Command =
     Commands.sequence(
-        feeder(Trigger { true }),
-        gripper.intake().withTimeout(0.2),
         Commands.runOnce({ swerveDrive.setAngle(Rotation2d.kZero) }),
         WaitCommand(0.8),
         DriveCommands.timedLeave(swerveDrive, 1.2),
