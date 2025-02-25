@@ -102,6 +102,7 @@ class LEDs : SubsystemBase() {
 
     private var defaultPattern =
         climbPattern
-            .or(gripper.hasCoral).or(alignPattern)
+            .or(gripper.hasCoral)
+            .or(alignPattern)
             .onFalse((setPattern(all = teamPattern)))
 }

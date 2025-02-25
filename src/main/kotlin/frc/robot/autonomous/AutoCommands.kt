@@ -19,7 +19,6 @@ import frc.robot.subsystems.vision.VisionConstants
 import frc.robot.swerveDrive
 import frc.robot.vision
 import frc.robot.wrist
-import kotlin.jvm.optionals.getOrNull
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
@@ -58,24 +57,24 @@ fun alignToPose(
     return Commands.sequence(
             Commands.runOnce({
                 aligning = true
-                shouldScore = {false}
+                shouldScore = { false }
                 bestTargetID =
                     vision.getBestTargetID(VisionConstants.frontCameraIndex)
             }),
             drive
                 .run {
                     drive.runVelocity(
-                            if (
+                        if (
+                            vision.getBestTargetID(
+                                VisionConstants.frontCameraIndex
+                            ) == bestTargetID &&
                                 vision.getBestTargetID(
                                     VisionConstants.frontCameraIndex
-                                ) == bestTargetID
-                                && vision.getBestTargetID(
-                                    VisionConstants.frontCameraIndex
                                 ) != 0
-                            )
-                                ChassisSpeeds(
-                                    xController.calculate(xError.invoke()),
-                                    yController.calculate(yError.invoke()),
+                        )
+                            ChassisSpeeds(
+                                xController.calculate(xError.invoke()),
+                                yController.calculate(yError.invoke()),
                                 -rotationController.calculate(
                                     vision
                                         .getYawToTarget(
@@ -83,10 +82,11 @@ fun alignToPose(
                                         )
                                         .get()
                                         .radians
-                                ))
-                            else{
-                                ChassisSpeeds(0.0, 0.0, 0.0)
-                            }
+                                )
+                            )
+                        else {
+                            ChassisSpeeds(0.0, 0.0, 0.0)
+                        }
                     )
                 }
                 .until(
@@ -97,7 +97,7 @@ fun alignToPose(
                         }
                         .debounce(0.15)
                 ),
-            Commands.runOnce({shouldScore = {true} }),
+            Commands.runOnce({ shouldScore = { true } }),
             drive
                 .runOnce {
                     rotationController.setpoint = drive.rotation.radians
@@ -128,26 +128,27 @@ fun alignToPose(
         )
 }
 
-fun finishAlign(scoreCommand: (Trigger)->Command): Command =
-    Commands.defer({
-        Commands.either(
-            scoreCommand(Trigger {true}),
-            moveDefaultPosition(),
-            shouldScore
-        )
-    }, setOf(elevator, wrist, gripper))
+fun finishAlign(scoreCommand: (Trigger) -> Command): Command =
+    Commands.defer(
+        {
+            Commands.either(
+                scoreCommand(Trigger { true }),
+                moveDefaultPosition(),
+                shouldScore
+            )
+        },
+        setOf(elevator, wrist, gripper)
+    )
 
 fun alignCommand(scoreCommand: () -> Command): Command =
     Commands.defer(
-        {
-            alignToPose(swerveDrive, isLeft, scoreCommand)
-        },
+        { alignToPose(swerveDrive, isLeft, scoreCommand) },
         setOf(swerveDrive, elevator, gripper, wrist)
     )
 
 private var aligning = false
 
-var shouldScore = {false}
+var shouldScore = { false }
 val IS_ALIGNING = Trigger { aligning }
 
 @AutoLogOutput(key = "Auto Alignment/is aligning")
