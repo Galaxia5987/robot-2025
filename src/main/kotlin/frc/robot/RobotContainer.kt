@@ -91,41 +91,16 @@ object RobotContainer {
 
         driverController
             .cross()
-            .and(heightController.button(12))
             .onTrue(l1(driverController.cross().negate()))
         driverController
             .square()
-            .and(heightController.button(12))
             .onTrue(l2(driverController.square().negate()))
         driverController
             .circle()
-            .and(heightController.button(12))
             .onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
-            .and(heightController.button(12))
             .onTrue(l4(driverController.triangle().negate()))
-
-        driverController
-            .cross()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand { l1() })
-            .onFalse(finishAlign(::l1))
-        driverController
-            .square()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand { l2() })
-            .onFalse(finishAlign(::l2))
-        driverController
-            .circle()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand { l3() })
-            .onFalse(finishAlign(::l3))
-        driverController
-            .triangle()
-            .and(heightController.button(12).negate())
-            .whileTrue(alignCommand { l4() })
-            .onFalse(finishAlign(::l4))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
