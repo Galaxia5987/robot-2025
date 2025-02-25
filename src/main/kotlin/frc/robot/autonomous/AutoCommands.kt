@@ -146,6 +146,14 @@ fun alignCommand(scoreCommand: () -> Command): Command =
         setOf(swerveDrive, elevator, gripper, wrist)
     )
 
+fun alignCommandWithPath(scoreCommand: () -> Command): Command =
+    Commands.defer(
+        {
+            pathFindToPose(selectedScorePose.invoke())
+                .andThen(alignToPose(swerveDrive, isLeft, scoreCommand))
+        }, setOf(swerveDrive, elevator, gripper, wrist)
+    )
+
 private var aligning = false
 
 var shouldScore = { false }
