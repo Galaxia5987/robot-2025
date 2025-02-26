@@ -18,7 +18,7 @@ fun B1L(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { true }
         }),
-        alignCommandWithPath(::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
@@ -28,7 +28,7 @@ fun B1R(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { false }
         }),
-        alignCommandWithPath(::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
@@ -70,6 +70,6 @@ fun dumbAuto(): Command =
         Commands.runOnce({ swerveDrive.setAngle(Rotation2d.kZero) }),
         WaitCommand(0.8),
         DriveCommands.timedLeave(swerveDrive, 1.2),
-        alignToPose(swerveDrive, { true }, ::l4).withTimeout(3.5),
+        alignToPose(swerveDrive, { true }, ::l4).withTimeout(8.0),
         dumbL4(Trigger { true })
     )
