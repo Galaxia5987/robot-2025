@@ -166,7 +166,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = C6L5R()
+    fun getAutonomousCommand(): Command = dumbAuto()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

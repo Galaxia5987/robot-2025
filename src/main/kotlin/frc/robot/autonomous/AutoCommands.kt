@@ -29,7 +29,7 @@ import org.littletonrobotics.junction.Logger
 private var lastRotationError = Rotation2d()
 
 private val DESIRED_TAG
-    get() = if (IS_RED) 10 else 22
+    get() = if (IS_RED) 10 else 21
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
@@ -120,7 +120,7 @@ fun alignToPose(
                                 rotationController.atSetpoint() &&
                                 xController.atSetpoint()
                         }
-                        .debounce(2.5)
+                        .debounce(0.5)
                 ),
             Commands.runOnce({ shouldScore = { true } }),
             drive

@@ -18,7 +18,7 @@ fun B1L(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { true }
         }),
-        alignCommandWithPath(::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
@@ -28,7 +28,7 @@ fun B1R(): Command =
             selectedScorePose = { Reef1 }
             isLeft = { false }
         }),
-        alignCommandWithPath(::l4).withTimeout(4.0),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
