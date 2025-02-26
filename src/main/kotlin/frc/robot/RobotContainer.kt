@@ -167,8 +167,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command =  Commands.none()
-//        dumbAuto()
+    fun getAutonomousCommand(): Command = dumbAuto()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
