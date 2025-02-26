@@ -142,7 +142,7 @@ fun alignToPose(
                         )
                     )
                 }
-                .withTimeout(10.0)
+                .withTimeout(1.0)
         )
         .finallyDo(Runnable { aligning = false })
         .alongWith(
