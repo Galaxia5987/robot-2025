@@ -46,9 +46,9 @@ class RollerIOMapleSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
                     driveSimulation
                         .driveTrainSimulatedChassisSpeedsFieldRelative,
                     driveSimulation.simulatedDriveTrainPose.rotation,
-                    CORAL_OUTTAKE_HEIGHT,
-                    CORAL_OUTTAKE_VELOCITY,
-                    CORAL_OUTTAKE_ANGLE
+                    ALGAE_OUTTAKE_HEIGHT,
+                    ALGAE_OUTTAKE_VELOCITY,
+                    ALGAE_OUTTAKE_ANGLE
                 )
             )
     }
