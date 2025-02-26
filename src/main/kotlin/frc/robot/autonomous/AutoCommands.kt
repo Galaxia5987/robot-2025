@@ -49,7 +49,7 @@ fun alignToPose(
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint =
         if (isLeft.invoke()) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
-    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    yController.setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = {
         val newTranslation =
             vision.getTranslationToID(
@@ -75,8 +75,8 @@ fun alignToPose(
     }
 
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setpoint = -0.535
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    xController.setpoint = X_ALIGNMENT_OFFSET.`in`(Units.Meters)
+    xController.setTolerance(X_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = {
         val newTranslation =
             vision.getTranslationToID(
