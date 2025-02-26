@@ -140,8 +140,7 @@ object RobotContainer {
             .leftBumper()
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
-        testController.a().onTrue(intakeBit(testController.a().negate()))
-        testController.y().onTrue(feederL4Bit(testController.y().negate()))
+        testController.a().whileTrue(runAllBits())
 
         val buttonMappings =
             listOf(
