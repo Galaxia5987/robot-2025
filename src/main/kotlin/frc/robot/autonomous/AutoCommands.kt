@@ -51,7 +51,7 @@ fun alignToPose(
     yController.setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = {
         val newTranslation =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )
@@ -63,7 +63,7 @@ fun alignToPose(
 
     val rotationError = {
         val newTransform =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )
@@ -78,7 +78,7 @@ fun alignToPose(
     xController.setTolerance(X_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = {
         val newTranslation =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )

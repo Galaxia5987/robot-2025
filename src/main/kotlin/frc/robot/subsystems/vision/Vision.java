@@ -66,13 +66,24 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].translationToBestTarget;
     }
 
-    public Transform3d getTranslationToID(int cameraIndex, int id) {
+    public Transform3d getTransformToID(int cameraIndex, int id) {
         for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
             if (inputs[cameraIndex].trackedTargetsIDs[i] == id) {
                 return inputs[cameraIndex].trackedTargets[i];
             }
         }
         return null;
+    }
+
+    public int getIdOfClosestTarget(int cameraIndex) {
+        double minDistance = Integer.MAX_VALUE;
+        int index = 0;
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm() < minDistance) {
+                minDistance = inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm();
+            }
+        }
+        return index;
     }
 
     @Override
