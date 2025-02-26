@@ -54,7 +54,6 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
-        swerveDrive.resetGyro(Rotation2d.k180deg)
 
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
@@ -86,7 +85,10 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                        { swerveDrive.resetGyro(Rotation2d.kZero) },
+                        {
+                            if (IS_RED) swerveDrive.resetGyro(Rotation2d.kZero)
+                            else swerveDrive.resetGyro(Rotation2d.k180deg)
+                        },
                         swerveDrive
                     )
                     .ignoringDisable(true)
@@ -165,7 +167,8 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = dumbAuto()
+    fun getAutonomousCommand(): Command =  Commands.none()
+//        dumbAuto()
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
