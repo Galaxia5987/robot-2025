@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.dumbL4
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.l4
 import frc.robot.swerveDrive
@@ -38,7 +39,7 @@ fun C6L(): Command =
             isLeft = { true }
         }),
         alignCommandWithPath(::l4).withTimeout(5.6),
-        l4(Trigger { true })
+        dumbL4(Trigger { true })
     )
 
 fun S5R(): Command =
@@ -70,5 +71,5 @@ fun dumbAuto(): Command =
         WaitCommand(0.8),
         DriveCommands.timedLeave(swerveDrive, 1.2),
         alignToPose(swerveDrive, { true }, ::l4).withTimeout(3.5),
-        l4(Trigger { true })
+        dumbL4(Trigger { true })
     )
