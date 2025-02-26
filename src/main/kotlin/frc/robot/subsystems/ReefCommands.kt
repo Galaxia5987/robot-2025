@@ -5,11 +5,9 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
-import frc.robot.autonomous.ALIGNMENT_FORWARD_VELOCITY
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.elevator.Positions
@@ -104,23 +102,22 @@ fun l4(outtakeTrigger: Trigger): Command =
     l4().andThen(scoreCoralL4(outtakeTrigger)).withName("Reef/L4")
 
 fun dumbL4(outtakeTrigger: Trigger): Command =
-    l4().andThen(waitUntil(outtakeTrigger),
-        gripper
-            .fastOuttake()
-            .withTimeout(0.8)
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            )).withName("Reef/DumbL4").andThen(
-                run({
-                    swerveDrive.runVelocity(
-                        ChassisSpeeds(
-                            -1.0,
-                            0.0,
-                            0.0
-                        )
-                    )}
-                ).withTimeout(0.4).andThen(moveDefaultPosition())
-            )
+    l4()
+        .andThen(
+            waitUntil(outtakeTrigger),
+            gripper
+                .fastOuttake()
+                .withTimeout(0.8)
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                )
+        )
+        .withName("Reef/DumbL4")
+        .andThen(
+            run({ swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) })
+                .withTimeout(0.2)
+                .andThen(moveDefaultPosition())
+        )
 
 fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 

@@ -23,6 +23,11 @@ import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
+@AutoLogOutput(key = "Auto Alignment/lastYError") private var lastYError = 0.0
+@AutoLogOutput(key = "Auto Alignment/lastXError") private var lastXError = 0.0
+@AutoLogOutput(key = "Auto Alignment/lastRotationError")
+private var lastRotationError = Rotation2d()
+
 private val DESIRED_TAG
     get() = if (IS_RED) 10 else 21
 
@@ -46,14 +51,42 @@ fun alignToPose(
         if (isLeft.invoke()) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
     yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = {
-        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
+        val newTranslation =
+            vision.getTranslationToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTranslation != null) {
+            lastYError = -newTranslation.y
+        }
+        lastYError
+    }
+
+    val rotationError = {
+        val newTransform =
+            vision.getTranslationToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTransform != null) {
+            lastRotationError = newTransform.rotation.toRotation2d()
+        }
+        lastRotationError
     }
 
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
     xController.setpoint = -0.535
     xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = {
-        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).x
+        val newTranslation =
+            vision.getTranslationToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTranslation != null) {
+            lastXError = -newTranslation.x
+        }
+        lastXError
     }
 
     return Commands.sequence(
@@ -73,12 +106,7 @@ fun alignToPose(
                                 xController.calculate(xError.invoke()),
                                 yController.calculate(yError.invoke()),
                                 -rotationController.calculate(
-                                    vision
-                                        .getYawToTarget(
-                                            VisionConstants.frontCameraIndex
-                                        )
-                                        .get()
-                                        .radians
+                                    rotationError.invoke().radians
                                 )
                             )
                         else {

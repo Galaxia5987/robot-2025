@@ -66,6 +66,15 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].translationToBestTarget;
     }
 
+    public Transform3d getTranslationToID(int cameraIndex, int id) {
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargetsIDs[i] == id) {
+                return inputs[cameraIndex].trackedTargets[i];
+            }
+        }
+        return null;
+    }
+
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
