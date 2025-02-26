@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.subsystems.drive.Drive
@@ -22,13 +23,16 @@ import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
+private val DESIRED_TAG
+    get() = if (IS_RED) 10 else 21
+
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
 fun alignToPose(
     drive: Drive,
     isLeft: () -> Boolean,
-    scoreCommand: () -> Command
+    scoreCommand: () -> Command,
 ): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
@@ -52,14 +56,10 @@ fun alignToPose(
         -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).x
     }
 
-    var bestTargetID = 6
-
     return Commands.sequence(
             Commands.runOnce({
                 aligning = true
                 shouldScore = { false }
-                bestTargetID =
-                    vision.getBestTargetID(VisionConstants.frontCameraIndex)
             }),
             drive
                 .run {
@@ -67,10 +67,7 @@ fun alignToPose(
                         if (
                             vision.getBestTargetID(
                                 VisionConstants.frontCameraIndex
-                            ) == bestTargetID &&
-                                vision.getBestTargetID(
-                                    VisionConstants.frontCameraIndex
-                                ) != 0
+                            ) == DESIRED_TAG
                         )
                             ChassisSpeeds(
                                 xController.calculate(xError.invoke()),
@@ -95,7 +92,7 @@ fun alignToPose(
                                 rotationController.atSetpoint() &&
                                 xController.atSetpoint()
                         }
-                        .debounce(0.15)
+                        .debounce(2.5)
                 ),
             Commands.runOnce({ shouldScore = { true } }),
             drive
