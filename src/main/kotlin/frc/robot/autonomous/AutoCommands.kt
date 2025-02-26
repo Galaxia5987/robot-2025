@@ -23,9 +23,8 @@ import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
-@AutoLogOutput(key = "Auto Alignment/lastYError") private var lastYError = 0.0
-@AutoLogOutput(key = "Auto Alignment/lastXError") private var lastXError = 0.0
-@AutoLogOutput(key = "Auto Alignment/lastRotationError")
+private var lastYError = 0.0
+private var lastXError = 0.0
 private var lastRotationError = Rotation2d()
 
 private val DESIRED_TAG
@@ -145,10 +144,11 @@ fun alignToPose(
                 .withTimeout(1.0)
         )
         .finallyDo(Runnable { aligning = false })
-        .alongWith(
+        .raceWith(
             Commands.run({
-                Logger.recordOutput("Auto Alignment/YError", yError)
-                Logger.recordOutput("Auto Alignment/XError", xError)
+                Logger.recordOutput("Auto Alignment/lastXError", lastXError)
+                Logger.recordOutput("Auto Alignment/lastYError", lastYError)
+                Logger.recordOutput("Auto Alignment/lastRotationError", lastRotationError)
             })
         )
 }
