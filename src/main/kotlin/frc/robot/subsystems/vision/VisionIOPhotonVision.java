@@ -15,9 +15,7 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,11 +31,16 @@ public class VisionIOPhotonVision implements VisionIO {
      * Creates a new VisionIOPhotonVision.
      *
      * @param name The configured name of the camera.
-     * @param rotationSupplier The 3D position of the camera relative to the robot.
+     * @param robotToCamera The 3D position of the camera relative to the robot.
      */
     public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
+    }
+
+    @Override
+    public String getName() {
+        return camera.getName();
     }
 
     @Override
@@ -53,10 +56,20 @@ public class VisionIOPhotonVision implements VisionIO {
                 inputs.latestTargetObservation =
                         new TargetObservation(
                                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
-                                Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
+                                Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
+                                result.getBestTarget().fiducialId);
+                inputs.translationToBestTarget =
+                        result.getBestTarget()
+                                .bestCameraToTarget
+                                .getTranslation()
+                                .rotateBy(robotToCamera.getRotation())
+                                .plus(robotToCamera.getTranslation());
+                inputs.yawToTarget =
+                        result.getBestTarget().bestCameraToTarget.getRotation().toRotation2d();
             } else {
                 inputs.latestTargetObservation =
-                        new TargetObservation(new Rotation2d(), new Rotation2d());
+                        new TargetObservation(Rotation2d.kZero, Rotation2d.kZero, 0);
+                inputs.yawToTarget = Rotation2d.kZero;
             }
 
             // Add pose observation

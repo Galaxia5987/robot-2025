@@ -3,9 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
@@ -13,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.autonomous.isLeft
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -68,8 +71,8 @@ object Robot : LoggedRobot() {
         when (CURRENT_MODE) {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
-                    0,
-                    PowerDistribution.ModuleType.kCTRE
+                    1,
+                    PowerDistribution.ModuleType.kRev
                 )
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
@@ -92,6 +95,34 @@ object Robot : LoggedRobot() {
         enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
+        PathfindingCommand.warmupCommand().schedule()
+
+        val commandCounts = HashMap<String, Int>()
+        val logCommandFunction =
+            { command: Command, active: Boolean, verb: String ->
+                val name = command.name
+                val count =
+                    commandCounts.getOrDefault(name, 0) +
+                        (if (active) 1 else -1)
+                commandCounts[name] = count
+                Logger.recordOutput(
+                    "Commands/Unique/" +
+                        name +
+                        "_" +
+                        Integer.toHexString(command.hashCode()),
+                    active
+                )
+                Logger.recordOutput("Commands/All/$name", count > 0)
+            }
+        CommandScheduler.getInstance().onCommandInitialize {
+            logCommandFunction(it, true, "initialized")
+        }
+        CommandScheduler.getInstance().onCommandFinish {
+            logCommandFunction(it, false, "finished")
+        }
+        CommandScheduler.getInstance().onCommandInterrupt { command ->
+            logCommandFunction(command, false, "interrupted")
+        }
     }
 
     /**
@@ -108,6 +139,7 @@ object Robot : LoggedRobot() {
             "SubsystemPoses",
             *RobotContainer.visualizer.getSubsystemsPoses()
         )
+        Logger.recordOutput("Auto Alignment/isLeft", isLeft)
     }
 
     /**
@@ -122,6 +154,12 @@ object Robot : LoggedRobot() {
      * SendableChooser make sure to add them to the chooser code above as well.
      */
     override fun autonomousInit() {
+
+        if (IS_RED) {
+            swerveDrive.resetGyro(Rotation2d.k180deg)
+        }
+        else swerveDrive.resetGyro(Rotation2d.kZero)
+
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()
 

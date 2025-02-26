@@ -158,6 +158,10 @@ public class DriveCommands {
                 .beforeStarting(angleController::reset);
     }
 
+    public static Command driveCommand(Drive drive, ChassisSpeeds chassisSpeeds) {
+        return drive.run(() -> drive.runVelocity(chassisSpeeds));
+    }
+
     /**
      * Measures the velocity feedforward constants for the drive motors.
      *
@@ -307,6 +311,11 @@ public class DriveCommands {
                                                                             wheelRadius))
                                                             + " inches");
                                         })));
+    }
+
+    public static Command timedLeave(Drive drive, double timeSeconds) {
+        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
+                .withTimeout(timeSeconds);
     }
 
     private static class WheelRadiusCharacterizationState {

@@ -26,27 +26,30 @@ public class VisionConstants {
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String FrontOVName = "frontOV";
-    public static String RightOVName = "rightOV";
-    public static String LeftOVName = "leftOV";
+    public static String FrontOVName = "front";
+    public static String RightOVName = "backRight";
+    public static String LeftOVName = "backLeft";
 
     // Robot to camera transforms
     // (Not used by Limelight, configure in web UI instead)
     public static Transform3d robotToFrontOV =
             new Transform3d(
-                    -0.01637, 0.0, 0.64085, new Rotation3d(0.0, -Math.toRadians(25.0), 0.0));
+                    0.23246,
+                    -0.18929,
+                    0.54793,
+                    new Rotation3d(0.0, Math.toRadians(30.0), Math.toRadians(20.0)));
     public static Transform3d robotToRightOV =
             new Transform3d(
-                    -0.06982,
-                    0.07982,
-                    0.61834,
-                    new Rotation3d(0.0, -Math.toRadians(25.0), Math.toRadians(225.0)));
+                    -0.12547,
+                    -0.23183,
+                    0.55182,
+                    new Rotation3d(0.0, Math.toRadians(-15.0), Math.toRadians(205.0)));
     public static Transform3d robotToLeftOV =
             new Transform3d(
-                    -0.06232,
-                    -0.03966,
-                    0.61186,
-                    new Rotation3d(0.0, -Math.toRadians(25.0), Math.toRadians(180.0)));
+                    -0.12635,
+                    0.23345,
+                    0.55208,
+                    new Rotation3d(0.0, Math.toRadians(-15.0), Math.toRadians(155.0)));
 
     public static Map<String, Transform3d> OVNameToTransform =
             new HashMap<>() {
@@ -59,7 +62,7 @@ public class VisionConstants {
 
     // Basic filtering thresholds
     public static double maxAmbiguity = 0.3;
-    public static double maxZError = 0.75;
+    public static double maxZError = 0.3;
 
     // Standard deviation baselines, for 1 meter distance and 1 tag
     // (Adjusted automatically based on distance and # of tags)
@@ -79,4 +82,6 @@ public class VisionConstants {
     public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
     public static double angularStdDevMegatag2Factor =
             Double.POSITIVE_INFINITY; // No rotation data available
+
+    public static int frontCameraIndex = 1;
 }

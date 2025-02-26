@@ -1,0 +1,247 @@
+{
+  "version": 1.0,
+  "grid_size": 8,
+  "tabs": [
+    {
+      "name": " Driver Dashboard",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "fr-drive",
+            "x": 1344.0,
+            "y": 0.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_2/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "br-drive",
+            "x": 1344.0,
+            "y": 80.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/module_4/EncoderConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "MatchTime",
+            "x": 816.0,
+            "y": 0.0,
+            "width": 464.0,
+            "height": 304.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/AdvantageKit/DriverStation/MatchTime",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 15,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "HasCoral",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 104.0,
+            "height": 216.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Gripper/HasCoral",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Back Left Camera",
+            "x": 896.0,
+            "y": 304.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/backLeft/Connected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Back Right Camera",
+            "x": 1152.0,
+            "y": 304.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/backRight/Connected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Front Camera",
+            "x": 1024.0,
+            "y": 304.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Vision/front/Connected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "FL",
+            "x": 0.0,
+            "y": 216.0,
+            "width": 80.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/Module0/TurnConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "FR",
+            "x": 80.0,
+            "y": 216.0,
+            "width": 80.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/Module1/TurnConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "RL",
+            "x": 0.0,
+            "y": 312.0,
+            "width": 80.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/Module2/TurnConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "RR",
+            "x": 80.0,
+            "y": 312.0,
+            "width": 80.0,
+            "height": 96.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/Module3/TurnConnected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "topopi_Port_1181_Input_MJPEG_Server",
+            "x": 336.0,
+            "y": 0.0,
+            "width": 480.0,
+            "height": 432.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/topopi_Port_1181_Input_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0
+            }
+          },
+          {
+            "title": "Right",
+            "x": 216.0,
+            "y": 0.0,
+            "width": 120.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Auto Alignment/isLeft",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4294198070,
+              "false_color": 4283215696,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Left",
+            "x": 104.0,
+            "y": 0.0,
+            "width": 112.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Auto Alignment/isLeft",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

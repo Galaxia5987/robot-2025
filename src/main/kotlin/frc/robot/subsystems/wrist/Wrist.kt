@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.subsystems.gripper.STOP_VOLTAGE
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -27,7 +28,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
     @AutoLogOutput
-    private var atSetpoint: Trigger = Trigger {
+    var atSetpoint: Trigger = Trigger {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
@@ -36,8 +37,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     val angle: () -> Angle = { io.inputs.angle }
 
-    private fun setVoltage(voltage: Voltage): Command = runOnce {
-        io.setVoltage(voltage)
+    fun setVoltage(voltage: Voltage): Command = runOnce {
+        startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
     }
 
     private fun setAngle(angle: Angles): Command =
@@ -55,7 +56,9 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun l2algae(): Command = setAngle(Angles.L2_ALGAE)
     fun l3algae(): Command = setAngle(Angles.L3_ALGAE)
     fun feeder(): Command = setAngle(Angles.FEEDER)
+    fun blockedFeeder(): Command = setAngle(Angles.BLOCKED_FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
+    fun max(): Command = setAngle(Angles.MAX)
     fun tuningAngle(): Command =
         run {
                 io.setAngle(Units.Degrees.of(tuningAngleDegrees.get()))
