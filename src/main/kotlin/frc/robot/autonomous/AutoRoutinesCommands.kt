@@ -70,6 +70,6 @@ fun dumbAuto(): Command =
         Commands.runOnce({ swerveDrive.setAngle(Rotation2d.kZero) }),
         WaitCommand(0.8),
         DriveCommands.timedLeave(swerveDrive, 1.2),
-        alignToPose(swerveDrive, { true }, ::l4).withTimeout(3.5),
+        alignToPose(swerveDrive, { true }, ::l4).withTimeout(8.0),
         dumbL4(Trigger { true })
     )
