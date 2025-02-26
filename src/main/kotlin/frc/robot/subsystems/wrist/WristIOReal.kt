@@ -78,7 +78,7 @@ class WristIOReal : WristIO {
                     SensorDirectionValue.Clockwise_Positive
                 MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
                 MagnetSensor.MagnetOffset =
-                    -ABSOLUTE_ENCDOER_MAGNET_OFFSET.`in`(Units.Rotations)
+                    -ABSOLUTE_ENCODER_MAGNET_OFFSET.`in`(Units.Rotations)
             }
         )
     }
