@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
 import frc.robot.subsystems.drive.TunerConstants
+import org.littletonrobotics.junction.Logger
 
 private val LINEAR_CONSTRAINTS = Constraints(TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond), TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond))
 
@@ -33,6 +34,12 @@ fun getSpeed(botPose: Pose2d): ChassisSpeeds {
         thetaController.calculate(botPose.rotation.radians),
     )
     val robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, botPose.rotation)
+
+    mapOf(
+        "XError" to xController.positionError,
+        "YError" to yController.positionError,
+        "ThetaError" to thetaController.error,
+    ).forEach { (key, value) -> Logger.recordOutput("AutoAlignment/$key", value) }
 
     return robotRelativeSpeeds
 }
