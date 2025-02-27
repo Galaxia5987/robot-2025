@@ -97,9 +97,10 @@ fun alignToPose(
                 .run {
                     drive.runVelocity(
                         if (
-                            vision.getBestTargetID(
-                                VisionConstants.frontCameraIndex
-                            ) == DESIRED_TAG
+                            vision.getTransformToID(
+                                VisionConstants.frontCameraIndex,
+                                DESIRED_TAG
+                            ) != null
                         )
                             ChassisSpeeds(
                                 xController.calculate(xError.invoke()),
