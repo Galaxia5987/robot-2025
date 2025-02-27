@@ -98,7 +98,7 @@ val ALIGNMENT_ROTATION_GAINS = Gains(3.0, 0.0, 0.0)
 
 val ALIGNMENT_FORWARD_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 
-val X_ALIGNMENT_OFFSET = Units.Meters.of(-0.2)
+val X_ALIGNMENT_OFFSET = Units.Meters.of(-0.52)
 val ALIGNED_Y_LEFT = -0.16
 val ALIGNED_Y_RIGHT = 0.16
 val ALIGNED_ROTATION = Rotation2d.fromDegrees(155.0)
