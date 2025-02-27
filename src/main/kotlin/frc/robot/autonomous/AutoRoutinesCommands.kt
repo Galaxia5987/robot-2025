@@ -38,7 +38,7 @@ fun C6L(): Command =
             selectedScorePose = { Reef6 }
             isLeft = { true }
         }),
-        alignCommandWithPath(::l4).withTimeout(5.6),
+        alignCommandWithPath(::l4),
         dumbL4(Trigger { true })
     )
 
@@ -48,7 +48,7 @@ fun S5R(): Command =
             selectedScorePose = { Reef5 }
             isLeft = { false }
         }),
-        alignCommandWithPath(::l4).withTimeout(6.5),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
