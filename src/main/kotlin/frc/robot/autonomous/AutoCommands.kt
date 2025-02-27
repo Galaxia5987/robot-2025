@@ -28,7 +28,7 @@ private var lastXError = 0.0
 private var lastRotationError = Rotation2d()
 
 private val DESIRED_TAG
-    get() = if (IS_RED) 10 else 21
+    get() = if (IS_RED) 10 else 22
 
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
