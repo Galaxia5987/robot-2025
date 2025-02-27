@@ -28,4 +28,10 @@ private val xController = ProfiledPIDController(0.0, 0.0, 0.0, LINEAR_CONSTRAINT
 private val yController = ProfiledPIDController(0.0, 0.0, 0.0, LINEAR_CONSTRAINTS)
 private val thetaController = PIDController(0.0, 0.0, 0.0)
 
+fun setSetpoint(desiredPose: Pose2d) {
+    xController.setGoal(desiredPose.x)
+    yController.setGoal(desiredPose.y)
+    thetaController.setpoint = desiredPose.rotation.radians
+}
+
 
