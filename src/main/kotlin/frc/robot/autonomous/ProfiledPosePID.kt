@@ -6,10 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Distance
 import frc.robot.subsystems.drive.TunerConstants
-import org.littletonrobotics.junction.AutoLogOutput
 
 private val LINEAR_CONSTRAINTS = Constraints(TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond), TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond))
 
@@ -32,6 +29,17 @@ fun setSetpoint(desiredPose: Pose2d) {
     xController.setGoal(desiredPose.x)
     yController.setGoal(desiredPose.y)
     thetaController.setpoint = desiredPose.rotation.radians
+}
+
+fun getSpeed(botPose: Pose2d): ChassisSpeeds {
+    val fieldRelativeSpeeds = ChassisSpeeds(
+        xController.calculate(botPose.x),
+        yController.calculate(botPose.y),
+        thetaController.calculate(botPose.rotation.radians),
+    )
+    val robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, botPose.rotation)
+
+    return robotRelativeSpeeds
 }
 
 
