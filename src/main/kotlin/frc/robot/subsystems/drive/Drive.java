@@ -481,6 +481,14 @@ public class Drive extends SubsystemBase {
                 : getPose().getRotation();
     }
 
+    public Rotation2d[] getGyroMeasurements() {
+        return gyroInputs.odometryYawPositions;
+    }
+
+    public double[] getGyroTimestamps() {
+        return gyroInputs.odometryYawTimestamps;
+    }
+
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
         return Commands.run(
                 () -> {

@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import frc.robot.InitializerKt;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -166,6 +168,14 @@ public class VisionIOPhotonVision implements VisionIO {
         int i = 0;
         for (int id : tagIds) {
             inputs.tagIds[i++] = id;
+        }
+
+        if (useLocalEstimation) {
+            var gyroReadings = InitializerKt.getSwerveDrive().getGyroMeasurements();
+            var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
+            for (int j = 0; j < gyroReadings.length; j++) {
+                localPoseEstimator.addHeadingData(gyroTimeStamps[i], gyroReadings[i]);
+            }
         }
     }
 }
