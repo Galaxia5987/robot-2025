@@ -5,12 +5,22 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands.*
+import edu.wpi.first.wpilibj2.command.Commands.parallel
+import edu.wpi.first.wpilibj2.command.Commands.run
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
+import edu.wpi.first.wpilibj2.command.Commands.sequence
+import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.*
+import frc.robot.CURRENT_MODE
+import frc.robot.Mode
+import frc.robot.driveSimulation
+import frc.robot.elevator
+import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.elevator.Positions
+import frc.robot.swerveDrive
+import frc.robot.wrist
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
@@ -53,17 +63,17 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-private fun scoreCoral(endTrigger: Trigger): Command =
-    sequence(
-        waitUntil(endTrigger),
-        gripper
-            .outtake()
-            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
-        moveDefaultPosition()
-    )
+fun outtakeCoral(): Command = sequence(
+    gripper
+        .outtake()
+        .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+        .alongWith(
+            visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+        ),
+    moveDefaultPosition()
+)
+
+private fun scoreCoral(endTrigger: Trigger): Command = waitUntil(endTrigger).andThen(outtakeCoral())
 
 private fun scoreCoralL4(endTrigger: Trigger): Command =
     sequence(
@@ -123,9 +133,9 @@ fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 
 fun pathfindFeeder(outtakeTrigger: Trigger): Command =
     AutoBuilder.pathfindThenFollowPath(
-            PathPlannerPath.fromPathFile("Feeder"),
-            TunerConstants.PATH_CONSTRAINTS
-        )
+        PathPlannerPath.fromPathFile("Feeder"),
+        TunerConstants.PATH_CONSTRAINTS
+    )
         .andThen(feeder(outtakeTrigger))
 
 fun l2algae(retractTrigger: Trigger): Command =
@@ -142,24 +152,24 @@ fun l3algae(retractTrigger: Trigger): Command =
 
 fun feeder(intakeTrigger: Trigger): Command =
     sequence(
-            parallel(elevator.feeder(), wrist.feeder()),
-            waitUntil(intakeTrigger),
-            gripper
-                .intake()
-                .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition())
-        )
+        parallel(elevator.feeder(), wrist.feeder()),
+        waitUntil(intakeTrigger),
+        gripper
+            .intake()
+            .until(gripper.hasCoral)
+            .andThen(moveDefaultPosition())
+    )
         .withName("Reef/Feeder")
 
 fun blockedFeeder(intakeTrigger: Trigger): Command =
     sequence(
-            parallel(elevator.feeder(), wrist.blockedFeeder()),
-            waitUntil(intakeTrigger),
-            gripper
-                .intake()
-                .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition())
-        )
+        parallel(elevator.feeder(), wrist.blockedFeeder()),
+        waitUntil(intakeTrigger),
+        gripper
+            .intake()
+            .until(gripper.hasCoral)
+            .andThen(moveDefaultPosition())
+    )
         .withName("Reef/Blocked Feeder")
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())
