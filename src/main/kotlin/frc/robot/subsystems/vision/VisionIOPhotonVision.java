@@ -15,6 +15,8 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -23,12 +25,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
+    protected final PhotonPoseEstimator localPoseEstimator;
+    protected Boolean useLocalEstimation = false;
 
     /**
      * Creates a new VisionIOPhotonVision.
@@ -39,6 +44,10 @@ public class VisionIOPhotonVision implements VisionIO {
     public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
+        localPoseEstimator = new PhotonPoseEstimator(
+                AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded),
+                PhotonPoseEstimator.PoseStrategy.PNP_DISTANCE_TRIG_SOLVE, robotToCamera
+        );
     }
 
     @Override

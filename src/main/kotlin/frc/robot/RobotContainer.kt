@@ -1,6 +1,8 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -165,7 +167,7 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = dumbAuto()
+    fun getAutonomousCommand(): Command = AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L"))
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
