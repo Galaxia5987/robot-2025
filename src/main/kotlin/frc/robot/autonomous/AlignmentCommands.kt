@@ -1,6 +1,7 @@
 package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.defer
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
@@ -28,16 +29,17 @@ fun alignCommand(): Command {
 }
 
 @AutoLogOutput(key = "AutoAlignment/AtAlignmentSetpoint")
-private val atAlignmentSetpoint = Trigger { atGoal() }.and(isAligning).onTrue(outtakeCoral())
+private val atAlignmentSetpoint = Trigger { atGoal().invoke() && isAligning.asBoolean }.onTrue(outtakeCoral())
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
         selectedScorePose.invoke().translation
-    ) <= MAX_ALIGNMENT_DISTANCE
+    ) <= Units.Meters.of(0.2)
 }
 
 @AutoLogOutput(key = "AutoAlignment/ShouldOpenElevator")
-private val shouldOpenElevator = isWithinDistance.and(isAligning).onTrue(selectedHeightCommand.invoke())
+private val shouldOpenElevator =
+    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }.onTrue(selectedHeightCommand.invoke())
 
 fun logTriggers() {
     Logger.recordOutput("AutoAlignment/IsAligning", isAligning)
