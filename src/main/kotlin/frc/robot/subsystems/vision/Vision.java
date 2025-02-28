@@ -23,18 +23,22 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
     private final VisionConsumer consumer;
+    private final VisionConsumer localConsumer;
     private final VisionIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    public Vision(VisionConsumer consumer, VisionIO... io) {
+    public Vision(VisionConsumer consumer, VisionConsumer localConsumer, VisionIO... io) {
+        this.localConsumer = localConsumer;
         this.consumer = consumer;
         this.io = io;
 
@@ -75,6 +79,22 @@ public class Vision extends SubsystemBase {
         return null;
     }
 
+    private boolean isObservationValid(VisionIO.PoseObservation observation) {
+        // Check whether to reject pose
+        return observation.tagCount() == 0 // Must have at least one tag
+                || (observation.tagCount() == 1
+                && observation.ambiguity()
+                > maxAmbiguity) // Cannot be high ambiguity
+                || Math.abs(observation.pose().getZ())
+                > maxZError // Must have realistic Z coordinate
+
+                // Must be within the field boundaries
+                || observation.pose().getX() < 0.0
+                || observation.pose().getX() > aprilTagLayout.getFieldLength()
+                || observation.pose().getY() < 0.0
+                || observation.pose().getY() > aprilTagLayout.getFieldWidth();
+    }
+
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
@@ -109,20 +129,7 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                // Check whether to reject pose
-                boolean rejectPose =
-                        observation.tagCount() == 0 // Must have at least one tag
-                                || (observation.tagCount() == 1
-                                        && observation.ambiguity()
-                                                > maxAmbiguity) // Cannot be high ambiguity
-                                || Math.abs(observation.pose().getZ())
-                                        > maxZError // Must have realistic Z coordinate
-
-                                // Must be within the field boundaries
-                                || observation.pose().getX() < 0.0
-                                || observation.pose().getX() > aprilTagLayout.getFieldLength()
-                                || observation.pose().getY() < 0.0
-                                || observation.pose().getY() > aprilTagLayout.getFieldWidth();
+                boolean rejectPose = isObservationValid(observation);
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -158,6 +165,17 @@ public class Vision extends SubsystemBase {
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
+            if (isObservationValid(inputs[cameraIndex].localEstimatedPose)) {
+                double stdDevFactor = Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2) / inputs[cameraIndex].localEstimatedPose.tagCount();
+                double linearStdDev = linearStdDevBaseline * stdDevFactor;
+                double angularStdDev = angularStdDevBaseline * stdDevFactor;
+                localConsumer.accept(
+                        inputs[cameraIndex].localEstimatedPose.pose().toPose2d(),
+                        inputs[cameraIndex].localEstimatedPose.timestamp(),
+                        VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
+                );
+            }
+
             // Log camera datadata
             Logger.recordOutput(
                     "Vision/" + io[cameraIndex].getName() + "/TagPoses",
@@ -176,6 +194,7 @@ public class Vision extends SubsystemBase {
             allRobotPosesAccepted.addAll(robotPosesAccepted);
             allRobotPosesRejected.addAll(robotPosesRejected);
         }
+
 
         // Log summary data
         Logger.recordOutput(
