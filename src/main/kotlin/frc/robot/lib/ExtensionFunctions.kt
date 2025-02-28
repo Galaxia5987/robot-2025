@@ -1,16 +1,16 @@
 package frc.robot.lib
 
-import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.LinearVelocity
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WrapperCommand
-import frc.robot.IS_RED
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import kotlin.math.PI
 import kotlin.math.hypot
 import org.littletonrobotics.junction.LogTable
@@ -66,9 +66,6 @@ inline fun <reified T : List<Any>> LogTable.get(
     else result as T
 }
 
-fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
-    (this - other).angle
-
 fun Command.handleInterrupt(command: Command): WrapperCommand =
     handleInterrupt {
         command.schedule()
@@ -83,19 +80,6 @@ fun Command.finallyDo(command: Command): WrapperCommand =
         }
     )
 
-fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
-
-fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
-
-fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
-
-fun Translation2d.flipIfNeeded(): Translation2d =
-    if (IS_RED) this.flip() else this
-
-fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
-
-fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
-
 fun Distance.toAngle(radius: Distance, gearRatio: Double): Angle =
     this.timesConversionFactor(
         Units.Rotations.per(Units.Meters)
@@ -107,3 +91,29 @@ fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
         Units.Meters.per(Units.Rotations)
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
+
+fun LinearVelocity.toAngular(
+    radius: Distance,
+    gearRatio: Double
+): AngularVelocity =
+    this.timesConversionFactor(
+        Units.RotationsPerSecond.per(Units.MetersPerSecond)
+            .of(1.0 / (radius.`in`(Units.Meters) * gearRatio * 2.0 * PI))
+    )
+
+fun AngularVelocity.toLinear(
+    radius: Distance,
+    gearRatio: Double
+): LinearVelocity =
+    this.timesConversionFactor(
+        Units.MetersPerSecond.per(Units.RotationsPerSecond)
+            .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
+    )
+
+fun CommandXboxController.setRumble(strength: Double) {
+    this.hid.setRumble(GenericHID.RumbleType.kBothRumble, strength)
+}
+
+fun CommandXboxController.rumbleCommand(): Command {
+    return Commands.startEnd({ this.setRumble(1.0) }, { this.setRumble(0.0) })
+}

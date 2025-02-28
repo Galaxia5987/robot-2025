@@ -17,17 +17,15 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.vision.VisionIO.PoseObservationType;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -51,25 +49,48 @@ public class Vision extends SubsystemBase {
         for (int i = 0; i < inputs.length; i++) {
             disconnectedAlerts[i] =
                     new Alert(
-                            "Vision camera " + Integer.toString(i) + " is disconnected.",
+                            "Vision camera " + io[i].getName() + " is disconnected.",
                             AlertType.kWarning);
         }
     }
 
-    /**
-     * Returns the X angle to the best target, which can be used for simple servoing with vision.
-     *
-     * @param cameraIndex The index of the camera to use.
-     */
-    public Rotation2d getTargetX(int cameraIndex) {
-        return inputs[cameraIndex].latestTargetObservation.tx();
+    public int getBestTargetID(int cameraIndex) {
+        return inputs[cameraIndex].latestTargetObservation.id();
+    }
+
+    public Supplier<Rotation2d> getYawToTarget(int cameraIndex) {
+        return () -> inputs[cameraIndex].yawToTarget;
+    }
+
+    public Translation3d getTranslationToBestTarget(int cameraIndex) {
+        return inputs[cameraIndex].translationToBestTarget;
+    }
+
+    public Transform3d getTransformToID(int cameraIndex, int id) {
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargetsIDs[i] == id) {
+                return inputs[cameraIndex].trackedTargets[i];
+            }
+        }
+        return null;
+    }
+
+    public int getIdOfClosestTarget(int cameraIndex) {
+        double minDistance = Integer.MAX_VALUE;
+        int index = 0;
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm() < minDistance) {
+                minDistance = inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm();
+            }
+        }
+        return index;
     }
 
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
             io[i].updateInputs(inputs[i]);
-            Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
+            Logger.processInputs("Vision/" + io[i].getName(), inputs[i]);
         }
 
         // Initialize logging values
@@ -132,7 +153,7 @@ public class Vision extends SubsystemBase {
                         Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
                 double linearStdDev = linearStdDevBaseline * stdDevFactor;
                 double angularStdDev = angularStdDevBaseline * stdDevFactor;
-                if (observation.type() == PoseObservationType.MEGATAG_2) {
+                if (observation.type() == VisionIO.PoseObservationType.MEGATAG_2) {
                     linearStdDev *= linearStdDevMegatag2Factor;
                     angularStdDev *= angularStdDevMegatag2Factor;
                 }
@@ -150,16 +171,16 @@ public class Vision extends SubsystemBase {
 
             // Log camera datadata
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/TagPoses",
+                    "Vision/" + io[cameraIndex].getName() + "/TagPoses",
                     tagPoses.toArray(new Pose3d[tagPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPoses",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPoses",
                     robotPoses.toArray(new Pose3d[robotPoses.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesAccepted",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPosesAccepted",
                     robotPosesAccepted.toArray(new Pose3d[robotPosesAccepted.size()]));
             Logger.recordOutput(
-                    "Vision/Camera" + Integer.toString(cameraIndex) + "/RobotPosesRejected",
+                    "Vision/" + io[cameraIndex].getName() + "/RobotPosesRejected",
                     robotPosesRejected.toArray(new Pose3d[robotPosesRejected.size()]));
             allTagPoses.addAll(tagPoses);
             allRobotPoses.addAll(robotPoses);

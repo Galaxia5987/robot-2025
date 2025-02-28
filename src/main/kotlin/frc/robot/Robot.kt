@@ -3,19 +3,22 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
-import edu.wpi.first.wpilibj.Compressor
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.autonomous.isLeft
+import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
+import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -32,7 +35,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  * project.
  */
 object Robot : LoggedRobot() {
-    private val compressor = Compressor(PneumaticsModuleType.CTREPCM)
     private lateinit var autonomousCommand: Command
 
     /**
@@ -69,8 +71,8 @@ object Robot : LoggedRobot() {
         when (CURRENT_MODE) {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
-                    0,
-                    PowerDistribution.ModuleType.kCTRE
+                    1,
+                    PowerDistribution.ModuleType.kRev
                 )
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
@@ -89,9 +91,38 @@ object Robot : LoggedRobot() {
 
         TunerConstants.init()
         RobotContainer // Initialize robot container.
-        compressor.enableDigital()
+
+        enableAutoLogOutputFor(this)
 
         DriverStation.silenceJoystickConnectionWarning(true)
+        PathfindingCommand.warmupCommand().schedule()
+
+        val commandCounts = HashMap<String, Int>()
+        val logCommandFunction =
+            { command: Command, active: Boolean, verb: String ->
+                val name = command.name
+                val count =
+                    commandCounts.getOrDefault(name, 0) +
+                        (if (active) 1 else -1)
+                commandCounts[name] = count
+                Logger.recordOutput(
+                    "Commands/Unique/" +
+                        name +
+                        "_" +
+                        Integer.toHexString(command.hashCode()),
+                    active
+                )
+                Logger.recordOutput("Commands/All/$name", count > 0)
+            }
+        CommandScheduler.getInstance().onCommandInitialize {
+            logCommandFunction(it, true, "initialized")
+        }
+        CommandScheduler.getInstance().onCommandFinish {
+            logCommandFunction(it, false, "finished")
+        }
+        CommandScheduler.getInstance().onCommandInterrupt { command ->
+            logCommandFunction(command, false, "interrupted")
+        }
     }
 
     /**
@@ -104,6 +135,11 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        Logger.recordOutput(
+            "SubsystemPoses",
+            *RobotContainer.visualizer.getSubsystemsPoses()
+        )
+        Logger.recordOutput("Auto Alignment/isLeft", isLeft)
     }
 
     /**
@@ -118,6 +154,9 @@ object Robot : LoggedRobot() {
      * SendableChooser make sure to add them to the chooser code above as well.
      */
     override fun autonomousInit() {
+
+        swerveDrive.resetGyroBasedOnAlliance(Rotation2d.k180deg)
+
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()
 
@@ -132,6 +171,18 @@ object Robot : LoggedRobot() {
     override fun teleopInit() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
+        }
+    }
+
+    override fun simulationPeriodic() {
+        val arena = SimulatedArena.getInstance()
+        arena.simulationPeriodic()
+
+        listOf("Algae", "Coral").forEach { type ->
+            Logger.recordOutput(
+                "FieldSimulation/$type",
+                *arena.getGamePiecesArrayByType(type)
+            )
         }
     }
 

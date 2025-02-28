@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -36,15 +37,15 @@ import java.util.function.Supplier;
 
 public class DriveCommands {
     private static final double DEADBAND = 0.1;
-    private static final double ANGLE_KP = 10.0;
-    private static final double ANGLE_KD = 0.4;
+    private static final double ANGLE_KP = 5.0;
+    private static final double ANGLE_KD = 0.2;
+    private static final Angle ANGLE_TOLERANCE = edu.wpi.first.units.Units.Degrees.of(1);
     private static final double ANGLE_MAX_VELOCITY = 8.0;
     private static final double ANGLE_MAX_ACCELERATION = 20.0;
     private static final double FF_START_DELAY = 2.0; // Secs
-    private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
+    private static final double FF_RAMP_RATE = 1; // Volts/Sec
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
-    private static final Rotation2d ANGLE_TOLERANCE = Rotation2d.fromDegrees(0.4);
 
     private DriveCommands() {}
 
@@ -116,8 +117,6 @@ public class DriveCommands {
         PIDController angleController = new PIDController(ANGLE_KP, 0.0, ANGLE_KD);
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
-        angleController.setTolerance(ANGLE_TOLERANCE.getRadians());
-
         // Construct command
         return Commands.run(
                         () -> {
@@ -128,9 +127,11 @@ public class DriveCommands {
 
                             // Calculate angular speed
                             double omega =
-                                    angleController.calculate(
-                                            drive.getRotation().getRadians(),
-                                            rotationSupplier.get().getRadians());
+                                    MathUtil.applyDeadband(
+                                            angleController.calculate(
+                                                    drive.getRotation().getRadians(),
+                                                    rotationSupplier.get().getRadians()),
+                                            ANGLE_TOLERANCE.in(edu.wpi.first.units.Units.Radians));
 
                             // Convert to field relative speeds & send command
                             ChassisSpeeds speeds =
@@ -155,6 +156,10 @@ public class DriveCommands {
 
                 // Reset PID controller when command starts
                 .beforeStarting(angleController::reset);
+    }
+
+    public static Command driveCommand(Drive drive, ChassisSpeeds chassisSpeeds) {
+        return drive.run(() -> drive.runVelocity(chassisSpeeds));
     }
 
     /**
@@ -306,6 +311,11 @@ public class DriveCommands {
                                                                             wheelRadius))
                                                             + " inches");
                                         })));
+    }
+
+    public static Command timedLeave(Drive drive, double timeSeconds) {
+        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
+                .withTimeout(timeSeconds);
     }
 
     private static class WheelRadiusCharacterizationState {

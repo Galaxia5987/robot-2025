@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
@@ -33,11 +34,16 @@ public class VisionIOPhotonVision implements VisionIO {
      * Creates a new VisionIOPhotonVision.
      *
      * @param name The configured name of the camera.
-     * @param rotationSupplier The 3D position of the camera relative to the robot.
+     * @param robotToCamera The 3D position of the camera relative to the robot.
      */
     public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
+    }
+
+    @Override
+    public String getName() {
+        return camera.getName();
     }
 
     @Override
@@ -53,10 +59,29 @@ public class VisionIOPhotonVision implements VisionIO {
                 inputs.latestTargetObservation =
                         new TargetObservation(
                                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),
-                                Rotation2d.fromDegrees(result.getBestTarget().getPitch()));
+                                Rotation2d.fromDegrees(result.getBestTarget().getPitch()),
+                                result.getBestTarget().fiducialId);
+                inputs.translationToBestTarget =
+                        result.getBestTarget()
+                                .bestCameraToTarget
+                                .getTranslation()
+                                .rotateBy(robotToCamera.getRotation())
+                                .plus(robotToCamera.getTranslation());
+                inputs.trackedTargets =
+                        result.targets.stream()
+                                .map((PhotonTrackedTarget target) -> target.bestCameraToTarget)
+                                .toList()
+                                .toArray(new Transform3d[0]);
+                inputs.trackedTargetsIDs =
+                        result.targets.stream()
+                                .mapToInt((PhotonTrackedTarget target) -> target.fiducialId)
+                                .toArray();
+                inputs.yawToTarget =
+                        result.getBestTarget().bestCameraToTarget.getRotation().toRotation2d();
             } else {
                 inputs.latestTargetObservation =
-                        new TargetObservation(new Rotation2d(), new Rotation2d());
+                        new TargetObservation(Rotation2d.kZero, Rotation2d.kZero, 0);
+                inputs.yawToTarget = Rotation2d.kZero;
             }
 
             // Add pose observation
