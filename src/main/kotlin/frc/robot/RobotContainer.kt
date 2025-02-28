@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.autonomous.alignCommand
 import frc.robot.autonomous.isAligning
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
@@ -20,7 +21,6 @@ import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3algae
@@ -103,7 +103,6 @@ object RobotContainer {
             )
 
         driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.square().onTrue(l2(driverController.square().negate()))
         driverController.circle().onTrue(l3(driverController.circle().negate()))
         driverController
             .triangle()
@@ -145,7 +144,8 @@ object RobotContainer {
 
         testController.a().whileTrue(runAllBits())
 
-        isAligning = testController.a()
+        driverController.square().whileTrue(alignCommand())
+        isAligning = driverController.square()
 
         val buttonMappings =
             listOf(

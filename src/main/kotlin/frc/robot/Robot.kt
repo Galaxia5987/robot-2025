@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.autonomous.getSpeed
+import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -134,9 +137,14 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        logTriggers()
         Logger.recordOutput(
-            "SubsystemPoses",
-            *RobotContainer.visualizer.getSubsystemsPoses()
+            "ScoreState/SelectedScorePose",
+            selectedScorePose.invoke()
+        )
+        Logger.recordOutput(
+            "AutoAlignment/Speeds",
+            getSpeed(swerveDrive.pose).invoke()
         )
     }
 

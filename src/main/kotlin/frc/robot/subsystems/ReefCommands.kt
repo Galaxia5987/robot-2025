@@ -63,17 +63,19 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun outtakeCoral(): Command = sequence(
-    gripper
-        .outtake()
-        .withTimeout(CORAL_OUTTAKE_TIMEOUT)
-        .alongWith(
-            visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-        ),
-    moveDefaultPosition()
-)
+fun outtakeCoral(): Command =
+    sequence(
+        gripper
+            .outtake()
+            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .alongWith(
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+            ),
+        moveDefaultPosition()
+    )
 
-private fun scoreCoral(endTrigger: Trigger): Command = waitUntil(endTrigger).andThen(outtakeCoral())
+private fun scoreCoral(endTrigger: Trigger): Command =
+    waitUntil(endTrigger).andThen(outtakeCoral())
 
 private fun scoreCoralL4(endTrigger: Trigger): Command =
     sequence(
