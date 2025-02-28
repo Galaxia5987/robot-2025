@@ -11,23 +11,25 @@ import org.littletonrobotics.junction.Logger
 
 private val LINEAR_CONSTRAINTS = Constraints(TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond), TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond))
 
-private val xController = ProfiledPIDController(0.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
+private val xController = ProfiledPIDController(1.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
     setTolerance(Units.Meters.of(0.0).`in`(Units.Meters))
 }
-private val yController = ProfiledPIDController(0.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
+private val yController = ProfiledPIDController(1.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
     setTolerance(Units.Meters.of(0.0).`in`(Units.Meters))
 }
-private val thetaController = PIDController(0.0, 0.0, 0.0).apply {
+private val thetaController = PIDController(1.0, 0.0, 0.0).apply {
     setTolerance(Units.Degrees.of(0.0).`in`(Units.Radians))
 }
 
-fun setSetpoint(desiredPose: Pose2d) {
+fun setGoal(desiredPose: Pose2d) {
     xController.setGoal(desiredPose.x)
     yController.setGoal(desiredPose.y)
     thetaController.setpoint = desiredPose.rotation.radians
 }
 
-fun getSpeed(botPose: Pose2d): ChassisSpeeds {
+fun atGoal(): Boolean = xController.atGoal() && yController.atGoal() && thetaController.atSetpoint()
+
+fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds = ChassisSpeeds(
         xController.calculate(botPose.x),
         yController.calculate(botPose.y),
@@ -41,7 +43,7 @@ fun getSpeed(botPose: Pose2d): ChassisSpeeds {
         "ThetaError" to thetaController.error,
     ).forEach { (key, value) -> Logger.recordOutput("AutoAlignment/$key", value) }
 
-    return robotRelativeSpeeds
+    return { robotRelativeSpeeds }
 }
 
 
