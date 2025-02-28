@@ -23,7 +23,7 @@ private val INITIAL_INTAKE_Roller_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.32 + 0.62890), z = Meters.of(0.35))
 
 private val INITIAL_WRIST_TRANSLATION =
-    getTranslation3d(x = Meters.of(0.27434), z = Meters.of(0.79707))
+    getTranslation3d(x = Meters.of(0.20715), z = Meters.of(0.995))
 
 private val INITIAL_Elevator_1_TRANSLATION =
     getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.14345040))
@@ -35,9 +35,7 @@ private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
 private val kWheelRadius = Meters.of(0.0508)
 private val CORAL_ROLLER_UP_C2C: Array<Double> =
-    arrayOf(0.14, 0.4) // arrayOf(C2C Distance, Angle (in rad))
-private val ALGAE_ROLLER_C2C: Array<Double> =
-    arrayOf(0.25335, 0.9) // arrayOf(C2C Distance, Angle (in rad))
+    arrayOf(0.201364, 3.3) // arrayOf(C2C Distance, Angle (in rad))
 
 private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
 
