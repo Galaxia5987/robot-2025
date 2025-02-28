@@ -12,13 +12,13 @@ import org.littletonrobotics.junction.Logger
 private val LINEAR_CONSTRAINTS = Constraints(TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond), TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond))
 
 private val xController = ProfiledPIDController(1.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
-    setTolerance(Units.Meters.of(0.0).`in`(Units.Meters))
+    setTolerance(Units.Meters.of(0.03).`in`(Units.Meters))
 }
 private val yController = ProfiledPIDController(1.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
-    setTolerance(Units.Meters.of(0.0).`in`(Units.Meters))
+    setTolerance(Units.Meters.of(0.03).`in`(Units.Meters))
 }
 private val thetaController = PIDController(1.0, 0.0, 0.0).apply {
-    setTolerance(Units.Degrees.of(0.0).`in`(Units.Radians))
+    setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
 }
 
 fun setGoal(desiredPose: Pose2d) {
@@ -42,6 +42,14 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         "YError" to yController.positionError,
         "ThetaError" to thetaController.error,
     ).forEach { (key, value) -> Logger.recordOutput("AutoAlignment/$key", value) }
+
+    mapOf(
+        "XGoal" to xController.goal.position,
+        "YGoal" to yController.goal.position,
+        "ThetaGoal" to thetaController.setpoint,
+    ).forEach { (key, value) -> Logger.recordOutput("AutoAlignment/$key", value) }
+
+    Logger.recordOutput("AutoAlignment/AtGoal", atGoal())
 
     return { robotRelativeSpeeds }
 }
