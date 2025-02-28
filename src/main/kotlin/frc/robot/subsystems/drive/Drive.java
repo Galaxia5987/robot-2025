@@ -153,6 +153,10 @@ public class Drive extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+    private final SwerveDrivePoseEstimator localPoseEstimator =
+            new SwerveDrivePoseEstimator(
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
 
     private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
     private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
@@ -304,6 +308,7 @@ public class Drive extends SubsystemBase {
 
             // Apply update
             poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            localPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -474,6 +479,13 @@ public class Drive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
+
+    /** Returns the local estimated pose. */
+    @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
+    public Pose2d getLocalEstimatedPose() {
+        return localPoseEstimator.getEstimatedPosition();
+    }
+
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
         return gyroInputs.connected
@@ -514,6 +526,7 @@ public class Drive extends SubsystemBase {
             resetSimulationPoseCallBack.accept(pose);
         }
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
     public void resetGyro(Rotation2d offset) {
@@ -528,6 +541,14 @@ public class Drive extends SubsystemBase {
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
         poseEstimator.addVisionMeasurement(
+                visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+    public void addLocalVisionMeasurement(
+            Pose2d visionRobotPoseMeters,
+            double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+        localPoseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 
