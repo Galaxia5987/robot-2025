@@ -114,7 +114,7 @@ private val visionIOs =
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
-val vision = Vision(swerveDrive::addVisionMeasurement, *visionIOs)
+val vision = Vision(swerveDrive::addVisionMeasurement, swerveDrive::addLocalVisionMeasurement, *visionIOs)
 
 val climber =
     Climber(

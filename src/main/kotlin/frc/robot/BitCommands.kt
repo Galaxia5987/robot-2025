@@ -1,56 +1,48 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units.Seconds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.sequence
-import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.WaitCommand
-import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
 
 fun intakeBit(): Command =
     sequence(
-        intakeAlgae().withTimeout(2.4),
-        roller.outtake().withTimeout(Seconds.of(0.8)),
-        extender.retract().withTimeout(0.5)
-    )
+            intakeAlgae().withTimeout(2.4),
+            roller.outtake().withTimeout(Seconds.of(0.8)),
+            extender.retract().withTimeout(0.5)
+        )
         .withName("Bits/Intake")
 
-fun driveBit(): Command = sequence(
-    DriveCommands.driveCommand(
-        swerveDrive, ChassisSpeeds(1.0, 0.0, 0.0)
-    ).withTimeout(2.5),
-    DriveCommands.driveCommand(
-        swerveDrive, ChassisSpeeds(0.0, 1.0, 0.0)
-    ).withTimeout(2.5),
-    DriveCommands.driveCommand(
-        swerveDrive, ChassisSpeeds(-1.0, 0.0, 0.0)
-    ).withTimeout(2.5),
-    DriveCommands.driveCommand(
-        swerveDrive, ChassisSpeeds(0.0, -1.0, 0.0)
-    ).withTimeout(2.5),
-    DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 0.0, 0.0)).withTimeout(0.1)
-)
+fun driveBit(): Command =
+    sequence(
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(1.0, 0.0, 0.0))
+            .withTimeout(2.5),
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 1.0, 0.0))
+            .withTimeout(2.5),
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(-1.0, 0.0, 0.0))
+            .withTimeout(2.5),
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, -1.0, 0.0))
+            .withTimeout(2.5),
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 0.0, 0.0))
+            .withTimeout(0.1)
+    )
 
-fun elevatorWristBit(): Command = sequence(
-    l1(),
-    WaitCommand(1.0),
-    l2(),
-    WaitCommand(1.0),
-    l3(),
-    WaitCommand(1.0),
-    l4(),
-    WaitCommand(1.0),
-    moveDefaultPosition()
-)
+fun elevatorWristBit(): Command =
+    sequence(
+        l1(),
+        WaitCommand(1.0),
+        l2(),
+        WaitCommand(1.0),
+        l3(),
+        WaitCommand(1.0),
+        l4(),
+        WaitCommand(1.0),
+        moveDefaultPosition()
+    )
 
-fun runAllBits(): Command = sequence(
-    driveBit(),
-    intakeBit(),
-    elevatorWristBit()
-)
-
+fun runAllBits(): Command =
+    sequence(driveBit(), intakeBit(), elevatorWristBit())

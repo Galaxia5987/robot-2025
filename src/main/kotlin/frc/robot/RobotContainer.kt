@@ -167,7 +167,8 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L"))
+    fun getAutonomousCommand(): Command =
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L"))
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =
