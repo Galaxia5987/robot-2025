@@ -19,7 +19,7 @@ class WristIOSim : WristIO {
             GEAR_RATIO,
             MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
-            TalonType.FALCON
+            TalonType.FALCON_FOC
         )
     private val angleController = PIDController(1.0, 0.0, 0.0)
     private val positionControl = PositionVoltage(0.0)
