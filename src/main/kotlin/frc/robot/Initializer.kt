@@ -92,7 +92,12 @@ private val visionIOs =
     when (CURRENT_MODE) {
         Mode.REAL ->
             VisionConstants.OVNameToTransform.map {
-                VisionIOPhotonVision(it.key, it.value)
+                VisionIOPhotonVision(
+                    it.key,
+                    it.value,
+                    { swerveDrive.gyroMeasurements },
+                    { swerveDrive.gyroTimestamps }
+                )
             }
         Mode.SIM ->
             VisionConstants.OVNameToTransform.map {
@@ -101,7 +106,9 @@ private val visionIOs =
                     it.value,
                     if (USE_MAPLE_SIM)
                         driveSimulation!!::getSimulatedDriveTrainPose
-                    else swerveDrive::getPose
+                    else swerveDrive::getPose,
+                    { swerveDrive.gyroMeasurements },
+                    { swerveDrive.gyroTimestamps }
                 )
             }
         Mode.REPLAY -> emptyList()

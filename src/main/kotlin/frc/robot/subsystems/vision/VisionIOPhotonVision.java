@@ -24,8 +24,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import frc.robot.InitializerKt;
+import java.util.function.Supplier;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -35,7 +34,8 @@ public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
     protected final PhotonPoseEstimator localPoseEstimator;
-    protected Boolean useLocalEstimation = false;
+    protected final Supplier<Rotation2d[]> gyroReadings;
+    protected final Supplier<double[]> gyroReadingsTimestamps;
 
     /**
      * Creates a new VisionIOPhotonVision.
@@ -43,13 +43,20 @@ public class VisionIOPhotonVision implements VisionIO {
      * @param name The configured name of the camera.
      * @param robotToCamera The 3D position of the camera relative to the robot.
      */
-    public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
+    public VisionIOPhotonVision(
+            String name,
+            Transform3d robotToCamera,
+            Supplier<Rotation2d[]> gyroReadings,
+            Supplier<double[]> gyroReadingsTimestamps) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
-        localPoseEstimator = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded),
-                PhotonPoseEstimator.PoseStrategy.PNP_DISTANCE_TRIG_SOLVE, robotToCamera
-        );
+        this.gyroReadings = gyroReadings;
+        this.gyroReadingsTimestamps = gyroReadingsTimestamps;
+        localPoseEstimator =
+                new PhotonPoseEstimator(
+                        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded),
+                        PhotonPoseEstimator.PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                        robotToCamera);
     }
 
     @Override
@@ -170,12 +177,12 @@ public class VisionIOPhotonVision implements VisionIO {
             inputs.tagIds[i++] = id;
         }
 
-        if (useLocalEstimation) {
-            var gyroReadings = InitializerKt.getSwerveDrive().getGyroMeasurements();
-            var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
-            for (int j = 0; j < gyroReadings.length; j++) {
-                localPoseEstimator.addHeadingData(gyroTimeStamps[i], gyroReadings[i]);
-            }
+        // Update PhotonPoseEstimator based on gyro readings
+        //        var gyroReadings = InitializerKt.getSwerveDrive().getGyroMeasurements();
+        //        var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
+        for (int j = 0; j < gyroReadings.get().length; j++) {
+            localPoseEstimator.addHeadingData(
+                    gyroReadingsTimestamps.get()[i], gyroReadings.get()[i]);
         }
     }
 }
