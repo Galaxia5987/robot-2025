@@ -26,25 +26,25 @@ public class VisionConstants {
             AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String FrontOVName = "front";
-    public static String RightOVName = "backRight";
-    public static String LeftOVName = "backLeft";
+    public static String FrontRightOVName = "frontRight";
+    public static String FrontLeftOVName = "frontLeft";
+    public static String BackOVName = "backLeft";
 
     // Robot to camera transforms
     // (Not used by Limelight, configure in web UI instead)
-    public static Transform3d robotToFrontOV =
+    public static Transform3d robotToFrontRightOV =
             new Transform3d(
-                    0.23246,
-                    -0.18929,
-                    0.54793,
-                    new Rotation3d(0.0, Math.toRadians(30.0), Math.toRadians(20.0)));
-    public static Transform3d robotToRightOV =
+                    0.22860,
+                    -0.10,
+                    0.6,
+                    new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
+    public static Transform3d robotToFrontLeftOV =
             new Transform3d(
-                    -0.12547,
-                    -0.23183,
-                    0.55182,
-                    new Rotation3d(0.0, Math.toRadians(-15.0), Math.toRadians(205.0)));
-    public static Transform3d robotToLeftOV =
+                    0.22860,
+                    0.10,
+                    0.6,
+                    new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
+    public static Transform3d robotToBackOV =
             new Transform3d(
                     -0.12635,
                     0.23345,
@@ -54,9 +54,9 @@ public class VisionConstants {
     public static Map<String, Transform3d> OVNameToTransform =
             new HashMap<>() {
                 {
-                    put(FrontOVName, robotToFrontOV);
-                    put(RightOVName, robotToRightOV);
-                    put(LeftOVName, robotToLeftOV);
+                    put(FrontRightOVName, robotToFrontRightOV);
+                    put(FrontLeftOVName, robotToFrontLeftOV);
+                    put(BackOVName, robotToBackOV);
                 }
             };
 

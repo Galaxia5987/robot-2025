@@ -27,21 +27,46 @@
         },
         {
           "axis": "y",
-          "degrees": 20
+          "degrees": 35
         },
         {
           "axis": "z",
-          "degrees": 20
+          "degrees": 0
         }
       ],
       "position": [
-        0.23046, -0.18829, 0.54551
+        0.22860, -0.10, 0.6
       ],
       "resolution": [
         1280,
         960
       ],
-      "fov": 75
+      "fov": 95
+    },
+    {
+      "name": "front2",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 35
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "position": [
+        0.22860, 0.10, 0.6
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 95
     },
     {
       "name": "backRight",
@@ -68,7 +93,7 @@
         1280,
         960
       ],
-      "fov": 75
+      "fov": 95
     },
     {
       "name": "backLeft",
@@ -95,7 +120,7 @@
         1280,
         960
       ],
-      "fov": 75
+      "fov": 95
     }
   ],
   "components": [
