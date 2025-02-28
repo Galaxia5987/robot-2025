@@ -202,11 +202,6 @@ class Visualizer {
         val coralRollersPoseUp =
             getGripperRollerPose(CORAL_ROLLER_UP_C2C[0], CORAL_ROLLER_UP_C2C[1])
 
-        val algaeRemoverPose =
-            getGripperRollerPoseInverted(
-                ALGAE_ROLLER_C2C[0],
-                ALGAE_ROLLER_C2C[1]
-            )
 
         val climberPose =
             getPose3d(
@@ -230,7 +225,6 @@ class Visualizer {
             wristPose,
             coralRollersPoseDown,
             coralRollersPoseUp,
-            algaeRemoverPose,
             climberPose
         )
     }
