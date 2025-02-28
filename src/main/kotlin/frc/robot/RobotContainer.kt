@@ -10,13 +10,23 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.autonomous.*
+import frc.robot.autonomous.dumbAuto
+import frc.robot.autonomous.isLeft
+import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.*
+import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.l1
+import frc.robot.subsystems.l2
+import frc.robot.subsystems.l2algae
+import frc.robot.subsystems.l3
+import frc.robot.subsystems.l3algae
+import frc.robot.subsystems.l4
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -54,8 +64,6 @@ object RobotContainer {
         configureDefaultCommands()
         visualizer = Visualizer()
 
-        swerveDrive.resetGyro(Rotation2d.k180deg)
-
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
 
@@ -86,7 +94,11 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                        { swerveDrive.resetGyro(Rotation2d.kZero) },
+                        {
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
+                        },
                         swerveDrive
                     )
                     .ignoringDisable(true)
@@ -139,8 +151,7 @@ object RobotContainer {
             .leftBumper()
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
-        testController.a().onTrue(intakeBit(testController.a().negate()))
-        testController.y().onTrue(feederL4Bit(testController.y().negate()))
+        testController.a().whileTrue(runAllBits())
 
         val buttonMappings =
             listOf(

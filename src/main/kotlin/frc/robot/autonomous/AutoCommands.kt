@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.subsystems.drive.Drive
@@ -22,13 +23,20 @@ import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
+private var lastYError = 0.0
+private var lastXError = 0.0
+private var lastRotationError = Rotation2d()
+
+private val DESIRED_TAG
+    get() = if (IS_RED) 10 else 21
+
 fun pathFindToPose(pose: Pose2d): Command =
     AutoBuilder.pathfindToPoseFlipped(pose, PATH_CONSTRAINTS, 0.0)
 
 fun alignToPose(
     drive: Drive,
     isLeft: () -> Boolean,
-    scoreCommand: () -> Command
+    scoreCommand: () -> Command,
 ): Command {
     val rotationController =
         ALIGNMENT_ROTATION_GAINS.run { PIDController(kP, kI, kD) }
@@ -40,48 +48,65 @@ fun alignToPose(
     val yController = ALIGNMENT_Y_GAINS.run { PIDController(kP, kI, kD) }
     yController.setpoint =
         if (isLeft.invoke()) -ALIGNED_Y_LEFT else -ALIGNED_Y_RIGHT
-    yController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    yController.setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = {
-        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).y
+        val newTranslation =
+            vision.getTransformToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTranslation != null) {
+            lastYError = -newTranslation.y
+        }
+        lastYError
+    }
+
+    val rotationError = {
+        val newTransform =
+            vision.getTransformToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTransform != null) {
+            lastRotationError = newTransform.rotation.toRotation2d()
+        }
+        lastRotationError
     }
 
     val xController = ALIGNMENT_X_GAINS.run { PIDController(kP, kI, kD) }
-    xController.setpoint = -0.535
-    xController.setTolerance(LINEAR_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
+    xController.setpoint = X_ALIGNMENT_OFFSET.`in`(Units.Meters)
+    xController.setTolerance(X_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = {
-        -vision.getTranslationToBestTarget(VisionConstants.frontCameraIndex).x
+        val newTranslation =
+            vision.getTransformToID(
+                VisionConstants.frontCameraIndex,
+                DESIRED_TAG
+            )
+        if (newTranslation != null) {
+            lastXError = -newTranslation.x
+        }
+        lastXError
     }
-
-    var bestTargetID = 6
 
     return Commands.sequence(
             Commands.runOnce({
                 aligning = true
                 shouldScore = { false }
-                bestTargetID =
-                    vision.getBestTargetID(VisionConstants.frontCameraIndex)
             }),
             drive
                 .run {
                     drive.runVelocity(
                         if (
-                            vision.getBestTargetID(
-                                VisionConstants.frontCameraIndex
-                            ) == bestTargetID &&
-                                vision.getBestTargetID(
-                                    VisionConstants.frontCameraIndex
-                                ) != 0
+                            vision.getTransformToID(
+                                VisionConstants.frontCameraIndex,
+                                DESIRED_TAG
+                            ) != null
                         )
                             ChassisSpeeds(
                                 xController.calculate(xError.invoke()),
                                 yController.calculate(yError.invoke()),
                                 -rotationController.calculate(
-                                    vision
-                                        .getYawToTarget(
-                                            VisionConstants.frontCameraIndex
-                                        )
-                                        .get()
-                                        .radians
+                                    rotationError.invoke().radians
                                 )
                             )
                         else {
@@ -95,7 +120,7 @@ fun alignToPose(
                                 rotationController.atSetpoint() &&
                                 xController.atSetpoint()
                         }
-                        .debounce(0.15)
+                        .debounce(0.5)
                 ),
             Commands.runOnce({ shouldScore = { true } }),
             drive
@@ -117,13 +142,17 @@ fun alignToPose(
                         )
                     )
                 }
-                .withTimeout(10.0)
+                .withTimeout(1.0)
         )
         .finallyDo(Runnable { aligning = false })
-        .alongWith(
+        .raceWith(
             Commands.run({
-                Logger.recordOutput("Auto Alignment/YError", yError)
-                Logger.recordOutput("Auto Alignment/XError", xError)
+                Logger.recordOutput("Auto Alignment/lastXError", lastXError)
+                Logger.recordOutput("Auto Alignment/lastYError", lastYError)
+                Logger.recordOutput(
+                    "Auto Alignment/lastRotationError",
+                    lastRotationError
+                )
             })
         )
 }
