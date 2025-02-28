@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
-import frc.robot.autonomous.isLeft
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -139,7 +138,6 @@ object Robot : LoggedRobot() {
             "SubsystemPoses",
             *RobotContainer.visualizer.getSubsystemsPoses()
         )
-        Logger.recordOutput("Auto Alignment/isLeft", isLeft)
     }
 
     /**
