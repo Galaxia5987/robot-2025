@@ -158,8 +158,10 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    private static final GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
-    private static final GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterX =
+            new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterY =
+            new GalacticSlewRateLimiter(1.5);
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {

@@ -149,7 +149,10 @@ fun alignToPose(
             Commands.run({
                 Logger.recordOutput("Auto Alignment/lastXError", lastXError)
                 Logger.recordOutput("Auto Alignment/lastYError", lastYError)
-                Logger.recordOutput("Auto Alignment/lastRotationError", lastRotationError)
+                Logger.recordOutput(
+                    "Auto Alignment/lastRotationError",
+                    lastRotationError
+                )
             })
         )
 }

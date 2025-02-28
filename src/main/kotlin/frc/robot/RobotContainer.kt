@@ -95,7 +95,9 @@ object RobotContainer {
             .onTrue(
                 Commands.runOnce(
                         {
-                            swerveDrive.resetGyroBasedOnAlliance(Rotation2d.kZero)
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
                         },
                         swerveDrive
                     )
