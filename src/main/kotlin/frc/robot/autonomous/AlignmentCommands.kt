@@ -3,7 +3,6 @@ package frc.robot.autonomous
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands.defer
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.distanceFromPoint
@@ -26,7 +25,7 @@ fun alignCommand(): Command {
         })
             .andThen(
                 swerveDrive.run {
-                    swerveDrive.normalRunVelocity(getSpeed(pose).invoke())
+                    swerveDrive.limitlessRunVelocity(getSpeed(pose).invoke())
                 }
             )
     }

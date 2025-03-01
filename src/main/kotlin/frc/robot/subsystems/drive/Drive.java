@@ -198,7 +198,7 @@ public class Drive extends SubsystemBase {
                 this::getPose,
                 this::resetOdometry,
                 this::getChassisSpeeds,
-                this::normalRunVelocity,
+                this::limitlessRunVelocity,
                 new PPHolonomicDriveController(
                         new PIDConstants(3.0, 0.0, 0.0), new PIDConstants(6.0, 0.0, 0.0)),
                 PP_CONFIG,
@@ -354,7 +354,7 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
     }
 
-    public void normalRunVelocity(ChassisSpeeds speeds) {
+    public void limitlessRunVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
