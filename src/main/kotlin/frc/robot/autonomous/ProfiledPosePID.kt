@@ -28,6 +28,12 @@ private val LINEAR_CONSTRAINTS =
         TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond)
     )
 
+private val ROTATIONAL_CONSTRAINTS =
+    Constraints(
+        TunerConstants.kMaxOmegaVelocity.`in`(Units.RadiansPerSecond),
+        TunerConstants.kMaxAngularAcceleration.`in`(Units.RadiansPerSecondPerSecond)
+    )
+
 val xController =
     ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS).apply {
         setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
@@ -37,7 +43,7 @@ val yController =
         setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
     }
 val thetaController =
-    PIDController(thetaKP.get(), thetaKI.get(), thetaKD.get()).apply {
+    ProfiledPIDController(thetaKP.get(), thetaKI.get(), thetaKD.get(), ROTATIONAL_CONSTRAINTS).apply {
         setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
         enableContinuousInput(-Math.PI, Math.PI)
     }
@@ -51,7 +57,7 @@ fun updateProfiledPID(){
 fun setGoal(desiredPose: Pose2d) {
     xController.setGoal(desiredPose.x)
     yController.setGoal(desiredPose.y)
-    thetaController.setpoint = desiredPose.rotation.radians
+    thetaController.setGoal(desiredPose.rotation.radians)
 }
 
 val atGoal =
@@ -65,6 +71,7 @@ val atGoal =
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)
     yController.reset(botPose.y, botSpeeds.vyMetersPerSecond)
+    thetaController.reset(botPose.rotation.radians, botSpeeds.omegaRadiansPerSecond)
 }
 
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
@@ -83,7 +90,7 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     mapOf(
             "XError" to xController.positionError,
             "YError" to yController.positionError,
-            "ThetaError" to thetaController.error,
+            "ThetaError" to thetaController.positionError,
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
@@ -92,7 +99,7 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     mapOf(
         "XSetpoint" to xController.setpoint.position,
         "YSetpoint" to yController.setpoint.position,
-        "ThetaSetpoint" to thetaController.setpoint,
+        "ThetaSetpoint" to thetaController.setpoint.position,
     )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
@@ -101,7 +108,7 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     mapOf(
             "XGoal" to xController.goal.position,
             "YGoal" to yController.goal.position,
-            "ThetaGoal" to thetaController.setpoint,
+            "ThetaGoal" to thetaController.goal.position,
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
