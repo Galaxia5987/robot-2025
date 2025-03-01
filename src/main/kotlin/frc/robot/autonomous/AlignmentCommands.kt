@@ -40,7 +40,7 @@ private val isWithinDistance = Trigger {
 }
 
 private val shouldOpenElevator =
-    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }
+    isAligning.and(isWithinDistance)
         .onTrue(selectedHeightCommand.invoke())
 
 fun logTriggers() {
