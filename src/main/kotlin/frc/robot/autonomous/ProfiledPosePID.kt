@@ -1,5 +1,6 @@
 package frc.robot.autonomous
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.geometry.Pose2d
@@ -64,9 +65,9 @@ val atGoal =
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds =
         ChassisSpeeds(
-            xController.calculate(botPose.x),
-            yController.calculate(botPose.y),
-            thetaController.calculate(botPose.rotation.radians),
+            MathUtil.applyDeadband(xController.calculate(botPose.x), Units.Meters.of(0.05).`in`(Units.Meters)),
+            MathUtil.applyDeadband(yController.calculate(botPose.y), Units.Meters.of(0.05).`in`(Units.Meters)),
+            MathUtil.applyDeadband(thetaController.calculate(botPose.rotation.radians), Units.Degrees.of(1.0).`in`(Units.Radians)),
         )
     val robotRelativeSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
