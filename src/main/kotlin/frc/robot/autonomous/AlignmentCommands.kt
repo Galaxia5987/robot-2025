@@ -29,7 +29,7 @@ fun alignCommand(): Command {
     }
 }
 
-private val atAlignmentSetpoint = isAligning.and(atGoal).onTrue(outtakeCoral())
+private val atAlignmentSetpoint = Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
@@ -38,7 +38,7 @@ private val isWithinDistance = Trigger {
 }
 
 private val shouldOpenElevator =
-    isAligning.and(isWithinDistance).onTrue(selectedHeightCommand.invoke())
+    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }.onTrue(selectedHeightCommand.invoke())
 
 fun logTriggers() {
     mapOf(
