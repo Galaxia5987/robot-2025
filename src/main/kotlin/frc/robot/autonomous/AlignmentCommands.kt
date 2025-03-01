@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.distanceFromPoint
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.swerveDrive
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
 var isAligning = Trigger { alignCommand().isScheduled }
@@ -19,9 +18,9 @@ val pose: Pose2d
 fun alignCommand(): Command {
     return swerveDrive.defer {
         runOnce({
-            resetProfiledPID(pose, swerveDrive.chassisSpeeds)
-            setGoal(selectedScorePose.invoke())
-        })
+                resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+                setGoal(selectedScorePose.invoke())
+            })
             .andThen(
                 swerveDrive.run {
                     swerveDrive.limitlessRunVelocity(getSpeed(pose).invoke())
@@ -30,8 +29,7 @@ fun alignCommand(): Command {
     }
 }
 
-private val atAlignmentSetpoint =
-    isAligning.and(atGoal).onTrue(outtakeCoral())
+private val atAlignmentSetpoint = isAligning.and(atGoal).onTrue(outtakeCoral())
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
@@ -40,16 +38,15 @@ private val isWithinDistance = Trigger {
 }
 
 private val shouldOpenElevator =
-    isAligning.and(isWithinDistance)
-        .onTrue(selectedHeightCommand.invoke())
+    isAligning.and(isWithinDistance).onTrue(selectedHeightCommand.invoke())
 
 fun logTriggers() {
     mapOf(
-        "IsAligning" to isAligning,
-        "AtAlignmentSetpoint" to atAlignmentSetpoint,
-        "IsWithinDistance" to isWithinDistance,
-        "ShouldOpenElevator" to shouldOpenElevator,
-    )
+            "IsAligning" to isAligning,
+            "AtAlignmentSetpoint" to atAlignmentSetpoint,
+            "IsWithinDistance" to isWithinDistance,
+            "ShouldOpenElevator" to shouldOpenElevator,
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
