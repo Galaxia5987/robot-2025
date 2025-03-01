@@ -22,9 +22,9 @@ fun alignCommand(): Command {
     return defer(
         {
             runOnce({
-                resetProfiledPID(pose, swerveDrive.chassisSpeeds)
-                setGoal(selectedScorePose.invoke())
-            })
+                    resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+                    setGoal(selectedScorePose.invoke())
+                })
                 .andThen(
                     swerveDrive.run {
                         swerveDrive.normalRunVelocity(getSpeed(pose).invoke())

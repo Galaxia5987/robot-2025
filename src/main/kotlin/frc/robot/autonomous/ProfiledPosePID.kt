@@ -1,7 +1,6 @@
 package frc.robot.autonomous
 
 import edu.wpi.first.math.MathUtil
-import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -31,24 +30,30 @@ private val LINEAR_CONSTRAINTS =
 private val ROTATIONAL_CONSTRAINTS =
     Constraints(
         TunerConstants.kMaxOmegaVelocity.`in`(Units.RadiansPerSecond),
-        TunerConstants.kMaxAngularAcceleration.`in`(Units.RadiansPerSecondPerSecond)
+        TunerConstants.kMaxAngularAcceleration.`in`(
+            Units.RadiansPerSecondPerSecond
+        )
     )
 
 val xController =
-    ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS).apply {
-        setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
-    }
+    ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS)
+        .apply { setTolerance(Units.Meters.of(0.05).`in`(Units.Meters)) }
 val yController =
-    ProfiledPIDController(yKP.get(), yKI.get(), yKD.get(), LINEAR_CONSTRAINTS).apply {
-        setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
-    }
+    ProfiledPIDController(yKP.get(), yKI.get(), yKD.get(), LINEAR_CONSTRAINTS)
+        .apply { setTolerance(Units.Meters.of(0.05).`in`(Units.Meters)) }
 val thetaController =
-    ProfiledPIDController(thetaKP.get(), thetaKI.get(), thetaKD.get(), ROTATIONAL_CONSTRAINTS).apply {
-        setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
-        enableContinuousInput(-Math.PI, Math.PI)
-    }
+    ProfiledPIDController(
+            thetaKP.get(),
+            thetaKI.get(),
+            thetaKD.get(),
+            ROTATIONAL_CONSTRAINTS
+        )
+        .apply {
+            setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
+            enableContinuousInput(-Math.PI, Math.PI)
+        }
 
-fun updateProfiledPID(){
+fun updateProfiledPID() {
     xController.setPID(xKP.get(), xKI.get(), xKD.get())
     yController.setPID(yKP.get(), yKI.get(), yKD.get())
     thetaController.setPID(thetaKP.get(), thetaKI.get(), thetaKD.get())
@@ -71,15 +76,27 @@ val atGoal =
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)
     yController.reset(botPose.y, botSpeeds.vyMetersPerSecond)
-    thetaController.reset(botPose.rotation.radians, botSpeeds.omegaRadiansPerSecond)
+    thetaController.reset(
+        botPose.rotation.radians,
+        botSpeeds.omegaRadiansPerSecond
+    )
 }
 
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds =
         ChassisSpeeds(
-            MathUtil.applyDeadband(xController.calculate(botPose.x), Units.Meters.of(0.05).`in`(Units.Meters)),
-            MathUtil.applyDeadband(yController.calculate(botPose.y), Units.Meters.of(0.05).`in`(Units.Meters)),
-            MathUtil.applyDeadband(thetaController.calculate(botPose.rotation.radians), Units.Degrees.of(1.0).`in`(Units.Radians)),
+            MathUtil.applyDeadband(
+                xController.calculate(botPose.x),
+                Units.Meters.of(0.05).`in`(Units.Meters)
+            ),
+            MathUtil.applyDeadband(
+                yController.calculate(botPose.y),
+                Units.Meters.of(0.05).`in`(Units.Meters)
+            ),
+            MathUtil.applyDeadband(
+                thetaController.calculate(botPose.rotation.radians),
+                Units.Degrees.of(1.0).`in`(Units.Radians)
+            ),
         )
     val robotRelativeSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -97,10 +114,10 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         }
 
     mapOf(
-        "XSetpoint" to xController.setpoint.position,
-        "YSetpoint" to yController.setpoint.position,
-        "ThetaSetpoint" to thetaController.setpoint.position,
-    )
+            "XSetpoint" to xController.setpoint.position,
+            "YSetpoint" to yController.setpoint.position,
+            "ThetaSetpoint" to thetaController.setpoint.position,
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
