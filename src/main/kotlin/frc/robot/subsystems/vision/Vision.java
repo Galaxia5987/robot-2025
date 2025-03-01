@@ -29,15 +29,15 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
-    private final VisionConsumer consumer;
+    private final VisionConsumer globalConsumer;
     private final VisionConsumer localConsumer;
     private final VisionIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    public Vision(VisionConsumer consumer, VisionConsumer localConsumer, VisionIO... io) {
+    public Vision(VisionConsumer globalConsumer, VisionConsumer localConsumer, VisionIO... io) {
+        this.globalConsumer = globalConsumer;
         this.localConsumer = localConsumer;
-        this.consumer = consumer;
         this.io = io;
 
         // Initialize inputs
@@ -167,7 +167,7 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Send vision observation
-                consumer.accept(
+                globalConsumer.accept(
                         observation.pose().toPose2d(),
                         observation.timestamp(),
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
