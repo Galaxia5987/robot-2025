@@ -65,7 +65,7 @@ fun setGoal(desiredPose: Pose2d) {
     thetaController.setGoal(desiredPose.rotation.radians)
 }
 
-val atGoal =
+val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
         .and(thetaController::atSetpoint)
