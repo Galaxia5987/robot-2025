@@ -31,7 +31,7 @@ fun alignCommand(): Command {
 }
 
 private val atAlignmentSetpoint =
-    Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
+    isAligning.and(atGoal).onTrue(outtakeCoral())
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
