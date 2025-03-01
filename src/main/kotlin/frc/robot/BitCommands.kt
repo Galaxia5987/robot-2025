@@ -5,9 +5,13 @@ import edu.wpi.first.units.Units.Seconds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.sequence
 import edu.wpi.first.wpilibj2.command.WaitCommand
-import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
+import frc.robot.subsystems.l1
+import frc.robot.subsystems.l2
+import frc.robot.subsystems.l3
+import frc.robot.subsystems.l4
+import frc.robot.subsystems.moveDefaultPosition
 
 fun intakeBit(): Command =
     sequence(
@@ -19,13 +23,13 @@ fun intakeBit(): Command =
 
 fun driveBit(): Command =
     sequence(
-        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(1.0, 0.0, 0.0))
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(2.0, 0.0, 0.0))
             .withTimeout(2.5),
-        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 1.0, 0.0))
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 2.0, 0.0))
             .withTimeout(2.5),
-        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(-1.0, 0.0, 0.0))
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(-2.0, 0.0, 0.0))
             .withTimeout(2.5),
-        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, -1.0, 0.0))
+        DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, -2.0, 0.0))
             .withTimeout(2.5),
         DriveCommands.driveCommand(swerveDrive, ChassisSpeeds(0.0, 0.0, 0.0))
             .withTimeout(0.1)
@@ -41,8 +45,19 @@ fun elevatorWristBit(): Command =
         WaitCommand(1.0),
         l4(),
         WaitCommand(1.0),
+        moveDefaultPosition(),
+        WaitCommand(1.0),
+        gripper.intake().withTimeout(3.0),
+        l4(),
+        WaitCommand(1.0),
         moveDefaultPosition()
     )
 
+fun climbBit(): Command =
+    sequence(
+        climber.powerControl { 1.0 }.withTimeout(1.5),
+        climber.powerControl { -1.0 }.withTimeout(1.5)
+    )
+
 fun runAllBits(): Command =
-    sequence(driveBit(), intakeBit(), elevatorWristBit())
+    sequence(driveBit(), intakeBit(), elevatorWristBit(), climbBit())

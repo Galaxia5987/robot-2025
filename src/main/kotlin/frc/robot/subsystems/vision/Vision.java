@@ -23,11 +23,9 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -70,13 +68,24 @@ public class Vision extends SubsystemBase {
         return inputs[cameraIndex].translationToBestTarget;
     }
 
-    public Transform3d getTranslationToID(int cameraIndex, int id) {
+    public Transform3d getTransformToID(int cameraIndex, int id) {
         for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
             if (inputs[cameraIndex].trackedTargetsIDs[i] == id) {
                 return inputs[cameraIndex].trackedTargets[i];
             }
         }
         return null;
+    }
+
+    public int getIdOfClosestTarget(int cameraIndex) {
+        double minDistance = Integer.MAX_VALUE;
+        int index = 0;
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm() < minDistance) {
+                minDistance = inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm();
+            }
+        }
+        return index;
     }
 
     private boolean isObservationValid(VisionIO.PoseObservation observation) {
@@ -194,7 +203,6 @@ public class Vision extends SubsystemBase {
             allRobotPosesAccepted.addAll(robotPosesAccepted);
             allRobotPosesRejected.addAll(robotPosesRejected);
         }
-
 
         // Log summary data
         Logger.recordOutput(

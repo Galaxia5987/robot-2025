@@ -23,9 +23,8 @@ import frc.robot.wrist
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
-@AutoLogOutput(key = "Auto Alignment/lastYError") private var lastYError = 0.0
-@AutoLogOutput(key = "Auto Alignment/lastXError") private var lastXError = 0.0
-@AutoLogOutput(key = "Auto Alignment/lastRotationError")
+private var lastYError = 0.0
+private var lastXError = 0.0
 private var lastRotationError = Rotation2d()
 
 private val DESIRED_TAG
@@ -52,7 +51,7 @@ fun alignToPose(
     yController.setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val yError = {
         val newTranslation =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )
@@ -64,7 +63,7 @@ fun alignToPose(
 
     val rotationError = {
         val newTransform =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )
@@ -79,7 +78,7 @@ fun alignToPose(
     xController.setTolerance(X_ALIGNMENT_TOLERANCE.`in`(Units.Meters))
     val xError = {
         val newTranslation =
-            vision.getTranslationToID(
+            vision.getTransformToID(
                 VisionConstants.frontCameraIndex,
                 DESIRED_TAG
             )
@@ -98,9 +97,10 @@ fun alignToPose(
                 .run {
                     drive.runVelocity(
                         if (
-                            vision.getBestTargetID(
-                                VisionConstants.frontCameraIndex
-                            ) == DESIRED_TAG
+                            vision.getTransformToID(
+                                VisionConstants.frontCameraIndex,
+                                DESIRED_TAG
+                            ) != null
                         )
                             ChassisSpeeds(
                                 xController.calculate(xError.invoke()),
@@ -142,13 +142,17 @@ fun alignToPose(
                         )
                     )
                 }
-                .withTimeout(10.0)
+                .withTimeout(1.0)
         )
         .finallyDo(Runnable { aligning = false })
-        .alongWith(
+        .raceWith(
             Commands.run({
-                Logger.recordOutput("Auto Alignment/YError", yError)
-                Logger.recordOutput("Auto Alignment/XError", xError)
+                Logger.recordOutput("Auto Alignment/lastXError", lastXError)
+                Logger.recordOutput("Auto Alignment/lastYError", lastYError)
+                Logger.recordOutput(
+                    "Auto Alignment/lastRotationError",
+                    lastRotationError
+                )
             })
         )
 }

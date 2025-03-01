@@ -155,9 +155,7 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        if (IS_RED) {
-            swerveDrive.resetGyro(Rotation2d.k180deg)
-        } else swerveDrive.resetGyro(Rotation2d.kZero)
+        swerveDrive.resetGyroBasedOnAlliance(Rotation2d.k180deg)
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()

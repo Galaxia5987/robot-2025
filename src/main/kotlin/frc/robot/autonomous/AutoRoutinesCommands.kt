@@ -38,7 +38,7 @@ fun C6L(): Command =
             selectedScorePose = { Reef6 }
             isLeft = { true }
         }),
-        alignCommandWithPath(::l4).withTimeout(5.6),
+        alignCommandWithPath(::l4),
         dumbL4(Trigger { true })
     )
 
@@ -48,7 +48,7 @@ fun S5R(): Command =
             selectedScorePose = { Reef5 }
             isLeft = { false }
         }),
-        alignCommandWithPath(::l4).withTimeout(6.5),
+        alignCommandWithPath(::l4),
         l4(Trigger { true })
     )
 
@@ -68,8 +68,8 @@ fun C6L5R(): Command = Commands.sequence(C6L(), autoFeed(), S5R())
 fun dumbAuto(): Command =
     Commands.sequence(
         Commands.runOnce({ swerveDrive.setAngle(Rotation2d.kZero) }),
-        WaitCommand(0.8),
+        WaitCommand(3.0),
         DriveCommands.timedLeave(swerveDrive, 1.2),
-        alignToPose(swerveDrive, { true }, ::l4).withTimeout(8.0),
+        alignToPose(swerveDrive, { true }, ::l4),
         dumbL4(Trigger { true })
     )
