@@ -94,8 +94,9 @@ object RobotContainer {
             .onTrue(
                 Commands.runOnce(
                         {
-                            if (IS_RED) swerveDrive.resetGyro(Rotation2d.kZero)
-                            else swerveDrive.resetGyro(Rotation2d.k180deg)
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
                         },
                         swerveDrive
                     )

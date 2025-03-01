@@ -540,6 +540,10 @@ public class Drive extends SubsystemBase {
         desiredHeading = new Rotation2d();
     }
 
+    public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
+        resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
+    }
+
     /** Adds a new timestamped vision measurement. */
     public void addVisionMeasurement(
             Pose2d visionRobotPoseMeters,
