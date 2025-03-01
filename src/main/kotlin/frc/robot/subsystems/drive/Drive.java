@@ -321,6 +321,10 @@ public class Drive extends SubsystemBase {
                 !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
     }
 
+    public Rotation2d getYawPosition() {
+        return gyroInputs.yawPosition;
+    }
+
     /**
      * Runs the drive at the desired velocity.
      *

@@ -95,7 +95,7 @@ private val visionIOs =
                 VisionIOPhotonVision(
                     it.key,
                     it.value,
-                    { swerveDrive.gyroMeasurements },
+                    swerveDrive::getYawPosition,
                     { swerveDrive.gyroTimestamps }
                 )
             }
