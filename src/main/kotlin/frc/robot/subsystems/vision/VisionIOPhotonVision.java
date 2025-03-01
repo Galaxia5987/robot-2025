@@ -204,7 +204,7 @@ public class VisionIOPhotonVision implements VisionIO {
         //        var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
         for (int j = 0; j < gyroReadings.get().length; j++) {
             localPoseEstimator.addHeadingData(
-                    gyroReadingsTimestamps.get()[i], gyroReadings.get()[i]);
+                    gyroReadingsTimestamps.get()[j], gyroReadings.get()[j]);
         }
     }
 }
