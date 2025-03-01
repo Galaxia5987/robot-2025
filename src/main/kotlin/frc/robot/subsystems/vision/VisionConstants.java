@@ -34,16 +34,10 @@ public class VisionConstants {
     // (Not used by Limelight, configure in web UI instead)
     public static Transform3d robotToFrontRightOV =
             new Transform3d(
-                    0.24886,
-                    -0.11289,
-                    0.59876,
-                    new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
+                    0.24886, -0.11289, 0.59876, new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
     public static Transform3d robotToFrontLeftOV =
             new Transform3d(
-                    0.24886,
-                    0.11411,
-                    0.59876,
-                    new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
+                    0.24886, 0.11411, 0.59876, new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
     public static Transform3d robotToBackOV =
             new Transform3d(
                     -0.12635,
