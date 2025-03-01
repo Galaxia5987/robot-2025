@@ -19,20 +19,17 @@ val pose: Pose2d
     get() = swerveDrive.pose
 
 fun alignCommand(): Command {
-    return defer(
-        {
-            runOnce({
-                    resetProfiledPID(pose, swerveDrive.chassisSpeeds)
-                    setGoal(selectedScorePose.invoke())
-                })
-                .andThen(
-                    swerveDrive.run {
-                        swerveDrive.normalRunVelocity(getSpeed(pose).invoke())
-                    }
-                )
-        },
-        setOf(swerveDrive)
-    )
+    return swerveDrive.defer {
+        runOnce({
+            resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+            setGoal(selectedScorePose.invoke())
+        })
+            .andThen(
+                swerveDrive.run {
+                    swerveDrive.normalRunVelocity(getSpeed(pose).invoke())
+                }
+            )
+    }
 }
 
 @AutoLogOutput(key = "AutoAlignment/AtAlignmentSetpoint")
