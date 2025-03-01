@@ -28,7 +28,9 @@ public interface VisionIO {
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public Rotation2d yawToTarget = new Rotation2d(0);
         public int[] tagIds = new int[0];
-        public PoseObservation localEstimatedPose = new PoseObservation(0.0, new Pose3d(), 0.0, 0, 0.0, PoseObservationType.PHOTONVISION);
+        public PoseObservation localEstimatedPose =
+                new PoseObservation(
+                        0.0, new Pose3d(), 0.0, 0, 0.0, PoseObservationType.PHOTONVISION);
     }
 
     /** Represents the angle to a simple target, not used for pose estimation. */

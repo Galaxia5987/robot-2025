@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.autonomous.dumbAuto
 import frc.robot.autonomous.isLeft
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor

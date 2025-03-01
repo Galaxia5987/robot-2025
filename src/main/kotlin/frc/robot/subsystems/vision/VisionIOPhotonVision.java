@@ -17,24 +17,19 @@ import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-/**
- * IO implementation for real PhotonVision hardware.
- */
+/** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
@@ -45,7 +40,7 @@ public class VisionIOPhotonVision implements VisionIO {
     /**
      * Creates a new VisionIOPhotonVision.
      *
-     * @param name          The configured name of the camera.
+     * @param name The configured name of the camera.
      * @param robotToCamera The 3D position of the camera relative to the robot.
      */
     public VisionIOPhotonVision(
@@ -80,18 +75,26 @@ public class VisionIOPhotonVision implements VisionIO {
             // Update latest target observation
             if (result.hasTargets()) {
                 var estimatedPose = localPoseEstimator.update(result);
-                estimatedPose.ifPresent(estimatedRobotPose -> inputs.localEstimatedPose = new PoseObservation(
-                        estimatedRobotPose.timestampSeconds,
-                        estimatedRobotPose.estimatedPose,
-                        estimatedRobotPose.targetsUsed.stream()
-                                .mapToDouble(target -> target.poseAmbiguity)
-                                .average().orElse(0.0),
-                        estimatedRobotPose.targetsUsed.size(),
-                        estimatedRobotPose.targetsUsed.stream().mapToDouble(
-                                target -> target.bestCameraToTarget.getTranslation().getNorm()
-                        ).average().orElse(0.0),
-                        PoseObservationType.PHOTONVISION
-                ));
+                estimatedPose.ifPresent(
+                        estimatedRobotPose ->
+                                inputs.localEstimatedPose =
+                                        new PoseObservation(
+                                                estimatedRobotPose.timestampSeconds,
+                                                estimatedRobotPose.estimatedPose,
+                                                estimatedRobotPose.targetsUsed.stream()
+                                                        .mapToDouble(target -> target.poseAmbiguity)
+                                                        .average()
+                                                        .orElse(0.0),
+                                                estimatedRobotPose.targetsUsed.size(),
+                                                estimatedRobotPose.targetsUsed.stream()
+                                                        .mapToDouble(
+                                                                target ->
+                                                                        target.bestCameraToTarget
+                                                                                .getTranslation()
+                                                                                .getNorm())
+                                                        .average()
+                                                        .orElse(0.0),
+                                                PoseObservationType.PHOTONVISION));
 
                 inputs.latestTargetObservation =
                         new TargetObservation(

@@ -160,7 +160,6 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-
     private static final GalacticSlewRateLimiter slewRateLimiterX =
             new GalacticSlewRateLimiter(1.5);
     private static final GalacticSlewRateLimiter slewRateLimiterY =
@@ -313,7 +312,8 @@ public class Drive extends SubsystemBase {
 
             // Apply update
             poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-            localPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            localPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -483,7 +483,6 @@ public class Drive extends SubsystemBase {
     public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
-
 
     /** Returns the local estimated pose. */
     @AutoLogOutput(key = "Odometry/LocalEstimatedPose")

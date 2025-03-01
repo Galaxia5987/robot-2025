@@ -92,10 +92,9 @@ public class Vision extends SubsystemBase {
         // Check whether to reject pose
         return observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
-                && observation.ambiguity()
-                > maxAmbiguity) // Cannot be high ambiguity
+                        && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
                 || Math.abs(observation.pose().getZ())
-                > maxZError // Must have realistic Z coordinate
+                        > maxZError // Must have realistic Z coordinate
 
                 // Must be within the field boundaries
                 || observation.pose().getX() < 0.0
@@ -175,14 +174,15 @@ public class Vision extends SubsystemBase {
             }
 
             if (isObservationValid(inputs[cameraIndex].localEstimatedPose)) {
-                double stdDevFactor = Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2) / inputs[cameraIndex].localEstimatedPose.tagCount();
+                double stdDevFactor =
+                        Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2)
+                                / inputs[cameraIndex].localEstimatedPose.tagCount();
                 double linearStdDev = linearStdDevBaseline * stdDevFactor;
                 double angularStdDev = angularStdDevBaseline * stdDevFactor;
                 localConsumer.accept(
                         inputs[cameraIndex].localEstimatedPose.pose().toPose2d(),
                         inputs[cameraIndex].localEstimatedPose.timestamp(),
-                        VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
-                );
+                        VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
             // Log camera datadata
