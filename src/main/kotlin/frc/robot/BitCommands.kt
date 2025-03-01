@@ -15,10 +15,10 @@ import frc.robot.subsystems.moveDefaultPosition
 
 fun intakeBit(): Command =
     sequence(
-        intakeAlgae().withTimeout(2.4),
-        roller.outtake().withTimeout(Seconds.of(0.8)),
-        extender.retract().withTimeout(0.5)
-    )
+            intakeAlgae().withTimeout(2.4),
+            roller.outtake().withTimeout(Seconds.of(0.8)),
+            extender.retract().withTimeout(0.5)
+        )
         .withName("Bits/Intake")
 
 fun driveBit(): Command =

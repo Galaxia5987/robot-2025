@@ -135,9 +135,9 @@ fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 
 fun pathfindFeeder(outtakeTrigger: Trigger): Command =
     AutoBuilder.pathfindThenFollowPath(
-        PathPlannerPath.fromPathFile("Feeder"),
-        TunerConstants.PATH_CONSTRAINTS
-    )
+            PathPlannerPath.fromPathFile("Feeder"),
+            TunerConstants.PATH_CONSTRAINTS
+        )
         .andThen(feeder(outtakeTrigger))
 
 fun l2algae(retractTrigger: Trigger): Command =
@@ -154,24 +154,24 @@ fun l3algae(retractTrigger: Trigger): Command =
 
 fun feeder(intakeTrigger: Trigger): Command =
     sequence(
-        parallel(elevator.feeder(), wrist.feeder()),
-        waitUntil(intakeTrigger),
-        gripper
-            .intake()
-            .until(gripper.hasCoral)
-            .andThen(moveDefaultPosition())
-    )
+            parallel(elevator.feeder(), wrist.feeder()),
+            waitUntil(intakeTrigger),
+            gripper
+                .intake()
+                .until(gripper.hasCoral)
+                .andThen(moveDefaultPosition())
+        )
         .withName("Reef/Feeder")
 
 fun blockedFeeder(intakeTrigger: Trigger): Command =
     sequence(
-        parallel(elevator.feeder(), wrist.blockedFeeder()),
-        waitUntil(intakeTrigger),
-        gripper
-            .intake()
-            .until(gripper.hasCoral)
-            .andThen(moveDefaultPosition())
-    )
+            parallel(elevator.feeder(), wrist.blockedFeeder()),
+            waitUntil(intakeTrigger),
+            gripper
+                .intake()
+                .until(gripper.hasCoral)
+                .andThen(moveDefaultPosition())
+        )
         .withName("Reef/Blocked Feeder")
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())

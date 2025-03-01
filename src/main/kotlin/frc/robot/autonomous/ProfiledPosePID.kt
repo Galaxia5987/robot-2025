@@ -38,10 +38,10 @@ fun setGoal(desiredPose: Pose2d) {
 
 val atGoal =
     Trigger {
-        xController.atGoal() &&
+            xController.atGoal() &&
                 yController.atGoal() &&
                 thetaController.atSetpoint()
-    }
+        }
         .debounce(0.4)
 
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
@@ -58,19 +58,19 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         )
 
     mapOf(
-        "XError" to xController.positionError,
-        "YError" to yController.positionError,
-        "ThetaError" to thetaController.error,
-    )
+            "XError" to xController.positionError,
+            "YError" to yController.positionError,
+            "ThetaError" to thetaController.error,
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
 
     mapOf(
-        "XGoal" to xController.goal.position,
-        "YGoal" to yController.goal.position,
-        "ThetaGoal" to thetaController.setpoint,
-    )
+            "XGoal" to xController.goal.position,
+            "YGoal" to yController.goal.position,
+            "ThetaGoal" to thetaController.setpoint,
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
