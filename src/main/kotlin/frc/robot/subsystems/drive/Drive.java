@@ -30,7 +30,10 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -154,8 +157,10 @@ public class Drive extends SubsystemBase {
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
-    private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterX =
+            new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterY =
+            new GalacticSlewRateLimiter(1.5);
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
@@ -512,6 +517,10 @@ public class Drive extends SubsystemBase {
         gyroIO.zeroGyro();
         gyroOffset = offset;
         desiredHeading = new Rotation2d();
+    }
+
+    public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
+        resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
     }
 
     /** Adds a new timestamped vision measurement. */

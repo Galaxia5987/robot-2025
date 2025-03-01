@@ -87,16 +87,18 @@ private val choreoPoses = parseChoreoPoses()
 val ALIGNMENT_POSES
     get() = choreoPoses.mapValues { it.value.flipIfNeeded() }
 
-val LINEAR_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
-val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.2)
+val X_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(6.0)
+val Y_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
+val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(2.5)
 val MAX_ALIGNMENT_DISTANCE: Distance = Units.Meters.of(2.0)
 
 val ALIGNMENT_X_GAINS = Gains(1.5, 0.0, 0.0)
-val ALIGNMENT_Y_GAINS = Gains(2.0, 0.0, 0.0)
+val ALIGNMENT_Y_GAINS = Gains(2.5, 0.0, 0.4)
 val ALIGNMENT_ROTATION_GAINS = Gains(3.0, 0.0, 0.0)
 
 val ALIGNMENT_FORWARD_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 
+val X_ALIGNMENT_OFFSET = Units.Meters.of(-0.47)
 val ALIGNED_Y_LEFT = -0.16
 val ALIGNED_Y_RIGHT = 0.16
 val ALIGNED_ROTATION = Rotation2d.fromDegrees(155.0)
