@@ -44,11 +44,13 @@ private val shouldOpenElevator =
         .onTrue(selectedHeightCommand.invoke())
 
 fun logTriggers() {
-    Logger.recordOutput("AutoAlignment/IsAligning", isAligning)
-    Logger.recordOutput(
-        "AutoAlignment/AtAlignmentSetpoint",
-        atAlignmentSetpoint
+    mapOf(
+        "IsAligning" to isAligning,
+        "AtAlignmentSetpoint" to atAlignmentSetpoint,
+        "IsWithinDistance" to isWithinDistance,
+        "ShouldOpenElevator" to shouldOpenElevator,
     )
-    Logger.recordOutput("AutoAlignment/IsWithinDistance", isWithinDistance)
-    Logger.recordOutput("AutoAlignment/ShouldOpenElevator", shouldOpenElevator)
+        .forEach { (key, value) ->
+            Logger.recordOutput("AutoAlignment/$key", value)
+        }
 }
