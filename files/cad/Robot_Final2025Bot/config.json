@@ -19,7 +19,7 @@
   ],
   "cameras": [
     {
-      "name": "front",
+      "name": "frontRight",
       "rotations": [
         {
           "axis": "x",
@@ -35,7 +35,9 @@
         }
       ],
       "position": [
-        0.22860, -0.10, 0.6
+        0.24886,
+        -0.11289,
+        0.59876
       ],
       "resolution": [
         1280,
@@ -44,7 +46,7 @@
       "fov": 95
     },
     {
-      "name": "front2",
+      "name": "frontLeft",
       "rotations": [
         {
           "axis": "x",
@@ -60,7 +62,9 @@
         }
       ],
       "position": [
-        0.22860, 0.10, 0.6
+        0.24886,
+        0.11411,
+        0.59876
       ],
       "resolution": [
         1280,
