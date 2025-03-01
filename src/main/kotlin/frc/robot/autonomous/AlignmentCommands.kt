@@ -11,7 +11,6 @@ import frc.robot.swerveDrive
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 
-@AutoLogOutput(key = "AutoAlignment/IsAligning")
 var isAligning = Trigger { alignCommand().isScheduled }
 
 val pose: Pose2d
@@ -31,7 +30,6 @@ fun alignCommand(): Command {
     }
 }
 
-@AutoLogOutput(key = "AutoAlignment/AtAlignmentSetpoint")
 private val atAlignmentSetpoint =
     Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
 
@@ -41,7 +39,6 @@ private val isWithinDistance = Trigger {
     ) <= Units.Meters.of(0.2)
 }
 
-@AutoLogOutput(key = "AutoAlignment/ShouldOpenElevator")
 private val shouldOpenElevator =
     Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }
         .onTrue(selectedHeightCommand.invoke())
