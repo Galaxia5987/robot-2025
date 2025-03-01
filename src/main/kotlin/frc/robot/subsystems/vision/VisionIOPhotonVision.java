@@ -34,7 +34,7 @@ public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
     protected final PhotonPoseEstimator localPoseEstimator;
-    protected final Supplier<Rotation2d> gyroReadings;
+    protected final Supplier<Rotation2d[]> gyroReadings;
     protected final Supplier<double[]> gyroReadingsTimestamps;
 
     /**
@@ -46,7 +46,7 @@ public class VisionIOPhotonVision implements VisionIO {
     public VisionIOPhotonVision(
             String name,
             Transform3d robotToCamera,
-            Supplier<Rotation2d> gyroReadings,
+            Supplier<Rotation2d[]> gyroReadings,
             Supplier<double[]> gyroReadingsTimestamps) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
@@ -73,9 +73,6 @@ public class VisionIOPhotonVision implements VisionIO {
         List<PoseObservation> poseObservations = new LinkedList<>();
         for (var result : camera.getAllUnreadResults()) {
             // Update latest target observation
-            localPoseEstimator.addHeadingData(
-                    result.getTimestampSeconds(), gyroReadings.get());
-
             if (result.hasTargets()) {
                 var estimatedPose = localPoseEstimator.update(result);
                 estimatedPose.ifPresent(
@@ -205,5 +202,9 @@ public class VisionIOPhotonVision implements VisionIO {
         // Update PhotonPoseEstimator based on gyro readings
         //        var gyroReadings = InitializerKt.getSwerveDrive().getGyroMeasurements();
         //        var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
+        for (int j = 0; j < gyroReadings.get().length; j++) {
+            localPoseEstimator.addHeadingData(
+                    gyroReadingsTimestamps.get()[i], gyroReadings.get()[i]);
+        }
     }
 }
