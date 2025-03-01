@@ -9,6 +9,17 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.TunerConstants
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+
+private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 5.0)
+private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
+private val xKD = LoggedNetworkNumber("/Tuning/AutoAlign/xKD", 0.0)
+private val yKP = LoggedNetworkNumber("/Tuning/AutoAlign/yKP", 5.0)
+private val yKI = LoggedNetworkNumber("/Tuning/AutoAlign/yKI", 0.0)
+private val yKD = LoggedNetworkNumber("/Tuning/AutoAlign/yKD", 0.0)
+private val thetaKP = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKP", 6.0)
+private val thetaKI = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKI", 0.0)
+private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
 
 private val LINEAR_CONSTRAINTS =
     Constraints(
@@ -17,18 +28,24 @@ private val LINEAR_CONSTRAINTS =
     )
 
 val xController =
-    ProfiledPIDController(5.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
+    ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS).apply {
         setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
     }
 val yController =
-    ProfiledPIDController(5.0, 0.0, 0.0, LINEAR_CONSTRAINTS).apply {
+    ProfiledPIDController(yKP.get(), yKI.get(), yKD.get(), LINEAR_CONSTRAINTS).apply {
         setTolerance(Units.Meters.of(0.05).`in`(Units.Meters))
     }
 val thetaController =
-    PIDController(4.0, 0.0, 0.0).apply {
+    PIDController(thetaKP.get(), thetaKI.get(), thetaKD.get()).apply {
         setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
         enableContinuousInput(-Math.PI, Math.PI)
     }
+
+fun updateProfiledPID(){
+    xController.setPID(xKP.get(), xKI.get(), xKD.get())
+    yController.setPID(yKP.get(), yKI.get(), yKD.get())
+    thetaController.setPID(thetaKP.get(), thetaKI.get(), thetaKD.get())
+}
 
 fun setGoal(desiredPose: Pose2d) {
     xController.setGoal(desiredPose.x)

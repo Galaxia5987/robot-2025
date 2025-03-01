@@ -18,6 +18,7 @@ import frc.robot.Mode.SIM
 import frc.robot.autonomous.getSpeed
 import frc.robot.autonomous.logTriggers
 import frc.robot.autonomous.selectedScorePose
+import frc.robot.autonomous.updateProfiledPID
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import org.ironmaple.simulation.SimulatedArena
@@ -146,6 +147,7 @@ object Robot : LoggedRobot() {
             "AutoAlignment/Speeds",
             getSpeed(swerveDrive.pose).invoke()
         )
+        updateProfiledPID()
     }
 
     /**
