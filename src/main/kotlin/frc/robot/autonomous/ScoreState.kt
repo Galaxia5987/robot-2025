@@ -17,12 +17,12 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
         {
             runOnce({
                 selectedScorePose = {
-                    buttonToPoseMap[buttonID]?.first
+                    buttonToPoseMap[buttonID]?.first?.flipIfNeeded()
                         ?: throw Exception("No pose for button $buttonID!!!")
                 }
                 Logger.recordOutput(
                     "ScoreState/SelectedScorePose",
-                    selectedScorePose.invoke().flipIfNeeded()
+                    selectedScorePose.invoke()
                 )
             })
         },
