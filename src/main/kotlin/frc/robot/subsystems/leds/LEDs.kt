@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.autonomous.isAligning
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -90,6 +91,7 @@ class LEDs : SubsystemBase() {
     private var alignPattern =
         climbPattern
             .negate()
+            .and(isAligning)
             .onTrue(
                 setPattern(
                     all =
