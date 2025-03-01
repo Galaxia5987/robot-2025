@@ -21,7 +21,10 @@ val pose: Pose2d
 fun alignCommand(): Command {
     return defer(
         {
-            runOnce({ setGoal(selectedScorePose.invoke()) })
+            runOnce({
+                resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+                setGoal(selectedScorePose.invoke())
+            })
                 .andThen(
                     swerveDrive.run {
                         swerveDrive.normalRunVelocity(getSpeed(pose).invoke())

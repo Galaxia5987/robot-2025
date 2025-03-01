@@ -62,6 +62,11 @@ val atGoal =
         }
         .debounce(0.4)
 
+fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
+    xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)
+    yController.reset(botPose.y, botSpeeds.vyMetersPerSecond)
+}
+
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds =
         ChassisSpeeds(
