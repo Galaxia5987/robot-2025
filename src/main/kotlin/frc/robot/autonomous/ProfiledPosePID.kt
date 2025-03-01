@@ -104,21 +104,9 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
             "XError" to xController.positionError,
             "YError" to yController.positionError,
             "ThetaError" to thetaController.positionError,
-        )
-        .forEach { (key, value) ->
-            Logger.recordOutput("AutoAlignment/$key", value)
-        }
-
-    mapOf(
             "XSetpoint" to xController.setpoint.position,
             "YSetpoint" to yController.setpoint.position,
             "ThetaSetpoint" to thetaController.setpoint.position,
-        )
-        .forEach { (key, value) ->
-            Logger.recordOutput("AutoAlignment/$key", value)
-        }
-
-    mapOf(
             "XGoal" to xController.goal.position,
             "YGoal" to yController.goal.position,
             "ThetaGoal" to thetaController.goal.position,
