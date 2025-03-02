@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.l1
+import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
 
-var selectedScorePose: () -> Pose2d = { Reef1Left }
+// Alignment target pose, if never set, supplies the current robot position
+var selectedScorePose: () -> Pose2d = { swerveDrive.pose }
 
 var selectedHeightCommand: Command = l1()
 
