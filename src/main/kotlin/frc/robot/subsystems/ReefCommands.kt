@@ -71,7 +71,8 @@ fun outtakeCoralAndDriveBack(): Command =
             ),
         swerveDrive
             .run { swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) }
-            .withTimeout(0.1),
+            .withTimeout(0.1)
+            .alongWith(wrist.max()),
         moveDefaultPosition()
     )
 
