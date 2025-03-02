@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.alignCommand
 import frc.robot.autonomous.isAligning
+import frc.robot.autonomous.outtakeCommand
 import frc.robot.autonomous.selectedHeightCommand
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
@@ -28,6 +29,8 @@ import frc.robot.subsystems.l2algae
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
+import frc.robot.subsystems.outtakeCoral
+import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -110,7 +113,7 @@ object RobotContainer {
             .whileTrue(
                 Commands.runOnce({
                         selectedHeightCommand = l1()
-                        isAligning = driverController.cross()
+                        outtakeCommand = outtakeCoral()
                     })
                     .alongWith(alignCommand())
             )
@@ -119,7 +122,7 @@ object RobotContainer {
             .whileTrue(
                 Commands.runOnce({
                         selectedHeightCommand = l2()
-                        isAligning = driverController.square()
+                        outtakeCommand = outtakeCoral()
                     })
                     .alongWith(alignCommand())
             )
@@ -128,7 +131,7 @@ object RobotContainer {
             .whileTrue(
                 Commands.runOnce({
                         selectedHeightCommand = l3()
-                        isAligning = driverController.circle()
+                        outtakeCommand = outtakeCoral()
                     })
                     .alongWith(alignCommand())
             )
@@ -137,10 +140,15 @@ object RobotContainer {
             .whileTrue(
                 Commands.runOnce({
                         selectedHeightCommand = l4()
-                        isAligning = driverController.triangle()
+                        outtakeCommand = outtakeCoralAndDriveBack()
                     })
                     .alongWith(alignCommand())
             )
+
+        isAligning = driverController.cross()
+            .or(driverController.square())
+            .or(driverController.circle())
+            .or(driverController.triangle())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController

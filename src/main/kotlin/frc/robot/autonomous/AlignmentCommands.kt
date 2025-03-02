@@ -34,7 +34,9 @@ fun alignCommand(): Command {
 }
 
 private val atAlignmentSetpoint =
-    Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
+    Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(defer({
+        outtakeCommand
+    }, setOf(gripper, elevator, wrist, swerveDrive)))
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
