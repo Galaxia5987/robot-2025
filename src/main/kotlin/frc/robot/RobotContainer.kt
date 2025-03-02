@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.alignCommand
 import frc.robot.autonomous.isAligning
+import frc.robot.autonomous.selectedHeightCommand
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
@@ -22,6 +23,7 @@ import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
+import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3algae
@@ -103,11 +105,43 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().onTrue(l1(driverController.cross().negate()))
-        driverController.circle().onTrue(l3(driverController.circle().negate()))
+        driverController.cross().onTrue(
+            Commands.runOnce({
+                selectedHeightCommand = ::l1
+                driverController.cross()
+            })
+                .alongWith(
+                    alignCommand()
+                )
+        )
+        driverController.square().onTrue(
+            Commands.runOnce({
+                selectedHeightCommand = ::l2
+                isAligning = driverController.square()
+            })
+                .alongWith(
+                    alignCommand()
+                )
+        )
+        driverController.circle().onTrue(
+            Commands.runOnce({
+                selectedHeightCommand = ::l3
+                isAligning = driverController.circle()
+            })
+                .alongWith(
+                    alignCommand()
+                )
+        )
         driverController
-            .triangle()
-            .onTrue(l4(driverController.triangle().negate()))
+            .triangle().onTrue(
+                Commands.runOnce({
+                    selectedHeightCommand = ::l4
+                    isAligning = driverController.triangle()
+                })
+                    .alongWith(
+                        alignCommand()
+                    )
+            )
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
@@ -144,9 +178,6 @@ object RobotContainer {
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
         testController.a().whileTrue(runAllBits())
-
-        driverController.square().whileTrue(alignCommand())
-        isAligning = driverController.square()
 
         val buttonMappings =
             listOf(
