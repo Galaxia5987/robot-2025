@@ -22,9 +22,9 @@ val pose: Pose2d
 fun alignCommand(): Command {
     return swerveDrive.defer {
         runOnce({
-            resetProfiledPID(pose, swerveDrive.chassisSpeeds)
-            setGoal(selectedScorePose.invoke())
-        })
+                resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+                setGoal(selectedScorePose.invoke())
+            })
             .andThen(
                 swerveDrive.run {
                     swerveDrive.limitlessRunVelocity(getSpeed(pose).invoke())
@@ -33,7 +33,8 @@ fun alignCommand(): Command {
     }
 }
 
-private val atAlignmentSetpoint = Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
+private val atAlignmentSetpoint =
+    Trigger { atGoal.asBoolean && isAligning.asBoolean }.onTrue(outtakeCoral())
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
@@ -42,20 +43,18 @@ private val isWithinDistance = Trigger {
 }
 
 private val shouldOpenElevator =
-    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }.onTrue(
-        defer(
-            { selectedHeightCommand },
-            setOf(wrist, elevator, gripper)
+    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }
+        .onTrue(
+            defer({ selectedHeightCommand }, setOf(wrist, elevator, gripper))
         )
-    )
 
 fun logTriggers() {
     mapOf(
-        "IsAligning" to isAligning,
-        "AtAlignmentSetpoint" to atAlignmentSetpoint,
-        "IsWithinDistance" to isWithinDistance,
-        "ShouldOpenElevator" to shouldOpenElevator,
-    )
+            "IsAligning" to isAligning,
+            "AtAlignmentSetpoint" to atAlignmentSetpoint,
+            "IsWithinDistance" to isWithinDistance,
+            "ShouldOpenElevator" to shouldOpenElevator,
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
