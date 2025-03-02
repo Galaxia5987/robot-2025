@@ -39,7 +39,7 @@ private val atAlignmentSetpoint =
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
         selectedScorePose.invoke().translation
-    ) <= Units.Meters.of(0.2)
+    ) <= Units.Meters.of(0.4)
 }
 
 private val shouldOpenElevator =
