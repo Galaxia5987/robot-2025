@@ -109,25 +109,29 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(
-                alignCommand().alongWith(raiseElevatorAtDistance(l1()))
+                alignCommand()
+                    .alongWith(raiseElevatorAtDistance(l1()))
                     .andThen(outtakeCoral())
             )
         driverController
             .square()
             .whileTrue(
-                alignCommand().alongWith(raiseElevatorAtDistance(l2()))
+                alignCommand()
+                    .alongWith(raiseElevatorAtDistance(l2()))
                     .andThen(outtakeCoral())
             )
         driverController
             .circle()
             .whileTrue(
-                alignCommand().alongWith(raiseElevatorAtDistance(l3()))
+                alignCommand()
+                    .alongWith(raiseElevatorAtDistance(l3()))
                     .andThen(outtakeCoral())
             )
         driverController
             .triangle()
             .whileTrue(
-                alignCommand().alongWith(raiseElevatorAtDistance(l4()))
+                alignCommand()
+                    .alongWith(raiseElevatorAtDistance(l4()))
                     .andThen(outtakeCoralAndDriveBack())
             )
 

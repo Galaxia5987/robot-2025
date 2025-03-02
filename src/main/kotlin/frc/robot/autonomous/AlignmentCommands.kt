@@ -15,22 +15,28 @@ val pose: Pose2d
     get() = swerveDrive.pose
 
 fun alignCommand(): Command {
-    return swerveDrive.defer {
-        runOnce({
-                isAligning = Trigger {true}
-                resetProfiledPID(pose, swerveDrive.chassisSpeeds)
-                setGoal(selectedScorePose.invoke())
-            })
-            .andThen(
-                swerveDrive.run {
-                    swerveDrive.limitlessRunVelocity(getSpeed(pose).invoke())
-                }
-            ).until(atGoal)
-    }.finallyDo(Runnable{ isAligning = Trigger{false}})
+    return swerveDrive
+        .defer {
+            runOnce({
+                    isAligning = Trigger { true }
+                    resetProfiledPID(pose, swerveDrive.chassisSpeeds)
+                    setGoal(selectedScorePose.invoke())
+                })
+                .andThen(
+                    swerveDrive.run {
+                        swerveDrive.limitlessRunVelocity(
+                            getSpeed(pose).invoke()
+                        )
+                    }
+                )
+                .until(atGoal)
+        }
+        .finallyDo(Runnable { isAligning = Trigger { false } })
 }
 
-private val atAlignmentSetpoint =
-    Trigger { atGoal.asBoolean && isAligning.asBoolean }
+private val atAlignmentSetpoint = Trigger {
+    atGoal.asBoolean && isAligning.asBoolean
+}
 
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
@@ -38,8 +44,9 @@ private val isWithinDistance = Trigger {
     ) <= Units.Meters.of(0.4)
 }
 
-val shouldOpenElevator =
-    Trigger { isWithinDistance.asBoolean && isAligning.asBoolean }
+val shouldOpenElevator = Trigger {
+    isWithinDistance.asBoolean && isAligning.asBoolean
+}
 
 fun logTriggers() {
     mapOf(
