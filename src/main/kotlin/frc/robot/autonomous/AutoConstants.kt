@@ -2,42 +2,55 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.lib.Gains
+import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
-import frc.robot.lib.getPose2d
+import frc.robot.lib.getTranslation2d
 import java.io.File
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.dyn4j.geometry.Vector2
 
-val ReefCenter = Translation2d(4.5, 4.0)
+val REEF_RADIUS: Distance = Units.Meters.of(0.8317)
 
-val Reef1Left: Pose2d = Pose2d(5.744, 3.870, Rotation2d.k180deg)
-val Reef1Right: Pose2d = Pose2d(5.744, 4.180, Rotation2d.k180deg)
+val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 
-val Reef2Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
-val Reef2Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+// If measured on the red side should flip.
+val Reef4Left: Pose2d = Pose2d(14.36, 3.84, Rotation2d.k180deg).flip()
+val Reef4Right: Pose2d = Pose2d(14.36, 4.19, Rotation2d.k180deg).flip()
 
-val Reef3Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
-val Reef3Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+// Two field measurements for finding the reef center. The robot should touch the reef.
+val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
+val ReefFaceRight: Pose2d = Pose2d(14.32, 4.19, Rotation2d.k180deg).flip()
+// The calculated center of the reef, used for calculating all other scoring positions.
+val ReefCenter = getTranslation2d(
+    (ReefFaceLeft.x + ReefFaceRight.x) / 2
+            + REEF_RADIUS.`in`(Units.Meters)
+            + ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
+    (ReefFaceLeft.y + ReefFaceRight.y) / 2
+)
 
-val Reef4Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
-val Reef4Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef5Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+val Reef5Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 
-val Reef5Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
-val Reef5Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef6Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+val Reef6Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
 
-val Reef6Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
-val Reef6Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef1Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef1Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+
+val Reef2Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef2Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+
+val Reef3Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef3Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
 
 val FeederRightMidPose: Pose2d =
     Pose2d(2.563, 1.647, Rotation2d.fromDegrees(-120.0))
