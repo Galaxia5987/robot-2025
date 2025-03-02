@@ -30,27 +30,38 @@ val Reef4Right: Pose2d = Pose2d(14.36, 4.19, Rotation2d.k180deg).flip()
 val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
 val ReefFaceRight: Pose2d = Pose2d(14.32, 4.19, Rotation2d.k180deg).flip()
 // The calculated center of the reef, used for calculating all other scoring positions.
-val ReefCenter = getTranslation2d(
-    (ReefFaceLeft.x + ReefFaceRight.x) / 2
-            + REEF_RADIUS.`in`(Units.Meters)
-            + ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
-    (ReefFaceLeft.y + ReefFaceRight.y) / 2
-)
+val ReefCenter =
+    getTranslation2d(
+        (ReefFaceLeft.x + ReefFaceRight.x) / 2 +
+            REEF_RADIUS.`in`(Units.Meters) +
+            ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
+        (ReefFaceLeft.y + ReefFaceRight.y) / 2
+    )
 
-val Reef5Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
-val Reef5Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+val Reef5Left: Pose2d =
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+val Reef5Right: Pose2d =
+    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 
-val Reef6Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
-val Reef6Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+val Reef6Left: Pose2d =
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+val Reef6Right: Pose2d =
+    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
 
-val Reef1Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
-val Reef1Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef1Left: Pose2d =
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef1Right: Pose2d =
+    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
 
-val Reef2Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
-val Reef2Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef2Left: Pose2d =
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef2Right: Pose2d =
+    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
 
-val Reef3Left: Pose2d = Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
-val Reef3Right: Pose2d = Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef3Left: Pose2d =
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef3Right: Pose2d =
+    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
 
 val FeederRightMidPose: Pose2d =
     Pose2d(2.563, 1.647, Rotation2d.fromDegrees(-120.0))

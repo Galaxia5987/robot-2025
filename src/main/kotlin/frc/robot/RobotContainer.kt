@@ -105,42 +105,41 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().whileTrue(
-            Commands.runOnce({
-                selectedHeightCommand = l1()
-                isAligning = driverController.cross()
-            })
-                .alongWith(
-                    alignCommand()
-                )
-        )
-        driverController.square().whileTrue(
-            Commands.runOnce({
-                selectedHeightCommand = l2()
-                isAligning = driverController.square()
-            })
-                .alongWith(
-                    alignCommand()
-                )
-        )
-        driverController.circle().whileTrue(
-            Commands.runOnce({
-                selectedHeightCommand = l3()
-                isAligning = driverController.circle()
-            })
-                .alongWith(
-                    alignCommand()
-                )
-        )
         driverController
-            .triangle().whileTrue(
+            .cross()
+            .whileTrue(
                 Commands.runOnce({
-                    selectedHeightCommand = l4()
-                    isAligning = driverController.triangle()
-                })
-                    .alongWith(
-                        alignCommand()
-                    )
+                        selectedHeightCommand = l1()
+                        isAligning = driverController.cross()
+                    })
+                    .alongWith(alignCommand())
+            )
+        driverController
+            .square()
+            .whileTrue(
+                Commands.runOnce({
+                        selectedHeightCommand = l2()
+                        isAligning = driverController.square()
+                    })
+                    .alongWith(alignCommand())
+            )
+        driverController
+            .circle()
+            .whileTrue(
+                Commands.runOnce({
+                        selectedHeightCommand = l3()
+                        isAligning = driverController.circle()
+                    })
+                    .alongWith(alignCommand())
+            )
+        driverController
+            .triangle()
+            .whileTrue(
+                Commands.runOnce({
+                        selectedHeightCommand = l4()
+                        isAligning = driverController.triangle()
+                    })
+                    .alongWith(alignCommand())
             )
 
         driverController.R1().whileTrue(intakeAlgae())
