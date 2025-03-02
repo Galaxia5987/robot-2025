@@ -105,7 +105,7 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().onTrue(
+        driverController.cross().whileTrue(
             Commands.runOnce({
                 selectedHeightCommand = l1()
                 driverController.cross()
@@ -114,7 +114,7 @@ object RobotContainer {
                     alignCommand()
                 )
         )
-        driverController.square().onTrue(
+        driverController.square().whileTrue(
             Commands.runOnce({
                 selectedHeightCommand = l2()
                 isAligning = driverController.square()
@@ -123,7 +123,7 @@ object RobotContainer {
                     alignCommand()
                 )
         )
-        driverController.circle().onTrue(
+        driverController.circle().whileTrue(
             Commands.runOnce({
                 selectedHeightCommand = l3()
                 isAligning = driverController.circle()
@@ -133,7 +133,7 @@ object RobotContainer {
                 )
         )
         driverController
-            .triangle().onTrue(
+            .triangle().whileTrue(
                 Commands.runOnce({
                     selectedHeightCommand = l4()
                     isAligning = driverController.triangle()
