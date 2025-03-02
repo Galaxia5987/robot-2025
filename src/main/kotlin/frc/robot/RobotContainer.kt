@@ -31,6 +31,7 @@ import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
+import frc.robot.subsystems.raiseElevatorAtDistance
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -111,44 +112,27 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(
-                Commands.runOnce({
-                        selectedHeightCommand = l1()
-                        outtakeCommand = outtakeCoral()
-                    })
-                    .alongWith(alignCommand())
+                alignCommand().alongWith(raiseElevatorAtDistance(l1()))
+                    .andThen(outtakeCoral())
             )
         driverController
             .square()
             .whileTrue(
-                Commands.runOnce({
-                        selectedHeightCommand = l2()
-                        outtakeCommand = outtakeCoral()
-                    })
-                    .alongWith(alignCommand())
+                alignCommand().alongWith(raiseElevatorAtDistance(l2()))
+                    .andThen(outtakeCoral())
             )
         driverController
             .circle()
             .whileTrue(
-                Commands.runOnce({
-                        selectedHeightCommand = l3()
-                        outtakeCommand = outtakeCoral()
-                    })
-                    .alongWith(alignCommand())
+                alignCommand().alongWith(raiseElevatorAtDistance(l3()))
+                    .andThen(outtakeCoral())
             )
         driverController
             .triangle()
             .whileTrue(
-                Commands.runOnce({
-                        selectedHeightCommand = l4()
-                        outtakeCommand = outtakeCoralAndDriveBack()
-                    })
-                    .alongWith(alignCommand())
+                alignCommand().alongWith(raiseElevatorAtDistance(l4()))
+                    .andThen(outtakeCoralAndDriveBack())
             )
-
-        isAligning = driverController.cross()
-            .or(driverController.square())
-            .or(driverController.circle())
-            .or(driverController.triangle())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
