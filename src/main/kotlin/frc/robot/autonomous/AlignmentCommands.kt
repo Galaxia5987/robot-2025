@@ -21,7 +21,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
         .runOnce{
                 isAligning = Trigger { true }
-                resetProfiledPID(swerveDrive.pose, swerveDrive.chassisSpeeds)
+                resetProfiledPID(swerveDrive.pose, -swerveDrive.fieldOrientedSpeeds)
                 setGoal(targetPose)
             }
                 .andThen(
