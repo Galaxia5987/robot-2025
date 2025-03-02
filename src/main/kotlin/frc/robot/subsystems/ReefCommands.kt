@@ -69,7 +69,7 @@ fun outtakeCoralAndDriveBack(): Command =
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
-        swerveDrive.run { swerveDrive.runVelocity(ChassisSpeeds(-1.0, 0.0, 0.0)) }.withTimeout(0.1),
+        swerveDrive.run { swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) }.withTimeout(0.1),
         moveDefaultPosition()
     )
 
