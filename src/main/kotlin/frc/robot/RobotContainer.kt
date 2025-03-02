@@ -108,7 +108,7 @@ object RobotContainer {
         driverController.cross().whileTrue(
             Commands.runOnce({
                 selectedHeightCommand = l1()
-                driverController.cross()
+                isAligning = driverController.cross()
             })
                 .alongWith(
                     alignCommand()
