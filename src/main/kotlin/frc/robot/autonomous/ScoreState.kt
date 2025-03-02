@@ -8,7 +8,7 @@ import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.l1
 import org.littletonrobotics.junction.Logger
 
-var selectedScorePose: () -> Pose2d = { Reef1 }
+var selectedScorePose: () -> Pose2d = { Reef1Left }
 
 var selectedHeightCommand: () -> Command = { l1() }
 
@@ -17,7 +17,7 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
         {
             runOnce({
                 selectedScorePose = {
-                    buttonToPoseMap[buttonID]?.first?.flipIfNeeded()
+                    buttonToPoseMap[buttonID]?.flipIfNeeded()
                         ?: throw Exception("No pose for button $buttonID!!!")
                 }
                 Logger.recordOutput(
