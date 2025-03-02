@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.Mode
+import frc.robot.autonomous.shouldOpenElevator
 import frc.robot.driveSimulation
 import frc.robot.elevator
 import frc.robot.gripper
@@ -96,6 +97,9 @@ fun l2(): Command = parallel(elevator.l2(), wrist.l2()).withName("Reef/Move L2")
 fun l3(): Command = parallel(elevator.l3(), wrist.l3()).withName("Reef/Move L3")
 
 fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
+
+fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
+    waitUntil(shouldOpenElevator).andThen(elevatorCommand)
 
 fun dumbL4(outtakeTrigger: Trigger): Command =
     l4()
