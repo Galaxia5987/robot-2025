@@ -5,6 +5,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.distanceFromPoint
+import frc.robot.lib.moveBack
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
@@ -40,7 +41,7 @@ fun alignCommand(): Command =
 
 private fun alignL4Prep(): Command =
     swerveDrive
-        .defer { alignToPose(selectedScorePose.invoke(), Trigger { false }) }
+        .defer { alignToPose(selectedScorePose.invoke().moveBack(Units.Centimeters.of(-50.0)), Trigger { false }) }
         .raceWith(raiseElevatorAtDistance(l4()))
 
 fun autoScoreL1(): Command =
