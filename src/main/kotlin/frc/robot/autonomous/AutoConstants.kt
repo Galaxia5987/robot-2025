@@ -2,6 +2,7 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
@@ -16,13 +17,28 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.dyn4j.geometry.Vector2
 
-val Reef1: Pose2d = Pose2d(6.033, 4.000, Rotation2d.k180deg)
-val Reef2: Pose2d = Pose2d(5.215, 5.266, Rotation2d.fromDegrees(-120.0))
-val Reef3: Pose2d = Pose2d(3.769, 5.416, Rotation2d.fromDegrees(-60.0))
-val Reef4: Pose2d = getPose2d(2.93, 4.030)
-val Reef5: Pose2d = Pose2d(3.719, 2.644, Rotation2d.fromDegrees(60.0))
-val Reef6: Pose2d = Pose2d(5.265, 2.664, Rotation2d.fromDegrees(120.0))
+val ReefCenter = Translation2d(4.5, 4.0)
+
+val Reef1Left: Pose2d = Pose2d(5.744, 3.870, Rotation2d.k180deg)
+val Reef1Right: Pose2d = Pose2d(5.744, 4.180, Rotation2d.k180deg)
+
+val Reef2Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+val Reef2Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+
+val Reef3Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+val Reef3Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+
+val Reef4Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef4Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+
+val Reef5Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef5Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+
+val Reef6Left: Pose2d = Reef1Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef6Right: Pose2d = Reef1Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+
 val FeederRightMidPose: Pose2d =
     Pose2d(2.563, 1.647, Rotation2d.fromDegrees(-120.0))
 val FeederRight: Pose2d = Pose2d(1.635, 1.467, Rotation2d.fromDegrees(-130.0))
