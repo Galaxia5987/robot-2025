@@ -107,7 +107,7 @@ object RobotContainer {
 
         driverController.cross().onTrue(
             Commands.runOnce({
-                selectedHeightCommand = ::l1
+                selectedHeightCommand = l1()
                 driverController.cross()
             })
                 .alongWith(
@@ -116,7 +116,7 @@ object RobotContainer {
         )
         driverController.square().onTrue(
             Commands.runOnce({
-                selectedHeightCommand = ::l2
+                selectedHeightCommand = l2()
                 isAligning = driverController.square()
             })
                 .alongWith(
@@ -125,7 +125,7 @@ object RobotContainer {
         )
         driverController.circle().onTrue(
             Commands.runOnce({
-                selectedHeightCommand = ::l3
+                selectedHeightCommand = l3()
                 isAligning = driverController.circle()
             })
                 .alongWith(
@@ -135,7 +135,7 @@ object RobotContainer {
         driverController
             .triangle().onTrue(
                 Commands.runOnce({
-                    selectedHeightCommand = ::l4
+                    selectedHeightCommand = l4()
                     isAligning = driverController.triangle()
                 })
                     .alongWith(

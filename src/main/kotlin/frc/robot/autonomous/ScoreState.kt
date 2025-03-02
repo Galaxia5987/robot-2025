@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.Logger
 
 var selectedScorePose: () -> Pose2d = { Reef1Left }
 
-var selectedHeightCommand: () -> Command = { l1() }
+var selectedHeightCommand: Command = l1()
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
