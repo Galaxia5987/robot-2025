@@ -6,14 +6,11 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.l1
-import frc.robot.subsystems.outtakeCoral
 import org.littletonrobotics.junction.Logger
 
 var selectedScorePose: () -> Pose2d = { Reef1Left }
 
 var selectedHeightCommand: Command = l1()
-
-var outtakeCommand: Command = outtakeCoral()
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
