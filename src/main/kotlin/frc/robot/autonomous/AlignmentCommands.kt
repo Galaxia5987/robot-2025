@@ -19,28 +19,28 @@ var isAligning = Trigger { alignCommand().isScheduled }
 
 private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
-        .runOnce{
-                isAligning = Trigger { true }
-                resetProfiledPID(swerveDrive.pose, -swerveDrive.fieldOrientedSpeeds)
-                setGoal(targetPose)
-            }
-                .andThen(
-                    swerveDrive.run {
-                        swerveDrive.limitlessRunVelocity(
-                            getSpeed(swerveDrive.pose).invoke()
-                        )
-                    }
+        .runOnce {
+            isAligning = Trigger { true }
+            resetProfiledPID(swerveDrive.pose, -swerveDrive.fieldOrientedSpeeds)
+            setGoal(targetPose)
+        }
+        .andThen(
+            swerveDrive.run {
+                swerveDrive.limitlessRunVelocity(
+                    getSpeed(swerveDrive.pose).invoke()
                 )
-                .until(endTrigger)
+            }
+        )
+        .until(endTrigger)
         .finallyDo(Runnable { isAligning = Trigger { false } })
 }
 
 fun alignCommand(): Command =
-    swerveDrive.defer{ alignToPose(selectedScorePose.invoke(), atGoal) }
-
+    swerveDrive.defer { alignToPose(selectedScorePose.invoke(), atGoal) }
 
 private fun alignL4Prep(): Command =
-    swerveDrive.defer{ alignToPose(selectedScorePose.invoke(), Trigger{false}) }
+    swerveDrive
+        .defer { alignToPose(selectedScorePose.invoke(), Trigger { false }) }
         .raceWith(raiseElevatorAtDistance(l4()))
 
 fun autoScoreL1(): Command =
@@ -59,9 +59,7 @@ fun autoScoreL3(): Command =
         .andThen(outtakeCoral())
 
 fun autoScoreL4(): Command =
-    alignL4Prep()
-        .andThen(alignCommand())
-        .andThen(outtakeCoralAndDriveBack())
+    alignL4Prep().andThen(alignCommand()).andThen(outtakeCoralAndDriveBack())
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean

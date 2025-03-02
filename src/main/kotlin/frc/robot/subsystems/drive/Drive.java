@@ -478,7 +478,8 @@ public class Drive extends SubsystemBase {
 
     @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredFieldOriented")
     public ChassisSpeeds getFieldOrientedSpeeds() {
-        return ChassisSpeeds.fromRobotRelativeSpeeds(kinematics.toChassisSpeeds(getModuleStates()), getRotation());
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
+                kinematics.toChassisSpeeds(getModuleStates()), getRotation());
     }
 
     /** Returns the position of each module in radians. */

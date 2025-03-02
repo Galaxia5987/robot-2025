@@ -102,18 +102,10 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController
-            .cross()
-            .whileTrue(autoScoreL1())
-        driverController
-            .square()
-            .whileTrue(autoScoreL2())
-        driverController
-            .circle()
-            .whileTrue(autoScoreL3())
-        driverController
-            .triangle()
-            .whileTrue(autoScoreL4())
+        driverController.cross().whileTrue(autoScoreL1())
+        driverController.square().whileTrue(autoScoreL2())
+        driverController.circle().whileTrue(autoScoreL3())
+        driverController.triangle().whileTrue(autoScoreL4())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
