@@ -108,31 +108,38 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().and(heightController.button(12).negate())
+        driverController
+            .cross()
+            .and(heightController.button(12).negate())
             .whileTrue(autoScoreL1())
             .onFalse(moveDefaultPosition())
-        driverController.square().and(heightController.button(12).negate())
+        driverController
+            .square()
+            .and(heightController.button(12).negate())
             .whileTrue(autoScoreL2())
             .onFalse(moveDefaultPosition())
-        driverController.circle().and(heightController.button(12).negate())
+        driverController
+            .circle()
+            .and(heightController.button(12).negate())
             .whileTrue(autoScoreL3())
             .onFalse(moveDefaultPosition())
-        driverController.triangle().and(heightController.button(12).negate())
+        driverController
+            .triangle()
+            .and(heightController.button(12).negate())
             .whileTrue(autoScoreL4())
             .onFalse(moveDefaultPosition())
 
-        driverController.cross().and(heightController.button(12))
-            .onTrue(l1())
-            .onFalse(outtakeCoral())
-        driverController.square().and(heightController.button(12))
-            .onTrue(l2())
-            .onFalse(outtakeCoral())
-        driverController.circle().and(heightController.button(12))
-            .onTrue(l3())
-            .onFalse(outtakeCoral())
-        driverController.triangle().and(heightController.button(12))
+        driverController.cross().and(heightController.button(12)).onTrue(l1())
+        driverController.square().and(heightController.button(12)).onTrue(l2())
+        driverController.circle().and(heightController.button(12)).onTrue(l3())
+        driverController
+            .triangle()
+            .and(heightController.button(12))
             .onTrue(l4())
-            .onFalse(outtakeCoral())
+        driverController
+            .options()
+            .and(heightController.button(12))
+            .onTrue(outtakeCoral())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController

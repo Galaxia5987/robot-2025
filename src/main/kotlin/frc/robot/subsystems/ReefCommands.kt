@@ -63,28 +63,32 @@ private fun visualizeCoralOuttake(): Command =
 
 fun outtakeCoralAndDriveBack(): Command =
     sequence(
-        gripper
+        (gripper
             .outtake()
             .until(gripper.hasCoral.negate())
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
+            ))
+            .withTimeout(0.5),
+        gripper.slowOuttake(true).withTimeout(0.1),
         swerveDrive
             .run { swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) }
             .withTimeout(0.1)
             .alongWith(wrist.max()),
-        moveDefaultPosition()
+        moveDefaultPosition().onlyIf(gripper.hasCoral.negate())
     )
 
 fun outtakeCoral(): Command =
     sequence(
-        gripper
-            .outtake()
-            .until(gripper.hasCoral.negate())
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ),
-        moveDefaultPosition()
+        (gripper
+                .outtake()
+                .until(gripper.hasCoral.negate())
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                ))
+            .withTimeout(0.5),
+        gripper.slowOuttake(true).withTimeout(0.1),
+        moveDefaultPosition().onlyIf(gripper.hasCoral.negate())
     )
 
 // TODO: Add Coral Simulation
@@ -103,7 +107,9 @@ fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
     waitUntil(shouldOpenElevator)
-        .andThen(elevatorCommand.until(elevator.atSetpoint.and(wrist.atSetpoint)))
+        .andThen(
+            elevatorCommand.until(elevator.atSetpoint.and(wrist.atSetpoint))
+        )
         .withName("Reef/raiseElevatorAtDistance")
 
 fun dumbL4(outtakeTrigger: Trigger): Command =
