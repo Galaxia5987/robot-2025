@@ -103,7 +103,7 @@ fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
     waitUntil(shouldOpenElevator)
-        .andThen(elevatorCommand.until(elevator.atSetpoint))
+        .andThen(elevatorCommand.until(elevator.atSetpoint.and(wrist.atSetpoint)))
         .withName("Reef/raiseElevatorAtDistance")
 
 fun dumbL4(outtakeTrigger: Trigger): Command =
