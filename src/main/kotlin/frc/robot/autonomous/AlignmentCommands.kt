@@ -23,13 +23,16 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
         .runOnce {
             isAligning = Trigger { true }
-            resetProfiledPID(swerveDrive.pose, -swerveDrive.fieldOrientedSpeeds)
+            resetProfiledPID(
+                swerveDrive.localEstimatedPose,
+                -swerveDrive.fieldOrientedSpeeds
+            )
             setGoal(targetPose)
         }
         .andThen(
             swerveDrive.run {
                 swerveDrive.limitlessRunVelocity(
-                    getSpeed(swerveDrive.pose).invoke()
+                    getSpeed(swerveDrive.localEstimatedPose).invoke()
                 )
             }
         )
@@ -78,7 +81,7 @@ private val atAlignmentSetpoint = Trigger {
 }
 
 private val isWithinDistance = Trigger {
-    swerveDrive.pose.distanceFromPoint(
+    swerveDrive.localEstimatedPose.distanceFromPoint(
         selectedScorePose.invoke().translation
     ) in ALIGNMENT_ELEVATOR_MIN_DISTANCE..ALIGNMENT_ELEVATOR_MAX_DISTANCE
 }

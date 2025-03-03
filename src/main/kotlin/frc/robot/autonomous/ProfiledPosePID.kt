@@ -49,7 +49,7 @@ val thetaController =
             ROTATIONAL_CONSTRAINTS
         )
         .apply {
-            setTolerance(Units.Degrees.of(2.0).`in`(Units.Radians))
+            setTolerance(Units.Degrees.of(1.0).`in`(Units.Radians))
             enableContinuousInput(-Math.PI, Math.PI)
         }
 

@@ -13,10 +13,7 @@
 
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
@@ -31,6 +28,9 @@ public interface VisionIO {
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public Rotation2d yawToTarget = new Rotation2d(0);
         public int[] tagIds = new int[0];
+        public PoseObservation localEstimatedPose =
+                new PoseObservation(
+                        0.0, new Pose3d(), 0.0, 0, 0.0, PoseObservationType.PHOTONVISION);
     }
 
     /** Represents the angle to a simple target, not used for pose estimation. */
