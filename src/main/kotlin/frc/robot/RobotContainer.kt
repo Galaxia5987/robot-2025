@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.autonomous.B1L
+import frc.robot.autonomous.C6L
+import frc.robot.autonomous.C6L5L
 import frc.robot.autonomous.autoScoreL1
 import frc.robot.autonomous.autoScoreL2
 import frc.robot.autonomous.autoScoreL3
@@ -212,5 +214,7 @@ object RobotContainer {
         autoChooser.setDefaultOption("B1L", B1L())
         autoChooser.addOption("None", Commands.none())
         autoChooser.addOption("B1L", B1L())
+        autoChooser.addOption("C6L", C6L())
+        autoChooser.addOption("C6L5L", C6L5L())
     }
 }
