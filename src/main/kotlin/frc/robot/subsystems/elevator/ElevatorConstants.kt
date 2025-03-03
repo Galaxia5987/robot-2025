@@ -10,7 +10,7 @@ import frc.robot.lib.selectGainsBasedOnMode
 const val VOLTAGE_CONTROL_KG = 0.37
 val MAX_HEIGHT_LIMIT: Distance = Units.Meters.of(0.95)
 val MIN_HEIGHT_LIMIT: Distance = Units.Meters.of(0.01)
-val SETPOINT_TOLERANCE: Distance = Units.Centimeters.of(7.0)
+val SETPOINT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
 val RESET_VOLTAGE: Voltage = Units.Volts.of(-7.0)
 val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(50.0)
 const val GEAR_RATIO = (12.0 / 72.0) * (12.0 / 12.0)
