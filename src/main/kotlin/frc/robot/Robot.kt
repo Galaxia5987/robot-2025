@@ -143,7 +143,7 @@ object Robot : LoggedRobot() {
         )
         Logger.recordOutput(
             "AutoAlignment/Speeds",
-            getSpeed(swerveDrive.pose).invoke()
+            getSpeed(swerveDrive.localEstimatedPose).invoke()
         )
     }
 
