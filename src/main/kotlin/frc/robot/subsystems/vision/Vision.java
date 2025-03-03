@@ -173,7 +173,7 @@ public class Vision extends SubsystemBase {
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
-            if (isObservationValid(inputs[cameraIndex].localEstimatedPose)) {
+            if (isObservationValid(inputs[cameraIndex].localEstimatedPose) &&  !io[cameraIndex].getName().equals(BackOVName)) {
                 double stdDevFactor =
                         Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2)
                                 / inputs[cameraIndex].localEstimatedPose.tagCount();
