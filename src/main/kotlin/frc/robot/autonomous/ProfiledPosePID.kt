@@ -60,6 +60,7 @@ fun updateProfiledPID() {
 }
 
 fun setGoal(desiredPose: Pose2d) {
+    updateProfiledPID()
     xController.setGoal(desiredPose.x)
     yController.setGoal(desiredPose.y)
     thetaController.setGoal(desiredPose.rotation.radians)
