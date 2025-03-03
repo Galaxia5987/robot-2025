@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import frc.robot.ConstantsKt;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -74,7 +75,7 @@ public class VisionIOPhotonVision implements VisionIO {
                 var estimatedPose = localPoseEstimator.update(result);
 
                 // Update PhotonPoseEstimator based on gyro readings
-                localPoseEstimator.addHeadingData(result.getTimestampSeconds() , botRotation.get());
+                localPoseEstimator.addHeadingData(result.getTimestampSeconds() , botRotation.get().plus(ConstantsKt.getIS_RED() ? Rotation2d.k180deg : Rotation2d.kZero));
                 estimatedPose.ifPresent(
                         estimatedRobotPose ->
                                 inputs.localEstimatedPose =
