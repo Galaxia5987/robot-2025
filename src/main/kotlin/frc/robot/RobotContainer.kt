@@ -25,6 +25,7 @@ import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l2algae
 import frc.robot.subsystems.l3algae
+import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -103,9 +104,13 @@ object RobotContainer {
             )
 
         driverController.cross().whileTrue(autoScoreL1())
+            .onFalse(moveDefaultPosition())
         driverController.square().whileTrue(autoScoreL2())
+            .onFalse(moveDefaultPosition())
         driverController.circle().whileTrue(autoScoreL3())
+            .onFalse(moveDefaultPosition())
         driverController.triangle().whileTrue(autoScoreL4())
+            .onFalse(moveDefaultPosition())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
