@@ -65,7 +65,7 @@ fun outtakeCoralAndDriveBack(): Command =
     sequence(
         gripper
             .outtake()
-            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .until(gripper.hasCoral.negate())
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
@@ -80,7 +80,7 @@ fun outtakeCoral(): Command =
     sequence(
         gripper
             .outtake()
-            .withTimeout(CORAL_OUTTAKE_TIMEOUT)
+            .until(gripper.hasCoral.negate())
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ),
