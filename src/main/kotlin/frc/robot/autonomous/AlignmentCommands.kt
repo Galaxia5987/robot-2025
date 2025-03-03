@@ -34,9 +34,11 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
             }
         )
         .until(endTrigger)
-        .andThen(swerveDrive.runOnce{
-            swerveDrive.limitlessRunVelocity(ChassisSpeeds())
-        })
+        .andThen(
+            swerveDrive.runOnce {
+                swerveDrive.limitlessRunVelocity(ChassisSpeeds())
+            }
+        )
         .finallyDo(Runnable { isAligning = Trigger { false } })
 }
 
@@ -47,9 +49,7 @@ private fun alignL4Prep(): Command =
     swerveDrive
         .defer {
             alignToPose(
-                selectedScorePose
-                    .invoke()
-                    .moveBack(Units.Meters.of(0.3)),
+                selectedScorePose.invoke().moveBack(Units.Meters.of(0.3)),
                 Trigger { false }
             )
         }

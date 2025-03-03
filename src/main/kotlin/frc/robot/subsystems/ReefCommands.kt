@@ -64,11 +64,11 @@ private fun visualizeCoralOuttake(): Command =
 fun outtakeCoralAndDriveBack(): Command =
     sequence(
         (gripper
-            .outtake()
-            .until(gripper.hasCoral.negate())
-            .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-            ))
+                .outtake()
+                .until(gripper.hasCoral.negate())
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.1),
         swerveDrive

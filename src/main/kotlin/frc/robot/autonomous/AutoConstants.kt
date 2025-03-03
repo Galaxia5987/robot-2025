@@ -34,8 +34,22 @@ val ReefCenter =
         (ReefFaceLeft.y + ReefFaceRight.y) / 2
     )
 
-val Reef4Left: Pose2d = ReefFaceLeft.plus(Transform2d(-Units.Centimeters.of(4.0), Units.Centimeters.zero(), Rotation2d.kZero))
-val Reef4Right: Pose2d = ReefFaceRight.plus(Transform2d(Units.Centimeters.of(4.0), Units.Centimeters.zero(), Rotation2d.kZero))
+val Reef4Left: Pose2d =
+    ReefFaceLeft.plus(
+        Transform2d(
+            -Units.Centimeters.of(4.0),
+            Units.Centimeters.zero(),
+            Rotation2d.kZero
+        )
+    )
+val Reef4Right: Pose2d =
+    ReefFaceRight.plus(
+        Transform2d(
+            Units.Centimeters.of(4.0),
+            Units.Centimeters.zero(),
+            Rotation2d.kZero
+        )
+    )
 
 val Reef5Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
