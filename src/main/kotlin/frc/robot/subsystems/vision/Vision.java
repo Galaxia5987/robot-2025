@@ -145,7 +145,7 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                boolean rejectPose = isObservationValid(observation);
+                boolean rejectPose = !isObservationValid(observation);
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
