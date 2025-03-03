@@ -119,6 +119,9 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         }
 
     Logger.recordOutput("AutoAlignment/AtGoal", atGoal)
+    Logger.recordOutput("AutoAlignment/XAtSetpoint", xController.atSetpoint())
+    Logger.recordOutput("AutoAlignment/YAtSetpoint", yController.atSetpoint())
+    Logger.recordOutput("AutoAlignment/thetaAtSetpoint", thetaController.atSetpoint())
 
     return { robotRelativeSpeeds }
 }
