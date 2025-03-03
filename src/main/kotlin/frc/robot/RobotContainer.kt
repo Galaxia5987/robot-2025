@@ -23,9 +23,14 @@ import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_C
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.l1
+import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
+import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3algae
+import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
+import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -103,14 +108,31 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        driverController.cross().whileTrue(autoScoreL1())
+        driverController.cross().and(heightController.button(12).negate())
+            .whileTrue(autoScoreL1())
             .onFalse(moveDefaultPosition())
-        driverController.square().whileTrue(autoScoreL2())
+        driverController.square().and(heightController.button(12).negate())
+            .whileTrue(autoScoreL2())
             .onFalse(moveDefaultPosition())
-        driverController.circle().whileTrue(autoScoreL3())
+        driverController.circle().and(heightController.button(12).negate())
+            .whileTrue(autoScoreL3())
             .onFalse(moveDefaultPosition())
-        driverController.triangle().whileTrue(autoScoreL4())
+        driverController.triangle().and(heightController.button(12).negate())
+            .whileTrue(autoScoreL4())
             .onFalse(moveDefaultPosition())
+
+        driverController.cross().and(heightController.button(12))
+            .onTrue(l1())
+            .onFalse(outtakeCoral())
+        driverController.square().and(heightController.button(12))
+            .onTrue(l2())
+            .onFalse(outtakeCoral())
+        driverController.circle().and(heightController.button(12))
+            .onTrue(l3())
+            .onFalse(outtakeCoral())
+        driverController.triangle().and(heightController.button(12))
+            .onTrue(l4())
+            .onFalse(outtakeCoral())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
