@@ -40,7 +40,7 @@ class WristIOSim : WristIO {
     override fun resetAbsoluteEncoder(angle: Angle) {}
 
     override fun updateInputs() {
-        motor.update(Timer.getFPGATimestamp()*500)
+        motor.update(Timer.getFPGATimestamp() * 500)
         inputs.angle.mut_replace(motor.position, Units.Rotations)
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
         inputs.velocity.mut_replace(motor.velocity)

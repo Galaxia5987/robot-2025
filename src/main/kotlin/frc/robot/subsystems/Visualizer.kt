@@ -202,7 +202,6 @@ class Visualizer {
         val coralRollersPoseUp =
             getGripperRollerPose(CORAL_ROLLER_UP_C2C[0], CORAL_ROLLER_UP_C2C[1])
 
-
         val climberPose =
             getPose3d(
                 translation = INITIAL_CLIMBER_TRANSLATION,
