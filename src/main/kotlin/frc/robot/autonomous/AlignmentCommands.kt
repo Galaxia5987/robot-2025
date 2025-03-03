@@ -80,7 +80,7 @@ private val atAlignmentSetpoint = Trigger {
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
         selectedScorePose.invoke().translation
-    ) <= ALIGNMENT_ELEVATOR_DISTANCE
+    ) in ALIGNMENT_ELEVATOR_MIN_DISTANCE..ALIGNMENT_ELEVATOR_MAX_DISTANCE
 }
 
 val shouldOpenElevator = Trigger {
