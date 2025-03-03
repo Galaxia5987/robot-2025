@@ -41,16 +41,9 @@ private fun `6LS`(): Command =
     AutoBuilder.followPath(PathPlannerPath.fromPathFile("6LS"))
         .andThen(
             Commands.run({
-                swerveDrive.runVelocity(
-                    ChassisSpeeds(0.8, 0.0, 0.0)
-                )
+                swerveDrive.runVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
             })
         )
         .raceWith(feeder(Trigger { true }))
 
-fun C6L5L(): Command =
-    Commands.sequence(
-        C6L(),
-        `6LS`(),
-        S5L()
-    )
+fun C6L5L(): Command = Commands.sequence(C6L(), `6LS`(), S5L())
