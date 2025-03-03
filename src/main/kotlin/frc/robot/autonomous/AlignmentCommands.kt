@@ -41,7 +41,14 @@ fun alignCommand(): Command =
 
 private fun alignL4Prep(): Command =
     swerveDrive
-        .defer { alignToPose(selectedScorePose.invoke().moveBack(Units.Centimeters.of(-50.0)), Trigger { false }) }
+        .defer {
+            alignToPose(
+                selectedScorePose
+                    .invoke()
+                    .moveBack(Units.Centimeters.of(-50.0)),
+                Trigger { false }
+            )
+        }
         .raceWith(raiseElevatorAtDistance(l4()))
 
 fun autoScoreL1(): Command =
