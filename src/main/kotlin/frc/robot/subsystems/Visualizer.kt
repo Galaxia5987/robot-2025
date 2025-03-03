@@ -32,7 +32,7 @@ private val INITIAL_Elevator_2_TRANSLATION =
     getTranslation3d(x = Meters.of(0.11250), z = Meters.of(0.20545040))
 
 private val INITIAL_CLIMBER_TRANSLATION =
-    getTranslation3d(x = Meters.of(-0.24), z = Meters.of(0.285))
+    getTranslation3d(x = Meters.of(-0.3), z = Meters.of(0.354))
 private val kWheelRadius = Meters.of(0.0508)
 private val CORAL_ROLLER_UP_C2C: Array<Double> =
     arrayOf(0.201364, 3.3) // arrayOf(C2C Distance, Angle (in rad))
