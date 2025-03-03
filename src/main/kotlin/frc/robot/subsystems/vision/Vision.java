@@ -88,7 +88,7 @@ public class Vision extends SubsystemBase {
         return index;
     }
 
-    private boolean isObservationValid(VisionIO.PoseObservation observation) {
+    private boolean isObservationNotValid(VisionIO.PoseObservation observation) {
         // Check whether to reject pose
         return observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
@@ -137,7 +137,7 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                boolean rejectPose = isObservationValid(observation);
+                boolean rejectPose = isObservationNotValid(observation);
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -173,7 +173,7 @@ public class Vision extends SubsystemBase {
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
-            if (isObservationValid(inputs[cameraIndex].localEstimatedPose) &&  !io[cameraIndex].getName().equals(BackOVName)) {
+            if (!isObservationNotValid(inputs[cameraIndex].localEstimatedPose) && !io[cameraIndex].getName().equals(BackOVName)) {
                 double stdDevFactor =
                         Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2)
                                 / inputs[cameraIndex].localEstimatedPose.tagCount();
