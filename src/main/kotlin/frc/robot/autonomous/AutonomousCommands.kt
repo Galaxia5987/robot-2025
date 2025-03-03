@@ -2,11 +2,13 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.feeder
+import frc.robot.swerveDrive
 
 fun B1L(): Command =
     Commands.sequence(
@@ -35,10 +37,20 @@ private fun S5L(): Command =
         autoScoreL4()
     )
 
+private fun `6LS`(): Command =
+    AutoBuilder.followPath(PathPlannerPath.fromPathFile("6LS"))
+        .andThen(
+            Commands.run({
+                swerveDrive.runVelocity(
+                    ChassisSpeeds(0.8, 0.0, 0.0)
+                )
+            })
+        )
+        .raceWith(feeder(Trigger { true }))
+
 fun C6L5L(): Command =
     Commands.sequence(
         C6L(),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("6LS")),
-        feeder(Trigger { true }),
+        `6LS`(),
         S5L()
     )
