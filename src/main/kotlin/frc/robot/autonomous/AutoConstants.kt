@@ -6,9 +6,7 @@ import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
-import frc.robot.lib.Gains
 import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getTranslation2d
