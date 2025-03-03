@@ -15,20 +15,27 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.ConstantsKt;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
+    protected final PhotonPoseEstimator localPoseEstimator;
+    protected final Supplier<Rotation2d> botRotation;
 
     /**
      * Creates a new VisionIOPhotonVision.
@@ -36,9 +43,16 @@ public class VisionIOPhotonVision implements VisionIO {
      * @param name The configured name of the camera.
      * @param robotToCamera The 3D position of the camera relative to the robot.
      */
-    public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
+    public VisionIOPhotonVision(
+            String name, Transform3d robotToCamera, Supplier<Rotation2d> botRotation) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
+        this.botRotation = botRotation;
+        localPoseEstimator =
+                new PhotonPoseEstimator(
+                        AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded),
+                        PhotonPoseEstimator.PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                        robotToCamera);
     }
 
     @Override
@@ -56,6 +70,38 @@ public class VisionIOPhotonVision implements VisionIO {
         for (var result : camera.getAllUnreadResults()) {
             // Update latest target observation
             if (result.hasTargets()) {
+                var estimatedPose = localPoseEstimator.update(result);
+
+                // Update PhotonPoseEstimator based on gyro readings
+                localPoseEstimator.addHeadingData(
+                        result.getTimestampSeconds(),
+                        botRotation
+                                .get()
+                                .plus(
+                                        ConstantsKt.getIS_RED()
+                                                ? Rotation2d.k180deg
+                                                : Rotation2d.kZero));
+                estimatedPose.ifPresent(
+                        estimatedRobotPose ->
+                                inputs.localEstimatedPose =
+                                        new PoseObservation(
+                                                estimatedRobotPose.timestampSeconds,
+                                                estimatedRobotPose.estimatedPose,
+                                                estimatedRobotPose.targetsUsed.stream()
+                                                        .mapToDouble(target -> target.poseAmbiguity)
+                                                        .average()
+                                                        .orElse(0.0),
+                                                estimatedRobotPose.targetsUsed.size(),
+                                                estimatedRobotPose.targetsUsed.stream()
+                                                        .mapToDouble(
+                                                                target ->
+                                                                        target.bestCameraToTarget
+                                                                                .getTranslation()
+                                                                                .getNorm())
+                                                        .average()
+                                                        .orElse(0.0),
+                                                PoseObservationType.PHOTONVISION));
+
                 inputs.latestTargetObservation =
                         new TargetObservation(
                                 Rotation2d.fromDegrees(result.getBestTarget().getYaw()),

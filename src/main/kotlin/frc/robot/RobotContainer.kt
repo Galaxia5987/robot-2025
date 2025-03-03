@@ -1,6 +1,8 @@
 package frc.robot
 
+import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -10,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.autonomous.dumbAuto
 import frc.robot.autonomous.isLeft
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
@@ -176,7 +177,8 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = dumbAuto()
+    fun getAutonomousCommand(): Command =
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L"))
 
     private fun registerAutoCommands() {
         fun register(name: String, command: Command) =

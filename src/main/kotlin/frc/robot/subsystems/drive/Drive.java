@@ -153,7 +153,10 @@ public class Drive extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition()
             };
-    private final SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator globalPoseEstimator =
+            new SwerveDrivePoseEstimator(
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+    private final SwerveDrivePoseEstimator localPoseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
@@ -308,7 +311,10 @@ public class Drive extends SubsystemBase {
             }
 
             // Apply update
-            poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            globalPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
+            localPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -476,7 +482,13 @@ public class Drive extends SubsystemBase {
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+        return globalPoseEstimator.getEstimatedPosition();
+    }
+
+    /** Returns the local estimated pose. */
+    @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
+    public Pose2d getLocalEstimatedPose() {
+        return localPoseEstimator.getEstimatedPosition();
     }
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
@@ -484,6 +496,14 @@ public class Drive extends SubsystemBase {
         return gyroInputs.connected
                 ? gyroInputs.yawPosition.plus(gyroOffset)
                 : getPose().getRotation();
+    }
+
+    public Rotation2d[] getGyroMeasurements() {
+        return gyroInputs.odometryYawPositions;
+    }
+
+    public double[] getGyroTimestamps() {
+        return gyroInputs.odometryYawTimestamps;
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -510,7 +530,8 @@ public class Drive extends SubsystemBase {
         if (frc.robot.ConstantsKt.getUSE_MAPLE_SIM()) {
             resetSimulationPoseCallBack.accept(pose);
         }
-        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
     public void resetGyro(Rotation2d offset) {
@@ -528,7 +549,15 @@ public class Drive extends SubsystemBase {
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        poseEstimator.addVisionMeasurement(
+        globalPoseEstimator.addVisionMeasurement(
+                visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+    public void addLocalVisionMeasurement(
+            Pose2d visionRobotPoseMeters,
+            double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+        localPoseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 
