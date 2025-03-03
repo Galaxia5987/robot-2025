@@ -312,8 +312,8 @@ public class Drive extends SubsystemBase {
 
             // Apply update
             globalPoseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-            localPoseEstimator.updateWithTime(
-                    sampleTimestamps[i], rawGyroRotation, modulePositions);
+//            localPoseEstimator.updateWithTime(
+//                    sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
