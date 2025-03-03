@@ -37,10 +37,10 @@ private val ROTATIONAL_CONSTRAINTS =
 
 val xController =
     ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS)
-        .apply { setTolerance(Units.Meters.of(0.05).`in`(Units.Meters)) }
+        .apply { setTolerance(Units.Meters.of(0.02).`in`(Units.Meters)) }
 val yController =
     ProfiledPIDController(yKP.get(), yKI.get(), yKD.get(), LINEAR_CONSTRAINTS)
-        .apply { setTolerance(Units.Meters.of(0.05).`in`(Units.Meters)) }
+        .apply { setTolerance(Units.Meters.of(0.02).`in`(Units.Meters)) }
 val thetaController =
     ProfiledPIDController(
             thetaKP.get(),
@@ -86,11 +86,11 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         ChassisSpeeds(
             MathUtil.applyDeadband(
                 xController.calculate(botPose.x),
-                Units.Meters.of(0.05).`in`(Units.Meters)
+                Units.Meters.of(0.02).`in`(Units.Meters)
             ),
             MathUtil.applyDeadband(
                 yController.calculate(botPose.y),
-                Units.Meters.of(0.05).`in`(Units.Meters)
+                Units.Meters.of(0.02).`in`(Units.Meters)
             ),
             MathUtil.applyDeadband(
                 thetaController.calculate(botPose.rotation.radians),
