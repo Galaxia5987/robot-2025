@@ -34,8 +34,7 @@ public class VisionIOPhotonVision implements VisionIO {
     protected final PhotonCamera camera;
     protected final Transform3d robotToCamera;
     protected final PhotonPoseEstimator localPoseEstimator;
-    protected final Supplier<Rotation2d[]> gyroReadings;
-    protected final Supplier<double[]> gyroReadingsTimestamps;
+    protected final Supplier<Rotation2d> botRotation;
 
     /**
      * Creates a new VisionIOPhotonVision.
@@ -46,12 +45,10 @@ public class VisionIOPhotonVision implements VisionIO {
     public VisionIOPhotonVision(
             String name,
             Transform3d robotToCamera,
-            Supplier<Rotation2d[]> gyroReadings,
-            Supplier<double[]> gyroReadingsTimestamps) {
+            Supplier<Rotation2d> botRotation) {
         camera = new PhotonCamera(name);
         this.robotToCamera = robotToCamera;
-        this.gyroReadings = gyroReadings;
-        this.gyroReadingsTimestamps = gyroReadingsTimestamps;
+        this.botRotation = botRotation;
         localPoseEstimator =
                 new PhotonPoseEstimator(
                         AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded),
@@ -75,6 +72,9 @@ public class VisionIOPhotonVision implements VisionIO {
             // Update latest target observation
             if (result.hasTargets()) {
                 var estimatedPose = localPoseEstimator.update(result);
+
+                // Update PhotonPoseEstimator based on gyro readings
+                localPoseEstimator.addHeadingData(result.getTimestampSeconds() , botRotation.get());
                 estimatedPose.ifPresent(
                         estimatedRobotPose ->
                                 inputs.localEstimatedPose =
@@ -197,14 +197,6 @@ public class VisionIOPhotonVision implements VisionIO {
         int i = 0;
         for (int id : tagIds) {
             inputs.tagIds[i++] = id;
-        }
-
-        // Update PhotonPoseEstimator based on gyro readings
-        //        var gyroReadings = InitializerKt.getSwerveDrive().getGyroMeasurements();
-        //        var gyroTimeStamps = InitializerKt.getSwerveDrive().getGyroTimestamps();
-        for (int j = 0; j < gyroReadings.get().length; j++) {
-            localPoseEstimator.addHeadingData(
-                    gyroReadingsTimestamps.get()[j], gyroReadings.get()[j]);
         }
     }
 }
