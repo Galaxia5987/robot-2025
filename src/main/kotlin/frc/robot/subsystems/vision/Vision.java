@@ -104,7 +104,7 @@ public class Vision extends SubsystemBase {
                 || observation.pose().getY() > aprilTagLayout.getFieldWidth());
     }
 
-    private Pair<Double, Double> calculateStddev(double avgTagDistance, int tagCount){
+    private Pair<Double, Double> calculateStddev(double avgTagDistance, int tagCount) {
         double stdFactor = Math.pow(avgTagDistance, 2.0) / tagCount;
         double linearStddev = linearStdDevBaseline * stdFactor;
         double angularStddev = angularStdDevBaseline * stdFactor;
@@ -161,7 +161,8 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Calculate standard deviations
-                var stddevs = calculateStddev(observation.averageTagDistance(), observation.tagCount());
+                var stddevs =
+                        calculateStddev(observation.averageTagDistance(), observation.tagCount());
                 double linearStdDev = stddevs.getFirst();
                 double angularStdDev = stddevs.getSecond();
                 if (observation.type() == VisionIO.PoseObservationType.MEGATAG_2) {
@@ -185,8 +186,7 @@ public class Vision extends SubsystemBase {
                 var stddevs =
                         calculateStddev(
                                 inputs[cameraIndex].localEstimatedPose.averageTagDistance(),
-                                inputs[cameraIndex].localEstimatedPose.tagCount()
-                        );
+                                inputs[cameraIndex].localEstimatedPose.tagCount());
                 double linearStdDev = stddevs.getFirst();
                 double angularStdDev = stddevs.getSecond();
                 localConsumer.accept(
