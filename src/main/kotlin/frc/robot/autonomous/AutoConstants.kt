@@ -2,6 +2,7 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
@@ -23,9 +24,6 @@ val REEF_RADIUS: Distance = Units.Meters.of(0.8317)
 val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 
 // If measured on the red side should flip.
-val Reef4Left: Pose2d = Pose2d(14.36, 3.84, Rotation2d.k180deg).flip()
-val Reef4Right: Pose2d = Pose2d(14.36, 4.19, Rotation2d.k180deg).flip()
-
 // Two field measurements for finding the reef center. The robot should touch the reef.
 val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
 val ReefFaceRight: Pose2d = Pose2d(14.32, 4.19, Rotation2d.k180deg).flip()
@@ -37,6 +35,9 @@ val ReefCenter =
             ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
         (ReefFaceLeft.y + ReefFaceRight.y) / 2
     )
+
+val Reef4Left: Pose2d = ReefFaceLeft.plus(Transform2d(-Units.Centimeters.of(4.0), Units.Centimeters.zero(), Rotation2d.kZero))
+val Reef4Right: Pose2d = ReefFaceRight.plus(Transform2d(Units.Centimeters.of(4.0), Units.Centimeters.zero(), Rotation2d.kZero))
 
 val Reef5Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
