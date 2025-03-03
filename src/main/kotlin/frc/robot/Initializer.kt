@@ -92,11 +92,7 @@ private val visionIOs =
     when (CURRENT_MODE) {
         Mode.REAL ->
             VisionConstants.OVNameToTransform.map {
-                VisionIOPhotonVision(
-                    it.key,
-                    it.value,
-                    { swerveDrive.rotation }
-                )
+                VisionIOPhotonVision(it.key, it.value, { swerveDrive.rotation })
             }
         Mode.SIM ->
             VisionConstants.OVNameToTransform.map {
