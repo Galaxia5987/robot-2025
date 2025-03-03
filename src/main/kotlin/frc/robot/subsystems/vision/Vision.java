@@ -16,6 +16,7 @@ package frc.robot.subsystems.vision;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
@@ -103,6 +104,13 @@ public class Vision extends SubsystemBase {
                 || observation.pose().getY() > aprilTagLayout.getFieldWidth());
     }
 
+    private Pair<Double, Double> calculateStddev(double avgTagDistance, int tagCount){
+        double stdFactor = Math.pow(avgTagDistance, 2.0) / tagCount;
+        double linearStddev = linearStdDevBaseline * stdFactor;
+        double angularStddev = angularStdDevBaseline * stdFactor;
+        return new Pair(linearStddev, angularStddev);
+    }
+
     @Override
     public void periodic() {
         for (int i = 0; i < io.length; i++) {
@@ -153,10 +161,9 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Calculate standard deviations
-                double stdDevFactor =
-                        Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
-                double linearStdDev = linearStdDevBaseline * stdDevFactor;
-                double angularStdDev = angularStdDevBaseline * stdDevFactor;
+                var stddevs = calculateStddev(observation.averageTagDistance(), observation.tagCount());
+                double linearStdDev = stddevs.getFirst();
+                double angularStdDev = stddevs.getSecond();
                 if (observation.type() == VisionIO.PoseObservationType.MEGATAG_2) {
                     linearStdDev *= linearStdDevMegatag2Factor;
                     angularStdDev *= angularStdDevMegatag2Factor;
@@ -175,11 +182,13 @@ public class Vision extends SubsystemBase {
 
             if (isObservationValid(inputs[cameraIndex].localEstimatedPose)
                     && !io[cameraIndex].getName().equals(BackOVName)) {
-                double stdDevFactor =
-                        Math.pow(inputs[cameraIndex].localEstimatedPose.averageTagDistance(), 2)
-                                / inputs[cameraIndex].localEstimatedPose.tagCount();
-                double linearStdDev = linearStdDevBaseline * stdDevFactor;
-                double angularStdDev = angularStdDevBaseline * stdDevFactor;
+                var stddevs =
+                        calculateStddev(
+                                inputs[cameraIndex].localEstimatedPose.averageTagDistance(),
+                                inputs[cameraIndex].localEstimatedPose.tagCount()
+                        );
+                double linearStdDev = stddevs.getFirst();
+                double angularStdDev = stddevs.getSecond();
                 localConsumer.accept(
                         inputs[cameraIndex].localEstimatedPose.pose().toPose2d(),
                         inputs[cameraIndex].localEstimatedPose.timestamp(),
