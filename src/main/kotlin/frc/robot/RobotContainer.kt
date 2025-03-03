@@ -1,15 +1,17 @@
 package frc.robot
 
-import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.autonomous.B1L
 import frc.robot.autonomous.autoScoreL1
 import frc.robot.autonomous.autoScoreL2
 import frc.robot.autonomous.autoScoreL3
@@ -61,12 +63,16 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
 
+    val autoChooser = AutoBuilder.buildAutoChooser()
+
     init {
 
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
         visualizer = Visualizer()
+
+        SmartDashboard.putData(autoChooser)
 
         if (CURRENT_MODE == Mode.SIM && USE_MAPLE_SIM)
             SimulatedArena.getInstance().resetFieldForAuto()
@@ -200,10 +206,11 @@ object RobotContainer {
         }
     }
 
-    fun getAutonomousCommand(): Command = Commands.none()
+    fun getAutonomousCommand(): Command = autoChooser.selected
 
     private fun registerAutoCommands() {
-        fun register(name: String, command: Command) =
-            NamedCommands.registerCommand(name, command)
+        autoChooser.setDefaultOption("B1L", B1L())
+        autoChooser.addOption("None", Commands.none())
+        autoChooser.addOption("B1L", B1L())
     }
 }
