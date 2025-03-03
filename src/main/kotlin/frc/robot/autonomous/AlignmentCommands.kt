@@ -45,7 +45,7 @@ private fun alignL4Prep(): Command =
             alignToPose(
                 selectedScorePose
                     .invoke()
-                    .moveBack(Units.Centimeters.of(-50.0)),
+                    .moveBack(Units.Meters.of(0.3)),
                 Trigger { false }
             )
         }
@@ -76,7 +76,7 @@ private val atAlignmentSetpoint = Trigger {
 private val isWithinDistance = Trigger {
     swerveDrive.pose.distanceFromPoint(
         selectedScorePose.invoke().translation
-    ) <= Units.Meters.of(0.4)
+    ) <= ALIGNMENT_ELEVATOR_DISTANCE
 }
 
 val shouldOpenElevator = Trigger {
