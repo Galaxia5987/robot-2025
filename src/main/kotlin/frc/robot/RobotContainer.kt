@@ -162,8 +162,14 @@ object RobotContainer {
 
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
+        heightController.button(2)
+            .onTrue(l2algae(heightController.button(2).negate()))
+        heightController.button(3)
+            .onTrue(l3algae(heightController.button(3).negate()))
         operatorController
             .start()
+            .onTrue(feeder(operatorController.start().negate()))
+        heightController.button(1)
             .onTrue(feeder(operatorController.start().negate()))
         operatorController
             .back()
