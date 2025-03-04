@@ -94,10 +94,10 @@ fun outtakeCoral(): Command =
 
 // TODO: Add Coral Simulation
 
-fun moveDefaultPosition(shouldWait: Boolean = true): Command =
+fun moveDefaultPosition(): Command =
     sequence(
             elevator.feeder(),
-            if (shouldWait) waitUntil(elevator.atSetpoint) else Commands.none(),
+            waitUntil(elevator.atSetpoint),
             wrist.feeder()
         )
         .withName("Reef/Move default position")

@@ -218,7 +218,7 @@ object RobotContainer {
         val namedCommands =
             mapOf(
                 "MoveL4" to l4(),
-                "MoveFeeder" to moveDefaultPosition(false),
+                "MoveFeeder" to moveDefaultPosition(),
             )
 
         NamedCommands.registerCommands(namedCommands)
