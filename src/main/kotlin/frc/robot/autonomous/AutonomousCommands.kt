@@ -20,6 +20,16 @@ fun B1L(): Command =
         autoScoreL4()
     )
 
+fun B1R(): Command =
+    Commands.sequence(
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("B1R").startingHolonomicPose.get()
+        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
+        Commands.runOnce({ selectedScorePose = { Reef1Right.flipIfNeeded() } }),
+        autoScoreL4()
+    )
+
 fun C6L(): Command =
     Commands.sequence(
         AutoBuilder.resetOdom(
