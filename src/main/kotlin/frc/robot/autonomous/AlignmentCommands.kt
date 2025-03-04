@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.extender
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
 import frc.robot.subsystems.l1
@@ -34,7 +35,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.limitlessRunVelocity(
                     getSpeed(swerveDrive.localEstimatedPose).invoke()
                 )
-            }
+            }.alongWith(extender.retractTime(0.3))
         )
         .until(endTrigger)
         .andThen(
