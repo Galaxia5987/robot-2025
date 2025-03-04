@@ -8,7 +8,6 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.LEDPattern
 import edu.wpi.first.wpilibj.util.Color
-import frc.robot.IS_RED
 
 val SCROLLING_SPEED_RAINBOW: LinearVelocity = Units.MetersPerSecond.of(0.3)
 val SCROLLING_SPEED_TEAM_PATTERN: LinearVelocity = Units.MetersPerSecond.of(0.2)
@@ -30,31 +29,20 @@ val CLIMBER_PATTERN_BRIGHTNESS: Dimensionless =
 val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val GRADIENT_PINK: Color = Color(255, 0, 148)
+var blueTeamPattern =
+    LEDPattern.gradient(
+        LEDPattern.GradientType.kDiscontinuous,
+        Color.kAqua,
+        Color.kBlue
+    )
+        .atBrightness(BLUE_BRIGHTNESS)
+        .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)
 
-val teamPattern: LEDPattern =
-    when (IS_RED) {
-        false ->
-            LEDPattern.gradient(
-                    LEDPattern.GradientType.kDiscontinuous,
-                    Color.kAqua,
-                    Color.kBlue
-                )
-                .atBrightness(BLUE_BRIGHTNESS)
-                .scrollAtAbsoluteSpeed(
-                    SCROLLING_SPEED_TEAM_PATTERN,
-                    LED_SPACING
-                )
-        true ->
-            LEDPattern.gradient(
-                    LEDPattern.GradientType.kDiscontinuous,
-                    Color.kRed,
-                    GRADIENT_PINK
-                )
-                .atBrightness(RED_BRIGHTNESS)
-                .scrollAtAbsoluteSpeed(
-                    SCROLLING_SPEED_TEAM_PATTERN,
-                    LED_SPACING
-                )
-    }
-
-val OFF: LEDPattern = LEDPattern.kOff
+var redTeamPattern =
+    LEDPattern.gradient(
+        LEDPattern.GradientType.kDiscontinuous,
+        Color.kRed,
+        GRADIENT_PINK
+    )
+        .atBrightness(RED_BRIGHTNESS)
+        .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)

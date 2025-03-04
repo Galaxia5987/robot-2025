@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -21,10 +22,6 @@ class LEDs : SubsystemBase() {
 
     init {
         ledStrip.start()
-        defaultCommand =
-            setPattern(all = teamPattern).until {
-                ledBuffer.getLED(1) != Color.kBlack
-            }
     }
 
     fun setPattern(
@@ -87,8 +84,15 @@ class LEDs : SubsystemBase() {
                 )
             )
 
-    private var defaultPattern =
+    var blueDefaultPattern =
         climbPattern
             .or(gripper.hasCoral)
-            .onFalse((setPattern(all = teamPattern)))
+            .or { IS_RED }
+            .onFalse(setPattern(all = blueTeamPattern))
+
+    var redDefaultPattern =
+        climbPattern
+            .or(gripper.hasCoral)
+            .or { !IS_RED }
+            .onFalse(setPattern(all = redTeamPattern))
 }
