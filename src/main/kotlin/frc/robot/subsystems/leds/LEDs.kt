@@ -51,7 +51,7 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private var climbPattern =
+    private val climbPattern =
         Trigger {
                 DriverStation.getMatchTime() < 20 &&
                     DriverStation.getMatchTime() > -1
@@ -69,7 +69,7 @@ class LEDs : SubsystemBase() {
                 )
             )
 
-    private var gripperPattern =
+    private val gripperPattern =
         gripper.hasCoral
             .and(climbPattern.negate())
             .onTrue(
@@ -81,13 +81,13 @@ class LEDs : SubsystemBase() {
                 )
             )
 
-    var blueDefaultPattern =
+    val blueDefaultPattern =
         climbPattern
             .or(gripper.hasCoral)
             .or { IS_RED }
             .onFalse(setPattern(all = blueTeamPattern))
 
-    var redDefaultPattern =
+    val redDefaultPattern =
         climbPattern
             .or(gripper.hasCoral)
             .or { !IS_RED }
