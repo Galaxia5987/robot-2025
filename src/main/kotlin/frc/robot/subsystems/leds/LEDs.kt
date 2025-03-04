@@ -1,10 +1,6 @@
 package frc.robot.subsystems.leds
 
-import edu.wpi.first.wpilibj.AddressableLED
-import edu.wpi.first.wpilibj.AddressableLEDBuffer
-import edu.wpi.first.wpilibj.AddressableLEDBufferView
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.LEDPattern
+import edu.wpi.first.wpilibj.*
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -56,7 +52,7 @@ class LEDs : SubsystemBase() {
 
     private var climbPattern =
         Trigger {
-                DriverStation.getMatchTime() < 5 &&
+            DriverStation.getMatchTime() < 30 &&
                     DriverStation.getMatchTime() > -1
             }
             .and(Trigger { DriverStation.isTeleop() })
