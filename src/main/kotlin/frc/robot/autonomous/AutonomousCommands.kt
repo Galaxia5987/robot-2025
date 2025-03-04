@@ -24,9 +24,6 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
 
 fun B1L(): Command =
     Commands.sequence(
-        AutoBuilder.resetOdom(
-            PathPlannerPath.fromPathFile("B1L").startingHolonomicPose.get()
-        ),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
         Commands.runOnce({ selectedScorePose = { Reef1Left.flipIfNeeded() } }),
         alignScoreL4()
@@ -34,9 +31,6 @@ fun B1L(): Command =
 
 fun B1R(): Command =
     Commands.sequence(
-        AutoBuilder.resetOdom(
-            PathPlannerPath.fromPathFile("B1R").startingHolonomicPose.get()
-        ),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
         Commands.runOnce({ selectedScorePose = { Reef1Right.flipIfNeeded() } }),
         alignScoreL4()
@@ -44,9 +38,6 @@ fun B1R(): Command =
 
 fun C6L(): Command =
     Commands.sequence(
-        AutoBuilder.resetOdom(
-            PathPlannerPath.fromPathFile("C6L").startingHolonomicPose.get()
-        ),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
         Commands.runOnce({ selectedScorePose = { Reef6Left.flipIfNeeded() } }),
         autoScoreL4()
