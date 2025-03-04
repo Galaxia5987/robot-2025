@@ -69,7 +69,7 @@ fun setGoal(desiredPose: Pose2d) {
 val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
-        .and(thetaController::atSetpoint)
+        .and(thetaController::atGoal)
         .debounce(0.4)
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
