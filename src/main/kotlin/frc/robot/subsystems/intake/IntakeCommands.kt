@@ -5,12 +5,12 @@ import frc.robot.extender
 import frc.robot.roller
 import java.util.function.BooleanSupplier
 
-fun intakeAlgae(): Command = extender.extend().alongWith(roller.intake())
+fun intakeAlgae(): Command =
+    extender.extend().alongWith(roller.intake()).withName("Intake/Intake Algae")
 
 fun outtakeAlgae(retractTrigger: BooleanSupplier): Command =
-    roller.outtake().until(retractTrigger).andThen(retractIntake())
-
-fun farOuttakeAlgae(retractTrigger: BooleanSupplier): Command =
-    roller.farOuttake().until(retractTrigger).andThen(retractIntake())
-
-fun retractIntake(): Command = extender.retract()
+    roller
+        .outtake()
+        .until(retractTrigger)
+        .andThen(extender.retract())
+        .withName("Intake/Outtake Algae")

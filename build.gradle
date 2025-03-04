@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "2.0.0"
-    id "edu.wpi.first.GradleRIO" version "2025.2.1"
+    id "edu.wpi.first.GradleRIO" version "2025.3.1"
     id "com.diffplug.spotless" version "6.12.0"
     id "com.peterabeles.gversion" version "1.10"
     id 'com.google.devtools.ksp' version '2.0.0-1.0.21'
@@ -53,14 +53,6 @@ deploy {
                     jvmArgs.add("-XX:GCTimeRatio=5")
                     jvmArgs.add("-XX:+UseSerialGC")
                     jvmArgs.add("-XX:MaxGCPauseMillis=50")
-
-                    // Enable VisualVM connection
-                    jvmArgs.add("-Dcom.sun.management.jmxremote=true")
-                    jvmArgs.add("-Dcom.sun.management.jmxremote.port=1198")
-                    jvmArgs.add("-Dcom.sun.management.jmxremote.local.only=false")
-                    jvmArgs.add("-Dcom.sun.management.jmxremote.ssl=false")
-                    jvmArgs.add("-Dcom.sun.management.jmxremote.authenticate=false")
-                    jvmArgs.add("-Djava.rmi.server.hostname=10.59.87.2") // Replace TE.AM with team number
 
                     // The options below may improve performance, but should only be enabled on the RIO 2
                     //
@@ -121,6 +113,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     implementation 'com.opencsv:opencsv:5.8'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0"
 
     implementation project(':annotation')
     ksp project(':annotation')

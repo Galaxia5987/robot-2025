@@ -30,7 +30,10 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -39,6 +42,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Mass;
+import edu.wpi.first.units.measure.MomentOfInertia;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -48,12 +53,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
+import frc.robot.InitializerKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
+import frc.robot.lib.math.GalacticSlewRateLimiter;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import org.ironmaple.simulation.drivesims.COTS;
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -81,9 +91,9 @@ public class Drive extends SubsystemBase {
                                     TunerConstants.BackRight.LocationY)));
 
     // PathPlanner config constants
-    private static final double ROBOT_MASS_KG = 74.088;
-    private static final double ROBOT_MOI = 6.883;
-    private static final double WHEEL_COF = 1.2;
+    private static final Mass ROBOT_MASS_KG = Kilograms.of(52.757);
+    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(5.095);
+    private static final double WHEEL_COF = 1.542;
     private static final RobotConfig PP_CONFIG =
             new RobotConfig(
                     ROBOT_MASS_KG,
@@ -100,7 +110,7 @@ public class Drive extends SubsystemBase {
 
     public static final DriveTrainSimulationConfig mapleSimConfig =
             DriveTrainSimulationConfig.Default()
-                    .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
+                    .withRobotMass(ROBOT_MASS_KG)
                     .withCustomModuleTranslations(getModuleTranslations())
                     .withGyro(COTS.ofNav2X())
                     .withSwerveModule(
@@ -122,6 +132,8 @@ public class Drive extends SubsystemBase {
     public Angle[] SwerveDriveAngle =
             new Angle[] {Radians.zero(), Radians.zero(), Radians.zero(), Radians.zero()};
 
+    private Consumer<Pose2d> resetSimulationPoseCallBack = null;
+
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
     private final SysIdRoutine sysId;
@@ -129,6 +141,8 @@ public class Drive extends SubsystemBase {
     private final Alert gyroDisconnectedAlert =
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
     @AutoLogOutput private Rotation2d desiredHeading;
+
+    private Rotation2d gyroOffset = Rotation2d.kZero;
 
     public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -139,12 +153,21 @@ public class Drive extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition()
             };
-    private SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator globalPoseEstimator =
+            new SwerveDrivePoseEstimator(
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+    private final SwerveDrivePoseEstimator localPoseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    public Drive(GyroIO gyroIO, ModuleIO[] moduleIOS) {
-        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3]);
+    private static final GalacticSlewRateLimiter slewRateLimiterX =
+            new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterY =
+            new GalacticSlewRateLimiter(1.5);
+
+    public Drive(
+            GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
+        this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
     }
 
     public Drive(
@@ -152,8 +175,15 @@ public class Drive extends SubsystemBase {
             ModuleIO flModuleIO,
             ModuleIO frModuleIO,
             ModuleIO blModuleIO,
-            ModuleIO brModuleIO) {
+            ModuleIO brModuleIO,
+            Optional<SwerveDriveSimulation> driveSimulation) {
         this.gyroIO = gyroIO;
+
+        driveSimulation.ifPresent(
+                swerveDriveSimulation ->
+                        this.resetSimulationPoseCallBack =
+                                swerveDriveSimulation::setSimulationWorldPose);
+
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);
         modules[2] = new Module(blModuleIO, 2, TunerConstants.BackLeft);
@@ -169,11 +199,11 @@ public class Drive extends SubsystemBase {
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
                 this::getPose,
-                this::setPose,
+                this::resetOdometry,
                 this::getChassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+                        new PIDConstants(4.0, 0.0, 2.0), new PIDConstants(14.0, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -281,7 +311,10 @@ public class Drive extends SubsystemBase {
             }
 
             // Apply update
-            poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            globalPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
+            localPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -295,6 +328,18 @@ public class Drive extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
+        double elevatorHeight = InitializerKt.getElevator().getHeight().invoke().in(Meters);
+
+        // Accel limits
+        double limit =
+                TunerConstants.SLEW_LIMIT_A * elevatorHeight * elevatorHeight
+                        + TunerConstants.SLEW_LIMIT_B * elevatorHeight
+                        + TunerConstants.SLEW_LIMIT_C;
+        speeds.vxMetersPerSecond =
+                slewRateLimiterX.withLimit(limit).calculate(speeds.vxMetersPerSecond);
+        speeds.vyMetersPerSecond =
+                slewRateLimiterY.withLimit(limit).calculate(speeds.vyMetersPerSecond);
+
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
@@ -313,6 +358,12 @@ public class Drive extends SubsystemBase {
 
         // Log optimized setpoints (runSetpoint mutates each state)
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+    }
+
+    public void setAngle(Rotation2d angle) {
+        for (int i = 0; i < 4; i++) {
+            modules[i].runSetpoint(new SwerveModuleState(0.0, angle));
+        }
     }
 
     /** Runs the drive in a straight line with the specified drive output. */
@@ -406,7 +457,7 @@ public class Drive extends SubsystemBase {
 
     /** Returns the measured chassis speeds of the robot. */
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-    private ChassisSpeeds getChassisSpeeds() {
+    public ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(getModuleStates());
     }
 
@@ -431,12 +482,28 @@ public class Drive extends SubsystemBase {
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+        return globalPoseEstimator.getEstimatedPosition();
+    }
+
+    /** Returns the local estimated pose. */
+    @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
+    public Pose2d getLocalEstimatedPose() {
+        return localPoseEstimator.getEstimatedPosition();
     }
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.connected ? gyroInputs.yawPosition : getPose().getRotation();
+        return gyroInputs.connected
+                ? gyroInputs.yawPosition.plus(gyroOffset)
+                : getPose().getRotation();
+    }
+
+    public Rotation2d[] getGyroMeasurements() {
+        return gyroInputs.odometryYawPositions;
+    }
+
+    public double[] getGyroTimestamps() {
+        return gyroInputs.odometryYawTimestamps;
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -459,13 +526,22 @@ public class Drive extends SubsystemBase {
     }
 
     /** Resets the current odometry pose. */
-    public void setPose(Pose2d pose) {
-        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+    public void resetOdometry(Pose2d pose) {
+        if (frc.robot.ConstantsKt.getUSE_MAPLE_SIM()) {
+            resetSimulationPoseCallBack.accept(pose);
+        }
+        globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
-    public void resetGyro() {
+    public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
+        gyroOffset = offset;
         desiredHeading = new Rotation2d();
+    }
+
+    public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
+        resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
     }
 
     /** Adds a new timestamped vision measurement. */
@@ -473,7 +549,15 @@ public class Drive extends SubsystemBase {
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        poseEstimator.addVisionMeasurement(
+        globalPoseEstimator.addVisionMeasurement(
+                visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+    public void addLocalVisionMeasurement(
+            Pose2d visionRobotPoseMeters,
+            double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+        localPoseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 

@@ -20,16 +20,14 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
-import frc.robot.REEFMASTER_CANBUS_NAME
 
 class WristIOReal : WristIO {
     override val inputs = LoggedWristInputs()
     private val positionControl = PositionVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
 
-    private val motor: TalonFX = TalonFX(MOTOR_PORT, REEFMASTER_CANBUS_NAME)
-    private val absoluteEncoder =
-        CANcoder(CANCODER_PORT, REEFMASTER_CANBUS_NAME)
+    private val motor: TalonFX = TalonFX(MOTOR_PORT)
+    private val absoluteEncoder = CANcoder(CANCODER_PORT)
 
     init {
         motor.configurator.apply(
@@ -61,10 +59,8 @@ class WristIOReal : WristIO {
                     SoftwareLimitSwitchConfigs().apply {
                         ForwardSoftLimitEnable = true
                         ReverseSoftLimitEnable = true
-                        ForwardSoftLimitThreshold =
-                            MAX_ANGLE.`in`(Units.Rotations)
-                        ReverseSoftLimitThreshold =
-                            MIN_ANGLE.`in`(Units.Rotations)
+                        ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
+                        ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
                     }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
@@ -78,10 +74,11 @@ class WristIOReal : WristIO {
 
         absoluteEncoder.configurator.apply(
             CANcoderConfiguration().apply {
-                MagnetSensor.MagnetOffset =
-                    -ENCODER_OFFSET.`in`(Units.Rotations)
                 MagnetSensor.SensorDirection =
                     SensorDirectionValue.Clockwise_Positive
+                MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
+                MagnetSensor.MagnetOffset =
+                    -ABSOLUTE_ENCODER_MAGNET_OFFSET.`in`(Units.Rotations)
             }
         )
     }
@@ -102,9 +99,6 @@ class WristIOReal : WristIO {
         inputs.angle.mut_replace(motor.position.value)
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
         inputs.absoluteEncoderAngle.mut_replace(absoluteEncoder.position.value)
-        inputs.noOffsetAbsoluteEncoderPosition.mut_replace(
-            absoluteEncoder.position.value - ENCODER_OFFSET
-        )
         inputs.velocity.mut_replace(motor.velocity.value)
     }
 }
