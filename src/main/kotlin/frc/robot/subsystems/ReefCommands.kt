@@ -2,6 +2,7 @@ package frc.robot.subsystems
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
@@ -99,6 +100,24 @@ fun l3(): Command = parallel(elevator.l3(), wrist.l3()).withName("Reef/Move L3")
 
 fun l4(outtakeTrigger: Trigger): Command =
     l4().andThen(scoreCoralL4(outtakeTrigger)).withName("Reef/L4")
+
+fun dumbL4(outtakeTrigger: Trigger): Command =
+    l4()
+        .andThen(
+            waitUntil(outtakeTrigger),
+            gripper
+                .fastOuttake()
+                .withTimeout(0.8)
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                )
+        )
+        .withName("Reef/DumbL4")
+        .andThen(
+            run({ swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) })
+                .withTimeout(0.2)
+                .andThen(moveDefaultPosition())
+        )
 
 fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
 

@@ -16,6 +16,7 @@ package frc.robot.subsystems.vision;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
@@ -29,13 +30,15 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
-    private final VisionConsumer consumer;
+    private final VisionConsumer globalConsumer;
+    private final VisionConsumer localConsumer;
     private final VisionIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
 
-    public Vision(VisionConsumer consumer, VisionIO... io) {
-        this.consumer = consumer;
+    public Vision(VisionConsumer globalConsumer, VisionConsumer localConsumer, VisionIO... io) {
+        this.globalConsumer = globalConsumer;
+        this.localConsumer = localConsumer;
         this.io = io;
 
         // Initialize inputs
@@ -64,6 +67,48 @@ public class Vision extends SubsystemBase {
 
     public Translation3d getTranslationToBestTarget(int cameraIndex) {
         return inputs[cameraIndex].translationToBestTarget;
+    }
+
+    public Transform3d getTransformToID(int cameraIndex, int id) {
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargetsIDs[i] == id) {
+                return inputs[cameraIndex].trackedTargets[i];
+            }
+        }
+        return null;
+    }
+
+    public int getIdOfClosestTarget(int cameraIndex) {
+        double minDistance = Integer.MAX_VALUE;
+        int index = 0;
+        for (int i = 0; i < inputs[cameraIndex].trackedTargets.length; i++) {
+            if (inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm() < minDistance) {
+                minDistance = inputs[cameraIndex].trackedTargets[i].getTranslation().getNorm();
+            }
+        }
+        return index;
+    }
+
+    private boolean isObservationValid(VisionIO.PoseObservation observation) {
+        // Check whether to reject pose
+        return !(observation.tagCount() == 0 // Must have at least one tag
+                || (observation.tagCount() == 1
+                        && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
+                || Math.abs(observation.pose().getZ())
+                        > maxZError // Must have realistic Z coordinate
+
+                // Must be within the field boundaries
+                || observation.pose().getX() < 0.0
+                || observation.pose().getX() > aprilTagLayout.getFieldLength()
+                || observation.pose().getY() < 0.0
+                || observation.pose().getY() > aprilTagLayout.getFieldWidth());
+    }
+
+    private Pair<Double, Double> calculateStddev(double avgTagDistance, int tagCount) {
+        double stdFactor = Math.pow(avgTagDistance, 2.0) / tagCount;
+        double linearStddev = linearStdDevBaseline * stdFactor;
+        double angularStddev = angularStdDevBaseline * stdFactor;
+        return new Pair(linearStddev, angularStddev);
     }
 
     @Override
@@ -100,20 +145,7 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                // Check whether to reject pose
-                boolean rejectPose =
-                        observation.tagCount() == 0 // Must have at least one tag
-                                || (observation.tagCount() == 1
-                                        && observation.ambiguity()
-                                                > maxAmbiguity) // Cannot be high ambiguity
-                                || Math.abs(observation.pose().getZ())
-                                        > maxZError // Must have realistic Z coordinate
-
-                                // Must be within the field boundaries
-                                || observation.pose().getX() < 0.0
-                                || observation.pose().getX() > aprilTagLayout.getFieldLength()
-                                || observation.pose().getY() < 0.0
-                                || observation.pose().getY() > aprilTagLayout.getFieldWidth();
+                boolean rejectPose = isObservationValid(observation);
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -129,10 +161,10 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Calculate standard deviations
-                double stdDevFactor =
-                        Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
-                double linearStdDev = linearStdDevBaseline * stdDevFactor;
-                double angularStdDev = angularStdDevBaseline * stdDevFactor;
+                var stddevs =
+                        calculateStddev(observation.averageTagDistance(), observation.tagCount());
+                double linearStdDev = stddevs.getFirst();
+                double angularStdDev = stddevs.getSecond();
                 if (observation.type() == VisionIO.PoseObservationType.MEGATAG_2) {
                     linearStdDev *= linearStdDevMegatag2Factor;
                     angularStdDev *= angularStdDevMegatag2Factor;
@@ -143,9 +175,23 @@ public class Vision extends SubsystemBase {
                 }
 
                 // Send vision observation
-                consumer.accept(
+                globalConsumer.accept(
                         observation.pose().toPose2d(),
                         observation.timestamp(),
+                        VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+            }
+
+            if (isObservationValid(inputs[cameraIndex].localEstimatedPose)
+                    && !io[cameraIndex].getName().equals(BackOVName)) {
+                var stddevs =
+                        calculateStddev(
+                                inputs[cameraIndex].localEstimatedPose.averageTagDistance(),
+                                inputs[cameraIndex].localEstimatedPose.tagCount());
+                double linearStdDev = stddevs.getFirst();
+                double angularStdDev = stddevs.getSecond();
+                localConsumer.accept(
+                        inputs[cameraIndex].localEstimatedPose.pose().toPose2d(),
+                        inputs[cameraIndex].localEstimatedPose.timestamp(),
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 

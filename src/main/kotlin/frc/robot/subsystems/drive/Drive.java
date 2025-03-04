@@ -30,7 +30,10 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -150,12 +153,17 @@ public class Drive extends SubsystemBase {
                 new SwerveModulePosition(),
                 new SwerveModulePosition()
             };
-    private final SwerveDrivePoseEstimator poseEstimator =
+    private final SwerveDrivePoseEstimator globalPoseEstimator =
+            new SwerveDrivePoseEstimator(
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+    private final SwerveDrivePoseEstimator localPoseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    private static GalacticSlewRateLimiter slewRateLimiterX = new GalacticSlewRateLimiter(1.5);
-    private static GalacticSlewRateLimiter slewRateLimiterY = new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterX =
+            new GalacticSlewRateLimiter(1.5);
+    private static final GalacticSlewRateLimiter slewRateLimiterY =
+            new GalacticSlewRateLimiter(1.5);
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
@@ -303,7 +311,10 @@ public class Drive extends SubsystemBase {
             }
 
             // Apply update
-            poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+            globalPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
+            localPoseEstimator.updateWithTime(
+                    sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -471,7 +482,13 @@ public class Drive extends SubsystemBase {
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+        return globalPoseEstimator.getEstimatedPosition();
+    }
+
+    /** Returns the local estimated pose. */
+    @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
+    public Pose2d getLocalEstimatedPose() {
+        return localPoseEstimator.getEstimatedPosition();
     }
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
@@ -479,6 +496,14 @@ public class Drive extends SubsystemBase {
         return gyroInputs.connected
                 ? gyroInputs.yawPosition.plus(gyroOffset)
                 : getPose().getRotation();
+    }
+
+    public Rotation2d[] getGyroMeasurements() {
+        return gyroInputs.odometryYawPositions;
+    }
+
+    public double[] getGyroTimestamps() {
+        return gyroInputs.odometryYawTimestamps;
     }
 
     public Command updateDesiredHeading(DoubleSupplier omegaAxis) {
@@ -505,7 +530,8 @@ public class Drive extends SubsystemBase {
         if (frc.robot.ConstantsKt.getUSE_MAPLE_SIM()) {
             resetSimulationPoseCallBack.accept(pose);
         }
-        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
     public void resetGyro(Rotation2d offset) {
@@ -514,12 +540,24 @@ public class Drive extends SubsystemBase {
         desiredHeading = new Rotation2d();
     }
 
+    public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
+        resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
+    }
+
     /** Adds a new timestamped vision measurement. */
     public void addVisionMeasurement(
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        poseEstimator.addVisionMeasurement(
+        globalPoseEstimator.addVisionMeasurement(
+                visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    }
+
+    public void addLocalVisionMeasurement(
+            Pose2d visionRobotPoseMeters,
+            double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+        localPoseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
     }
 
