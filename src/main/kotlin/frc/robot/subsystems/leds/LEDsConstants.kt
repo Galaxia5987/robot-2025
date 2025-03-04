@@ -25,18 +25,18 @@ val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val GRADIENT_PINK: Color = Color(255, 0, 148)
 var blueTeamPattern =
     LEDPattern.gradient(
-        LEDPattern.GradientType.kDiscontinuous,
-        Color.kAqua,
-        Color.kBlue
-    )
+            LEDPattern.GradientType.kDiscontinuous,
+            Color.kAqua,
+            Color.kBlue
+        )
         .atBrightness(BLUE_BRIGHTNESS)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)
 
 var redTeamPattern =
     LEDPattern.gradient(
-        LEDPattern.GradientType.kDiscontinuous,
-        Color.kRed,
-        GRADIENT_PINK
-    )
+            LEDPattern.GradientType.kDiscontinuous,
+            Color.kRed,
+            GRADIENT_PINK
+        )
         .atBrightness(RED_BRIGHTNESS)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)

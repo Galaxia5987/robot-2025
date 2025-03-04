@@ -52,7 +52,7 @@ class LEDs : SubsystemBase() {
 
     private var climbPattern =
         Trigger {
-            DriverStation.getMatchTime() < 30 &&
+                DriverStation.getMatchTime() < 30 &&
                     DriverStation.getMatchTime() > -1
             }
             .and(Trigger { DriverStation.isTeleop() })
