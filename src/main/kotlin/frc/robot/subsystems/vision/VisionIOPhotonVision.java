@@ -20,7 +20,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.ConstantsKt;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,10 +73,7 @@ public class VisionIOPhotonVision implements VisionIO {
 
                 // Update PhotonPoseEstimator based on gyro readings
                 localPoseEstimator.addHeadingData(
-                        result.getTimestampSeconds(),
-                        botRotation
-                                .get()
-                                .plus(Rotation2d.k180deg));
+                        result.getTimestampSeconds(), botRotation.get().plus(Rotation2d.k180deg));
                 estimatedPose.ifPresent(
                         estimatedRobotPose ->
                                 inputs.localEstimatedPose =

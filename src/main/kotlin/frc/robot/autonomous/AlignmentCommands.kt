@@ -31,11 +31,13 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
             setGoal(targetPose)
         }
         .andThen(
-            swerveDrive.run {
-                swerveDrive.limitlessRunVelocity(
-                    getSpeed(swerveDrive.localEstimatedPose).invoke()
-                )
-            }.alongWith(extender.retractTime(0.3))
+            swerveDrive
+                .run {
+                    swerveDrive.limitlessRunVelocity(
+                        getSpeed(swerveDrive.localEstimatedPose).invoke()
+                    )
+                }
+                .alongWith(extender.retractTime(0.3))
         )
         .until(endTrigger)
         .andThen(
