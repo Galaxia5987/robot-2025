@@ -518,6 +518,10 @@ public class Drive extends SubsystemBase {
         return localPoseEstimator.getEstimatedPosition();
     }
 
+    public void resetLocalPoseEstimatorBasedOnGlobal() {
+        localPoseEstimator.resetPose(globalPoseEstimator.getEstimatedPosition());
+    }
+
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
         return gyroInputs.connected
