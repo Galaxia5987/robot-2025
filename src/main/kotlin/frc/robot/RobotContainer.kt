@@ -17,10 +17,10 @@ import frc.robot.autonomous.B1L
 import frc.robot.autonomous.B1R
 import frc.robot.autonomous.C6L
 import frc.robot.autonomous.C6L5LR
-import frc.robot.autonomous.autoScoreL1
-import frc.robot.autonomous.autoScoreL2
-import frc.robot.autonomous.autoScoreL3
-import frc.robot.autonomous.autoScoreL4
+import frc.robot.autonomous.alignScoreL1
+import frc.robot.autonomous.alignScoreL2
+import frc.robot.autonomous.alignScoreL3
+import frc.robot.autonomous.alignScoreL4
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
@@ -122,22 +122,22 @@ object RobotContainer {
         driverController
             .cross()
             .and(heightController.button(12).negate())
-            .whileTrue(autoScoreL1())
+            .whileTrue(alignScoreL1())
             .onFalse(moveDefaultPosition())
         driverController
             .square()
             .and(heightController.button(12).negate())
-            .whileTrue(autoScoreL2())
+            .whileTrue(alignScoreL2())
             .onFalse(moveDefaultPosition())
         driverController
             .circle()
             .and(heightController.button(12).negate())
-            .whileTrue(autoScoreL3())
+            .whileTrue(alignScoreL3())
             .onFalse(moveDefaultPosition())
         driverController
             .triangle()
             .and(heightController.button(12).negate())
-            .whileTrue(autoScoreL4())
+            .whileTrue(alignScoreL4())
             .onFalse(moveDefaultPosition())
 
         driverController.cross().and(heightController.button(12)).onTrue(l1())

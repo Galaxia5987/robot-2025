@@ -59,23 +59,25 @@ private fun alignL4Prep(): Command =
         }
         .raceWith(raiseElevatorAtDistance(l4()))
 
-fun autoScoreL1(): Command =
+fun alignScoreL1(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l1()))
         .andThen(outtakeCoral())
 
-fun autoScoreL2(): Command =
+fun alignScoreL2(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l2()))
         .andThen(outtakeCoral())
 
-fun autoScoreL3(): Command =
+fun alignScoreL3(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l3()))
         .andThen(outtakeCoral())
 
-fun autoScoreL4(): Command =
+fun alignScoreL4(): Command =
     alignL4Prep().andThen(alignCommand()).andThen(outtakeCoralAndDriveBack())
+
+fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean

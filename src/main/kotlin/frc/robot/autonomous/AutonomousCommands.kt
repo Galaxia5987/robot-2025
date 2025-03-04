@@ -29,7 +29,7 @@ fun B1L(): Command =
         ),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
         Commands.runOnce({ selectedScorePose = { Reef1Left.flipIfNeeded() } }),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 fun B1R(): Command =
@@ -39,7 +39,7 @@ fun B1R(): Command =
         ),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
         Commands.runOnce({ selectedScorePose = { Reef1Right.flipIfNeeded() } }),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 fun C6L(): Command =
