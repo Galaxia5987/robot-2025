@@ -77,10 +77,7 @@ public class VisionIOPhotonVision implements VisionIO {
                         result.getTimestampSeconds(),
                         botRotation
                                 .get()
-                                .plus(
-                                        ConstantsKt.getIS_RED()
-                                                ? Rotation2d.k180deg
-                                                : Rotation2d.kZero));
+                                .plus(Rotation2d.k180deg));
                 estimatedPose.ifPresent(
                         estimatedRobotPose ->
                                 inputs.localEstimatedPose =
