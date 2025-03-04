@@ -89,17 +89,16 @@ fun outtakeCoral(): Command =
                 ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.1),
-        moveDefaultPosition().onlyIf(gripper.hasCoral.negate().and{!DriverStation.isAutonomous()})
+        moveDefaultPosition()
+            .onlyIf(
+                gripper.hasCoral.negate().and { !DriverStation.isAutonomous() }
+            )
     )
 
 // TODO: Add Coral Simulation
 
 fun moveDefaultPosition(): Command =
-    sequence(
-            elevator.feeder(),
-            waitUntil(elevator.atSetpoint),
-            wrist.feeder()
-        )
+    sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.feeder())
         .withName("Reef/Move default position")
 
 fun l1(): Command = parallel(elevator.l1(), wrist.l1()).withName("Reef/Move L1")

@@ -166,7 +166,6 @@ object Robot : LoggedRobot() {
         )
         swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
 
-
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()
 
