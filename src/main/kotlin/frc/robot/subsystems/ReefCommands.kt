@@ -2,8 +2,8 @@ package frc.robot.subsystems
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.parallel
 import edu.wpi.first.wpilibj2.command.Commands.run
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
@@ -89,7 +89,7 @@ fun outtakeCoral(): Command =
                 ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.1),
-        moveDefaultPosition().onlyIf(gripper.hasCoral.negate())
+        moveDefaultPosition().onlyIf(gripper.hasCoral.negate().and{!DriverStation.isAutonomous()})
     )
 
 // TODO: Add Coral Simulation
