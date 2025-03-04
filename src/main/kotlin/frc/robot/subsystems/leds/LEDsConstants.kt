@@ -23,7 +23,7 @@ val CLIMBER_PATTERN_BRIGHTNESS: Dimensionless = Units.Percent.of(50.0)
 val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val GRADIENT_PINK: Color = Color(255, 0, 148)
-var blueTeamPattern =
+val blueTeamPattern: LEDPattern =
     LEDPattern.gradient(
             LEDPattern.GradientType.kDiscontinuous,
             Color.kAqua,
@@ -32,7 +32,7 @@ var blueTeamPattern =
         .atBrightness(BLUE_BRIGHTNESS)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)
 
-var redTeamPattern =
+val redTeamPattern: LEDPattern =
     LEDPattern.gradient(
             LEDPattern.GradientType.kDiscontinuous,
             Color.kRed,
