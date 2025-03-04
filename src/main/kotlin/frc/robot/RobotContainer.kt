@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.auto.NamedCommands
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -214,6 +215,14 @@ object RobotContainer {
     fun getAutonomousCommand(): Command = autoChooser.selected
 
     private fun registerAutoCommands() {
+        val namedCommands =
+            mapOf(
+                "MoveL4" to l4(),
+                "MoveFeeder" to moveDefaultPosition(false),
+            )
+
+        NamedCommands.registerCommands(namedCommands)
+
         autoChooser.setDefaultOption("B1L", B1L())
         autoChooser.addOption("None", Commands.none())
         autoChooser.addOption("B1L", B1L())
