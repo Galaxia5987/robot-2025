@@ -10,6 +10,15 @@ import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.feeder
 import frc.robot.swerveDrive
 
+fun feederPath(pathName: String, mirror: Boolean = false): Command =
+    AutoBuilder.followPath(if (mirror) PathPlannerPath.fromPathFile(pathName).mirrorPath() else PathPlannerPath.fromPathFile(pathName))
+        .andThen(
+            Commands.run({
+                swerveDrive.runVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
+            })
+        )
+        .raceWith(feeder(Trigger { true }))
+
 fun B1L(): Command =
     Commands.sequence(
         AutoBuilder.resetOdom(
