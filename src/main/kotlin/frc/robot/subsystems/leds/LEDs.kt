@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.*
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.gripper
@@ -55,7 +56,7 @@ class LEDs : SubsystemBase() {
                 DriverStation.getMatchTime() < 30 &&
                     DriverStation.getMatchTime() > -1
             }
-            .and(Trigger { DriverStation.isTeleop() })
+            .and(RobotModeTriggers.teleop())
             .onTrue(
                 setPattern(
                     all =
