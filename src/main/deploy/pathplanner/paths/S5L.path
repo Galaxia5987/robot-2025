@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.612556818181818,
-        "y": 1.9558948863636352
+        "x": 2.931647727272727,
+        "y": 2.77356534090909
       },
       "isLocked": false,
       "linkedName": "S2"
@@ -20,8 +20,8 @@
         "y": 2.753622159090909
       },
       "prevControl": {
-        "x": 2.51284090909091,
-        "y": 1.886093750000001
+        "x": 2.9601789304228054,
+        "y": 1.6033300829054917
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,24 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "MoveL4",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "MoveL4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 250.0,
-    "maxAngularAcceleration": 120.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 320.0,
+    "maxAngularAcceleration": 520.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
