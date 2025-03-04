@@ -56,13 +56,39 @@ private fun S5L(): Command =
         autoScoreL4()
     )
 
-private fun `6LS`(): Command =
-    AutoBuilder.followPath(PathPlannerPath.fromPathFile("6LS"))
-        .andThen(
-            Commands.run({
-                swerveDrive.runVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
-            })
-        )
-        .raceWith(feeder(Trigger { true }))
+private fun S5R(): Command =
+    Commands.sequence(
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
+        Commands.runOnce({ selectedScorePose = { Reef5Right.flipIfNeeded() } }),
+        autoScoreL4()
+    )
 
-fun C6L5L(): Command = Commands.sequence(C6L(), `6LS`(), S5L())
+fun A2R(): Command =
+    Commands.sequence(
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("C6L").mirrorPath().startingHolonomicPose.get()
+        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L").mirrorPath()),
+        Commands.runOnce({ selectedScorePose = { Reef2Right.flipIfNeeded() } }),
+        autoScoreL4()
+    )
+
+private fun S3R(): Command =
+    Commands.sequence(
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath()),
+        Commands.runOnce({ selectedScorePose = { Reef3Right.flipIfNeeded() } }),
+        autoScoreL4()
+    )
+
+private fun S3L(): Command =
+    Commands.sequence(
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath()),
+        Commands.runOnce({ selectedScorePose = { Reef3Left.flipIfNeeded() } }),
+        autoScoreL4()
+    )
+
+fun C6L5LR(): Command =
+    Commands.sequence(C6L(), feederPath("6LS"), S5L(), feederPath("5LS"), S5R())
+
+fun A2R3RL(): Command =
+    Commands.sequence(A2R(), feederPath("6LS", true), S3R(), feederPath("5LS", true), S3L())
