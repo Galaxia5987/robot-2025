@@ -30,10 +30,11 @@ enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
     L2(Units.Centimeters.of(0.0)),
     L3(Units.Centimeters.of(28.5)),
-    L4(Units.Centimeters.of(98.6)),
+    L4(Units.Centimeters.of(105.0)),
     L2_ALGAE(Units.Centimeters.of(0.0)),
-    L3_ALGAE(Units.Centimeters.of(14.0)),
-    FEEDER(Units.Centimeters.of(1.5)),
+    L3_ALGAE(Units.Centimeters.of(0.0)),
+    FEEDER(Units.Centimeters.of(16.0)),
+    BLOCKED_FEEDER(Units.Centimeters.of(7.0)),
     ZERO(Units.Centimeters.zero());
 
     fun getLoggingName() =

@@ -159,7 +159,7 @@ fun feeder(intakeTrigger: Trigger): Command =
 
 fun blockedFeeder(intakeTrigger: Trigger): Command =
     sequence(
-            parallel(elevator.feeder(), wrist.blockedFeeder()),
+            parallel(elevator.blockedFeeder(), wrist.blockedFeeder()),
             waitUntil(intakeTrigger),
             gripper
                 .intake()

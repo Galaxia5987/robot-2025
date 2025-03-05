@@ -66,6 +66,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
 
+    fun blockedFeeder(): Command =
+        setHeight(Positions.BLOCKED_FEEDER).withName("Elevator/Blocked Feeder")
+
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")
 
