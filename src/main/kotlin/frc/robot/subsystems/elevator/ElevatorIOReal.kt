@@ -24,9 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.toAngle
 import frc.robot.lib.toDistance
 import frc.robot.lib.toLinear
-import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
-import frc.robot.subsystems.intake.extender.PINION_RADIUS
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
@@ -45,12 +44,9 @@ class ElevatorIOReal : ElevatorIO {
         SoftwareLimitSwitchConfigs().apply {
             ForwardSoftLimitEnable = true
             ReverseSoftLimitEnable = true
-            ForwardSoftLimitThreshold =
-                MAX_HEIGHT_LIMIT.toAngle(SPROCKET_RADIUS, GEAR_RATIO)
-                    .`in`(Units.Rotations)
+            ForwardSoftLimitThreshold = MAX_HEIGHT_LIMIT.`in`(Units.Rotations)
             ReverseSoftLimitThreshold =
-                MIN_HEIGHT_LIMIT.toAngle(PINION_RADIUS, GEAR_RATIO)
-                    .`in`(Units.Rotations)
+                MIN_HEIGHT_LIMIT.`in`(Units.Rotations)
         }
 
     @AutoLogOutput
@@ -69,7 +65,6 @@ class ElevatorIOReal : ElevatorIO {
                     }
                 Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 1.0 }
                 Slot0 = slot0Configs
-                SoftwareLimitSwitch = softLimitsConfig
                 HardwareLimitSwitch =
                     HardwareLimitSwitchConfigs().apply {
                         ReverseLimitType = ReverseLimitTypeValue.NormallyOpen
@@ -117,8 +112,6 @@ class ElevatorIOReal : ElevatorIO {
             .withForwardSoftLimitEnable(value)
             .withReverseSoftLimitEnable(value)
 
-        mainMotor.configurator.apply(softLimitsConfig)
-        auxMotor.configurator.apply(softLimitsConfig)
     }
 
     override fun updateInputs() {
