@@ -38,7 +38,7 @@ import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
-import frc.robot.subsystems.outtakeCoral
+import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -151,7 +151,7 @@ object RobotContainer {
         driverController
             .options()
             .and(heightController.button(12))
-            .onTrue(outtakeCoral())
+            .onTrue(outtakeCoralAndDriveBack())
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
@@ -197,6 +197,10 @@ object RobotContainer {
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
         testController.a().whileTrue(runAllBits())
+
+        driverController.povDown().onTrue(elevator.tuningPosition())
+        driverController.povRight().onTrue(wrist.tuningAngle())
+        driverController.povLeft().onTrue(gripper.slowOuttake(true))
 
         val buttonMappings =
             listOf(

@@ -6,14 +6,12 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.extender
-import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
+import frc.robot.subsystems.autoL4
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
-import frc.robot.subsystems.l4
-import frc.robot.subsystems.leds.alignPattern
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.raiseElevatorAtDistance
@@ -21,7 +19,6 @@ import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
 
 var isAligning: Trigger = Trigger { alignCommand().isScheduled }
-    .onTrue(leds.setPattern(all = alignPattern))
 
 private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
@@ -62,7 +59,7 @@ private fun alignL4Prep(): Command =
                 Trigger { false }
             )
         }
-        .raceWith(raiseElevatorAtDistance(l4()))
+        .raceWith(raiseElevatorAtDistance(autoL4()))
 
 fun alignScoreL1(): Command =
     alignCommand()
