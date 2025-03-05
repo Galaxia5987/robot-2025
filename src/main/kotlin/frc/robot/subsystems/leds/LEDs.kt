@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
+import frc.robot.autonomous.isAligning
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -68,11 +69,15 @@ class LEDs : SubsystemBase() {
         isEndGame
             .or(gripper.hasCoral)
             .or { IS_RED }
+            .or (isAligning)
             .onFalse(setPattern(all = blueTeamPattern))
 
     val redDefaultPattern: Trigger =
         isEndGame
             .or(gripper.hasCoral)
             .or { !IS_RED }
+            .or (isAligning)
             .onFalse(setPattern(all = redTeamPattern))
+
+    val alignTrigger = isAligning.onTrue(setPattern(alignPattern))
 }
