@@ -9,7 +9,7 @@ import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
-val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.385)
+val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.479)
 val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 9.0) * (20.0 / 66.0))
 const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
@@ -29,7 +29,7 @@ enum class Angles(val angle: Angle) {
     L2_ALGAE(Units.Degrees.of(80.0)),
     L3_ALGAE(Units.Degrees.of(130.0)),
     FEEDER(Units.Degrees.of(17.0)),
-    BLOCKED_FEEDER(Units.Degrees.of(23.0)),
+    BLOCKED_FEEDER(Units.Degrees.of(25.0)),
     MAX(Units.Degrees.of(170.0)),
     ZERO(Units.Degrees.zero());
 
