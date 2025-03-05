@@ -1,15 +1,12 @@
 package frc.robot.subsystems.leds
 
-import edu.wpi.first.wpilibj.AddressableLED
-import edu.wpi.first.wpilibj.AddressableLEDBuffer
-import edu.wpi.first.wpilibj.AddressableLEDBufferView
-import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.LEDPattern
+import edu.wpi.first.wpilibj.*
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.autonomous.isAligning
+import frc.robot.IS_RED
 import frc.robot.gripper
 
 class LEDs : SubsystemBase() {
@@ -22,10 +19,6 @@ class LEDs : SubsystemBase() {
 
     init {
         ledStrip.start()
-        defaultCommand =
-            setPattern(all = teamPattern).until {
-                ledBuffer.getLED(1) != Color.kBlack
-            }
     }
 
     fun setPattern(
@@ -58,12 +51,12 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private var climbPattern =
+    private val climbPattern: Trigger =
         Trigger {
-                DriverStation.getMatchTime() < 5 &&
+                DriverStation.getMatchTime() < 20 &&
                     DriverStation.getMatchTime() > -1
             }
-            .and(Trigger { DriverStation.isTeleop() })
+            .and(RobotModeTriggers.teleop())
             .onTrue(
                 setPattern(
                     all =
@@ -76,7 +69,7 @@ class LEDs : SubsystemBase() {
                 )
             )
 
-    private var gripperPattern =
+    private val gripperPattern: Trigger =
         gripper.hasCoral
             .and(climbPattern.negate())
             .onTrue(
@@ -88,22 +81,15 @@ class LEDs : SubsystemBase() {
                 )
             )
 
-    private var alignPattern =
-        climbPattern
-            .negate()
-            .and(isAligning)
-            .onTrue(
-                setPattern(
-                    all =
-                        LEDPattern.solid(Color.kPurple)
-                            .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
-                            .atBrightness(ALIGN_PATTERN_BRIGHTNESS)
-                )
-            )
-
-    private var defaultPattern =
+    val blueDefaultPattern: Trigger =
         climbPattern
             .or(gripper.hasCoral)
-            .or(alignPattern)
-            .onFalse((setPattern(all = teamPattern)))
+            .or { IS_RED }
+            .onFalse(setPattern(all = blueTeamPattern))
+
+    val redDefaultPattern: Trigger =
+        climbPattern
+            .or(gripper.hasCoral)
+            .or { !IS_RED }
+            .onFalse(setPattern(all = redTeamPattern))
 }
