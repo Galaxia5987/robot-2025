@@ -1,7 +1,6 @@
 package frc.robot.subsystems.leds
 
 import edu.wpi.first.wpilibj.*
-import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
@@ -51,44 +50,28 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private val climbPattern: Trigger =
-        Trigger {
-                DriverStation.getMatchTime() < 20 &&
-                    DriverStation.getMatchTime() > -1
-            }
-            .and(RobotModeTriggers.teleop())
-            .onTrue(
-                setPattern(
-                    all =
-                        LEDPattern.rainbow(255, 128)
-                            .scrollAtAbsoluteSpeed(
-                                SCROLLING_SPEED_RAINBOW,
-                                LED_SPACING
-                            )
-                            .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
-                )
-            )
+    private val isEndGame = Trigger {
+        DriverStation.getMatchTime() < 20 &&
+                DriverStation.getMatchTime() > -1
+    }
+        .and(RobotModeTriggers.teleop())
+        .onTrue(setPattern(climbPattern))
 
-    private val gripperPattern: Trigger =
+    private val gripperTrigger: Trigger =
         gripper.hasCoral
-            .and(climbPattern.negate())
+            .and(isEndGame.negate())
             .onTrue(
-                setPattern(
-                    all =
-                        LEDPattern.solid(Color.kWhiteSmoke)
-                            .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
-                            .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
-                )
+                setPattern(all = gripperPattern)
             )
 
     val blueDefaultPattern: Trigger =
-        climbPattern
+        isEndGame
             .or(gripper.hasCoral)
             .or { IS_RED }
             .onFalse(setPattern(all = blueTeamPattern))
 
     val redDefaultPattern: Trigger =
-        climbPattern
+        isEndGame
             .or(gripper.hasCoral)
             .or { !IS_RED }
             .onFalse(setPattern(all = redTeamPattern))
