@@ -51,32 +51,31 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    private val isEndGame = Trigger {
-        DriverStation.getMatchTime() < 20 &&
-                DriverStation.getMatchTime() > -1
-    }
-        .and(RobotModeTriggers.teleop())
-        .onTrue(setPattern(climbPattern))
+    private val isEndGame =
+        Trigger {
+                DriverStation.getMatchTime() < 20 &&
+                    DriverStation.getMatchTime() > -1
+            }
+            .and(RobotModeTriggers.teleop())
+            .onTrue(setPattern(climbPattern))
 
     private val gripperTrigger: Trigger =
         gripper.hasCoral
             .and(isEndGame.negate())
-            .onTrue(
-                setPattern(all = gripperPattern)
-            )
+            .onTrue(setPattern(all = gripperPattern))
 
     val blueDefaultPattern: Trigger =
         isEndGame
             .or(gripper.hasCoral)
             .or { IS_RED }
-            .or (isAligning)
+            .or(isAligning)
             .onFalse(setPattern(all = blueTeamPattern))
 
     val redDefaultPattern: Trigger =
         isEndGame
             .or(gripper.hasCoral)
             .or { !IS_RED }
-            .or (isAligning)
+            .or(isAligning)
             .onFalse(setPattern(all = redTeamPattern))
 
     val alignTrigger = isAligning.onTrue(setPattern(alignPattern))

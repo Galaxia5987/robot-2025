@@ -101,7 +101,9 @@ object Robot : LoggedRobot() {
         DriverStation.silenceJoystickConnectionWarning(true)
         PathfindingCommand.warmupCommand().schedule()
 
-        leds.setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern).schedule()
+        leds
+            .setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+            .schedule()
 
         val commandCounts = HashMap<String, Int>()
         val logCommandFunction =

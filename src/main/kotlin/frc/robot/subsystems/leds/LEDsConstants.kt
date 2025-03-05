@@ -42,16 +42,15 @@ val redTeamPattern: LEDPattern =
         .atBrightness(RED_BRIGHTNESS)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED_TEAM_PATTERN, LED_SPACING)
 
-val alignPattern: LEDPattern = LEDPattern.solid(Color.kGreen).atBrightness(ALIGN_BRIGHTNESS)
+val alignPattern: LEDPattern =
+    LEDPattern.solid(Color.kGreen).atBrightness(ALIGN_BRIGHTNESS)
 
-val climbPattern: LEDPattern = LEDPattern.rainbow(255, 128)
-    .scrollAtAbsoluteSpeed(
-        SCROLLING_SPEED_RAINBOW,
-        LED_SPACING
-    )
-    .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
+val climbPattern: LEDPattern =
+    LEDPattern.rainbow(255, 128)
+        .scrollAtAbsoluteSpeed(SCROLLING_SPEED_RAINBOW, LED_SPACING)
+        .atBrightness(CLIMBER_PATTERN_BRIGHTNESS)
 
-val gripperPattern: LEDPattern = LEDPattern.solid(Color.kWhiteSmoke)
-    .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
-    .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
-
+val gripperPattern: LEDPattern =
+    LEDPattern.solid(Color.kWhiteSmoke)
+        .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
+        .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
