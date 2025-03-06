@@ -107,6 +107,7 @@ fun moveDefaultPosition(
                 sequence(
                     wrist.max().onlyIf { moveWristUp },
                     elevator.feeder(),
+                    waitUntil(wrist.atSetpoint),
                     if (zeroWrist.asBoolean) wrist.l1() else wrist.feeder()
                 )
             },
