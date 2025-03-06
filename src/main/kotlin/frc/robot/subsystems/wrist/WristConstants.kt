@@ -23,10 +23,11 @@ val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 
 enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(0.0)),
-    L2(Units.Degrees.of(110.0)),
+    L2(Units.Degrees.of(0.0)),
     L3(Units.Degrees.of(145.0)),
     L4(Units.Degrees.of(90.0)),
-    AUTO_L4(Units.Degrees.of(130.0)),
+    ALIGN_L2(Units.Degrees.of(110.0)),
+    ALIGN_L4(Units.Degrees.of(130.0)),
     L2_ALGAE(Units.Degrees.of(80.0)),
     L3_ALGAE(Units.Degrees.of(130.0)),
     FEEDER(Units.Degrees.of(17.0)),

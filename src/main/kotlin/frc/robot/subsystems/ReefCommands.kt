@@ -64,10 +64,10 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun outtakeCoralAndDriveBack(moveWristUp: Boolean): Command =
+fun outtakeCoralAndDriveBack(moveWristUp: Boolean, isReverse: Boolean = false): Command =
     sequence(
         (gripper
-                .outtake()
+                .outtake(isReverse)
                 .until(gripper.hasCoral.negate())
                 .alongWith(
                     visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
@@ -90,6 +90,20 @@ fun outtakeCoral(): Command =
                 ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.15),
+        moveDefaultPosition(false)
+            .onlyIf(
+                gripper.hasCoral.negate().and { !DriverStation.isAutonomous() }
+            )
+    )
+
+fun outtakeL1(): Command =
+    sequence(
+        (gripper
+            .slowOuttake(true)
+            .until(gripper.hasCoral.negate())
+            .alongWith(
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+            )),
         moveDefaultPosition(false)
             .onlyIf(
                 gripper.hasCoral.negate().and { !DriverStation.isAutonomous() }
@@ -130,6 +144,14 @@ fun l3(): Command =
 fun l4(): Command =
     parallel(elevator.l4(), wrist.l4(), runOnce({ isL4 = Trigger { true } }))
         .withName("Reef/Move L4")
+
+fun alignL2(): Command =
+    parallel(
+        elevator.alignL2(),
+        wrist.alignL2(),
+        runOnce({ isL4 = Trigger { true } })
+        )
+        .withName("Reef/Auto L2")
 
 fun alignL4(): Command =
     parallel(

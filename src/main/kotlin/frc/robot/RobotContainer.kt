@@ -39,6 +39,7 @@ import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.outtakeCoralAndDriveBack
+import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -142,12 +143,12 @@ object RobotContainer {
             .cross()
             .and(heightController.button(12))
             .onTrue(l1())
-            .onFalse(outtakeCoralAndDriveBack(false))
+            .onFalse(outtakeL1())
         driverController
             .square()
             .and(heightController.button(12))
             .onTrue(l2())
-            .onFalse(outtakeCoralAndDriveBack(false))
+            .onFalse(outtakeCoralAndDriveBack(false, isReverse = true))
         driverController
             .circle()
             .and(heightController.button(12))

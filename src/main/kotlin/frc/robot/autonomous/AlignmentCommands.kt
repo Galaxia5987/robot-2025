@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.extender
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
+import frc.robot.subsystems.alignL2
 import frc.robot.subsystems.alignL4
 import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
+import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.raiseElevatorAtDistance
 import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
@@ -64,11 +65,11 @@ private fun alignL4Prep(): Command =
 fun alignScoreL1(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l1()))
-        .andThen(outtakeCoral())
+        .andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
     alignCommand()
-        .alongWith(raiseElevatorAtDistance(l2()))
+        .alongWith(raiseElevatorAtDistance(alignL2()))
         .andThen(outtakeCoralAndDriveBack(false))
 
 fun alignScoreL3(): Command =
