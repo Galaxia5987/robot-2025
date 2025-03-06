@@ -121,43 +121,42 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
+        val disableAlignment = heightController.button(12)
+
         driverController
             .cross()
-            .and(heightController.button(12).negate())
+            .and(disableAlignment.negate())
             .whileTrue(alignScoreL1())
         driverController
             .square()
-            .and(heightController.button(12).negate())
+            .and(disableAlignment.negate())
             .whileTrue(alignScoreL2())
         driverController
             .circle()
-            .and(heightController.button(12).negate())
+            .and(disableAlignment.negate())
             .whileTrue(alignScoreL3())
         driverController
             .triangle()
-            .and(heightController.button(12).negate())
+            .and(disableAlignment.negate())
             .whileTrue(alignScoreL4())
 
         driverController
             .cross()
-            .and(heightController.button(12))
+            .and(disableAlignment)
             .onTrue(l1())
             .onFalse(outtakeL1())
         driverController
             .square()
-            .and(heightController.button(12))
-            .onTrue(l2())
-            .onFalse(outtakeCoralAndDriveBack(false, isReverse = true))
+            .onTrue(l2().onlyIf(disableAlignment))
+            .onFalse(outtakeCoralAndDriveBack(false, isReverse = true).onlyIf(disableAlignment))
         driverController
             .circle()
-            .and(heightController.button(12))
-            .onTrue(l3())
-            .onFalse(outtakeCoralAndDriveBack(true))
+            .onTrue(l3().onlyIf(disableAlignment))
+            .onFalse(outtakeCoralAndDriveBack(true).onlyIf(disableAlignment))
         driverController
             .triangle()
-            .and(heightController.button(12))
-            .onTrue(l4())
-            .onFalse(outtakeCoralAndDriveBack(true))
+            .onTrue(l4().onlyIf(disableAlignment))
+            .onFalse(outtakeCoralAndDriveBack(true).onlyIf(disableAlignment))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
@@ -179,7 +178,7 @@ object RobotContainer {
             .onTrue(
                 feeder(
                     operatorController.start().negate(),
-                    heightController.button(12)
+                    disableAlignment
                 )
             )
         heightController
@@ -187,7 +186,7 @@ object RobotContainer {
             .onTrue(
                 feeder(
                     operatorController.start().negate(),
-                    heightController.button(12)
+                    disableAlignment
                 )
             )
         operatorController
@@ -195,7 +194,7 @@ object RobotContainer {
             .onTrue(
                 blockedFeeder(
                     operatorController.back().negate(),
-                    heightController.button(12)
+                    disableAlignment
                 )
             )
         operatorController
@@ -217,7 +216,7 @@ object RobotContainer {
             .leftBumper()
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
-        heightController.button(12).onTrue(wrist.l1())
+        disableAlignment.onTrue(wrist.l1())
 
         testController.a().whileTrue(runAllBits())
 
