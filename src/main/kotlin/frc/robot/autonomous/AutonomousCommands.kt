@@ -6,7 +6,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.feeder
 import frc.robot.swerveDrive
 
@@ -25,35 +24,35 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
 fun B1L(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
-        Commands.runOnce({ selectedScorePose = { Reef1Left.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[3]!! }),
         alignScoreL4()
     )
 
 fun B1R(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
-        Commands.runOnce({ selectedScorePose = { Reef1Right.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
         alignScoreL4()
     )
 
 fun C6L(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        Commands.runOnce({ selectedScorePose = { Reef6Left.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         autoScoreL4()
     )
 
 private fun S5L(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
-        Commands.runOnce({ selectedScorePose = { Reef5Left.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         autoScoreL4()
     )
 
 private fun S5R(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
-        Commands.runOnce({ selectedScorePose = { Reef5Right.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         autoScoreL4()
     )
 
@@ -68,7 +67,7 @@ fun A2R(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = { Reef2Right.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         autoScoreL4()
     )
 
@@ -77,7 +76,7 @@ private fun S3R(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5L").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = { Reef3Right.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
         autoScoreL4()
     )
 
@@ -86,7 +85,7 @@ private fun S3L(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5R").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = { Reef3Left.flipIfNeeded() } }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
         autoScoreL4()
     )
 

@@ -77,5 +77,4 @@ class LEDs : SubsystemBase() {
             .or { !IS_RED }
             .or(isAligning)
             .onFalse(setPattern(all = redTeamPattern))
-
 }

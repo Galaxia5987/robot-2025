@@ -52,30 +52,33 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.limitlessRunVelocity(ChassisSpeeds())
             }
         )
-        .finallyDo(Runnable {
-            isAligning = Trigger { false }
-            leds.setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
-                .schedule()
-        })
+        .finallyDo(
+            Runnable {
+                isAligning = Trigger { false }
+                leds
+                    .setPattern(
+                        all = if (IS_RED) redTeamPattern else blueTeamPattern
+                    )
+                    .schedule()
+            }
+        )
 }
 
 fun alignCommand(): Command =
-    swerveDrive.defer { alignToPose(selectedScorePose.invoke(), atGoal) }
+    swerveDrive.defer { alignToPose(selectedScorePose.first.invoke(), atGoal) }
 
 private fun alignL4Prep(): Command =
     swerveDrive
         .defer {
             alignToPose(
-                selectedScorePose.invoke().moveBack(Units.Meters.of(0.3)),
+                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
                 Trigger { false }
             )
         }
         .raceWith(raiseElevatorAtDistance(alignL4()))
 
 fun alignScoreL1(): Command =
-    alignCommand()
-        .alongWith(raiseElevatorAtDistance(l1()))
-        .andThen(outtakeL1())
+    alignCommand().alongWith(raiseElevatorAtDistance(l1())).andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
     alignCommand()
@@ -100,7 +103,7 @@ private val atAlignmentSetpoint = Trigger {
 
 private val isWithinDistance = Trigger {
     swerveDrive.localEstimatedPose.distanceFromPoint(
-        selectedScorePose.invoke().translation
+        selectedScorePose.first.invoke().translation
     ) in ALIGNMENT_ELEVATOR_MIN_DISTANCE..ALIGNMENT_ELEVATOR_MAX_DISTANCE
 }
 

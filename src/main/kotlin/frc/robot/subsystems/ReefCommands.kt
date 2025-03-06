@@ -64,7 +64,10 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun outtakeCoralAndDriveBack(moveWristUp: Boolean, isReverse: Boolean = false): Command =
+fun outtakeCoralAndDriveBack(
+    moveWristUp: Boolean,
+    isReverse: Boolean = false
+): Command =
     sequence(
         (gripper
                 .outtake(isReverse)
@@ -147,9 +150,9 @@ fun l4(): Command =
 
 fun alignL2(): Command =
     parallel(
-        elevator.alignL2(),
-        wrist.alignL2(),
-        runOnce({ isL4 = Trigger { true } })
+            elevator.alignL2(),
+            wrist.alignL2(),
+            runOnce({ isL4 = Trigger { true } })
         )
         .withName("Reef/Auto L2")
 

@@ -7,6 +7,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Filesystem
+import frc.robot.IS_RED
 import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getTranslation2d
@@ -25,6 +26,7 @@ val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 // Two field measurements for finding the reef center. The robot should touch the reef.
 val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
 val ReefFaceRight: Pose2d = Pose2d(14.32, 4.19, Rotation2d.k180deg).flip()
+
 // The calculated center of the reef, used for calculating all other scoring positions.
 val ReefCenter =
     getTranslation2d(
@@ -83,20 +85,53 @@ val FeederLeftMidPose: Pose2d =
     Pose2d(3.520, 6.353, Rotation2d.fromDegrees(120.0))
 val FeederLeft: Pose2d = Pose2d(1.197, 7.031, Rotation2d.fromDegrees(120.0))
 
-val buttonToPoseMap =
+val buttonToPoseAndTagMap =
     mapOf(
-        9 to Reef4Left, // L1
-        10 to Reef4Right, // R1
-        8 to Reef3Right, // L2
-        11 to Reef5Left, // R2
-        4 to Reef3Left, // L3
-        12 to Reef5Right, // R3
-        7 to Reef2Right, // L4
-        1 to Reef6Left, // R4
-        6 to Reef2Left, // L5
-        2 to Reef6Right, // R5
-        5 to Reef1Right, // L6
-        3 to Reef1Left // R6
+        9 to
+            Pair({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }), // L1
+        10 to
+            Pair(
+                { Reef4Right.flipIfNeeded() },
+                { if (IS_RED) 7 else 18 }
+            ), // R1
+        8 to
+            Pair(
+                { Reef3Right.flipIfNeeded() },
+                { if (IS_RED) 6 else 19 }
+            ), // L2
+        11 to
+            Pair({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }), // R2
+        4 to
+            Pair({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }), // L3
+        12 to
+            Pair(
+                { Reef5Right.flipIfNeeded() },
+                { if (IS_RED) 8 else 17 }
+            ), // R3
+        7 to
+            Pair(
+                { Reef2Right.flipIfNeeded() },
+                { if (IS_RED) 11 else 20 }
+            ), // L4
+        1 to
+            Pair({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }), // R4
+        6 to
+            Pair(
+                { Reef2Left.flipIfNeeded() },
+                { if (IS_RED) 11 else 20 }
+            ), // L5
+        2 to
+            Pair(
+                { Reef6Right.flipIfNeeded() },
+                { if (IS_RED) 9 else 22 }
+            ), // R5
+        5 to
+            Pair(
+                { Reef1Right.flipIfNeeded() },
+                { if (IS_RED) 10 else 21 }
+            ), // L6
+        3 to
+            Pair({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }) // R6
     )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =

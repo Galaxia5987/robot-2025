@@ -146,8 +146,13 @@ object Robot : LoggedRobot() {
         logTriggers()
         Logger.recordOutput(
             "ScoreState/SelectedScorePose",
-            selectedScorePose.invoke()
+            selectedScorePose.first.invoke()
         )
+        Logger.recordOutput(
+            "ScoreState/TagOfSelectedScorePose",
+            selectedScorePose.second
+        )
+
         Logger.recordOutput(
             "AutoAlignment/Speeds",
             getSpeed(swerveDrive.localEstimatedPose).invoke()
