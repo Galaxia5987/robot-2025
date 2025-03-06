@@ -124,34 +124,31 @@ object RobotContainer {
             .cross()
             .and(heightController.button(12).negate())
             .whileTrue(alignScoreL1())
-            .onFalse(moveDefaultPosition())
         driverController
             .square()
             .and(heightController.button(12).negate())
             .whileTrue(alignScoreL2())
-            .onFalse(moveDefaultPosition())
         driverController
             .circle()
             .and(heightController.button(12).negate())
             .whileTrue(alignScoreL3())
-            .onFalse(moveDefaultPosition())
         driverController
             .triangle()
             .and(heightController.button(12).negate())
             .whileTrue(alignScoreL4())
-            .onFalse(moveDefaultPosition())
+            .onFalse(moveDefaultPosition(true))
 
         driverController.cross().and(heightController.button(12)).onTrue(l1())
+            .onFalse(outtakeCoralAndDriveBack(false))
         driverController.square().and(heightController.button(12)).onTrue(l2())
+            .onFalse(outtakeCoralAndDriveBack(false))
         driverController.circle().and(heightController.button(12)).onTrue(l3())
+            .onFalse(outtakeCoralAndDriveBack(true))
         driverController
             .triangle()
             .and(heightController.button(12))
             .onTrue(l4())
-        driverController
-            .options()
-            .and(heightController.button(12))
-            .onTrue(outtakeCoralAndDriveBack())
+            .onFalse(outtakeCoralAndDriveBack(true))
 
         driverController.R1().whileTrue(intakeAlgae())
         driverController
@@ -231,7 +228,7 @@ object RobotContainer {
         val namedCommands =
             mapOf(
                 "MoveL4" to l4(),
-                "MoveFeeder" to moveDefaultPosition(),
+                "MoveFeeder" to moveDefaultPosition(true),
             )
 
         NamedCommands.registerCommands(namedCommands)

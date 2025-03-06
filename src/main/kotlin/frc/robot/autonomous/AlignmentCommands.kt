@@ -28,7 +28,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.localEstimatedPose,
                 -swerveDrive.fieldOrientedSpeeds
             )
-            setGoal(if (isL4.asBoolean) targetPose.moveBack(Units.Meters.of(0.1)) else targetPose)
+            setGoal(targetPose.moveBack(Units.Meters.of(0.1)))
         }
         .andThen(
             swerveDrive
@@ -69,15 +69,15 @@ fun alignScoreL1(): Command =
 fun alignScoreL2(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l2()))
-        .andThen(outtakeCoral())
+        .andThen(outtakeCoralAndDriveBack(false))
 
 fun alignScoreL3(): Command =
     alignCommand()
         .alongWith(raiseElevatorAtDistance(l3()))
-        .andThen(outtakeCoral())
+        .andThen(outtakeCoralAndDriveBack(true))
 
 fun alignScoreL4(): Command =
-    alignL4Prep().andThen(alignCommand()).andThen(outtakeCoralAndDriveBack())
+    alignL4Prep().andThen(alignCommand()).andThen(outtakeCoralAndDriveBack(true))
 
 fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
 
@@ -103,6 +103,7 @@ fun logTriggers() {
             "AtAlignmentSetpoint" to atAlignmentSetpoint,
             "IsWithinDistance" to isWithinDistance,
             "ShouldOpenElevator" to shouldOpenElevator,
+            "isL4" to isL4
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)

@@ -62,7 +62,7 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun outtakeCoralAndDriveBack(): Command =
+fun outtakeCoralAndDriveBack(moveWristUp: Boolean): Command =
     sequence(
         (gripper
                 .outtake()
@@ -74,9 +74,8 @@ fun outtakeCoralAndDriveBack(): Command =
         gripper.slowOuttake(true).withTimeout(0.1),
         swerveDrive
             .run { swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) }
-            .withTimeout(0.1)
-            .alongWith(wrist.max()),
-        moveDefaultPosition().onlyIf(gripper.hasCoral.negate())
+            .withTimeout(0.25)
+        ,moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
     )
 
 fun outtakeCoral(): Command =
@@ -88,8 +87,8 @@ fun outtakeCoral(): Command =
                     visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
                 ))
             .withTimeout(0.5),
-        gripper.slowOuttake(true).withTimeout(0.1),
-        moveDefaultPosition()
+        gripper.slowOuttake(true).withTimeout(0.15),
+        moveDefaultPosition(false)
             .onlyIf(
                 gripper.hasCoral.negate().and { !DriverStation.isAutonomous() }
             )
@@ -97,8 +96,8 @@ fun outtakeCoral(): Command =
 
 // TODO: Add Coral Simulation
 
-fun moveDefaultPosition(): Command =
-    sequence(wrist.max(), elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.l1())
+fun moveDefaultPosition(moveWristUp: Boolean): Command =
+    sequence(wrist.max().onlyIf{moveWristUp}, elevator.feeder(), wrist.l1())
         .withName("Reef/Move default position")
 
 fun l1(): Command = parallel(elevator.l1(), wrist.l1(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L1")
@@ -122,13 +121,13 @@ fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
 fun l2algae(retractTrigger: Trigger): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
         .until(retractTrigger)
-        .andThen(moveDefaultPosition())
+        .andThen(moveDefaultPosition(false))
         .withName("Reef/L2 Algae")
 
 fun l3algae(retractTrigger: Trigger): Command =
     parallel(elevator.l3Algae(), wrist.l3algae(), gripper.removeAlgae())
         .until(retractTrigger)
-        .andThen(moveDefaultPosition())
+        .andThen(moveDefaultPosition(false))
         .withName("Reef/L3 Algae")
 
 fun feeder(intakeTrigger: Trigger): Command =
@@ -138,7 +137,7 @@ fun feeder(intakeTrigger: Trigger): Command =
             gripper
                 .intake()
                 .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition())
+                .andThen(moveDefaultPosition(false))
         )
         .withName("Reef/Feeder")
 
@@ -149,7 +148,7 @@ fun blockedFeeder(intakeTrigger: Trigger): Command =
             gripper
                 .intake()
                 .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition())
+                .andThen(moveDefaultPosition(false))
         )
         .withName("Reef/Blocked Feeder")
 
