@@ -28,7 +28,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.localEstimatedPose,
                 -swerveDrive.fieldOrientedSpeeds
             )
-            setGoal(targetPose)
+            setGoal(if (isL4.asBoolean) targetPose.moveBack(Units.Meters.of(0.1)) else targetPose)
         }
         .andThen(
             swerveDrive
@@ -94,6 +94,8 @@ private val isWithinDistance = Trigger {
 val shouldOpenElevator = Trigger {
     isWithinDistance.asBoolean && isAligning.asBoolean
 }
+
+var isL4 = Trigger {false}
 
 fun logTriggers() {
     mapOf(

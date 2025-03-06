@@ -5,13 +5,13 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.parallel
-import edu.wpi.first.wpilibj2.command.Commands.run
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.Commands.sequence
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.Mode
+import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
 import frc.robot.driveSimulation
 import frc.robot.elevator
@@ -101,16 +101,16 @@ fun moveDefaultPosition(): Command =
     sequence(wrist.max(), elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.l1())
         .withName("Reef/Move default position")
 
-fun l1(): Command = parallel(elevator.l1(), wrist.l1()).withName("Reef/Move L1")
+fun l1(): Command = parallel(elevator.l1(), wrist.l1(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L1")
 
-fun l2(): Command = parallel(elevator.l2(), wrist.l2()).withName("Reef/Move L2")
+fun l2(): Command = parallel(elevator.l2(), wrist.l2(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L2")
 
-fun l3(): Command = parallel(elevator.l3(), wrist.l3()).withName("Reef/Move L3")
+fun l3(): Command = parallel(elevator.l3(), wrist.l3(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L3")
 
-fun l4(): Command = parallel(elevator.l4(), wrist.l4()).withName("Reef/Move L4")
+fun l4(): Command = parallel(elevator.l4(), wrist.l4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Move L4")
 
 fun autoL4(): Command =
-    parallel(elevator.autoL4(), wrist.autoL4()).withName("Reef/Auto L4")
+    parallel(elevator.autoL4(), wrist.autoL4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Auto L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
     waitUntil(shouldOpenElevator)
@@ -118,24 +118,6 @@ fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
             elevatorCommand.until(elevator.atSetpoint.and(wrist.atSetpoint))
         )
         .withName("Reef/raiseElevatorAtDistance")
-
-fun dumbL4(outtakeTrigger: Trigger): Command =
-    l4()
-        .andThen(
-            waitUntil(outtakeTrigger),
-            gripper
-                .fastOuttake()
-                .withTimeout(0.8)
-                .alongWith(
-                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-                )
-        )
-        .withName("Reef/DumbL4")
-        .andThen(
-            run({ swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) })
-                .withTimeout(0.2)
-                .andThen(moveDefaultPosition())
-        )
 
 fun l2algae(retractTrigger: Trigger): Command =
     parallel(elevator.l2Algae(), wrist.l2algae(), gripper.removeAlgae())
