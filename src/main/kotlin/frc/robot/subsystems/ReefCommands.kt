@@ -98,7 +98,7 @@ fun outtakeCoral(): Command =
 // TODO: Add Coral Simulation
 
 fun moveDefaultPosition(): Command =
-    sequence(elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.l1())
+    sequence(wrist.max(), elevator.feeder(), waitUntil(elevator.atSetpoint), wrist.l1())
         .withName("Reef/Move default position")
 
 fun l1(): Command = parallel(elevator.l1(), wrist.l1()).withName("Reef/Move L1")
