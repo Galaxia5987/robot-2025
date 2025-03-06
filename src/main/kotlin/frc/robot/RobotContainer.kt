@@ -1,5 +1,6 @@
 package frc.robot
 
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.path.PathPlannerPath
@@ -9,28 +10,18 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.*
 import frc.robot.autonomous.isLeft
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.subsystems.Visualizer
-import frc.robot.subsystems.blockedFeeder
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
-import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
-import frc.robot.subsystems.l2algae
-import frc.robot.subsystems.l3
-import frc.robot.subsystems.l3algae
-import frc.robot.subsystems.l4
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -176,6 +167,20 @@ object RobotContainer {
                 .onTrue(setPoseBasedOnButton(buttonId))
         }
     }
+
+    val disableTrigger: Trigger =
+        RobotModeTriggers.disabled()
+            .debounce(disableCommandDebounce)
+            .onTrue(
+                Commands.runOnce({
+                    swerveDrive.SetNeutralMode(NeutralModeValue.Coast)
+                })
+            )
+            .onFalse(
+                Commands.runOnce({
+                    swerveDrive.SetNeutralMode(NeutralModeValue.Brake)
+                })
+            )
 
     fun getAutonomousCommand(): Command =
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L"))
