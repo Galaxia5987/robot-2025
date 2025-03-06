@@ -171,14 +171,17 @@ fun feeder(
         )
         .withName("Reef/Feeder")
 
-fun blockedFeeder(intakeTrigger: Trigger): Command =
+fun blockedFeeder(
+    intakeTrigger: Trigger,
+    zeroWrist: BooleanSupplier = BooleanSupplier { true }
+): Command =
     sequence(
             parallel(elevator.blockedFeeder(), wrist.blockedFeeder()),
             waitUntil(intakeTrigger),
             gripper
                 .intake()
                 .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition(false))
+                .andThen(moveDefaultPosition(false, zeroWrist))
         )
         .withName("Reef/Blocked Feeder")
 

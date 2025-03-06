@@ -192,7 +192,12 @@ object RobotContainer {
             )
         operatorController
             .back()
-            .onTrue(blockedFeeder(operatorController.back().negate()))
+            .onTrue(
+                blockedFeeder(
+                    operatorController.back().negate(),
+                    heightController.button(12)
+                )
+            )
         operatorController
             .povDown()
             .onTrue(elevator.reset(operatorController.povDown().negate()))
