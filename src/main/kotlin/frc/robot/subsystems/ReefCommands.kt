@@ -4,6 +4,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.parallel
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.Commands.sequence
@@ -20,6 +21,7 @@ import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import frc.robot.swerveDrive
 import frc.robot.wrist
+import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
@@ -74,8 +76,8 @@ fun outtakeCoralAndDriveBack(moveWristUp: Boolean): Command =
         gripper.slowOuttake(true).withTimeout(0.1),
         swerveDrive
             .run { swerveDrive.runVelocity(ChassisSpeeds(-0.5, 0.0, 0.0)) }
-            .withTimeout(0.25)
-        ,moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
+            .withTimeout(0.25),
+        moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
     )
 
 fun outtakeCoral(): Command =
@@ -96,20 +98,45 @@ fun outtakeCoral(): Command =
 
 // TODO: Add Coral Simulation
 
-fun moveDefaultPosition(moveWristUp: Boolean): Command =
-    sequence(wrist.max().onlyIf{moveWristUp}, elevator.feeder(), wrist.l1())
+fun moveDefaultPosition(
+    moveWristUp: Boolean,
+    zeroWrist: BooleanSupplier = BooleanSupplier { true }
+): Command =
+    Commands.defer(
+            {
+                sequence(
+                    wrist.max().onlyIf { moveWristUp },
+                    elevator.feeder(),
+                    if (zeroWrist.asBoolean) wrist.l1() else wrist.feeder()
+                )
+            },
+            setOf(elevator, wrist)
+        )
         .withName("Reef/Move default position")
 
-fun l1(): Command = parallel(elevator.l1(), wrist.l1(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L1")
+fun l1(): Command =
+    parallel(elevator.l1(), wrist.l1(), runOnce({ isL4 = Trigger { false } }))
+        .withName("Reef/Move L1")
 
-fun l2(): Command = parallel(elevator.l2(), wrist.l2(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L2")
+fun l2(): Command =
+    parallel(elevator.l2(), wrist.l2(), runOnce({ isL4 = Trigger { false } }))
+        .withName("Reef/Move L2")
 
-fun l3(): Command = parallel(elevator.l3(), wrist.l3(), runOnce({isL4 = Trigger{false}})).withName("Reef/Move L3")
+fun l3(): Command =
+    parallel(elevator.l3(), wrist.l3(), runOnce({ isL4 = Trigger { false } }))
+        .withName("Reef/Move L3")
 
-fun l4(): Command = parallel(elevator.l4(), wrist.l4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Move L4")
+fun l4(): Command =
+    parallel(elevator.l4(), wrist.l4(), runOnce({ isL4 = Trigger { true } }))
+        .withName("Reef/Move L4")
 
 fun alignL4(): Command =
-    parallel(elevator.alignL4(), wrist.alignL4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Auto L4")
+    parallel(
+            elevator.alignL4(),
+            wrist.alignL4(),
+            runOnce({ isL4 = Trigger { true } })
+        )
+        .withName("Reef/Auto L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
     waitUntil(shouldOpenElevator)
@@ -130,14 +157,17 @@ fun l3algae(retractTrigger: Trigger): Command =
         .andThen(moveDefaultPosition(false))
         .withName("Reef/L3 Algae")
 
-fun feeder(intakeTrigger: Trigger): Command =
+fun feeder(
+    intakeTrigger: Trigger,
+    zeroWrist: BooleanSupplier = BooleanSupplier { true }
+): Command =
     sequence(
             parallel(elevator.feeder(), wrist.feeder()),
             waitUntil(intakeTrigger),
             gripper
                 .intake()
                 .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition(false))
+                .andThen(moveDefaultPosition(false, zeroWrist))
         )
         .withName("Reef/Feeder")
 

@@ -77,7 +77,9 @@ fun alignScoreL3(): Command =
         .andThen(outtakeCoralAndDriveBack(true))
 
 fun alignScoreL4(): Command =
-    alignL4Prep().andThen(alignCommand()).andThen(outtakeCoralAndDriveBack(true))
+    alignL4Prep()
+        .andThen(alignCommand())
+        .andThen(outtakeCoralAndDriveBack(true))
 
 fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
 
@@ -95,7 +97,7 @@ val shouldOpenElevator = Trigger {
     isWithinDistance.asBoolean && isAligning.asBoolean
 }
 
-var isL4 = Trigger {false}
+var isL4 = Trigger { false }
 
 fun logTriggers() {
     mapOf(

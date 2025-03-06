@@ -138,11 +138,20 @@ object RobotContainer {
             .whileTrue(alignScoreL4())
             .onFalse(moveDefaultPosition(true))
 
-        driverController.cross().and(heightController.button(12)).onTrue(l1())
+        driverController
+            .cross()
+            .and(heightController.button(12))
+            .onTrue(l1())
             .onFalse(outtakeCoralAndDriveBack(false))
-        driverController.square().and(heightController.button(12)).onTrue(l2())
+        driverController
+            .square()
+            .and(heightController.button(12))
+            .onTrue(l2())
             .onFalse(outtakeCoralAndDriveBack(false))
-        driverController.circle().and(heightController.button(12)).onTrue(l3())
+        driverController
+            .circle()
+            .and(heightController.button(12))
+            .onTrue(l3())
             .onFalse(outtakeCoralAndDriveBack(true))
         driverController
             .triangle()
@@ -167,10 +176,20 @@ object RobotContainer {
             .onTrue(l3algae(heightController.button(3).negate()))
         operatorController
             .start()
-            .onTrue(feeder(operatorController.start().negate()))
+            .onTrue(
+                feeder(
+                    operatorController.start().negate(),
+                    heightController.button(12)
+                )
+            )
         heightController
             .button(1)
-            .onTrue(feeder(operatorController.start().negate()))
+            .onTrue(
+                feeder(
+                    operatorController.start().negate(),
+                    heightController.button(12)
+                )
+            )
         operatorController
             .back()
             .onTrue(blockedFeeder(operatorController.back().negate()))
@@ -192,6 +211,8 @@ object RobotContainer {
         operatorController
             .leftBumper()
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+
+        heightController.button(12).onTrue(wrist.l1())
 
         testController.a().whileTrue(runAllBits())
 
