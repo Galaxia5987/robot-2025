@@ -137,7 +137,6 @@ object RobotContainer {
             .triangle()
             .and(heightController.button(12).negate())
             .whileTrue(alignScoreL4())
-            .onFalse(moveDefaultPosition(true))
 
         driverController
             .cross()
