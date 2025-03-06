@@ -13,8 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static frc.robot.lib.PhoenixUtil.tryUntilOk;
-
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -35,7 +33,10 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+
 import java.util.Queue;
+
+import static frc.robot.lib.PhoenixUtil.tryUntilOk;
 
 /**
  * Module IO implementation for Talon FX drive motor controller, Talon FX turn motor controller, and
@@ -267,5 +268,11 @@ public class ModuleIOTalonFX implements ModuleIO {
                     case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
                             rotation.getRotations());
                 });
+    }
+
+    @Override
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        driveTalon.setNeutralMode(neutralMode);
+        turnTalon.setNeutralMode(neutralMode);
     }
 }
