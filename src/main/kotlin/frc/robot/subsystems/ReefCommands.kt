@@ -109,8 +109,8 @@ fun l3(): Command = parallel(elevator.l3(), wrist.l3(), runOnce({isL4 = Trigger{
 
 fun l4(): Command = parallel(elevator.l4(), wrist.l4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Move L4")
 
-fun autoL4(): Command =
-    parallel(elevator.autoL4(), wrist.autoL4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Auto L4")
+fun alignL4(): Command =
+    parallel(elevator.alignL4(), wrist.alignL4(), runOnce({isL4 = Trigger{true}})).withName("Reef/Auto L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
     waitUntil(shouldOpenElevator)

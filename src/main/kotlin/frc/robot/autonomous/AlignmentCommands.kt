@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.extender
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
-import frc.robot.subsystems.autoL4
+import frc.robot.subsystems.alignL4
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
@@ -59,7 +59,7 @@ private fun alignL4Prep(): Command =
                 Trigger { false }
             )
         }
-        .raceWith(raiseElevatorAtDistance(autoL4()))
+        .raceWith(raiseElevatorAtDistance(alignL4()))
 
 fun alignScoreL1(): Command =
     alignCommand()
