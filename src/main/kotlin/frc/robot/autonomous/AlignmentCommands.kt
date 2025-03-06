@@ -5,13 +5,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.extender
+import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
 import frc.robot.subsystems.alignL2
 import frc.robot.subsystems.alignL4
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l3
+import frc.robot.subsystems.leds.alignPattern
+import frc.robot.subsystems.leds.blueTeamPattern
+import frc.robot.subsystems.leds.redTeamPattern
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.outtakeL1
@@ -25,6 +30,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
         .runOnce {
             isAligning = Trigger { true }
+            leds.setPattern(all = alignPattern).schedule()
             resetProfiledPID(
                 swerveDrive.localEstimatedPose,
                 -swerveDrive.fieldOrientedSpeeds
@@ -46,7 +52,11 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.limitlessRunVelocity(ChassisSpeeds())
             }
         )
-        .finallyDo(Runnable { isAligning = Trigger { false } })
+        .finallyDo(Runnable {
+            isAligning = Trigger { false }
+            leds.setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+                .schedule()
+        })
 }
 
 fun alignCommand(): Command =

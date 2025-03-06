@@ -78,5 +78,4 @@ class LEDs : SubsystemBase() {
             .or(isAligning)
             .onFalse(setPattern(all = redTeamPattern))
 
-    val alignTrigger = isAligning.onTrue(setPattern(alignPattern))
 }
