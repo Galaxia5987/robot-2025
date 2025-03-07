@@ -81,7 +81,7 @@ fun outtakeCoralAndDriveBack(
             swerveDrive.limitlessRunVelocity(
                 ChassisSpeeds(-0.8, 0.0, 0.0)
             )
-        }.withTimeout(0.25),
+        }.withTimeout(0.3),
         swerveDrive.run {
             swerveDrive.stop()
         }.withTimeout(0.25),
