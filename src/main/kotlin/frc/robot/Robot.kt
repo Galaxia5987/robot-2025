@@ -8,6 +8,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
@@ -15,9 +16,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
-import frc.robot.autonomous.isLeft
+import frc.robot.autonomous.getSpeed
+import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
+import frc.robot.subsystems.leds.blueTeamPattern
+import frc.robot.subsystems.leds.redTeamPattern
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -97,6 +102,10 @@ object Robot : LoggedRobot() {
         DriverStation.silenceJoystickConnectionWarning(true)
         PathfindingCommand.warmupCommand().schedule()
 
+        leds
+            .setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+            .schedule()
+
         val commandCounts = HashMap<String, Int>()
         val logCommandFunction =
             { command: Command, active: Boolean, verb: String ->
@@ -135,11 +144,27 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        logTriggers()
         Logger.recordOutput(
-            "SubsystemPoses",
-            *RobotContainer.visualizer.getSubsystemsPoses()
+            "ScoreState/SelectedScorePose",
+            selectedScorePose.first.invoke()
         )
-        Logger.recordOutput("Auto Alignment/isLeft", isLeft)
+        Logger.recordOutput(
+            "ScoreState/TagOfSelectedScorePose",
+            selectedScorePose.second
+        )
+
+        Logger.recordOutput(
+            "disableAlignment",
+            RobotContainer.disableAlignment
+        )
+
+        Logger.recordOutput(
+            "AutoAlignment/Speeds",
+            getSpeed(swerveDrive.localEstimatedPose).invoke()
+        )
+
+        Logger.recordOutput("test", Units.RotationsPerSecond.of(130.0))
     }
 
     /**
@@ -155,10 +180,10 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        if (IS_RED) {
-            swerveDrive.resetGyro(Rotation2d.k180deg)
-        }
-        else swerveDrive.resetGyro(Rotation2d.kZero)
+        swerveDrive.resetGyro(
+            if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
+        )
+        swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()
