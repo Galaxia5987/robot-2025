@@ -5,18 +5,11 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.Commands.parallel
-import edu.wpi.first.wpilibj2.command.Commands.runOnce
-import edu.wpi.first.wpilibj2.command.Commands.sequence
-import edu.wpi.first.wpilibj2.command.Commands.waitUntil
+import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.CURRENT_MODE
-import frc.robot.Mode
+import frc.robot.*
 import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
-import frc.robot.driveSimulation
-import frc.robot.elevator
-import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import frc.robot.swerveDrive
@@ -67,7 +60,7 @@ private fun visualizeCoralOuttake(): Command =
 fun visualizeCoralOuttakeIfNeeded(): Command =
     visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
 
-private fun scoreCoral(endTrigger: Trigger): Command =
+
 fun outtakeCoralAndDriveBack(
     moveWristUp: Boolean,
     isReverse: Boolean = false

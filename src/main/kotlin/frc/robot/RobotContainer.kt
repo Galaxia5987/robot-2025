@@ -59,7 +59,7 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
     private val heightController = CommandGenericHID(3)
-    private val poseController = CommandGenericHID(4)
+    private val poseController   = CommandGenericHID(4)
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision

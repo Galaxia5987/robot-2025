@@ -180,10 +180,10 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        swerveDrive.resetGyro(
-            if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
-        )
-        swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
+        if (IS_RED) {
+            swerveDrive.resetGyro(Rotation2d.k180deg)
+        }
+        else swerveDrive.resetGyro(Rotation2d.kZero)
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()

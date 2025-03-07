@@ -51,8 +51,7 @@ class Visualizer {
     private val gripper = frc.robot.gripper
 
     private val ALGAE_OFFSET = Transform3d(0.4, 0.0, 0.35, Rotation3d())
-    private val CORAL_HEIGHT_OFFSET = getPose3d(z = 0.07)
-    private val CORAL_ANGLE_OFFSET = Degrees.of(25.0)
+    private val CORAL_OFFSET = getPose3d(z = -0.09, x = -0.07)
 
     private fun getElevatorPoses(): Pair<Pose3d, Pose3d> {
 
@@ -92,10 +91,10 @@ class Visualizer {
                             CORAL_ROLLER_UP_C2C[0],
                             CORAL_ROLLER_UP_C2C[1]
                         )
-                        .minus(CORAL_HEIGHT_OFFSET)
+                        .minus(CORAL_OFFSET)
                 )
                 ?.withRotation(
-                    pitch = -wrist.angle.invoke() + CORAL_ANGLE_OFFSET,
+                    pitch = -wrist.angle.invoke(),
                     yaw =
                         driveSimulation.simulatedDriveTrainPose.rotation
                             .measure!!
