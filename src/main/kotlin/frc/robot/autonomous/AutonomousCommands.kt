@@ -89,13 +89,49 @@ private fun S3L(): Command =
     )
 
 fun C6L5LR(): Command =
-    Commands.sequence(C6L(), feederPath("6LS"), S5L(), feederPath("5LS"), S5R())
+    Commands.sequence(
+        C6L(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
+        feederPath("6LS"),
+        S5L(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
+        feederPath("5LS"),
+        S5R(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
+    )
 
 fun A2R3RL(): Command =
     Commands.sequence(
         A2R(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
         feederPath("6LS", true),
         S3R(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
         feederPath("5LS", true),
-        S3L()
+        S3L(),
+        Commands.either(
+            alignScoreL4(),
+            Commands.none(),
+            gripper.hasCoral
+        ),
     )
