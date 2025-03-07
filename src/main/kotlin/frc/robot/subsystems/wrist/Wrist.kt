@@ -37,9 +37,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     val angle: () -> Angle = { io.inputs.angle }
 
-    fun setVoltage(voltage: Voltage): Command = runOnce {
+    fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
-    }
 
     private fun setAngle(angle: Angles): Command =
         runOnce {
@@ -48,6 +47,16 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 setpointValue = angle.angle
             }
             .withName("Wrist/${angle.getLoggingName()}")
+
+    fun reset(resetTrigger: Trigger): Command =
+        Commands.sequence(
+            runOnce { io.setSoftLimits(false) }
+                .andThen(setVoltage(RESET_VOLTAGE))
+                .until(resetTrigger),
+            runOnce({io.resetAbsoluteEncoder(Units.Degrees.zero())}),
+            runOnce { io.setSoftLimits(true) }
+        )
+            .withName("Elevator/reset")
 
     fun l1(): Command = setAngle(Angles.L1)
     fun l2(): Command = setAngle(Angles.L2)

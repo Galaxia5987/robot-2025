@@ -199,6 +199,9 @@ object RobotContainer {
             .povUp()
             .onTrue(extender.reset(operatorController.povUp().negate()))
         operatorController
+            .povRight()
+            .onTrue(wrist.reset(operatorController.povRight().negate()))
+        operatorController
             .rightTrigger()
             .whileTrue(elevator.setVoltage(ELEVATOR_MANUAL_CONTROL_VOLTAGE))
         operatorController
@@ -209,7 +212,7 @@ object RobotContainer {
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
         operatorController
             .leftBumper()
-            .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
+            .whileTrue(wrist.setVoltage(-WRIST_MANUAL_CONTROL_VOLTAGE))
 
         disableAlignment.onTrue(wrist.l1())
 
