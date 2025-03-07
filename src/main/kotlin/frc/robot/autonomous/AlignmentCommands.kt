@@ -67,7 +67,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
 fun alignCommand(): Command =
     swerveDrive.defer { alignToPose(selectedScorePose.first.invoke(), atGoal) }
 
-private fun alignL4Prep(): Command =
+private fun alignPrep(reefMasterCommand: Command): Command =
     swerveDrive
         .defer {
             alignToPose(
@@ -75,23 +75,23 @@ private fun alignL4Prep(): Command =
                 Trigger { false }
             )
         }
-        .raceWith(raiseElevatorAtDistance(alignL4()))
+        .raceWith(raiseElevatorAtDistance(reefMasterCommand))
 
 fun alignScoreL1(): Command =
     alignCommand().alongWith(raiseElevatorAtDistance(l1())).andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
-    alignCommand()
-        .alongWith(raiseElevatorAtDistance(alignL2()))
+    alignPrep(alignL2())
+        .andThen(alignCommand())
         .andThen(outtakeCoralAndDriveBack(false))
 
 fun alignScoreL3(): Command =
-    alignCommand()
-        .alongWith(raiseElevatorAtDistance(l3()))
-        .andThen(outtakeCoralAndDriveBack(true))
+    alignPrep(l3())
+        .andThen(alignCommand())
+        .andThen(outtakeCoralAndDriveBack(false))
 
 fun alignScoreL4(): Command =
-    alignL4Prep()
+    alignPrep(alignL4())
         .andThen(alignCommand())
         .andThen(outtakeCoralAndDriveBack(true))
 
