@@ -17,8 +17,6 @@ const val GEAR_RATIO = 1 / ((1.0 / 9.0) * (20.0 / 66.0) * (16.0 / 42.0))
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(4.0)
 
-val ABSOLUTE_ENCODER_MAGNET_OFFSET = Units.Rotations.of(0.0)
-
 val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 
 enum class Angles(val angle: Angle) {

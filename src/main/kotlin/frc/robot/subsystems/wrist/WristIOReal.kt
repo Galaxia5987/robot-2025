@@ -77,10 +77,10 @@ class WristIOReal : WristIO {
                 MagnetSensor.SensorDirection =
                     SensorDirectionValue.Clockwise_Positive
                 MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
-                MagnetSensor.MagnetOffset =
-                    -ABSOLUTE_ENCODER_MAGNET_OFFSET.`in`(Units.Rotations)
+                MagnetSensor.MagnetOffset = 0.0
             }
         )
+        absoluteEncoder.setPosition(0.0)
     }
 
     override fun setAngle(angle: Angle) {
