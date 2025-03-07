@@ -154,6 +154,11 @@ object Robot : LoggedRobot() {
         )
 
         Logger.recordOutput(
+            "disableAlignment",
+            RobotContainer.disableAlignment
+        )
+
+        Logger.recordOutput(
             "AutoAlignment/Speeds",
             getSpeed(swerveDrive.localEstimatedPose).invoke()
         )
