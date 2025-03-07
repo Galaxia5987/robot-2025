@@ -32,10 +32,10 @@ val GAINS =
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
     L2(Units.Centimeters.of(0.0)),
-    L3(Units.Centimeters.of(18.0)),
+    L3(Units.Centimeters.of(20.0)),
     L4(Units.Centimeters.of(105.0)),
     ALIGN_L2(Units.Centimeters.of(0.0)),
-    ALIGN_L4(Units.Centimeters.of(90.0)),
+    ALIGN_L4(Units.Centimeters.of(95.0)),
     L2_ALGAE(Units.Centimeters.of(0.0)),
     L3_ALGAE(Units.Centimeters.of(0.0)),
     FEEDER(Units.Centimeters.of(16.0)),

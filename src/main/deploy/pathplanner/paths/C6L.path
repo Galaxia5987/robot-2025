@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.269463952257485,
-        "y": 2.4376264693927405
+        "x": 6.243676201473987,
+        "y": 2.3638351082137943
       },
       "isLocked": false,
       "linkedName": "C"
     },
     {
       "anchor": {
-        "x": 5.115426136363636,
-        "y": 2.5242755681818188
+        "x": 5.069341216216216,
+        "y": 2.532854729729729
       },
       "prevControl": {
-        "x": 6.322396122778854,
-        "y": 2.5902131356111258
+        "x": 6.292311112057911,
+        "y": 2.5782358685691555
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,12 +29,26 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7552602436323365,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 450.0,
+        "maxAngularAcceleration": 600.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "MoveL4",
-      "waypointRelativePos": 0.9531737773152947,
+      "waypointRelativePos": 0.8990634755463015,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,10 +59,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 320.0,
-    "maxAngularAcceleration": 520.0,
+    "maxAngularVelocity": 650.0,
+    "maxAngularAcceleration": 715.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

@@ -76,7 +76,7 @@ fun outtakeCoralAndDriveBack(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
             ))
             .withTimeout(0.5),
-        gripper.slowOuttake(true).withTimeout(0.1),
+        gripper.slowOuttake(true).withTimeout(0.15),
         swerveDrive.run {
             swerveDrive.limitlessRunVelocity(
                 ChassisSpeeds(-0.8, 0.0, 0.0)
@@ -161,7 +161,7 @@ fun alignL2(): Command =
     )
         .withName("Reef/Auto L2")
 
-fun alignL4(): Command =
+fun alignmentSetpointL4(): Command =
     parallel(
         elevator.alignL4(),
         wrist.alignL4(),

@@ -2,6 +2,7 @@ package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -25,6 +26,7 @@ import frc.robot.autonomous.alignScoreL4
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
@@ -98,7 +100,7 @@ object RobotContainer {
                 swerveDrive,
                 { driverController.leftY },
                 { driverController.leftX },
-                { -driverController.rightX * 0.6 }
+                { -driverController.rightX * 0.7 }
             )
 
         climber.defaultCommand =
@@ -125,15 +127,19 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
+            .onFalse(moveDefaultPosition(false, { false }))
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
+            .onFalse(moveDefaultPosition(false, { false }))
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
+            .onFalse(moveDefaultPosition(true, { false }))
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
+            .onFalse(moveDefaultPosition(true, { false }))
 
         driverController
             .cross()
@@ -186,6 +192,14 @@ object RobotContainer {
             )
         operatorController
             .back()
+            .onTrue(
+                blockedFeeder(
+                    operatorController.back().negate(),
+                    disableAlignment
+                )
+            )
+        heightController
+            .button(4)
             .onTrue(
                 blockedFeeder(
                     operatorController.back().negate(),
@@ -250,8 +264,8 @@ object RobotContainer {
     private fun registerAutoCommands() {
         val namedCommands =
             mapOf(
-                "MoveL4" to l4(),
-                "MoveFeeder" to moveDefaultPosition(true),
+                "MoveL4" to alignmentSetpointL4(),
+                "MoveFeeder" to moveDefaultPosition(true, { false }),
             )
 
         NamedCommands.registerCommands(namedCommands)
@@ -259,6 +273,10 @@ object RobotContainer {
         autoChooser.setDefaultOption("B1L", B1L())
         autoChooser.addOption("None", Commands.none())
         autoChooser.addOption("B1L", B1L())
+        autoChooser.addOption(
+            "CalibrationPath",
+            AutoBuilder.followPath(PathPlannerPath.fromPathFile("Calibration Path"))
+        )
         autoChooser.addOption("B1R", B1R())
         autoChooser.addOption("C6L", C6L())
         autoChooser.addOption("C6L5LR", C6L5LR())

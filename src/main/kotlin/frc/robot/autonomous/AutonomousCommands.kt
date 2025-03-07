@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.gripper
 import frc.robot.subsystems.feeder
 import frc.robot.swerveDrive
 
@@ -23,69 +24,65 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
 
 fun B1L(): Command =
     Commands.sequence(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[3]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1L")),
         alignScoreL4()
     )
 
 fun B1R(): Command =
     Commands.sequence(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
         alignScoreL4()
     )
 
 fun C6L(): Command =
     Commands.sequence(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
+        feeder(Trigger{true}, {false}),
+        gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
         autoScoreL4()
     )
 
 private fun S5L(): Command =
     Commands.sequence(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
         autoScoreL4()
     )
 
 private fun S5R(): Command =
     Commands.sequence(
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
         autoScoreL4()
     )
 
 fun A2R(): Command =
     Commands.sequence(
-        AutoBuilder.resetOdom(
-            PathPlannerPath.fromPathFile("C6L")
-                .mirrorPath()
-                .startingHolonomicPose
-                .get()
-        ),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         autoScoreL4()
     )
 
 private fun S3R(): Command =
     Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5L").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
         autoScoreL4()
     )
 
 private fun S3L(): Command =
     Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5R").mirrorPath()
         ),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
         autoScoreL4()
     )
 

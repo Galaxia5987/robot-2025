@@ -8,6 +8,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
@@ -162,6 +163,8 @@ object Robot : LoggedRobot() {
             "AutoAlignment/Speeds",
             getSpeed(swerveDrive.localEstimatedPose).invoke()
         )
+
+        Logger.recordOutput("test", Units.RotationsPerSecond.of(130.0))
     }
 
     /**

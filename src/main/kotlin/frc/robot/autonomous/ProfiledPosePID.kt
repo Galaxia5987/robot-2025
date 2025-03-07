@@ -11,12 +11,12 @@ import frc.robot.subsystems.drive.TunerConstants
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
-private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 5.0)
+private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 7.0)
 private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
 private val xKD = LoggedNetworkNumber("/Tuning/AutoAlign/xKD", 0.0)
-private val yKP = LoggedNetworkNumber("/Tuning/AutoAlign/yKP", 5.0)
+private val yKP = LoggedNetworkNumber("/Tuning/AutoAlign/yKP", 7.0)
 private val yKI = LoggedNetworkNumber("/Tuning/AutoAlign/yKI", 0.0)
-private val yKD = LoggedNetworkNumber("/Tuning/AutoAlign/yKD", 0.0)
+private val yKD = LoggedNetworkNumber("/Tuning/AutoAlign/yKD", 0.8)
 private val thetaKP = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKP", 6.0)
 private val thetaKI = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKI", 0.0)
 private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
@@ -37,10 +37,10 @@ private val ROTATIONAL_CONSTRAINTS =
 
 val xController =
     ProfiledPIDController(xKP.get(), xKI.get(), xKD.get(), LINEAR_CONSTRAINTS)
-        .apply { setTolerance(Units.Meters.of(0.02).`in`(Units.Meters)) }
+        .apply { setTolerance(X_ALIGNMENT_TOLERANCE.`in`(Units.Meters)) }
 val yController =
     ProfiledPIDController(yKP.get(), yKI.get(), yKD.get(), LINEAR_CONSTRAINTS)
-        .apply { setTolerance(Units.Meters.of(0.02).`in`(Units.Meters)) }
+        .apply { setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters)) }
 val thetaController =
     ProfiledPIDController(
             thetaKP.get(),
@@ -49,7 +49,7 @@ val thetaController =
             ROTATIONAL_CONSTRAINTS
         )
         .apply {
-            setTolerance(Units.Degrees.of(1.0).`in`(Units.Radians))
+            setTolerance(ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians))
             enableContinuousInput(-Math.PI, Math.PI)
         }
 
@@ -70,7 +70,7 @@ val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
         .and(thetaController::atGoal)
-        .debounce(0.4)
+        .debounce(0.15)
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)
@@ -86,11 +86,11 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         ChassisSpeeds(
             MathUtil.applyDeadband(
                 xController.calculate(botPose.x),
-                Units.Meters.of(0.02).`in`(Units.Meters)
+                Units.Meters.of(0.03).`in`(Units.Meters)
             ),
             MathUtil.applyDeadband(
                 yController.calculate(botPose.y),
-                Units.Meters.of(0.02).`in`(Units.Meters)
+                Units.Meters.of(0.03).`in`(Units.Meters)
             ),
             MathUtil.applyDeadband(
                 thetaController.calculate(botPose.rotation.radians),
