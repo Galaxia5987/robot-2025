@@ -168,17 +168,22 @@ object RobotContainer {
         }
     }
 
-    val disableTrigger: Trigger =
+    private val enableTrigger =
+        RobotModeTriggers.autonomous()
+            .or(RobotModeTriggers.teleop())
+            .onTrue(
+                Commands.runOnce({
+                    swerveDrive.SetNeutralMode(NeutralModeValue.Brake)
+                })
+            )
+
+    private val disableTrigger: Trigger =
         RobotModeTriggers.disabled()
             .debounce(disableCommandDebounce)
+            .and(enableTrigger.negate())
             .onTrue(
                 Commands.runOnce({
                     swerveDrive.SetNeutralMode(NeutralModeValue.Coast)
-                })
-            )
-            .onFalse(
-                Commands.runOnce({
-                    swerveDrive.SetNeutralMode(NeutralModeValue.Brake)
                 })
             )
 
