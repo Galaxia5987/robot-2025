@@ -25,7 +25,9 @@ import frc.robot.autonomous.alignScoreL4
 import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
+import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
@@ -166,30 +168,30 @@ object RobotContainer {
         heightController
             .button(3)
             .onTrue(l3algae(heightController.button(3).negate()))
-//        operatorController
-//            .start()
-//            .onTrue(
-//                feeder(
-//                    operatorController.start().negate(),
-//                    disableAlignment
-//                )
-//            )
-//        heightController
-//            .button(1)
-//            .onTrue(
-//                feeder(
-//                    operatorController.start().negate(),
-//                    disableAlignment
-//                )
-//            )
-//        operatorController
-//            .back()
-//            .onTrue(
-//                blockedFeeder(
-//                    operatorController.back().negate(),
-//                    disableAlignment
-//                )
-//            )
+        operatorController
+            .start()
+            .onTrue(
+                feeder(
+                    operatorController.start().negate(),
+                    disableAlignment
+                )
+            )
+        heightController
+            .button(1)
+            .onTrue(
+                feeder(
+                    operatorController.start().negate(),
+                    disableAlignment
+                )
+            )
+        operatorController
+            .back()
+            .onTrue(
+                blockedFeeder(
+                    operatorController.back().negate(),
+                    disableAlignment
+                )
+            )
         operatorController
             .povDown()
             .onTrue(elevator.reset(operatorController.povDown().negate()))
@@ -209,7 +211,7 @@ object RobotContainer {
             .leftBumper()
             .whileTrue(wrist.setVoltage(WRIST_MANUAL_CONTROL_VOLTAGE))
 
-//        disableAlignment.onTrue(wrist.l1())
+        disableAlignment.onTrue(wrist.l1())
 
         testController.a().whileTrue(runAllBits())
 
