@@ -50,12 +50,12 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
 
     fun reset(resetTrigger: Trigger): Command =
         Commands.sequence(
-            runOnce { io.setSoftLimits(false) }
-                .andThen(setVoltage(RESET_VOLTAGE))
-                .until(resetTrigger),
-            runOnce({io.resetAbsoluteEncoder(Units.Degrees.zero())}),
-            runOnce { io.setSoftLimits(true) }
-        )
+                runOnce { io.setSoftLimits(false) }
+                    .andThen(setVoltage(RESET_VOLTAGE))
+                    .until(resetTrigger),
+                runOnce({ io.resetAbsoluteEncoder(Units.Degrees.zero()) }),
+                runOnce { io.setSoftLimits(true) }
+            )
             .withName("Elevator/reset")
 
     fun l1(): Command = setAngle(Angles.L1)

@@ -10,7 +10,6 @@ import frc.robot.extender
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
-import frc.robot.subsystems.alignL2
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
@@ -66,10 +65,14 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
 }
 
 fun alignCommand(moveBack: Boolean = true): Command =
-    swerveDrive.defer { alignToPose(
-        if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.1))
-        else selectedScorePose.first.invoke(),
-        atGoal) }
+    swerveDrive.defer {
+        alignToPose(
+            if (moveBack)
+                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.1))
+            else selectedScorePose.first.invoke(),
+            atGoal
+        )
+    }
 
 private fun alignPrep(reefMasterCommand: Command): Command =
     swerveDrive
@@ -82,7 +85,9 @@ private fun alignPrep(reefMasterCommand: Command): Command =
         .raceWith(raiseElevatorAtDistance(reefMasterCommand))
 
 fun alignScoreL1(): Command =
-    alignCommand(false).alongWith(raiseElevatorAtDistance(l1())).andThen(outtakeL1())
+    alignCommand(false)
+        .alongWith(raiseElevatorAtDistance(l1()))
+        .andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
     alignPrep(l2())

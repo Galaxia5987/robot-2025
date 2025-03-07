@@ -17,7 +17,6 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 
@@ -63,8 +62,7 @@ class WristIOReal : WristIO {
                         StaticFeedforwardSign =
                             StaticFeedforwardSignValue.UseClosedLoopSign
                     }
-                SoftwareLimitSwitch =
-                    softLimits
+                SoftwareLimitSwitch = softLimits
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
@@ -99,9 +97,10 @@ class WristIOReal : WristIO {
     }
 
     override fun setSoftLimits(value: Boolean) {
-        motor.configurator.apply(softLimits
-            .withForwardSoftLimitEnable(value)
-            .withReverseSoftLimitEnable(value)
+        motor.configurator.apply(
+            softLimits
+                .withForwardSoftLimitEnable(value)
+                .withReverseSoftLimitEnable(value)
         )
     }
 

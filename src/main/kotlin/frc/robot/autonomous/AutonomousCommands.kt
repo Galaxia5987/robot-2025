@@ -38,7 +38,7 @@ fun B1R(): Command =
 
 fun C6L(): Command =
     Commands.sequence(
-        feeder(Trigger{true}, {false}),
+        feeder(Trigger { true }, { false }),
         gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
@@ -61,7 +61,7 @@ private fun S5R(): Command =
 
 fun A2R(): Command =
     Commands.sequence(
-        feeder(Trigger{true}, {false}),
+        feeder(Trigger { true }, { false }),
         gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         AutoBuilder.followPath(
@@ -91,47 +91,23 @@ private fun S3L(): Command =
 fun C6L5LR(): Command =
     Commands.sequence(
         C6L(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("6LS"),
         S5L(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("5LS"),
         S5R(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
     )
 
 fun A2R3RL(): Command =
     Commands.sequence(
         A2R(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("6LS", true),
         S3R(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("5LS", true),
         S3L(),
-        Commands.either(
-            alignScoreL4(),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
     )

@@ -154,10 +154,7 @@ object Robot : LoggedRobot() {
             selectedScorePose.second
         )
 
-        Logger.recordOutput(
-            "disableAlignment",
-            RobotContainer.disableAlignment
-        )
+        Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
 
         Logger.recordOutput(
             "AutoAlignment/Speeds",
