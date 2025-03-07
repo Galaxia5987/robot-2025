@@ -79,7 +79,7 @@ fun outtakeCoralAndDriveBack(
         gripper.slowOuttake(true).withTimeout(0.1),
         swerveDrive.run {
             swerveDrive.limitlessRunVelocity(
-                ChassisSpeeds(-0.5, 0.0, 0.0)
+                ChassisSpeeds(-0.8, 0.0, 0.0)
             )
         }.withTimeout(0.25),
         swerveDrive.run {
