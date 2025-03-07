@@ -61,6 +61,8 @@ private fun S5R(): Command =
 
 fun A2R(): Command =
     Commands.sequence(
+        feeder(Trigger{true}, {false}),
+        gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
