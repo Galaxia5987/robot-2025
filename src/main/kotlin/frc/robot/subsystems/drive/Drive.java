@@ -567,7 +567,10 @@ public class Drive extends SubsystemBase {
         globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
         localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
-
+    public void resetGyroSim(Rotation2d offset,SwerveDriveSimulation driveSimulation)
+    {
+        driveSimulation.getGyroSimulation().setRotation(offset);
+    }
     public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
         gyroOffset = offset;
