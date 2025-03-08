@@ -119,19 +119,19 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
+            .onFalse(moveDefaultPosition(false, {false}).onlyIf { moveDefaultPosition(false, {false}).isScheduled.not() })
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
+            .onFalse(moveDefaultPosition(false, {false}).onlyIf { moveDefaultPosition(false, {false}).isScheduled.not() })
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
+            .onFalse(moveDefaultPosition(true, {false}).onlyIf { moveDefaultPosition(true, {false}).isScheduled.not() })
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
+            .onFalse(moveDefaultPosition(true, {false}).onlyIf { moveDefaultPosition(true, {false}).isScheduled.not() })
 
         driverController
             .cross()
