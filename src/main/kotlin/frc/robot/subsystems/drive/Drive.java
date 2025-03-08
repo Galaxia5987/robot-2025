@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
+import static frc.robot.InitializerKt.getDriveSimulation;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
