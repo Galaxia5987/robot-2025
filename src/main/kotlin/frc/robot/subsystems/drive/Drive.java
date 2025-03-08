@@ -206,8 +206,7 @@ public class Drive extends SubsystemBase {
                 this::limitlessRunVelocity,
                 new PPHolonomicDriveController(
                         new PIDConstants(3 * scale, 0.0, 0.0),
-                        new PIDConstants(0.8 * scale, 0.0, 0.0)
-                ),
+                        new PIDConstants(0.8 * scale, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -568,10 +567,11 @@ public class Drive extends SubsystemBase {
         globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
         localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
-    public void resetGyroSim(Rotation2d offset,SwerveDriveSimulation driveSimulation)
-    {
+
+    public void resetGyroSim(Rotation2d offset, SwerveDriveSimulation driveSimulation) {
         driveSimulation.getGyroSimulation().setRotation(offset);
     }
+
     public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
         gyroOffset = offset;
