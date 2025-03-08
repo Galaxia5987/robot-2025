@@ -154,10 +154,7 @@ object Robot : LoggedRobot() {
             selectedScorePose.second
         )
 
-        Logger.recordOutput(
-            "disableAlignment",
-            RobotContainer.disableAlignment
-        )
+        Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
 
         Logger.recordOutput(
             "AutoAlignment/Speeds",
@@ -182,8 +179,7 @@ object Robot : LoggedRobot() {
 
         if (IS_RED) {
             swerveDrive.resetGyro(Rotation2d.k180deg)
-        }
-        else swerveDrive.resetGyro(Rotation2d.kZero)
+        } else swerveDrive.resetGyro(Rotation2d.kZero)
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()

@@ -29,6 +29,7 @@ import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
@@ -41,10 +42,9 @@ import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.outtakeL1
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -59,7 +59,7 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
     private val heightController = CommandGenericHID(3)
-    private val poseController   = CommandGenericHID(4)
+    private val poseController = CommandGenericHID(4)
 
     private val swerveDrive = frc.robot.swerveDrive
     private val vision = frc.robot.vision
@@ -114,13 +114,13 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                    {
-                        swerveDrive.resetGyroBasedOnAlliance(
-                            Rotation2d.kZero
-                        )
-                    },
-                    swerveDrive
-                )
+                        {
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
@@ -147,15 +147,18 @@ object RobotContainer {
             .onTrue(l1())
             .onFalse(outtakeL1())
         driverController
-            .square().and(disableAlignment)
+            .square()
+            .and(disableAlignment)
             .onTrue(l2())
             .onFalse(outtakeCoralAndDriveBack(false, isReverse = true))
         driverController
-            .circle().and(disableAlignment)
+            .circle()
+            .and(disableAlignment)
             .onTrue(l3())
             .onFalse(outtakeCoralAndDriveBack(true))
         driverController
-            .triangle().and(disableAlignment)
+            .triangle()
+            .and(disableAlignment)
             .onTrue(l4())
             .onFalse(outtakeCoralAndDriveBack(true))
 
@@ -177,18 +180,12 @@ object RobotContainer {
         operatorController
             .start()
             .onTrue(
-                feeder(
-                    operatorController.start().negate(),
-                    disableAlignment
-                )
+                feeder(operatorController.start().negate(), disableAlignment)
             )
         heightController
             .button(1)
             .onTrue(
-                feeder(
-                    operatorController.start().negate(),
-                    disableAlignment
-                )
+                feeder(operatorController.start().negate(), disableAlignment)
             )
         operatorController
             .back()
@@ -275,7 +272,9 @@ object RobotContainer {
         autoChooser.addOption("B1L", B1L())
         autoChooser.addOption(
             "CalibrationPath",
-            AutoBuilder.followPath(PathPlannerPath.fromPathFile("Calibration Path"))
+            AutoBuilder.followPath(
+                PathPlannerPath.fromPathFile("Calibration Path")
+            )
         )
         autoChooser.addOption("B1R", B1R())
         autoChooser.addOption("C6L", C6L())

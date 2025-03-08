@@ -38,7 +38,7 @@ fun B1R(): Command =
 
 fun C6L(): Command =
     Commands.sequence(
-        feeder(Trigger{true}, {false}),
+        feeder(Trigger { true }, { false }),
         gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
