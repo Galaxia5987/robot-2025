@@ -97,7 +97,7 @@ object RobotContainer {
 
         climber.defaultCommand =
             climber.powerControl {
-                MathUtil.applyDeadband(operatorController.leftY, 0.15)
+                MathUtil.applyDeadband(operatorController.leftY + poseController.getRawAxis(0), 0.15)
             }
     }
 
