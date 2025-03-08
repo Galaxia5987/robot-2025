@@ -41,7 +41,7 @@ fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 private fun S5L(): Command =
@@ -60,13 +60,11 @@ private fun S5R(): Command =
 
 fun A2R(): Command =
     Commands.sequence(
-        feeder(Trigger { true }, { false }),
-        gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
         ),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 private fun S3R(): Command =

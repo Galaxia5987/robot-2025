@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.957889344262295,
-        "y": 1.6694159836065567
+        "x": 4.069154449307799,
+        "y": 2.4465494842022273
       },
       "isLocked": false,
       "linkedName": "C"
@@ -20,8 +20,8 @@
         "y": 2.4145880681818177
       },
       "prevControl": {
-        "x": 5.63422131147541,
-        "y": 2.138870855067063
+        "x": 5.809333022348924,
+        "y": 2.4596652559516157
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,17 +61,6 @@
           "name": "ResetCoral"
         }
       }
-    },
-    {
-      "name": "MoveL4",
-      "waypointRelativePos": 0.8990634755463015,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "MoveL4"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -83,7 +72,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 0.0,
     "rotation": 119.99999999999999
   },
   "reversed": false,

@@ -2,10 +2,12 @@ package frc.robot.autonomous
 
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.getPose2d
 import frc.robot.subsystems.drive.TunerConstants
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
@@ -132,6 +134,8 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
+
+    Logger.recordOutput("AutoAlignment/GoalPose", Pose2d(xController.goal.position, yController.goal.position, Rotation2d.fromRadians(thetaController.goal.position)))
 
     return { robotRelativeSpeeds }
 }
