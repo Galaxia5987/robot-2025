@@ -1,6 +1,9 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.geometry.*
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
 import frc.robot.CURRENT_MODE
@@ -34,7 +37,9 @@ private val INITIAL_CLIMBER_TRANSLATION =
     getTranslation3d(x = Meters.of(-0.3), z = Meters.of(0.354))
 private val kWheelRadius = Meters.of(0.0508)
 private val CORAL_ROLLER_UP_C2C: Array<Double> =
-    arrayOf(0.201364, 3.3) // arrayOf(C2C Distance, Angle (in rad))
+    arrayOf(0.31500, 3.21) // arrayOf(C2C Distance, Angle (in rad))
+private val CORAL_ROLLER_DOWN_C2C: Array<Double> =
+    arrayOf(0.14203, 3.5) // arrayOf(C2C Distance, Angle (in rad))
 
 private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
 
@@ -202,16 +207,19 @@ class Visualizer {
     fun getSubsystemsPoses(): Array<Pose3d> {
         val swervePosesTurn = getAllSwerveModulePoseTurn()
         val swervePosesDrive = getAllSwerveModulePoseDrive()
-
+        var extenderPosition = extender.position.invoke()
+        if (extenderPosition < Meters.zero()) {
+            extenderPosition = Meters.zero()
+        }
         val intakePose =
             getPose3d(
                 INITIAL_INTAKE_TRANSLATION +
-                    (getTranslation3d(x = extender.position.invoke()))
+                    (getTranslation3d(x = extenderPosition))
             )
         val intakeRollerPose =
             getPose3d(
                 INITIAL_INTAKE_Roller_TRANSLATION +
-                    getTranslation3d(x = extender.position.invoke()),
+                    getTranslation3d(x = extenderPosition),
                 getRotation3d(pitch = roller.rollerAngle.`in`(Rotations))
             )
 
@@ -230,7 +238,11 @@ class Visualizer {
                 )
             )
 
-        val coralRollersPoseDown = getGripperRollerPoseInverted()
+        val coralRollersPoseDown =
+            getGripperRollerPoseInverted(
+                CORAL_ROLLER_DOWN_C2C[0],
+                CORAL_ROLLER_DOWN_C2C[1]
+            )
         val coralRollersPoseUp =
             getGripperRollerPose(CORAL_ROLLER_UP_C2C[0], CORAL_ROLLER_UP_C2C[1])
 
