@@ -97,7 +97,10 @@ object RobotContainer {
 
         climber.defaultCommand =
             climber.powerControl {
-                MathUtil.applyDeadband(operatorController.leftY + poseController.getRawAxis(0), 0.15)
+                MathUtil.applyDeadband(
+                    operatorController.leftY + poseController.getRawAxis(0),
+                    0.15
+                )
             }
     }
 
@@ -119,19 +122,35 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false, {false}).onlyIf { moveDefaultPosition(false, {false}).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(false, { false }).onlyIf {
+                    moveDefaultPosition(false, { false }).isScheduled.not()
+                }
+            )
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false, {false}).onlyIf { moveDefaultPosition(false, {false}).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(false, { false }).onlyIf {
+                    moveDefaultPosition(false, { false }).isScheduled.not()
+                }
+            )
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true, {false}).onlyIf { moveDefaultPosition(true, {false}).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(true, { false }).onlyIf {
+                    moveDefaultPosition(true, { false }).isScheduled.not()
+                }
+            )
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true, {false}).onlyIf { moveDefaultPosition(true, {false}).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(true, { false }).onlyIf {
+                    moveDefaultPosition(true, { false }).isScheduled.not()
+                }
+            )
 
         driverController
             .cross()
@@ -255,7 +274,10 @@ object RobotContainer {
             mapOf(
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
-                "ResetCoral" to feeder(Trigger { true }, { false }).andThen(WaitCommand(0.4)).andThen(gripper.intake().withTimeout(0.25)),
+                "ResetCoral" to
+                    feeder(Trigger { true }, { false })
+                        .andThen(WaitCommand(0.4))
+                        .andThen(gripper.intake().withTimeout(0.25)),
             )
 
         NamedCommands.registerCommands(namedCommands)
