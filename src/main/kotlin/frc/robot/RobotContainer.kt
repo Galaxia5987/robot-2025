@@ -119,19 +119,35 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(false).onlyIf {
+                    moveDefaultPosition(false).isScheduled.not()
+                }
+            )
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(false).onlyIf {
+                    moveDefaultPosition(false).isScheduled.not()
+                }
+            )
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(true).onlyIf {
+                    moveDefaultPosition(true).isScheduled.not()
+                }
+            )
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
+            .onFalse(
+                moveDefaultPosition(true).onlyIf {
+                    moveDefaultPosition(true).isScheduled.not()
+                }
+            )
 
         driverController
             .cross()
@@ -255,7 +271,10 @@ object RobotContainer {
             mapOf(
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
-                "ResetCoral" to feeder(Trigger { true }, { false }).andThen(WaitCommand(0.4)).andThen(gripper.intake().withTimeout(0.25)),
+                "ResetCoral" to
+                    feeder(Trigger { true }, { false })
+                        .andThen(WaitCommand(0.4))
+                        .andThen(gripper.intake().withTimeout(0.25)),
             )
 
         NamedCommands.registerCommands(namedCommands)

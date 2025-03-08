@@ -8,7 +8,6 @@ import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
@@ -16,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
-import frc.robot.autonomous.getSpeed
 import frc.robot.autonomous.logTriggers
 import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor

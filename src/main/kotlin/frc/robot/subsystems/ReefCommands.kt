@@ -17,9 +17,9 @@ import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import frc.robot.swerveDrive
 import frc.robot.wrist
+import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
-import java.util.function.BooleanSupplier
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
