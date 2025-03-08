@@ -83,7 +83,6 @@ fun outtakeCoralAndDriveBack(
             }
             .withTimeout(0.3),
         swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25),
-        moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
     )
 
 fun outtakeCoral(): Command =

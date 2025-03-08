@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
 import frc.robot.subsystems.feeder
+import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
 
 fun feederPath(pathName: String, mirror: Boolean = false): Command =
@@ -38,8 +39,6 @@ fun B1R(): Command =
 
 fun C6L(): Command =
     Commands.sequence(
-        feeder(Trigger { true }, { false }),
-        gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
         autoScoreL4()
@@ -91,13 +90,13 @@ private fun S3L(): Command =
 fun C6L5LR(): Command =
     Commands.sequence(
         C6L(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
         feederPath("6LS"),
         S5L(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
         feederPath("5LS"),
         S5R(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
     )
 
 fun A2R3RL(): Command =

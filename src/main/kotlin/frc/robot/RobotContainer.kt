@@ -13,17 +13,8 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
-import frc.robot.autonomous.A2R
-import frc.robot.autonomous.A2R3RL
-import frc.robot.autonomous.B1L
-import frc.robot.autonomous.B1R
-import frc.robot.autonomous.C6L
-import frc.robot.autonomous.C6L5LR
-import frc.robot.autonomous.alignScoreL1
-import frc.robot.autonomous.alignScoreL2
-import frc.robot.autonomous.alignScoreL3
-import frc.robot.autonomous.alignScoreL4
-import frc.robot.autonomous.setPoseBasedOnButton
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
@@ -100,7 +91,7 @@ object RobotContainer {
                 swerveDrive,
                 { driverController.leftY },
                 { driverController.leftX },
-                { -driverController.rightX * 0.7 }
+                { -driverController.rightX * 0.6 }
             )
 
         climber.defaultCommand =
@@ -127,19 +118,19 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false, { false }))
+            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(false, { false }))
+            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true, { false }))
+            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true, { false }))
+            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
 
         driverController
             .cross()
@@ -263,6 +254,7 @@ object RobotContainer {
             mapOf(
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
+                "ResetCoral" to feeder(Trigger { true }, { false }).andThen(gripper.intake().withTimeout(0.25)),
             )
 
         NamedCommands.registerCommands(namedCommands)
