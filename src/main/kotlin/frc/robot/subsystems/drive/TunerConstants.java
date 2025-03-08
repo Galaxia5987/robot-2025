@@ -181,8 +181,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.5);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(1.0);
+            kSpeedAt12Volts = MetersPerSecond.of(4.0);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -251,10 +251,10 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        -3.074097498922825,
-                        -0.5522330836388308,
-                        1.5892040962495242,
-                        -0.021475731030398976
+                        -3.0710295373470538,
+                        -0.5645049299419159,
+                        1.576932249946439,
+                        -0.0046019423636569235
                     };
 
             steerGains =
@@ -300,7 +300,7 @@ public class TunerConstants {
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(5);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(2.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;

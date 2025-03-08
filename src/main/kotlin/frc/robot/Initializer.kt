@@ -167,9 +167,7 @@ val roller =
     Roller(
         when (CURRENT_MODE) {
             Mode.REAL -> RollerIOReal()
-            Mode.SIM ->
-                if (USE_MAPLE_SIM) RollerIOMapleSim(driveSimulation!!)
-                else RollerIOSim()
+            Mode.SIM -> RollerIOSim(driveSimulation!!)
             Mode.REPLAY ->
                 object : RollerIO {
                     override var inputs = LoggedRollerInputs()

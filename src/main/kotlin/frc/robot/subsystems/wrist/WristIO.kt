@@ -10,6 +10,7 @@ interface WristIO {
     fun setAngle(angle: Angle) {}
     fun setVoltage(voltage: Voltage) {}
     fun resetAbsoluteEncoder(angle: Angle) {}
+    fun setSoftLimits(value: Boolean) {}
     fun updateInputs() {}
 
     @Logged

@@ -45,12 +45,12 @@ fun elevatorWristBit(): Command =
         WaitCommand(1.0),
         l4(),
         WaitCommand(1.0),
-        moveDefaultPosition(),
+        moveDefaultPosition(true),
         WaitCommand(1.0),
         gripper.intake().withTimeout(3.0),
         l4(),
         WaitCommand(1.0),
-        moveDefaultPosition()
+        moveDefaultPosition(true)
     )
 
 fun climbBit(): Command =

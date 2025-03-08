@@ -9,28 +9,28 @@ import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
 val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
-val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.385)
+val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.479)
 val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 9.0) * (20.0 / 66.0))
 const val SENSOR_TO_MECHANISM = 1 / (16.0 / 42.0)
 const val GEAR_RATIO = 1 / ((1.0 / 9.0) * (20.0 / 66.0) * (16.0 / 42.0))
 val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.001)
 val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(4.0)
-
-val ABSOLUTE_ENCODER_MAGNET_OFFSET = Units.Rotations.of(0.395)
-
+val RESET_VOLTAGE: Voltage = Units.Volts.of(-4.0)
 val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 
 enum class Angles(val angle: Angle) {
-    L1(Units.Degrees.of(122.0)),
-    L2(Units.Degrees.of(122.0)),
-    L3(Units.Degrees.of(135.0)),
-    L4(Units.Degrees.of(122.0)),
+    L1(Units.Degrees.of(0.0)),
+    L2(Units.Degrees.of(0.0)),
+    L3(Units.Degrees.of(145.0)),
+    L4(Units.Degrees.of(90.0)),
+    ALIGN_L2(Units.Degrees.of(120.0)),
+    ALIGN_L4(Units.Degrees.of(130.0)),
     L2_ALGAE(Units.Degrees.of(80.0)),
-    L3_ALGAE(Units.Degrees.of(135.0)),
-    FEEDER(Units.Degrees.of(30.0)),
-    BLOCKED_FEEDER(Units.Degrees.of(42.0)),
-    MAX(Units.Degrees.of(138.0)),
+    L3_ALGAE(Units.Degrees.of(130.0)),
+    FEEDER(Units.Degrees.of(17.0)),
+    BLOCKED_FEEDER(Units.Degrees.of(25.0)),
+    MAX(Units.Degrees.of(170.0)),
     ZERO(Units.Degrees.zero());
 
     fun getLoggingName() =

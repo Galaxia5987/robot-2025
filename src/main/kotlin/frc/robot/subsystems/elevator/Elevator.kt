@@ -57,6 +57,13 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l2(): Command = setHeight(Positions.L2).withName("Elevator/L2")
     fun l3(): Command = setHeight(Positions.L3).withName("Elevator/L3")
     fun l4(): Command = setHeight(Positions.L4).withName("Elevator/L4")
+
+    fun alignL2(): Command =
+        setHeight(Positions.ALIGN_L2).withName("Elevator/Auto L2")
+
+    fun alignL4(): Command =
+        setHeight(Positions.ALIGN_L4).withName("Elevator/Auto L4")
+
     fun l2Algae(): Command =
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
 
@@ -65,6 +72,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
 
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
+
+    fun blockedFeeder(): Command =
+        setHeight(Positions.BLOCKED_FEEDER).withName("Elevator/Blocked Feeder")
 
     fun zero(): Command =
         setHeight(Positions.ZERO).withName("Elevator/Move To Zero")

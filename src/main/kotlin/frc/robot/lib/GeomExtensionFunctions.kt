@@ -8,10 +8,15 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
 
+fun Pose2d.moveBack(distance: Distance): Pose2d =
+    this + Transform2d(-distance, Units.Meters.zero(), Rotation2d.kZero)
+
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
     (this - other).angle
 
 fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
+
+fun Pose2d.toPose3d(): Pose3d = Pose3d(this)
 
 fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
 

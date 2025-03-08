@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
+import static frc.robot.InitializerKt.getDriveSimulation;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -112,6 +113,7 @@ public class Drive extends SubsystemBase {
             DriveTrainSimulationConfig.Default()
                     .withRobotMass(ROBOT_MASS_KG)
                     .withCustomModuleTranslations(getModuleTranslations())
+                    .withBumperSize(Meters.of(0.851), Meters.of(0.851))
                     .withGyro(COTS.ofNav2X())
                     .withSwerveModule(
                             new SwerveModuleSimulationConfig(
@@ -195,15 +197,16 @@ public class Drive extends SubsystemBase {
 
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
-
+        var scale = 3;
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
                 this::getPose,
                 this::resetOdometry,
                 this::getChassisSpeeds,
-                this::runVelocity,
+                this::limitlessRunVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(4.0, 0.0, 2.0), new PIDConstants(14.0, 0.0, 0.0)),
+                        new PIDConstants(3 * scale, 0.0, 0.0),
+                        new PIDConstants(0.8 * scale, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -360,6 +363,27 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
     }
 
+    public void limitlessRunVelocity(ChassisSpeeds speeds) {
+        // Calculate module setpoints
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
+
+        // Log unoptimized setpoints and setpoint speeds
+        Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
+        Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
+
+        // Send setpoints to modules
+        for (int i = 0; i < 4; i++) {
+            modules[i].runSetpoint(setpointStates[i]);
+        }
+
+        // Log optimized setpoints (runSetpoint mutates each state)
+        Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+    }
+
     public void setAngle(Rotation2d angle) {
         for (int i = 0; i < 4; i++) {
             modules[i].runSetpoint(new SwerveModuleState(0.0, angle));
@@ -461,6 +485,12 @@ public class Drive extends SubsystemBase {
         return kinematics.toChassisSpeeds(getModuleStates());
     }
 
+    @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredFieldOriented")
+    public ChassisSpeeds getFieldOrientedSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
+                kinematics.toChassisSpeeds(getModuleStates()), getRotation());
+    }
+
     /** Returns the position of each module in radians. */
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
@@ -489,6 +519,10 @@ public class Drive extends SubsystemBase {
     @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
     public Pose2d getLocalEstimatedPose() {
         return localPoseEstimator.getEstimatedPosition();
+    }
+
+    public void resetLocalPoseEstimatorBasedOnGlobal() {
+        localPoseEstimator.resetPose(globalPoseEstimator.getEstimatedPosition());
     }
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
@@ -534,6 +568,10 @@ public class Drive extends SubsystemBase {
         localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
+    public void resetGyroSim(Rotation2d offset, SwerveDriveSimulation driveSimulation) {
+        driveSimulation.getGyroSimulation().setRotation(offset);
+    }
+
     public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
         gyroOffset = offset;
@@ -542,6 +580,9 @@ public class Drive extends SubsystemBase {
 
     public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
         resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
+        if (ConstantsKt.getUSE_MAPLE_SIM() && getDriveSimulation() != null) {
+            resetGyroSim(Rotation2d.kZero, getDriveSimulation());
+        }
     }
 
     /** Adds a new timestamped vision measurement. */
