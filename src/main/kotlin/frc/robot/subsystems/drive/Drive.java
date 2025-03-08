@@ -580,6 +580,9 @@ public class Drive extends SubsystemBase {
 
     public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
         resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
+        if (ConstantsKt.getUSE_MAPLE_SIM() && getDriveSimulation() != null) {
+            resetGyroSim(Rotation2d.kZero, getDriveSimulation());
+        }
     }
 
     /** Adds a new timestamped vision measurement. */
