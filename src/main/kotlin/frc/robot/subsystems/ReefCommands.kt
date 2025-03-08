@@ -10,17 +10,11 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.Commands.sequence
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.CURRENT_MODE
-import frc.robot.Mode
+import frc.robot.*
 import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
-import frc.robot.driveSimulation
-import frc.robot.elevator
-import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
-import frc.robot.swerveDrive
-import frc.robot.wrist
 import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
@@ -83,6 +77,7 @@ fun outtakeCoralAndDriveBack(
             }
             .withTimeout(0.3),
         swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25),
+        moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
     )
 
 fun outtakeCoral(): Command =

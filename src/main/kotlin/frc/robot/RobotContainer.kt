@@ -118,19 +118,19 @@ object RobotContainer {
         driverController
             .cross()
             .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
+            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
+            .onFalse(moveDefaultPosition(false).onlyIf { moveDefaultPosition(false).isScheduled.not() })
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
+            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate()))
+            .onFalse(moveDefaultPosition(true).onlyIf { moveDefaultPosition(true).isScheduled.not() })
 
         driverController
             .cross()
