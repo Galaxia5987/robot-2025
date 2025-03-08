@@ -1,15 +1,17 @@
 package frc.robot.autonomous
 
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.getPose2d
 import frc.robot.subsystems.drive.TunerConstants
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+import kotlin.math.abs
 
 private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 7.0)
 private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
@@ -43,11 +45,11 @@ val yController =
         .apply { setTolerance(Y_ALIGNMENT_TOLERANCE.`in`(Units.Meters)) }
 val thetaController =
     ProfiledPIDController(
-            thetaKP.get(),
-            thetaKI.get(),
-            thetaKD.get(),
-            ROTATIONAL_CONSTRAINTS
-        )
+        thetaKP.get(),
+        thetaKI.get(),
+        thetaKD.get(),
+        ROTATIONAL_CONSTRAINTS
+    )
         .apply {
             setTolerance(ROTATIONAL_ALIGNMENT_TOLERANCE.`in`(Units.Radians))
             enableContinuousInput(-Math.PI, Math.PI)
@@ -84,49 +86,56 @@ fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds =
         ChassisSpeeds(
-            MathUtil.applyDeadband(
-                xController.calculate(botPose.x),
-                Units.Meters.of(0.03).`in`(Units.Meters)
-            ),
-            MathUtil.applyDeadband(
-                yController.calculate(botPose.y),
-                Units.Meters.of(0.03).`in`(Units.Meters)
-            ),
-            MathUtil.applyDeadband(
-                thetaController.calculate(botPose.rotation.radians),
-                Units.Degrees.of(1.0).`in`(Units.Radians)
-            ),
+            xController.calculate(botPose.x),
+            yController.calculate(botPose.y),
+            thetaController.calculate(botPose.rotation.radians)
         )
+
+    if (abs(xController.positionError) < X_ALIGNMENT_TOLERANCE.div(2.0).`in`(Units.Meters)) {
+        fieldRelativeSpeeds.vxMetersPerSecond = 0.0
+    }
+
+    if (abs(yController.positionError) < Y_ALIGNMENT_TOLERANCE.div(2.0).`in`(Units.Meters)) {
+        fieldRelativeSpeeds.vyMetersPerSecond = 0.0
+    }
+
+    if (abs(thetaController.positionError) < ROTATIONAL_ALIGNMENT_TOLERANCE.div(2.0).`in`(Units.Radians)) {
+        fieldRelativeSpeeds.omegaRadiansPerSecond = 0.0
+    }
+
     val robotRelativeSpeeds =
         ChassisSpeeds.fromFieldRelativeSpeeds(
             fieldRelativeSpeeds,
             botPose.rotation
         )
 
+
     mapOf(
-            "XError" to xController.positionError,
-            "YError" to yController.positionError,
-            "ThetaError" to thetaController.positionError,
-            "XSetpoint" to xController.setpoint.position,
-            "YSetpoint" to yController.setpoint.position,
-            "ThetaSetpoint" to thetaController.setpoint.position,
-            "XGoal" to xController.goal.position,
-            "YGoal" to yController.goal.position,
-            "ThetaGoal" to thetaController.goal.position,
-        )
+        "XError" to xController.positionError,
+        "YError" to yController.positionError,
+        "ThetaError" to thetaController.positionError,
+        "XSetpoint" to xController.setpoint.position,
+        "YSetpoint" to yController.setpoint.position,
+        "ThetaSetpoint" to thetaController.setpoint.position,
+        "XGoal" to xController.goal.position,
+        "YGoal" to yController.goal.position,
+        "ThetaGoal" to thetaController.goal.position,
+    )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
 
     mapOf(
-            "AtGoal" to atGoal.asBoolean,
-            "XAtSetpoint" to xController.atSetpoint(),
-            "YAtSetpoint" to yController.atSetpoint(),
-            "thetaAtSetpoint" to thetaController.atSetpoint()
-        )
+        "AtGoal" to atGoal.asBoolean,
+        "XAtSetpoint" to xController.atSetpoint(),
+        "YAtSetpoint" to yController.atSetpoint(),
+        "thetaAtSetpoint" to thetaController.atSetpoint()
+    )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
+
+    Logger.recordOutput("AutoAlignment/GoalPose", Pose2d(xController.goal.position, yController.goal.position, Rotation2d.fromRadians(thetaController.goal.position)))
 
     return { robotRelativeSpeeds }
 }

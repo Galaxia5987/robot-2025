@@ -155,13 +155,6 @@ object Robot : LoggedRobot() {
         )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
-
-        Logger.recordOutput(
-            "AutoAlignment/Speeds",
-            getSpeed(swerveDrive.localEstimatedPose).invoke()
-        )
-
-        Logger.recordOutput("test", Units.RotationsPerSecond.of(130.0))
     }
 
     /**
@@ -177,9 +170,10 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        if (IS_RED) {
-            swerveDrive.resetGyro(Rotation2d.k180deg)
-        } else swerveDrive.resetGyro(Rotation2d.kZero)
+        swerveDrive.resetGyro(
+            if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
+        )
+        swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()

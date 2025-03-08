@@ -5,7 +5,10 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.Commands.*
+import edu.wpi.first.wpilibj2.command.Commands.parallel
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
+import edu.wpi.first.wpilibj2.command.Commands.sequence
+import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.*
 import frc.robot.autonomous.isL4
@@ -14,9 +17,9 @@ import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
 import frc.robot.swerveDrive
 import frc.robot.wrist
-import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
+import java.util.function.BooleanSupplier
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
@@ -77,7 +80,7 @@ fun outtakeCoralAndDriveBack(
             .run {
                 swerveDrive.limitlessRunVelocity(ChassisSpeeds(-0.8, 0.0, 0.0))
             }
-            .withTimeout(0.25),
+            .withTimeout(0.3),
         swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25),
         moveDefaultPosition(moveWristUp).onlyIf(gripper.hasCoral.negate())
     )

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
 import frc.robot.subsystems.feeder
+import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
 
 fun feederPath(pathName: String, mirror: Boolean = false): Command =
@@ -38,11 +39,11 @@ fun B1R(): Command =
 
 fun C6L(): Command =
     Commands.sequence(
-        feeder(Trigger { true }, { false }),
+        feeder(Trigger{true}, {false}),
         gripper.intake().withTimeout(0.25),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 private fun S5L(): Command =
@@ -65,7 +66,7 @@ fun A2R(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
         ),
-        autoScoreL4()
+        alignScoreL4()
     )
 
 private fun S3R(): Command =
@@ -87,13 +88,28 @@ private fun S3L(): Command =
     )
 
 fun C6L5LR(): Command =
-    Commands.sequence(C6L(), feederPath("6LS"), S5L(), feederPath("5LS"), S5R())
+    Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        C6L(),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        feederPath("6LS"),
+        S5L(),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        feederPath("5LS"),
+        S5R(),
+        Commands.either(alignScoreL4().andThen(moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())), Commands.none(), gripper.hasCoral),
+    )
 
 fun A2R3RL(): Command =
     Commands.sequence(
         A2R(),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("6LS", true),
         S3R(),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
         feederPath("5LS", true),
-        S3L()
+        S3L(),
+        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
     )
