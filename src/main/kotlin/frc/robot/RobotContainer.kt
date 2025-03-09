@@ -28,7 +28,6 @@ import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
-import frc.robot.subsystems.l3
 import frc.robot.subsystems.l3Manual
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
@@ -283,7 +282,7 @@ object RobotContainer {
             )
         )
         autoChooser.addOption("B1R", B1R())
-        autoChooser.addOption("C6L", C6R())
+        autoChooser.addOption("C6L", C6L())
         autoChooser.addOption("C6L5LR", C6L5LR())
         autoChooser.addOption("A2R", A2R())
         autoChooser.addOption("A2R3RL", A2R3RL())
