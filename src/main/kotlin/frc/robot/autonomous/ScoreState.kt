@@ -8,8 +8,7 @@ import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
 
 // Alignment target pose, if never set, supplies the current robot position
-var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
-    Pair({ swerveDrive.pose }, { 0 })
+var selectedScorePose: Pair<() -> Pose2d, () -> Int> = buttonToPoseAndTagMap[9]!!
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
