@@ -282,7 +282,7 @@ object RobotContainer {
             )
         )
         autoChooser.addOption("B1R", B1R())
-        autoChooser.addOption("C6L", C6L())
+        autoChooser.addOption("C6L", C6R())
         autoChooser.addOption("C6L5LR", C6L5LR())
         autoChooser.addOption("A2R", A2R())
         autoChooser.addOption("A2R3RL", A2R3RL())
