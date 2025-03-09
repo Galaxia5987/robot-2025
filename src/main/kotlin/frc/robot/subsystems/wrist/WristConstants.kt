@@ -23,6 +23,7 @@ enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(0.0)),
     L2(Units.Degrees.of(0.0)),
     L3(Units.Degrees.of(145.0)),
+    L3_MANUAL(Units.Degrees.of(170.0)),
     L4(Units.Degrees.of(90.0)),
     ALIGN_L2(Units.Degrees.of(120.0)),
     ALIGN_L4(Units.Degrees.of(128.0)),

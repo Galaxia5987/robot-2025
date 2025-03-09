@@ -141,6 +141,9 @@ fun l3(): Command =
     parallel(elevator.l3(), wrist.l3(), runOnce({ isL4 = Trigger { false } }))
         .withName("Reef/Move L3")
 
+fun l3Manual(): Command =
+    parallel(elevator.zero(), wrist.l3Manual()).withName("Reef/Move L3 Manual")
+
 fun l4(): Command =
     parallel(elevator.l4(), wrist.l4(), runOnce({ isL4 = Trigger { true } }))
         .withName("Reef/Move L4")

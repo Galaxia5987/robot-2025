@@ -29,6 +29,7 @@ import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
 import frc.robot.subsystems.l3
+import frc.robot.subsystems.l3Manual
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
@@ -155,7 +156,7 @@ object RobotContainer {
         driverController
             .circle()
             .and(disableAlignment)
-            .onTrue(l3())
+            .onTrue(l3Manual())
             .onFalse(outtakeCoralAndDriveBack(true))
         driverController
             .triangle()

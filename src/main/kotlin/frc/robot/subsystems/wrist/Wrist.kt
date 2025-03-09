@@ -61,6 +61,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun l1(): Command = setAngle(Angles.L1)
     fun l2(): Command = setAngle(Angles.L2)
     fun l3(): Command = setAngle(Angles.L3)
+    fun l3Manual(): Command = setAngle(Angles.L3_MANUAL)
     fun l4(): Command = setAngle(Angles.L4)
     fun alignL2(): Command = setAngle(Angles.ALIGN_L2)
     fun alignL4(): Command = setAngle(Angles.ALIGN_L4)
