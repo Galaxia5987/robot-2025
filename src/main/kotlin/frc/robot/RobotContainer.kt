@@ -118,15 +118,6 @@ object RobotContainer {
                     )
                     .ignoringDisable(true)
             )
-
-        driverController
-            .cross()
-            .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(
-                moveDefaultPosition(false, { false }).onlyIf {
-                    moveDefaultPosition(false, { false }).isScheduled.not()
-                }
-            )
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
@@ -154,7 +145,6 @@ object RobotContainer {
 
         driverController
             .cross()
-            .and(disableAlignment)
             .onTrue(l1())
             .onFalse(outtakeL1())
         driverController
