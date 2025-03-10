@@ -29,15 +29,11 @@ val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 val ReefFaceLeft: Pose2d = Pose2d(14.34, 3.84, Rotation2d.k180deg).flip()
 val ReefFaceRight: Pose2d = Pose2d(14.34, 4.19, Rotation2d.k180deg).flip()
 
-// 4.48945, FIELD_WIDTH / 2
 // The calculated center of the reef, used for calculating all other scoring positions.
-val ReefCenter = Translation2d(4.48945, FlippingUtil.fieldSizeY / 2)
-//    getTranslation2d(
-//        (ReefFaceLeft.x + ReefFaceRight.x) / 2 +
-//            REEF_RADIUS.`in`(Units.Meters) +
-//            ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
-//        (ReefFaceLeft.y + ReefFaceRight.y) / 2
-//    )
+val ReefCenter = Translation2d(
+    (ReefFaceLeft.measureX + ReefFaceRight.measureX) / 2.0 + REEF_RADIUS + ROBOT_SIDE_LENGTH / 2.0,
+    (ReefFaceLeft.measureY + ReefFaceRight.measureY) / 2.0
+)
 
 val Reef4Left: Pose2d =
     ReefFaceLeft + Transform2d(
