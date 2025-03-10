@@ -251,7 +251,7 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[]{
-                            0.05062136600022616, 2.5832236467994196, -1.5508545765523831, -3.1354567304382504
+                            0.0, 0.0, 0.0, 0.0
                     };
 
             steerGains =
