@@ -8,7 +8,7 @@ import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
 import frc.robot.lib.selectGainsBasedOnMode
 
-val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.0)
+val AT_SETPOINT_TOLERANCE: Angle = Units.Degrees.of(1.5)
 val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.479)
 val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0)
 const val ROTOR_TO_SENSOR = 1 / ((1.0 / 9.0) * (20.0 / 66.0))
@@ -23,9 +23,10 @@ enum class Angles(val angle: Angle) {
     L1(Units.Degrees.of(0.0)),
     L2(Units.Degrees.of(0.0)),
     L3(Units.Degrees.of(145.0)),
+    L3_MANUAL(Units.Degrees.of(170.0)),
     L4(Units.Degrees.of(90.0)),
     ALIGN_L2(Units.Degrees.of(120.0)),
-    ALIGN_L4(Units.Degrees.of(130.0)),
+    ALIGN_L4(Units.Degrees.of(128.0)),
     L2_ALGAE(Units.Degrees.of(80.0)),
     L3_ALGAE(Units.Degrees.of(130.0)),
     FEEDER(Units.Degrees.of(17.0)),

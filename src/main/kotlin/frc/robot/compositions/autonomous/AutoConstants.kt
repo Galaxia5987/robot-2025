@@ -1,5 +1,6 @@
 package frc.robot.autonomous
 
+import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
@@ -24,17 +25,18 @@ val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 
 // If measured on the red side should flip.
 // Two field measurements for finding the reef center. The robot should touch the reef.
-val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
-val ReefFaceRight: Pose2d = Pose2d(14.32, 4.19, Rotation2d.k180deg).flip()
+val ReefFaceLeft: Pose2d = Pose2d(14.34, 3.84, Rotation2d.k180deg).flip()
+val ReefFaceRight: Pose2d = Pose2d(14.34, 4.19, Rotation2d.k180deg).flip()
 
+// 4.48945, FIELD_WIDTH / 2
 // The calculated center of the reef, used for calculating all other scoring positions.
-val ReefCenter =
-    getTranslation2d(
-        (ReefFaceLeft.x + ReefFaceRight.x) / 2 +
-            REEF_RADIUS.`in`(Units.Meters) +
-            ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
-        (ReefFaceLeft.y + ReefFaceRight.y) / 2
-    )
+val ReefCenter = getTranslation2d(4.48945, FlippingUtil.fieldSizeY / 2)
+//    getTranslation2d(
+//        (ReefFaceLeft.x + ReefFaceRight.x) / 2 +
+//            REEF_RADIUS.`in`(Units.Meters) +
+//            ROBOT_SIDE_LENGTH.`in`(Units.Meters) / 2,
+//        (ReefFaceLeft.y + ReefFaceRight.y) / 2
+//    )
 
 val Reef4Left: Pose2d =
     ReefFaceLeft.plus(

@@ -28,7 +28,7 @@ import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algae
-import frc.robot.subsystems.l3
+import frc.robot.subsystems.l3Manual
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
@@ -118,15 +118,6 @@ object RobotContainer {
                     )
                     .ignoringDisable(true)
             )
-
-        driverController
-            .cross()
-            .whileTrue(alignScoreL1().onlyIf(disableAlignment.negate()))
-            .onFalse(
-                moveDefaultPosition(false, { false }).onlyIf {
-                    moveDefaultPosition(false, { false }).isScheduled.not()
-                }
-            )
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
@@ -154,7 +145,6 @@ object RobotContainer {
 
         driverController
             .cross()
-            .and(disableAlignment)
             .onTrue(l1())
             .onFalse(outtakeL1())
         driverController
@@ -165,7 +155,7 @@ object RobotContainer {
         driverController
             .circle()
             .and(disableAlignment)
-            .onTrue(l3())
+            .onTrue(l3Manual())
             .onFalse(outtakeCoralAndDriveBack(true))
         driverController
             .triangle()
