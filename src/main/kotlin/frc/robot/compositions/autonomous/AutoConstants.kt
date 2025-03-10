@@ -22,7 +22,7 @@ import kotlinx.serialization.json.jsonPrimitive
 
 val REEF_RADIUS: Distance = Units.Meters.of(0.8317)
 
-val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
+val ROBOT_SIDE_LENGTH: Distance = Units.Meters.of(0.825)
 
 // If measured on the red side should flip.
 // Two field measurements for finding the reef center. The robot should touch the reef.
