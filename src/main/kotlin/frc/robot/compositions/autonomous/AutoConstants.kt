@@ -4,6 +4,7 @@ import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
@@ -30,7 +31,7 @@ val ReefFaceRight: Pose2d = Pose2d(14.34, 4.19, Rotation2d.k180deg).flip()
 
 // 4.48945, FIELD_WIDTH / 2
 // The calculated center of the reef, used for calculating all other scoring positions.
-val ReefCenter = getTranslation2d(4.48945, FlippingUtil.fieldSizeY / 2)
+val ReefCenter = Translation2d(4.48945, FlippingUtil.fieldSizeY / 2)
 //    getTranslation2d(
 //        (ReefFaceLeft.x + ReefFaceRight.x) / 2 +
 //            REEF_RADIUS.`in`(Units.Meters) +
