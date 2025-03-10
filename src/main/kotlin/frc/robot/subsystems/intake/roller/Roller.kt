@@ -5,6 +5,8 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.lib.extensions.rotations
+import frc.robot.lib.extensions.volts
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
@@ -22,7 +24,7 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
             .withName("Roller/setVoltage")
 
     fun setTuningVoltage(): Command =
-        setVoltage(Units.Volts.of(tuningVoltage.get()))
+        setVoltage(tuningVoltage.get().volts)
             .withName("Roller/Voltage")
     fun getVoltage(): Double {
         return io.inputs.appliedVoltage.baseUnitMagnitude()
@@ -35,7 +37,7 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
         setVoltage(FAR_OUTTAKE_VOLTAGE).withName("Roller/farOuttake")
 
     override fun periodic() {
-        rollerAngle += Units.Rotations.of(getVoltage() * kV * 0.02)
+        rollerAngle += (getVoltage() * kV * 0.02).rotations
         io.updateInputs()
         Logger.processInputs("Intake/${this::class.simpleName}", io.inputs)
     }

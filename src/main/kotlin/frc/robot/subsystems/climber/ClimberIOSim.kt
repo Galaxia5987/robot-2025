@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
 
@@ -27,7 +28,7 @@ class ClimberIOSim : ClimberIO {
 
     override fun updateInput() {
         motor.update(Timer.getFPGATimestamp() * 100)
-        inputs.angle = Units.Rotations.of(motor.position)
+        inputs.angle = motor.position.rotations
         inputs.appliedVoltage = motor.appliedVoltage
         inputs.angularVelocity = motor.velocity
     }

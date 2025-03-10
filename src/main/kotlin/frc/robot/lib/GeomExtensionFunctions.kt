@@ -43,7 +43,7 @@ fun Pose2d.toTransform(): Transform2d =
     Transform2d(this.translation, this.rotation)
 
 fun Pose2d.distanceFromPoint(translationMeters: Translation2d): Distance =
-    Units.Meters.of(this.translation.getDistance(translationMeters))
+    this.translation.getDistance(translationMeters).m
 
 fun Pose3d.toTransform(): Transform3d =
     Transform3d(this.translation, this.rotation)

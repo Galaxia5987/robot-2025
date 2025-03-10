@@ -7,6 +7,8 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.rotations
+import frc.robot.lib.extensions.volts
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
@@ -32,7 +34,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
         return io.inputs.appliedVoltage.`in`(Units.Volts)
     }
     fun tuningVoltage(): Command =
-        setVoltage(Units.Volts.of(tuningVoltage.get()))
+        setVoltage(tuningVoltage.get().volts)
             .withName("Gripper/Tuning")
 
     fun intake(): Command =
@@ -55,7 +57,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
 
     override fun periodic() {
-        rollerAngle += Units.Rotations.of(getVoltage() * kV * 0.02)
+        rollerAngle += (getVoltage() * kV * 0.02).rotations
         io.updateInputs()
         Logger.processInputs(this::class.simpleName, io.inputs)
     }

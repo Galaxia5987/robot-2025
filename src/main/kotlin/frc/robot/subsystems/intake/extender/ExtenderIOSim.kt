@@ -7,6 +7,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.extensions.toAngle
 import frc.robot.lib.extensions.toDistance
 import frc.robot.lib.extensions.toLinear
@@ -47,7 +48,7 @@ class ExtenderIOSim : ExtenderIO {
         motor.update(Timer.getFPGATimestamp())
 
         inputs.position =
-            Units.Rotations.of(motor.position)
+            motor.position.rotations
                 .toDistance(PINION_RADIUS, GEAR_RATIO)
         inputs.motorCurrent = motor.appliedCurrent
         inputs.appliedVoltage = motor.appliedVoltage

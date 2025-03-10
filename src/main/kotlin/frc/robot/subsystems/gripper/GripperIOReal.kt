@@ -8,9 +8,9 @@ import com.ctre.phoenix6.hardware.TalonFX
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.math.filter.MedianFilter
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.AnalogInput
+import frc.robot.lib.extensions.cm
 
 class GripperIOReal : GripperIO {
     override val inputs = LoggedGripperInputs()
@@ -52,7 +52,7 @@ class GripperIOReal : GripperIO {
         }
 
         inputs.sensorDistance.mut_replace(
-            Units.Centimeters.of(calculatedDistance)
+            calculatedDistance.cm
         )
         inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
     }

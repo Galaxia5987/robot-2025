@@ -9,6 +9,7 @@ import frc.robot.IS_RED
 import frc.robot.extender
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
+import frc.robot.lib.extensions.cm
 import frc.robot.lib.moveBack
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.l1
@@ -68,7 +69,7 @@ fun alignCommand(moveBack: Boolean = true): Command =
     swerveDrive.defer {
         alignToPose(
             if (moveBack)
-                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.1))
+                selectedScorePose.first.invoke().moveBack(10.cm)
             else selectedScorePose.first.invoke(),
             atGoal
         )
@@ -78,7 +79,7 @@ private fun alignPrep(reefMasterCommand: Command): Command =
     swerveDrive
         .defer {
             alignToPose(
-                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
+                selectedScorePose.first.invoke().moveBack(30.cm),
                 Trigger { false }
             )
         }
