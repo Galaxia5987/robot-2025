@@ -69,3 +69,15 @@ fun getPose3d(
     z: Distance = Meters.zero(),
     rotation: Rotation3d = Rotation3d(),
 ) = Pose3d(x, y, z, rotation)
+
+fun getTransform2d(
+    x: Double = 0.0,
+    y: Double = 0.0,
+    rotation: Rotation2d = Rotation2d(),
+): Transform2d = Transform2d(x, y, rotation)
+
+fun getTransform2d(
+    x: Distance = Meters.zero(),
+    y: Distance = Meters.zero(),
+    rotation: Rotation2d = Rotation2d(),
+): Transform2d = Transform2d(x, y, rotation)
