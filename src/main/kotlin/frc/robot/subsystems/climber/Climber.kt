@@ -5,11 +5,12 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import java.util.function.DoubleSupplier
+import frc.robot.lib.extensions.volts
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import java.util.function.DoubleSupplier
 
 class Climber(private val io: ClimberIO) : SubsystemBase() {
     var inputs = io.inputs
@@ -29,7 +30,7 @@ class Climber(private val io: ClimberIO) : SubsystemBase() {
             .withName("Climber/setVoltage")
 
     fun powerControl(power: DoubleSupplier): Command =
-        run { io.setVoltage(Units.Volts.of(power.asDouble * 10.0)) }
+        run { io.setVoltage((power.asDouble * 10.0).volts) }
             .withName("Climber/powerControl")
 
     override fun periodic() {

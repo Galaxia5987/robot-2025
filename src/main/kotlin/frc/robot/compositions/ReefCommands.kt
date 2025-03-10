@@ -1,39 +1,33 @@
 package frc.robot.subsystems
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.Commands.parallel
-import edu.wpi.first.wpilibj2.command.Commands.runOnce
-import edu.wpi.first.wpilibj2.command.Commands.sequence
-import edu.wpi.first.wpilibj2.command.Commands.waitUntil
+import edu.wpi.first.wpilibj2.command.Commands.*
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.CURRENT_MODE
-import frc.robot.Mode
+import frc.robot.*
 import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
-import frc.robot.driveSimulation
-import frc.robot.elevator
-import frc.robot.gripper
+import frc.robot.lib.extensions.cm
+import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.mps
+import frc.robot.lib.extensions.sec
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
-import frc.robot.swerveDrive
-import frc.robot.wrist
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 import java.util.function.BooleanSupplier
 
-private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
+private val CORAL_OUTTAKE_TIMEOUT = 0.5.sec
 
 private val CORAL_SHOOT_OFFSET =
-    getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
-private val GRIPPER_HEIGHT = Units.Meters.of(0.50)
-private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
-private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
-private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
+    getTranslation2d(40.cm, 0.cm)
+private val GRIPPER_HEIGHT = 50.cm
+private val CORAL_SHOOT_SPEED = 3.mps
+private val CORAL_L4_SHOOT_ANGLE = -80.0.deg
+private val WRIST_ANGLE_OFFSET = 35.0.deg
 
 private fun visualizeCoralOuttake(): Command =
     runOnce({

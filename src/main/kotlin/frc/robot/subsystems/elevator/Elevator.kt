@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Second
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
@@ -9,12 +10,16 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import java.util.function.DoubleSupplier
+import frc.robot.lib.extensions.div
+import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.sec
+import frc.robot.lib.extensions.volts
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+import java.util.function.DoubleSupplier
 
 class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     @AutoLogOutput private val mechanism = LoggedMechanism2d(3.0, 3.0)
@@ -23,7 +28,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         root.append(LoggedMechanismLigament2d("ElevatorLigament", 5.0, 90.0))
 
     @AutoLogOutput
-    private var setpointValue: Distance = Units.Millimeters.of(0.0)
+    private var setpointValue: Distance = 0.m
 
     @AutoLogOutput var setpointName: Positions = Positions.ZERO
 
@@ -82,7 +87,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun tuningPosition(): Command =
         defer {
                 run {
-                    val height = Units.Meters.of(tuningHeight.get())
+                    val height = tuningHeight.get().m
                     setpointValue = height
                     io.setHeight(height)
                 }
@@ -99,9 +104,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun powerControl(percentOutput: DoubleSupplier): Command =
         run {
                 io.setVoltage(
-                    Units.Volts.of(
+                    (
                         percentOutput.asDouble * 10.0 + VOLTAGE_CONTROL_KG
-                    )
+                            ).volts
                 )
             }
             .withName("Elevator/powerControl")
@@ -124,9 +129,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         val routineForwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
+                    5.volts / Second,
+                    6.volts,
+                    1.5.sec,
                     { state: State ->
                         Logger.recordOutput("Elevator/state", state)
                     }
@@ -140,9 +145,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         val routineBackwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(4.0),
-                    Units.Second.of(1.5),
+                    5.volts / Second,
+                    4.volts,
+                    1.5.sec,
                     { state: State ->
                         Logger.recordOutput("Elevator/state", state)
                     }

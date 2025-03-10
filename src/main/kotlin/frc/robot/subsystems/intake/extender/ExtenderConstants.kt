@@ -1,26 +1,26 @@
 package frc.robot.subsystems.intake.extender
 
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.*
 import frc.robot.lib.Gains
+import frc.robot.lib.extensions.*
 import frc.robot.lib.selectGainsBasedOnMode
 
 const val GEAR_RATIO = 1.0 / 3.0
-val RESET_VOLTAGE: Voltage = Units.Volts.of(-5.0)
-val PINION_RADIUS: Distance = Units.Millimeters.of(15.22)
-val MOMENT_OF_INERTIA: MomentOfInertia = Units.KilogramSquareMeters.of(0.003)
-val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(20.8)
-val POSITION_TOLERANCE: Distance = Units.Centimeters.of(0.58)
-val MAX_EXTENSION: Angle = Units.Rotations.of(12.749)
-val MIN_EXTENSION: Angle = Units.Rotations.of(0.0)
+val RESET_VOLTAGE: Voltage = -5.0.volts
+val PINION_RADIUS: Distance = 15.22.mm
+val MOMENT_OF_INERTIA: MomentOfInertia = 0.003.kg2m
+val RESET_CURRENT_THRESHOLD: Current = 20.8.amps
+val POSITION_TOLERANCE: Distance = 0.58.cm
+val MAX_EXTENSION: Angle = 12.749.rotations
+val MIN_EXTENSION: Angle = 0.0.rotations
 const val SAFETY_DEBOUNCE = 1.0
 
 val GAINS = selectGainsBasedOnMode(Gains(2.0), Gains(kP = 0.5, kD = 0.2))
 
 enum class Positions(val position: Distance) {
-    EXTENDED(Units.Meters.of(0.34)),
-    RETRACTED(Units.Meters.of(0.0)),
-    L4(Units.Meters.of(0.36));
+    EXTENDED(34.cm),
+    RETRACTED(0.cm),
+    L4(36.cm);
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {

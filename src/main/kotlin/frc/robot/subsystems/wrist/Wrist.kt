@@ -1,6 +1,7 @@
 package frc.robot.subsystems.wrist
 
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Second
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
@@ -9,6 +10,10 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.div
+import frc.robot.lib.extensions.sec
+import frc.robot.lib.extensions.volts
 import frc.robot.subsystems.gripper.STOP_VOLTAGE
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
@@ -73,9 +78,9 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun max(): Command = setAngle(Angles.MAX)
     fun tuningAngle(): Command =
         run {
-                io.setAngle(Units.Degrees.of(tuningAngleDegrees.get()))
+            io.setAngle(tuningAngleDegrees.get().deg)
                 setpointName = "Tuning Angle"
-                setpointValue = Units.Degrees.of(tuningAngleDegrees.get())
+            setpointValue = tuningAngleDegrees.get().deg
             }
             .withName("Wrist/Tuning")
 
@@ -83,9 +88,9 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         val routineForwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
+                    5.volts / Second,
+                    6.volts,
+                    1.5.sec,
                     { state: State ->
                         Logger.recordOutput("Wrist/state", state)
                     }
@@ -99,9 +104,9 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         val routineBackwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
+                    5.volts / Second,
+                    6.volts,
+                    1.5.sec,
                     { state: State ->
                         Logger.recordOutput("Wrist/state", state)
                     }

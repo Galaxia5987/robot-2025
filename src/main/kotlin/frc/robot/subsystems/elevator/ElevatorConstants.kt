@@ -1,27 +1,27 @@
 package frc.robot.subsystems.elevator
 
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
+import frc.robot.lib.extensions.*
 import frc.robot.lib.selectGainsBasedOnMode
 
 const val VOLTAGE_CONTROL_KG = 0.37
-val MAX_HEIGHT_LIMIT: Angle = Units.Rotations.of(27.5)
-val MIN_HEIGHT_LIMIT: Angle = Units.Rotations.of(0.1337)
-val AUX_MAX_HEIGHT_LIMIT: Angle = Units.Rotations.of(1.6)
-val AUX_MIN_HEIGHT_LIMIT: Angle = Units.Rotations.of(-25.66)
-val SETPOINT_TOLERANCE: Distance = Units.Centimeters.of(2.0)
-val RESET_VOLTAGE: Voltage = Units.Volts.of(-4.0)
-val RESET_CURRENT_THRESHOLD: Current = Units.Amps.of(50.0)
+val MAX_HEIGHT_LIMIT: Angle = 27.5.rotations
+val MIN_HEIGHT_LIMIT: Angle = 0.1337.rotations
+val AUX_MAX_HEIGHT_LIMIT: Angle = 1.6.rotations
+val AUX_MIN_HEIGHT_LIMIT: Angle = -25.66.rotations
+val SETPOINT_TOLERANCE: Distance = 2.cm
+val RESET_VOLTAGE: Voltage = -4.0.volts
+val RESET_CURRENT_THRESHOLD: Current = 50.amps
 const val GEAR_RATIO = (12.0 / 72.0) * (12.0 / 12.0)
 const val SECOND_STAGE_RATIO = 2.0
 const val ADJUSTED_GEAR_RATIO = SECOND_STAGE_RATIO * GEAR_RATIO
-val MIN_KG_HEIGHT: Distance = Units.Centimeters.of(3.0)
-val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
-val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
+val MIN_KG_HEIGHT: Distance = 3.cm
+val SPROCKET_RADIUS: Distance = 36.4.mm / 2
+val MANUAL_CONTROL_VOLTAGE: Voltage = 6.0.volts
 
 val GAINS =
     selectGainsBasedOnMode(
@@ -30,17 +30,17 @@ val GAINS =
     )
 
 enum class Positions(val value: Distance) {
-    L1(Units.Centimeters.of(0.0)),
-    L2(Units.Centimeters.of(0.0)),
-    L3(Units.Centimeters.of(20.0)),
-    L4(Units.Centimeters.of(105.0)),
-    ALIGN_L2(Units.Centimeters.of(0.0)),
-    ALIGN_L4(Units.Centimeters.of(95.0)),
-    L2_ALGAE(Units.Centimeters.of(0.0)),
-    L3_ALGAE(Units.Centimeters.of(0.0)),
-    FEEDER(Units.Centimeters.of(16.0)),
-    BLOCKED_FEEDER(Units.Centimeters.of(10.0)),
-    ZERO(Units.Centimeters.zero());
+    L1(0.cm),
+    L2(0.cm),
+    L3(20.cm),
+    L4(105.cm),
+    ALIGN_L2(0.cm),
+    ALIGN_L4(95.cm),
+    L2_ALGAE(0.cm),
+    L3_ALGAE(0.cm),
+    FEEDER(16.cm),
+    BLOCKED_FEEDER(10.cm),
+    ZERO(0.cm);
 
     fun getLoggingName() =
         name.split("_").joinToString(" ") {

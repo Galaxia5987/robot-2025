@@ -10,6 +10,9 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.IS_RED
+import frc.robot.lib.extensions.cm
+import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.m
 import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getTranslation2d
@@ -20,9 +23,9 @@ import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-val REEF_RADIUS: Distance = Units.Meters.of(0.8317)
+val REEF_RADIUS: Distance = 0.8317.m
 
-val ROBOT_SIDE_LENGTH: Distance = Units.Meters.of(0.825)
+val ROBOT_SIDE_LENGTH: Distance = 0.825.m
 
 // If measured on the red side should flip.
 // Two field measurements for finding the reef center. The robot should touch the reef.
@@ -37,13 +40,13 @@ val ReefCenter = Translation2d(
 
 val Reef4Left: Pose2d =
     ReefFaceLeft + Transform2d(
-        -Units.Centimeters.of(4.0),
+        -4.cm,
         Units.Centimeters.zero(),
         Rotation2d.kZero
     )
 val Reef4Right: Pose2d =
     ReefFaceRight + Transform2d(
-        -Units.Centimeters.of(4.0),
+        -4.cm,
         Units.Centimeters.zero(),
         Rotation2d.kZero
     )
@@ -170,8 +173,8 @@ private val choreoPoses = parseChoreoPoses()
 val ALIGNMENT_POSES
     get() = choreoPoses.mapValues { it.value.flipIfNeeded() }
 
-val X_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
-val Y_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
-val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
-val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
-val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
+val X_ALIGNMENT_TOLERANCE: Distance = 2.75.cm
+val Y_ALIGNMENT_TOLERANCE: Distance = 2.75.cm
+val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = 1.deg
+val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = 40.cm
+val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = 18.cm

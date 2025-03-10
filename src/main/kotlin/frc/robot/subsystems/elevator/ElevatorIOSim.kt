@@ -3,10 +3,10 @@ package frc.robot.subsystems.elevator
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.math.controller.PIDController
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.extensions.toAngle
 import frc.robot.lib.extensions.toDistance
 import frc.robot.lib.extensions.toLinear
@@ -40,7 +40,7 @@ class ElevatorIOSim : ElevatorIO {
         motor.update(Timer.getFPGATimestamp())
         inputs.appliedVoltage = motor.appliedVoltage
         inputs.height =
-            Units.Rotations.of(motor.position)
+            motor.position.rotations
                 .toDistance(SPROCKET_RADIUS, ADJUSTED_GEAR_RATIO)
         inputs.mainMotorCurrent = motor.appliedCurrent
         inputs.velocity = motor.velocity.toLinear(SPROCKET_RADIUS, GEAR_RATIO)

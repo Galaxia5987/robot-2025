@@ -1,10 +1,9 @@
 package frc.robot.lib.extensions
 
+import edu.wpi.first.units.TimeUnit
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.AngularVelocity
-import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.units.measure.LinearVelocity
+import edu.wpi.first.units.VoltageUnit
+import edu.wpi.first.units.measure.*
 import kotlin.math.PI
 
 fun LinearVelocity.toAngular(

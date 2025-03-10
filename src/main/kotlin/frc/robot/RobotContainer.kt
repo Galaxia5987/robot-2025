@@ -6,7 +6,6 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -17,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.extensions.volts
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
@@ -62,7 +62,7 @@ object RobotContainer {
     private val roller = frc.robot.roller
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
-    val voltage = Units.Volts.of(1.0)
+    val voltage = 1.volts
     val disableAlignment = heightController.button(12)
 
     val autoChooser = AutoBuilder.buildAutoChooser()
