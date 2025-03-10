@@ -34,7 +34,7 @@ fun B1R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
-//        alignScoreL4()
+        alignScoreL4()
     )
 
 fun C6L(): Command =
