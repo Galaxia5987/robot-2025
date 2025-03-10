@@ -36,3 +36,8 @@ fun AngularVelocity.toLinear(
         Units.MetersPerSecond.per(Units.RotationsPerSecond)
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
+
+
+operator fun Distance.div(time: TimeUnit): LinearVelocity = this / time.one()
+operator fun Distance.div(divisor: Number): Distance = this / divisor.toDouble()
+operator fun Voltage.div(time: TimeUnit): Velocity<VoltageUnit> = this / time.one()
