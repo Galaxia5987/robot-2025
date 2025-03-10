@@ -35,10 +35,10 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
         setOf()
     )
     return runOnce({
-        selectedScorePose = buttonToPoseMap[buttonID]?.first ?: throw Exception("No pose for button $buttonID!!!")
+        selectedScorePose = buttonToPoseMap[buttonID]?.first ?: throw Exception("No pose for button $buttonID!")
 
         isLeft = buttonToPoseMap[buttonID]?.second ?: throw Exception(
-            "isLeft not configured for $buttonID!!!"
+            "isLeft not configured for $buttonID!"
         )
 
         Logger.recordOutput(
