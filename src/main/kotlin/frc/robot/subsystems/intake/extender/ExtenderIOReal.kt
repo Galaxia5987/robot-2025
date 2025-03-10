@@ -1,11 +1,6 @@
 package frc.robot.subsystems.intake.extender
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs
-import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.TalonFX
@@ -14,9 +9,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
-import frc.robot.lib.toAngle
-import frc.robot.lib.toDistance
-import frc.robot.lib.toLinear
+import frc.robot.lib.extensions.toAngle
+import frc.robot.lib.extensions.toDistance
+import frc.robot.lib.extensions.toLinear
 
 class ExtenderIOReal : ExtenderIO {
     override val inputs = LoggedExtenderInputs()

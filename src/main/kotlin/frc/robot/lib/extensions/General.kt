@@ -1,4 +1,4 @@
-package frc.robot.lib
+package frc.robot.lib.extensions
 
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Seconds

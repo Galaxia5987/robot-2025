@@ -1,12 +1,6 @@
 package frc.robot.subsystems.elevator
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs
-import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
@@ -21,11 +15,11 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.toAngle
-import frc.robot.lib.toDistance
-import frc.robot.lib.toLinear
-import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
+import frc.robot.lib.extensions.toAngle
+import frc.robot.lib.extensions.toDistance
+import frc.robot.lib.extensions.toLinear
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 
 class ElevatorIOReal : ElevatorIO {
     override val inputs = LoggedElevatorInputs()
