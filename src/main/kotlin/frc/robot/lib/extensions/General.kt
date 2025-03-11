@@ -5,7 +5,6 @@ import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.LogTable
@@ -72,5 +71,3 @@ fun CommandGenericHID.rumble(): Command {
 
 fun (() -> Boolean).debounce(time: Double): Trigger = Trigger(this).debounce(time)
 fun (() -> Boolean).debounce(time: Time): Trigger = Trigger(this).debounce(time.`in`(Seconds))
-
-infix fun Command.andThen(command: Command): SequentialCommandGroup = andThen(command)
