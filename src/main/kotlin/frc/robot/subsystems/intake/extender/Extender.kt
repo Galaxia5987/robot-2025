@@ -12,10 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.lib.extensions.div
-import frc.robot.lib.extensions.m
-import frc.robot.lib.extensions.sec
-import frc.robot.lib.extensions.volts
+import frc.robot.lib.extensions.*
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -51,9 +48,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             .withName("Extender/setPosition")
 
     private fun setPosition(position: Positions): Command =
-        runOnce { setpointName = position.getLoggingName() }
-            .andThen(setPosition({ position.position }))
-            .withName("Extender/setPosition with enum")
+        runOnce {
+            setpointName = position.getLoggingName()
+        } then setPosition { position.position } withName "setPosition with enum"
 
     private fun setVoltage(voltage: Voltage): Command =
         startEnd(
