@@ -7,10 +7,11 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import java.util.function.BooleanSupplier
 
-infix fun Command.until(condition: () -> Boolean): Command = until(condition)
-infix fun Command.andThen(next: Command): Command = andThen(next)
-infix fun Command.andThen(next: () -> Command): Command = andThen(next())
+infix fun Command.until(condition: BooleanSupplier): Command = until(condition)
+infix fun Command.then(next: Command): Command = andThen(next)
+infix fun Command.then(next: () -> Command): Command = andThen(next())
 infix fun Command.finallyDo(end: (interrupted: Boolean) -> Unit): Command = finallyDo(end)
 infix fun Command.finallyDo(command: Command): Command = finallyDo { _ -> command.schedule() }
 
