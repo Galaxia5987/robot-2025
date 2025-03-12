@@ -53,7 +53,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
-import frc.robot.InitializerKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.math.GalacticSlewRateLimiter;

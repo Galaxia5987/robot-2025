@@ -29,4 +29,3 @@ private val CORAL_ROLLER_UP_C2C: Array<Double> =
     arrayOf(0.201364, 3.3) // arrayOf(C2C Distance, Angle (in rad))
 
 private val WRIST_ANGLE_OFFSET = Degrees.of(90.0)
-
