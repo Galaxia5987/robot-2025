@@ -24,10 +24,7 @@ val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
 
 val GAINS =
-    selectGainsBasedOnMode(
-        Gains(kP = 4.0, kD = 0.3, kG = 0.0),
-        Gains(kP = 0.4)
-    )
+    selectGainsBasedOnMode(Gains(kP = 4.0, kD = 0.3, kG = 0.0), Gains(kP = 0.4))
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
