@@ -349,6 +349,7 @@ public class Drive extends SubsystemBase {
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("SwerveChassisSpeeds/SetpointsFieldOriented", ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
         Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
@@ -370,6 +371,7 @@ public class Drive extends SubsystemBase {
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("SwerveChassisSpeeds/SetpointsFieldOriented", ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
         Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
