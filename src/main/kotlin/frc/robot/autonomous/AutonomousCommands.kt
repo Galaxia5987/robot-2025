@@ -18,7 +18,9 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
         )
         .andThen(
             Commands.run({
-                    swerveDrive.limitlessRunVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
+                    swerveDrive.limitlessRunVelocity(
+                        ChassisSpeeds(0.8, 0.0, 0.0)
+                    )
                 })
                 .raceWith(feeder(Trigger { true }))
         )

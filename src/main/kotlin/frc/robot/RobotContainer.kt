@@ -92,7 +92,7 @@ object RobotContainer {
                 swerveDrive,
                 { driverController.leftY },
                 { driverController.leftX },
-                { -driverController.rightX * 0.8}
+                { -driverController.rightX * 0.8 }
             )
 
         climber.defaultCommand =
@@ -105,7 +105,7 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        //reset swerve
+        // reset swerve
         driverController
             .create()
             .onTrue(
@@ -120,7 +120,7 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        //align score
+        // align score
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
@@ -146,11 +146,8 @@ object RobotContainer {
                 }
             )
 
-        //manual score
-        driverController
-            .cross()
-            .onTrue(l1())
-            .onFalse(outtakeL1())
+        // manual score
+        driverController.cross().onTrue(l1()).onFalse(outtakeL1())
         driverController
             .square()
             .and(disableAlignment)
@@ -167,17 +164,17 @@ object RobotContainer {
             .onTrue(l4())
             .onFalse(outtakeCoralAndDriveBack(true))
 
-        //intake buttons
+        // intake buttons
         driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
             .onTrue(outtakeAlgae(driverController.L1().negate()))
 
-        //gripper control
+        // gripper control
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
 
-        //remove algae
+        // remove algae
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
         heightController
@@ -187,7 +184,7 @@ object RobotContainer {
             .button(3)
             .onTrue(l3algae(heightController.button(3).negate()))
 
-        //feeder
+        // feeder
         operatorController
             .start()
             .onTrue(
@@ -215,7 +212,7 @@ object RobotContainer {
                 )
             )
 
-        //overrides and resets
+        // overrides and resets
         operatorController
             .povDown()
             .onTrue(elevator.reset(operatorController.povDown().negate()))
@@ -240,15 +237,15 @@ object RobotContainer {
 
         disableAlignment.onTrue(wrist.l1())
 
-        //test controller
+        // test controller
         testController.a().whileTrue(runAllBits())
 
-        //tuning buttons
+        // tuning buttons
         driverController.povDown().onTrue(elevator.tuningPosition())
         driverController.povRight().onTrue(wrist.tuningAngle())
         driverController.povLeft().onTrue(gripper.slowOuttake(true))
 
-        //pose selector
+        // pose selector
         val buttonMappings =
             listOf(
                 9, // L1
@@ -303,7 +300,13 @@ object RobotContainer {
         autoChooser.addOption("A2R3RL", A2R3RL())
 
         autoChooser.addOption("turnSysId", swerveDrive.runAllTurnSysID())
-        autoChooser.addOption("wheelRadiusCharacterization", DriveCommands.wheelRadiusCharacterization(swerveDrive))
-        autoChooser.addOption("swerveFFCharacterization", DriveCommands.feedforwardCharacterization(swerveDrive))
+        autoChooser.addOption(
+            "wheelRadiusCharacterization",
+            DriveCommands.wheelRadiusCharacterization(swerveDrive)
+        )
+        autoChooser.addOption(
+            "swerveFFCharacterization",
+            DriveCommands.feedforwardCharacterization(swerveDrive)
+        )
     }
 }

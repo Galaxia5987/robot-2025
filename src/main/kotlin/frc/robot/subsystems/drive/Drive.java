@@ -341,9 +341,10 @@ public class Drive extends SubsystemBase {
         fieldSpeeds.vyMetersPerSecond =
                 slewRateLimiterY.withLimit(limit).calculate(fieldSpeeds.vyMetersPerSecond);
 
-        limitlessRunVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(fieldSpeeds,
-                isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation())
-        );
+        limitlessRunVelocity(
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                        fieldSpeeds,
+                        isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation()));
     }
 
     public void limitlessRunVelocity(ChassisSpeeds speeds) {
@@ -355,7 +356,9 @@ public class Drive extends SubsystemBase {
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
-        Logger.recordOutput("SwerveChassisSpeeds/SetpointsFieldOriented", ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
+        Logger.recordOutput(
+                "SwerveChassisSpeeds/SetpointsFieldOriented",
+                ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
         Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 

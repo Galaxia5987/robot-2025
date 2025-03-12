@@ -91,9 +91,7 @@ fun alignScoreL1(): Command =
         .andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
-    alignPrep(l2())
-        .andThen(alignCommand(false))
-        .andThen(outtakeL2())
+    alignPrep(l2()).andThen(alignCommand(false)).andThen(outtakeL2())
 
 fun alignScoreL3(): Command =
     alignPrep(l3())
