@@ -93,12 +93,7 @@ public class DriveCommands {
                     boolean isFlipped =
                             DriverStation.getAlliance().isPresent()
                                     && DriverStation.getAlliance().get() == Alliance.Red;
-                    drive.runVelocity(
-                            ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    speeds,
-                                    isFlipped
-                                            ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                                            : drive.getRotation()));
+                    drive.fieldOrientedRunVelocity(speeds, isFlipped);
                 },
                 drive);
     }
@@ -144,13 +139,7 @@ public class DriveCommands {
                             boolean isFlipped =
                                     DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get() == Alliance.Red;
-                            drive.runVelocity(
-                                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                                            speeds,
-                                            isFlipped
-                                                    ? drive.getRotation()
-                                                            .plus(new Rotation2d(Math.PI))
-                                                    : drive.getRotation()));
+                            drive.fieldOrientedRunVelocity(speeds, isFlipped);
                         },
                         drive)
 
@@ -159,7 +148,7 @@ public class DriveCommands {
     }
 
     public static Command driveCommand(Drive drive, ChassisSpeeds chassisSpeeds) {
-        return drive.run(() -> drive.runVelocity(chassisSpeeds));
+        return drive.run(() -> drive.limitlessRunVelocity(chassisSpeeds));
     }
 
     /**
@@ -247,7 +236,7 @@ public class DriveCommands {
                         Commands.run(
                                 () -> {
                                     double speed = limiter.calculate(WHEEL_RADIUS_MAX_VELOCITY);
-                                    drive.runVelocity(new ChassisSpeeds(0.0, 0.0, speed));
+                                    drive.limitlessRunVelocity(new ChassisSpeeds(0.0, 0.0, speed));
                                 },
                                 drive)),
 
@@ -314,7 +303,7 @@ public class DriveCommands {
     }
 
     public static Command timedLeave(Drive drive, double timeSeconds) {
-        return Commands.run(() -> drive.runVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
+        return Commands.run(() -> drive.limitlessRunVelocity(new ChassisSpeeds(1.0, 0.0, 0.0)))
                 .withTimeout(timeSeconds);
     }
 

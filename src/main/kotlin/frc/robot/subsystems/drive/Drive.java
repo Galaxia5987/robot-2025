@@ -326,9 +326,9 @@ public class Drive extends SubsystemBase {
     /**
      * Runs the drive at the desired velocity.
      *
-     * @param speeds Speeds in meters/sec
+     * @param fieldSpeeds Speeds in meters/sec
      */
-    public void runVelocity(ChassisSpeeds speeds) {
+    public void fieldOrientedRunVelocity(ChassisSpeeds fieldSpeeds, Boolean isFlipped) {
         double elevatorHeight = InitializerKt.getElevator().getHeight().invoke().in(Meters);
 
         // Accel limits
@@ -336,30 +336,14 @@ public class Drive extends SubsystemBase {
                 TunerConstants.SLEW_LIMIT_A * elevatorHeight * elevatorHeight
                         + TunerConstants.SLEW_LIMIT_B * elevatorHeight
                         + TunerConstants.SLEW_LIMIT_C;
-        speeds.vxMetersPerSecond =
-                slewRateLimiterX.withLimit(limit).calculate(speeds.vxMetersPerSecond);
-        speeds.vyMetersPerSecond =
-                slewRateLimiterY.withLimit(limit).calculate(speeds.vyMetersPerSecond);
+        fieldSpeeds.vxMetersPerSecond =
+                slewRateLimiterX.withLimit(limit).calculate(fieldSpeeds.vxMetersPerSecond);
+        fieldSpeeds.vyMetersPerSecond =
+                slewRateLimiterY.withLimit(limit).calculate(fieldSpeeds.vyMetersPerSecond);
 
-        // Calculate module setpoints
-        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
-        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
-
-        // Log unoptimized setpoints and setpoint speeds
-        Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
-        Logger.recordOutput("SwerveChassisSpeeds/SetpointsFieldOriented", ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
-        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
-        Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
-
-        // Send setpoints to modules
-        for (int i = 0; i < 4; i++) {
-            modules[i].runSetpoint(setpointStates[i]);
-        }
-
-        // Log optimized setpoints (runSetpoint mutates each state)
-        Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
+        limitlessRunVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(fieldSpeeds,
+                isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation())
+        );
     }
 
     public void limitlessRunVelocity(ChassisSpeeds speeds) {
@@ -406,7 +390,7 @@ public class Drive extends SubsystemBase {
 
     /** Stops the drive. */
     public void stop() {
-        runVelocity(new ChassisSpeeds());
+        limitlessRunVelocity(new ChassisSpeeds());
     }
 
     /**
