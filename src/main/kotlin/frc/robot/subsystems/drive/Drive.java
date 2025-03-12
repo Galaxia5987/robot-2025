@@ -329,18 +329,6 @@ public class Drive extends SubsystemBase {
      * @param speeds Speeds in meters/sec
      */
     public void runVelocity(ChassisSpeeds speeds) {
-        double elevatorHeight = InitializerKt.getElevator().getHeight().invoke().in(Meters);
-
-        // Accel limits
-        double limit =
-                TunerConstants.SLEW_LIMIT_A * elevatorHeight * elevatorHeight
-                        + TunerConstants.SLEW_LIMIT_B * elevatorHeight
-                        + TunerConstants.SLEW_LIMIT_C;
-        speeds.vxMetersPerSecond =
-                slewRateLimiterX.withLimit(limit).calculate(speeds.vxMetersPerSecond);
-        speeds.vyMetersPerSecond =
-                slewRateLimiterY.withLimit(limit).calculate(speeds.vyMetersPerSecond);
-
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);

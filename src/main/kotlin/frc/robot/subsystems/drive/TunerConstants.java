@@ -139,20 +139,20 @@ public class TunerConstants {
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
                     new double[]{
-                            1.9374177350995647,
-                            2.868544073346149,
-                            -0.2162912910918754,
-                            1.1244079175201749
+                            -1.064582666792635,
+                            -1.2640001692177683,
+                            0.13345632854605077,
+                            -3.0280780752862557
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(22.792)
+                            .withKP(40)
                             .withKI(0)
-                            .withKD(2.207)
+                            .withKD(0)
                             .withKS(0)
-                            .withKV(0.22717)
-                            .withKA(0.1124)
+                            .withKV(0)
+                            .withKA(0)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
