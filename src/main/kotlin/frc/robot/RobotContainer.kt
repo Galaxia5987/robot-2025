@@ -105,6 +105,7 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        //reset swerve
         driverController
             .create()
             .onTrue(
@@ -118,6 +119,8 @@ object RobotContainer {
                     )
                     .ignoringDisable(true)
             )
+
+        //align score
         driverController
             .square()
             .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
@@ -143,6 +146,7 @@ object RobotContainer {
                 }
             )
 
+        //manual score
         driverController
             .cross()
             .onTrue(l1())
@@ -163,13 +167,17 @@ object RobotContainer {
             .onTrue(l4())
             .onFalse(outtakeCoralAndDriveBack(true))
 
+        //intake buttons
         driverController.R1().whileTrue(intakeAlgae())
         driverController
             .L1()
             .onTrue(outtakeAlgae(driverController.L1().negate()))
+
+        //gripper control
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
 
+        //remove algae
         operatorController.x().onTrue(l2algae(operatorController.x().negate()))
         operatorController.b().onTrue(l3algae(operatorController.b().negate()))
         heightController
@@ -178,6 +186,8 @@ object RobotContainer {
         heightController
             .button(3)
             .onTrue(l3algae(heightController.button(3).negate()))
+
+        //feeder
         operatorController
             .start()
             .onTrue(
@@ -204,6 +214,8 @@ object RobotContainer {
                     disableAlignment
                 )
             )
+
+        //overrides and resets
         operatorController
             .povDown()
             .onTrue(elevator.reset(operatorController.povDown().negate()))
@@ -228,12 +240,15 @@ object RobotContainer {
 
         disableAlignment.onTrue(wrist.l1())
 
+        //test controller
         testController.a().whileTrue(runAllBits())
 
+        //tuning buttons
         driverController.povDown().onTrue(elevator.tuningPosition())
         driverController.povRight().onTrue(wrist.tuningAngle())
         driverController.povLeft().onTrue(gripper.slowOuttake(true))
 
+        //pose selector
         val buttonMappings =
             listOf(
                 9, // L1
