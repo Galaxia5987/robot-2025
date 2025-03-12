@@ -4,3 +4,10 @@ profile:
   name: qodana.recommended
 include:
   - name: CheckDependencyLicenses
+exclude:
+  - name: All
+    paths:
+      - src/main/kotlin/frc/robot/subsystems/drive
+      - annotation
+      - src/main/kotlin/frc/robot/subsystems/vision
+      - src/main/kotlin/frc/robot/lib

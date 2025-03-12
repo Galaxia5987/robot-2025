@@ -61,7 +61,7 @@
             "title": "HasCoral",
             "x": 0.0,
             "y": 0.0,
-            "width": 104.0,
+            "width": 160.0,
             "height": 216.0,
             "type": "Boolean Box",
             "properties": {
@@ -76,47 +76,13 @@
           },
           {
             "title": "Back Left Camera",
-            "x": 896.0,
+            "x": 816.0,
             "y": 304.0,
-            "width": 128.0,
+            "width": 152.0,
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/Vision/backLeft/Connected",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "Back Right Camera",
-            "x": 1152.0,
-            "y": 304.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/backRight/Connected",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
-            "title": "Front Camera",
-            "x": 1024.0,
-            "y": 304.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/front/Connected",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
@@ -207,31 +173,44 @@
             }
           },
           {
-            "title": "Right",
-            "x": 216.0,
+            "title": "SendableChooser[0]",
+            "x": 160.0,
             "y": 0.0,
-            "width": 120.0,
+            "width": 176.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/SendableChooser[0]",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Front Left Camera",
+            "x": 968.0,
+            "y": 304.0,
+            "width": 144.0,
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/Auto Alignment/isLeft",
+              "topic": "/AdvantageKit/Vision/frontLeft/Connected",
               "period": 0.06,
               "data_type": "boolean",
-              "true_color": 4294198070,
-              "false_color": 4283215696,
+              "true_color": 4283215696,
+              "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
             }
           },
           {
-            "title": "Left",
-            "x": 104.0,
-            "y": 0.0,
-            "width": 112.0,
+            "title": "Front Right Camera",
+            "x": 1112.0,
+            "y": 304.0,
+            "width": 152.0,
             "height": 128.0,
             "type": "Boolean Box",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/Auto Alignment/isLeft",
+              "topic": "/AdvantageKit/Vision/frontRight/Connected",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,

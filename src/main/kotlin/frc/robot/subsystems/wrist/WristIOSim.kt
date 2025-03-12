@@ -19,9 +19,9 @@ class WristIOSim : WristIO {
             GEAR_RATIO,
             MOMENT_OF_INERTIA.`in`(Units.KilogramSquareMeters),
             1.0,
-            TalonType.FALCON
+            TalonType.FALCON_FOC
         )
-    private val angleController = PIDController(1.0, 0.0, 0.0)
+    private val angleController = PIDController(3.0, 0.0, 0.0)
     private val positionControl = PositionVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
 
@@ -40,7 +40,7 @@ class WristIOSim : WristIO {
     override fun resetAbsoluteEncoder(angle: Angle) {}
 
     override fun updateInputs() {
-        motor.update(Timer.getFPGATimestamp())
+        motor.update(Timer.getFPGATimestamp() * 500)
         inputs.angle.mut_replace(motor.position, Units.Rotations)
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
         inputs.velocity.mut_replace(motor.velocity)

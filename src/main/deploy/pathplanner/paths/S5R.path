@@ -1,0 +1,80 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3905737704918033,
+        "y": 1.2498463114754088
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.750001224555681,
+        "y": 3.1501591276100864
+      },
+      "isLocked": false,
+      "linkedName": "S2"
+    },
+    {
+      "anchor": {
+        "x": 3.9188352272727274,
+        "y": 2.6738494318181822
+      },
+      "prevControl": {
+        "x": 3.0740629457029063,
+        "y": 1.6681810074533465
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "5R"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7862679955703215,
+      "maxWaypointRelativePos": 0.9944629014396453,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 450.0,
+        "maxAngularAcceleration": 600.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "MoveL4",
+      "waypointRelativePos": 0.8283499446290032,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "MoveL4"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 650.0,
+    "maxAngularAcceleration": 715.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -125.00000000000001
+  },
+  "useDefaultConstraints": true
+}

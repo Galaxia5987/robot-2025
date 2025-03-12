@@ -17,7 +17,6 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 
@@ -28,6 +27,14 @@ class WristIOReal : WristIO {
 
     private val motor: TalonFX = TalonFX(MOTOR_PORT)
     private val absoluteEncoder = CANcoder(CANCODER_PORT)
+
+    private val softLimits =
+        SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
+            ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
+        }
 
     init {
         motor.configurator.apply(
@@ -55,13 +62,7 @@ class WristIOReal : WristIO {
                         StaticFeedforwardSign =
                             StaticFeedforwardSignValue.UseClosedLoopSign
                     }
-                SoftwareLimitSwitch =
-                    SoftwareLimitSwitchConfigs().apply {
-                        ForwardSoftLimitEnable = true
-                        ReverseSoftLimitEnable = true
-                        ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
-                        ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
-                    }
+                SoftwareLimitSwitch = softLimits
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
@@ -77,10 +78,10 @@ class WristIOReal : WristIO {
                 MagnetSensor.SensorDirection =
                     SensorDirectionValue.Clockwise_Positive
                 MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
-                MagnetSensor.MagnetOffset =
-                    -ABSOLUTE_ENCODER_MAGNET_OFFSET.`in`(Units.Rotations)
+                MagnetSensor.MagnetOffset = 0.0
             }
         )
+        absoluteEncoder.setPosition(0.0)
     }
 
     override fun setAngle(angle: Angle) {
@@ -93,6 +94,14 @@ class WristIOReal : WristIO {
 
     override fun resetAbsoluteEncoder(angle: Angle) {
         absoluteEncoder.setPosition(angle)
+    }
+
+    override fun setSoftLimits(value: Boolean) {
+        motor.configurator.apply(
+            softLimits
+                .withForwardSoftLimitEnable(value)
+                .withReverseSoftLimitEnable(value)
+        )
     }
 
     override fun updateInputs() {

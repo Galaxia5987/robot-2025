@@ -15,9 +15,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
-import frc.robot.autonomous.isLeft
+import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
+import frc.robot.subsystems.leds.blueTeamPattern
+import frc.robot.subsystems.leds.redTeamPattern
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -97,6 +100,10 @@ object Robot : LoggedRobot() {
         DriverStation.silenceJoystickConnectionWarning(true)
         PathfindingCommand.warmupCommand().schedule()
 
+        leds
+            .setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+            .schedule()
+
         val commandCounts = HashMap<String, Int>()
         val logCommandFunction =
             { command: Command, active: Boolean, verb: String ->
@@ -135,11 +142,17 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        logTriggers()
         Logger.recordOutput(
-            "SubsystemPoses",
-            *RobotContainer.visualizer.getSubsystemsPoses()
+            "ScoreState/SelectedScorePose",
+            selectedScorePose.first.invoke()
         )
-        Logger.recordOutput("Auto Alignment/isLeft", isLeft)
+        Logger.recordOutput(
+            "ScoreState/TagOfSelectedScorePose",
+            selectedScorePose.second
+        )
+
+        Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
     }
 
     /**
@@ -155,7 +168,10 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        swerveDrive.resetGyroBasedOnAlliance(Rotation2d.k180deg)
+        swerveDrive.resetGyro(
+            if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
+        )
+        swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()

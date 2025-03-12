@@ -78,6 +78,9 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
             )
             .withName("Extender/reset")
 
+    fun retractTime(time: Double): Command =
+        setVoltage(RESET_VOLTAGE).withTimeout(time)
+
     fun returnToSetpoint(): Command = run {
         atSetpoint
             .negate()
