@@ -47,7 +47,7 @@ object RobotContainer {
                 swerveDrive,
                 { driverController.leftY },
                 { driverController.leftX },
-                { -driverController.rightX * 0.6 }
+                { -driverController.rightX * 0.8 }
             )
     }
 
