@@ -277,8 +277,8 @@ public class TunerConstants {
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
             kSlipCurrent = Amps.of(78.0);
-            kMaxOmegaVelocity = RadiansPerSecond.of(7);
-            kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
+            kMaxOmegaVelocity = RadiansPerSecond.of(10.85);
+            kMaxAngularAcceleration = RadiansPerSecondPerSecond.of(8.6);
 
             driveInitialConfigs =
                     new TalonFXConfiguration()
@@ -296,8 +296,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(5);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(2.0);
+            kSpeedAt12Volts = MetersPerSecond.of(3.7);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(2.3);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
