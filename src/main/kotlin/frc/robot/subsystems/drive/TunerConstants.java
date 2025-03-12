@@ -306,7 +306,7 @@ public class TunerConstants {
 
             kDriveGearRatio = 1.0 / ((10.0 / 34.0) * (28.0 / 18.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
-            kWheelRadius = Centimeter.of(5.1);
+            kWheelRadius = Meters.of(0.046);
 
             kInvertLeftSide = true;
             kInvertRightSide = true;
