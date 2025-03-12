@@ -1,6 +1,5 @@
 package frc.robot.autonomous
 
-import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
@@ -12,69 +11,64 @@ import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.IS_RED
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.div
 import frc.robot.lib.extensions.m
 import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getTranslation2d
+import kotlinx.serialization.json.*
 import java.io.File
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.doubleOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
-val REEF_RADIUS: Distance = 0.8317.m
+private val REFERENCE_REEF_FACE = run {
+    val reefRadius: Distance = 0.8317.m
+    val robotSideLength: Distance = 0.825.m
+    // If measured on the red side should flip.
+    // Two field measurements for finding the reef center. The robot should touch the reef.
+    val reefLeftFaceMiddle = Translation2d(14.34.m, 3.84.m).flip()
+    val reefRightFaceMiddle = Translation2d(14.34.m, 4.19.m).flip()
+    // The calculated center of the reef, used for calculating all other scoring positions.
+    val reefCenter = (reefRightFaceMiddle + reefLeftFaceMiddle) / 2
 
-val ROBOT_SIDE_LENGTH: Distance = 0.825.m
-
-// If measured on the red side should flip.
-// Two field measurements for finding the reef center. The robot should touch the reef.
-val ReefFaceLeft: Pose2d = Pose2d(14.34, 3.84, Rotation2d.k180deg).flip()
-val ReefFaceRight: Pose2d = Pose2d(14.34, 4.19, Rotation2d.k180deg).flip()
-
-// The calculated center of the reef, used for calculating all other scoring positions.
-val ReefCenter = Translation2d(
-    (ReefFaceLeft.measureX + ReefFaceRight.measureX) / 2.0 + REEF_RADIUS + ROBOT_SIDE_LENGTH / 2.0,
-    (ReefFaceLeft.measureY + ReefFaceRight.measureY) / 2.0
-)
+    reefCenter + getTranslation2d(x = reefRadius + robotSideLength / 2)
+}
 
 val Reef4Left: Pose2d =
-    ReefFaceLeft + Transform2d(
+    REEF_LEFT_FACE_MIDDLE + Transform2d(
         -4.cm,
         Units.Centimeters.zero(),
         Rotation2d.kZero
     )
 val Reef4Right: Pose2d =
-    ReefFaceRight + Transform2d(
+    REEF_RIGHT_FACE_MIDDLE + Transform2d(
         -4.cm,
         Units.Centimeters.zero(),
         Rotation2d.kZero
     )
 
 val Reef5Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+    Reef4Left.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(60.0))
 val Reef5Right: Pose2d =
-    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+    Reef4Right.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(60.0))
 
 val Reef6Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+    Reef4Left.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(120.0))
 val Reef6Right: Pose2d =
-    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+    Reef4Right.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(120.0))
 
 val Reef1Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+    Reef4Left.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(180.0))
 val Reef1Right: Pose2d =
-    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+    Reef4Right.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(180.0))
 
 val Reef2Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+    Reef4Left.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(240.0))
 val Reef2Right: Pose2d =
-    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+    Reef4Right.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(240.0))
 
 val Reef3Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+    Reef4Left.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(300.0))
 val Reef3Right: Pose2d =
-    Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+    Reef4Right.rotateAround(REEF_CENTER, Rotation2d.fromDegrees(300.0))
 
 val FeederRightMidPose: Pose2d =
     Pose2d(2.563, 1.647, Rotation2d.fromDegrees(-120.0))
@@ -86,50 +80,50 @@ val FeederLeft: Pose2d = Pose2d(1.197, 7.031, Rotation2d.fromDegrees(120.0))
 val buttonToPoseAndTagMap =
     mapOf(
         9 to
-            Pair({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }), // L1
+                Pair({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }), // L1
         10 to
-            Pair(
-                { Reef4Right.flipIfNeeded() },
-                { if (IS_RED) 7 else 18 }
-            ), // R1
+                Pair(
+                    { Reef4Right.flipIfNeeded() },
+                    { if (IS_RED) 7 else 18 }
+                ), // R1
         8 to
-            Pair(
-                { Reef3Right.flipIfNeeded() },
-                { if (IS_RED) 6 else 19 }
-            ), // L2
+                Pair(
+                    { Reef3Right.flipIfNeeded() },
+                    { if (IS_RED) 6 else 19 }
+                ), // L2
         11 to
-            Pair({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }), // R2
+                Pair({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }), // R2
         4 to
-            Pair({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }), // L3
+                Pair({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }), // L3
         12 to
-            Pair(
-                { Reef5Right.flipIfNeeded() },
-                { if (IS_RED) 8 else 17 }
-            ), // R3
+                Pair(
+                    { Reef5Right.flipIfNeeded() },
+                    { if (IS_RED) 8 else 17 }
+                ), // R3
         7 to
-            Pair(
-                { Reef2Right.flipIfNeeded() },
-                { if (IS_RED) 11 else 20 }
-            ), // L4
+                Pair(
+                    { Reef2Right.flipIfNeeded() },
+                    { if (IS_RED) 11 else 20 }
+                ), // L4
         1 to
-            Pair({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }), // R4
+                Pair({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }), // R4
         6 to
-            Pair(
-                { Reef2Left.flipIfNeeded() },
-                { if (IS_RED) 11 else 20 }
-            ), // L5
+                Pair(
+                    { Reef2Left.flipIfNeeded() },
+                    { if (IS_RED) 11 else 20 }
+                ), // L5
         2 to
-            Pair(
-                { Reef6Right.flipIfNeeded() },
-                { if (IS_RED) 9 else 22 }
-            ), // R5
+                Pair(
+                    { Reef6Right.flipIfNeeded() },
+                    { if (IS_RED) 9 else 22 }
+                ), // R5
         5 to
-            Pair(
-                { Reef1Right.flipIfNeeded() },
-                { if (IS_RED) 10 else 21 }
-            ), // L6
+                Pair(
+                    { Reef1Right.flipIfNeeded() },
+                    { if (IS_RED) 10 else 21 }
+                ), // L6
         3 to
-            Pair({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }) // R6
+                Pair({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }) // R6
     )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
@@ -148,8 +142,8 @@ private fun parseChoreoPoses(): Map<String, Pose2d> {
         json
             .parseToJsonElement(
                 File(
-                        "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
-                    )
+                    "${Filesystem.getDeployDirectory()}/choreo/autotrajectories/AutoPaths.chor"
+                )
                     .readText()
             )
             .jsonObject
