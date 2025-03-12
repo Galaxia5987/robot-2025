@@ -128,7 +128,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                     Units.Volt.of(6.0),
                     Units.Second.of(1.5),
                     { state: State ->
-                        Logger.recordOutput("Elevator/state", state)
+                        Logger.recordOutput("Elevator/state", state.toString())
                     }
                 ),
                 SysIdRoutine.Mechanism(
@@ -144,7 +144,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                     Units.Volt.of(4.0),
                     Units.Second.of(1.5),
                     { state: State ->
-                        Logger.recordOutput("Elevator/state", state)
+                        Logger.recordOutput("Elevator/state", state.toString())
                     }
                 ),
                 SysIdRoutine.Mechanism(
