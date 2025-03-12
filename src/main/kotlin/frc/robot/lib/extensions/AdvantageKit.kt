@@ -1,14 +1,15 @@
-package frc.robot.lib
+package frc.robot.lib.extensions
 
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.MutableMeasure
-import edu.wpi.first.units.Unit as WPIUnit
 import edu.wpi.first.util.struct.Struct
 import edu.wpi.first.util.struct.StructSerializable
-import kotlin.reflect.KProperty
 import org.littletonrobotics.junction.AutoLogOutputManager
 import org.littletonrobotics.junction.LogTable
 import org.littletonrobotics.junction.inputs.LoggableInputs
+import kotlin.Unit
+import kotlin.reflect.KProperty
+import edu.wpi.first.units.Unit as WPIUnit
 
 abstract class AutoLogInputs : LoggableInputs {
     fun log(value: Double, key: String? = null) =
