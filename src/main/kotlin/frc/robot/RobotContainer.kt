@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
@@ -20,9 +19,7 @@ import org.littletonrobotics.junction.AutoLogOutput
  */
 object RobotContainer {
 
-    private val driverController = CommandPS5Controller(0)
-    private val operatorController = CommandXboxController(1)
-    private val testController = CommandXboxController(2)
+    private val driverController = CommandXboxController(0)
 
     private val swerveDrive = frc.robot.swerveDrive
 
@@ -53,7 +50,7 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController
-            .create()
+            .back()
             .onTrue(
                 Commands.runOnce(
                         {
