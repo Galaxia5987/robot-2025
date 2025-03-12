@@ -1,4 +1,4 @@
-package frc.robot.autonomous
+package frc.robot.compositions.autonomous
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
