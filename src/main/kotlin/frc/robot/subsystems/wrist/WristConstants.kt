@@ -20,7 +20,7 @@ val RESET_VOLTAGE: Voltage = Units.Volts.of(-4.0)
 val GAINS = selectGainsBasedOnMode(Gains(kP = 150.0, kD = 5.0), Gains())
 
 enum class Angles(val angle: Angle) {
-    L1(Units.Degrees.of(0.0)),
+    L1(Units.Degrees.of(20.0)),
     L2(Units.Degrees.of(0.0)),
     L3(Units.Degrees.of(145.0)),
     L3_MANUAL(Units.Degrees.of(170.0)),
