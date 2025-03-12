@@ -147,12 +147,12 @@ public class TunerConstants {
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(22.792)
+                            .withKP(40)
                             .withKI(0)
-                            .withKD(2.207)
+                            .withKD(0)
                             .withKS(0)
-                            .withKV(0.22717)
-                            .withKA(0.1124)
+                            .withKV(0)
+                            .withKA(0)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
             driveGains =
@@ -256,12 +256,12 @@ public class TunerConstants {
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(22.792)
+                            .withKP(40)
                             .withKI(0)
-                            .withKD(2.207)
+                            .withKD(0)
                             .withKS(0)
-                            .withKV(0.22717)
-                            .withKA(0.1124)
+                            .withKV(0)
+                            .withKA(0)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
 
