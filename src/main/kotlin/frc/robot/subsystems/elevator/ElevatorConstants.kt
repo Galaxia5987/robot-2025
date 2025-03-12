@@ -25,7 +25,7 @@ val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
 
 val GAINS =
     selectGainsBasedOnMode(
-        Gains(kP = 1.0, kI = 0.08, kD = 0.1, kG = 0.3),
+        Gains(kP = 4.0, kD = 0.3, kG = 0.0),
         Gains(kP = 0.4)
     )
 
