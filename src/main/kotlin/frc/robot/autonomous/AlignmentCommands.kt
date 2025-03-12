@@ -20,6 +20,7 @@ import frc.robot.subsystems.leds.redTeamPattern
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.outtakeL1
+import frc.robot.subsystems.outtakeL2
 import frc.robot.subsystems.raiseElevatorAtDistance
 import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
@@ -92,7 +93,7 @@ fun alignScoreL1(): Command =
 fun alignScoreL2(): Command =
     alignPrep(l2())
         .andThen(alignCommand(false))
-        .andThen(outtakeCoralAndDriveBack(false))
+        .andThen(outtakeL2())
 
 fun alignScoreL3(): Command =
     alignPrep(l3())

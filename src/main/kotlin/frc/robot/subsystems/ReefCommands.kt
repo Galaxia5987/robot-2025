@@ -78,7 +78,7 @@ fun outtakeCoralAndDriveBack(
                         visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
                     )))
             .withTimeout(0.5),
-        gripper.slowOuttake(true).withTimeout(0.15),
+        gripper.slowOuttake(!isReverse).withTimeout(0.15),
         swerveDrive
             .run {
                 swerveDrive.limitlessRunVelocity(ChassisSpeeds(-0.8, 0.0, 0.0))
@@ -117,6 +117,27 @@ fun outtakeL1(): Command =
             .onlyIf(
                 gripper.hasCoral.negate().and { !DriverStation.isAutonomous() }
             )
+    )
+
+fun outtakeL2(): Command =
+    sequence(
+        (gripper
+            .outtake(true).withTimeout(0.3).andThen(
+                gripper.outtake(true)
+                    .until(gripper.hasCoral.negate())
+                    .alongWith(
+                        visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                    )))
+            .withTimeout(0.5),
+        gripper.slowOuttake(false).withTimeout(0.15),
+        moveDefaultPosition(false, {false}),
+        WaitCommand(0.2),
+        swerveDrive
+            .run {
+                swerveDrive.limitlessRunVelocity(ChassisSpeeds(-0.8, 0.0, 0.0))
+            }
+            .withTimeout(0.3),
+        swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25)
     )
 
 // TODO: Add Coral Simulation
