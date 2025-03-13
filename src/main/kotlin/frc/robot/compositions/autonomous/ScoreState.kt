@@ -14,10 +14,7 @@ var selectedScorePose = Reef1
 @AutoLogOutput(key = "Auto Alignment/Is left")
 var isLeft = false
 
-// TODO: Add implementation for actual value
-val withinAlignmentDistance = swerveDrive.pose.distanceFromPoint(
-    selectedScorePose.translation
-) <= MAX_ALIGNMENT_DISTANCE
+data class ScoreLocation(val name: String, val pose: Pose2d, val tagId: Int)
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
