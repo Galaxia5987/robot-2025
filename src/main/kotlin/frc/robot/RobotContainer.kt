@@ -298,6 +298,7 @@ object RobotContainer {
         autoChooser.addOption("C6L5LR", C6L5LR())
         autoChooser.addOption("A2R", A2R())
         autoChooser.addOption("A2R3RL", A2R3RL())
+        autoChooser.addOption("test", test())
 
         autoChooser.addOption("turnSysId", swerveDrive.runAllTurnSysID())
         autoChooser.addOption(
