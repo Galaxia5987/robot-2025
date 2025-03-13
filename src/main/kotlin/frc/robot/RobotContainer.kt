@@ -53,16 +53,7 @@ object RobotContainer {
     private val heightController = CommandGenericHID(3)
     private val poseController = CommandGenericHID(4)
 
-    private val swerveDrive = frc.robot.swerveDrive
-    private val vision = frc.robot.vision
-    private val climber = frc.robot.climber
-    private val elevator = frc.robot.elevator
-    private val gripper = frc.robot.gripper
-    private val extender = frc.robot.extender
-    private val roller = frc.robot.roller
-    private val wrist = frc.robot.wrist
     val visualizer: Visualizer
-    val voltage = 1.volts
     val disableAlignment = heightController.button(12)
 
     val autoChooser = AutoBuilder.buildAutoChooser()
