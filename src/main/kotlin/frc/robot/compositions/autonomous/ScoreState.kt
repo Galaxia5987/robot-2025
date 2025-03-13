@@ -14,7 +14,11 @@ var selectedScorePose = Reef1
 @AutoLogOutput(key = "Auto Alignment/Is left")
 var isLeft = false
 
-data class ScoreLocation(val name: String, val pose: Pose2d, val tagId: Int)
+data class ScoreLocation(val name: String, val pose: Pose2d, val tagId: Int) {
+    companion object {
+        val struct = ScoreLocationStruct()
+    }
+}
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
