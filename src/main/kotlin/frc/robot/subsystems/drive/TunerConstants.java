@@ -300,7 +300,7 @@ public class TunerConstants {
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
             kSpeedAt12Volts = MetersPerSecond.of(3.7);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(2.55);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(6.47);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
