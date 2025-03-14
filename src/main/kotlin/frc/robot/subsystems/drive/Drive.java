@@ -560,6 +560,10 @@ public class Drive extends SubsystemBase {
         desiredHeading = new Rotation2d();
     }
 
+    public void setGyroOffset(Rotation2d offset) {
+        gyroOffset = offset;
+    }
+
     public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
         resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
     }
