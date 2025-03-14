@@ -25,8 +25,8 @@ val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 
 // If measured on the red side should flip.
 // Two field measurements for finding the reef center. The robot should touch the reef.
-val ReefFaceLeft: Pose2d = Pose2d(14.34, 3.84, Rotation2d.k180deg).flip()
-val ReefFaceRight: Pose2d = Pose2d(14.34, 4.19, Rotation2d.k180deg).flip()
+val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.84, Rotation2d.k180deg).flip()
+val ReefFaceRight: Pose2d = Pose2d(14.33, 4.19, Rotation2d.k180deg).flip()
 
 // 4.48945, FIELD_WIDTH / 2
 // The calculated center of the reef, used for calculating all other scoring positions.
