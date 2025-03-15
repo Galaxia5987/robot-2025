@@ -16,6 +16,7 @@ import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
 import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.selectedFeeder
 import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
@@ -151,6 +152,7 @@ object Robot : LoggedRobot() {
             "ScoreState/TagOfSelectedScorePose",
             selectedScorePose.second
         )
+        Logger.recordOutput("ScoreState/SelectedFeeder", selectedFeeder.invoke())
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
         Logger.recordOutput(

@@ -37,6 +37,11 @@ var isAligning: Trigger = Trigger { alignCommand().isScheduled }
 private fun pathFindToPose(pose: Pose2d, goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()): Command =
     AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, goalEndVelocity)
 
+fun pathFindToSelectedFeeder(): Command =
+    swerveDrive.defer{
+        pathFindToPose(selectedFeeder.invoke())
+    }
+
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
         val targetPose =

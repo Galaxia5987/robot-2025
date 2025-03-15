@@ -65,6 +65,7 @@ object RobotContainer {
     val voltage = Units.Volts.of(1.0)
     val disableAlignment = heightController.button(12)
     val disablePathFinding = heightController.button(11)
+    val disableFeederAlign = heightController.button(10)
 
     val autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -99,7 +100,7 @@ object RobotContainer {
         climber.defaultCommand =
             climber.powerControl {
                 MathUtil.applyDeadband(
-                    operatorController.leftY + poseController.getRawAxis(0),
+                    operatorController.leftY,
                     0.15
                 )
             }
@@ -185,7 +186,21 @@ object RobotContainer {
             .button(3)
             .onTrue(l3algae(heightController.button(3).negate()))
 
-        // feeder
+        // feeder auto
+        (operatorController
+            .start().or(operatorController.back()))
+            .and(disableFeederAlign.negate())
+            .whileTrue(
+                pathFindToSelectedFeeder()
+            )
+        (heightController
+            .button(1).or(heightController.button(4)))
+            .and(disableFeederAlign.negate())
+            .whileTrue(
+                pathFindToSelectedFeeder()
+            )
+
+        // feeder manual
         operatorController
             .start()
             .onTrue(
@@ -268,6 +283,12 @@ object RobotContainer {
                 .button(buttonId)
                 .onTrue(setPoseBasedOnButton(buttonId))
         }
+        poseController.axisLessThan(0, -0.01).onTrue(
+            setFeederBasedOnAxis(0)
+        )
+        poseController.axisLessThan(1, -0.01).onTrue(
+            setFeederBasedOnAxis(1)
+        )
     }
 
     fun getAutonomousCommand(): Command = autoChooser.selected
