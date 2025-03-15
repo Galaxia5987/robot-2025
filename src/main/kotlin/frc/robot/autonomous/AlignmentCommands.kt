@@ -44,7 +44,7 @@ fun pathFindToSelectedFeeder(): Command =
             .andThen(
                 Commands.run({
                     swerveDrive.limitlessRunVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
-                }).withTimeout(0.5)
+                }).withTimeout(1.0)
             )
             .finallyDo(
                 Runnable {

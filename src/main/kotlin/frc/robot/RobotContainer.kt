@@ -204,18 +204,18 @@ object RobotContainer {
         operatorController
             .start()
             .onTrue(
-                feeder(operatorController.start().negate(), disableAlignment)
+                feeder(Trigger{true}, disableAlignment)
             )
         heightController
             .button(1)
             .onTrue(
-                feeder(operatorController.start().negate(), disableAlignment)
+                feeder(Trigger{true}, disableAlignment)
             )
         operatorController
             .back()
             .onTrue(
                 blockedFeeder(
-                    operatorController.back().negate(),
+                    Trigger{true},
                     disableAlignment
                 )
             )
@@ -223,7 +223,7 @@ object RobotContainer {
             .button(4)
             .onTrue(
                 blockedFeeder(
-                    operatorController.back().negate(),
+                    Trigger{true},
                     disableAlignment
                 )
             )
