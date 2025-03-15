@@ -11,11 +11,14 @@ import frc.robot.IS_RED
 fun Pose2d.moveBack(distance: Distance): Pose2d =
     this + Transform2d(-distance, Units.Meters.zero(), Rotation2d.kZero)
 
-fun Pose2d.moveTowards(target: Pose2d, distance: Distance) : Pose2d {
+fun Pose2d.moveTowards(target: Pose2d, distance: Distance): Pose2d {
     val direction = this - target.withRotation(Rotation2d.kZero)
-    if(direction.translation.norm < (distance.`in`(Units.Meters)))
+    if (direction.translation.norm < (distance.`in`(Units.Meters)))
         return target.withRotation(this.rotation)
-    return (this.withRotation(Rotation2d.kZero) + (direction) / direction.translation.norm * (-distance.`in`(Units.Meters))).withRotation(this.rotation)
+    return (this.withRotation(Rotation2d.kZero) +
+            (direction) / direction.translation.norm *
+                (-distance.`in`(Units.Meters)))
+        .withRotation(this.rotation)
 }
 
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =

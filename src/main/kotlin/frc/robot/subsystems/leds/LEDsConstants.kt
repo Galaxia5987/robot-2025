@@ -49,7 +49,9 @@ val alignPattern: LEDPattern =
     LEDPattern.solid(Color.kGreen).atBrightness(ALIGN_BRIGHTNESS)
 
 val pathFindPattern: LEDPattern =
-    LEDPattern.solid(Color.kYellow).atBrightness(PATH_FIND_BRIGHTNESS).blink(PATH_FIND_BLINKING_ON_TIME, PATH_FIND_BLINKING_OFF_TIME)
+    LEDPattern.solid(Color.kYellow)
+        .atBrightness(PATH_FIND_BRIGHTNESS)
+        .blink(PATH_FIND_BLINKING_ON_TIME, PATH_FIND_BLINKING_OFF_TIME)
 
 val climbPattern: LEDPattern =
     LEDPattern.rainbow(255, 128)

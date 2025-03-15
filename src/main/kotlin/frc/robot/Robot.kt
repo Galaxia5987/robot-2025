@@ -153,7 +153,10 @@ object Robot : LoggedRobot() {
         )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
-        Logger.recordOutput("disablePathFinding", RobotContainer.disablePathFinding)
+        Logger.recordOutput(
+            "disablePathFinding",
+            RobotContainer.disablePathFinding
+        )
     }
 
     /**
@@ -169,7 +172,9 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        swerveDrive.setGyroOffset(if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero)
+        swerveDrive.setGyroOffset(
+            if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
+        )
         swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
 
         // Make sure command is compiled beforehand, otherwise there will be a delay.

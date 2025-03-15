@@ -39,8 +39,11 @@ private fun pathFindToPose(pose: Pose2d): Command =
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
         val targetPose =
-            if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3))
-                .moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
+            if (moveBack)
+                selectedScorePose.first
+                    .invoke()
+                    .moveBack(Units.Meters.of(0.3))
+                    .moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
             else selectedScorePose.first.invoke()
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
@@ -50,7 +53,8 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
                 Runnable {
                     leds
                         .setPattern(
-                            all = if (IS_RED) redTeamPattern else blueTeamPattern
+                            all =
+                                if (IS_RED) redTeamPattern else blueTeamPattern
                         )
                         .schedule()
                 }
