@@ -39,7 +39,23 @@ private fun pathFindToPose(pose: Pose2d, goalEndVelocity: LinearVelocity = Units
 
 fun pathFindToSelectedFeeder(): Command =
     swerveDrive.defer{
+        leds.setPattern(all = pathFindPattern).schedule()
         pathFindToPose(selectedFeeder.invoke())
+            .andThen(
+                Commands.run({
+                    swerveDrive.limitlessRunVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
+                }).withTimeout(0.5)
+            )
+            .finallyDo(
+                Runnable {
+                    leds
+                        .setPattern(
+                            all =
+                                if (IS_RED) redTeamPattern else blueTeamPattern
+                        )
+                        .schedule()
+                }
+            )
     }
 
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
