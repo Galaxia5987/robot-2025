@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -33,8 +34,8 @@ import org.littletonrobotics.junction.Logger
 
 var isAligning: Trigger = Trigger { alignCommand().isScheduled }
 
-private fun pathFindToPose(pose: Pose2d): Command =
-    AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS)
+private fun pathFindToPose(pose: Pose2d, goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()): Command =
+    AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, goalEndVelocity)
 
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
@@ -48,7 +49,7 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
         leds.setPattern(all = pathFindPattern).schedule()
-        pathFindToPose(targetPose)
+        pathFindToPose(targetPose, PATH_FIND_END_VELOCITY)
             .finallyDo(
                 Runnable {
                     leds

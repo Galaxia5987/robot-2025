@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.IS_RED
 import frc.robot.lib.flip
@@ -182,3 +183,4 @@ val Y_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
 val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
+val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(2.5)
