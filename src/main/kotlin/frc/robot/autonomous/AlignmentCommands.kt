@@ -34,17 +34,27 @@ import org.littletonrobotics.junction.Logger
 
 var isAligning: Trigger = Trigger { alignCommand().isScheduled }
 
-private fun pathFindToPose(pose: Pose2d, goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()): Command =
-    AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS, goalEndVelocity)
+private fun pathFindToPose(
+    pose: Pose2d,
+    goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()
+): Command =
+    AutoBuilder.pathfindToPose(
+        pose,
+        TunerConstants.PATH_CONSTRAINTS,
+        goalEndVelocity
+    )
 
 fun pathFindToSelectedFeeder(): Command =
-    swerveDrive.defer{
+    swerveDrive.defer {
         leds.setPattern(all = pathFindPattern).schedule()
         pathFindToPose(selectedFeeder.invoke())
             .andThen(
                 Commands.run({
-                    swerveDrive.limitlessRunVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
-                }).withTimeout(1.0)
+                        swerveDrive.limitlessRunVelocity(
+                            ChassisSpeeds(0.8, 0.0, 0.0)
+                        )
+                    })
+                    .withTimeout(1.0)
             )
             .finallyDo(
                 Runnable {

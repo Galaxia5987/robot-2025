@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger
 var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
     Pair({ swerveDrive.pose }, { 0 })
 
-var selectedFeeder: ()-> Pose2d = {swerveDrive.pose}
+var selectedFeeder: () -> Pose2d = { swerveDrive.pose }
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
@@ -35,8 +35,14 @@ fun setFeederBasedOnAxis(axisID: Int): Command {
     return Commands.defer(
         {
             runOnce({
-                selectedFeeder = {if (axisID == 0) FeederRight.flipIfNeeded() else FeederLeft.flipIfNeeded()}
-                Logger.recordOutput("ScoreState/SelectedFeeder", selectedFeeder.invoke())
+                selectedFeeder = {
+                    if (axisID == 0) FeederRight.flipIfNeeded()
+                    else FeederLeft.flipIfNeeded()
+                }
+                Logger.recordOutput(
+                    "ScoreState/SelectedFeeder",
+                    selectedFeeder.invoke()
+                )
             })
         },
         setOf()

@@ -99,10 +99,7 @@ object RobotContainer {
 
         climber.defaultCommand =
             climber.powerControl {
-                MathUtil.applyDeadband(
-                    operatorController.leftY,
-                    0.15
-                )
+                MathUtil.applyDeadband(operatorController.leftY, 0.15)
             }
     }
 
@@ -187,46 +184,26 @@ object RobotContainer {
             .onTrue(l3algae(heightController.button(3).negate()))
 
         // feeder auto
-        (operatorController
-            .start().or(operatorController.back()))
+        (operatorController.start().or(operatorController.back()))
             .and(disableFeederAlign.negate())
-            .whileTrue(
-                pathFindToSelectedFeeder()
-            )
-        (heightController
-            .button(1).or(heightController.button(4)))
+            .whileTrue(pathFindToSelectedFeeder())
+        (heightController.button(1).or(heightController.button(4)))
             .and(disableFeederAlign.negate())
-            .whileTrue(
-                pathFindToSelectedFeeder()
-            )
+            .whileTrue(pathFindToSelectedFeeder())
 
         // feeder manual
         operatorController
             .start()
-            .onTrue(
-                feeder(Trigger{true}, disableAlignment)
-            )
+            .onTrue(feeder(Trigger { true }, disableAlignment))
         heightController
             .button(1)
-            .onTrue(
-                feeder(Trigger{true}, disableAlignment)
-            )
+            .onTrue(feeder(Trigger { true }, disableAlignment))
         operatorController
             .back()
-            .onTrue(
-                blockedFeeder(
-                    Trigger{true},
-                    disableAlignment
-                )
-            )
+            .onTrue(blockedFeeder(Trigger { true }, disableAlignment))
         heightController
             .button(4)
-            .onTrue(
-                blockedFeeder(
-                    Trigger{true},
-                    disableAlignment
-                )
-            )
+            .onTrue(blockedFeeder(Trigger { true }, disableAlignment))
 
         // overrides and resets
         operatorController
@@ -283,12 +260,8 @@ object RobotContainer {
                 .button(buttonId)
                 .onTrue(setPoseBasedOnButton(buttonId))
         }
-        poseController.axisLessThan(0, -0.01).onTrue(
-            setFeederBasedOnAxis(0)
-        )
-        poseController.axisLessThan(1, -0.01).onTrue(
-            setFeederBasedOnAxis(1)
-        )
+        poseController.axisLessThan(0, -0.01).onTrue(setFeederBasedOnAxis(0))
+        poseController.axisLessThan(1, -0.01).onTrue(setFeederBasedOnAxis(1))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.selected

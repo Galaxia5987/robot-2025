@@ -152,7 +152,10 @@ object Robot : LoggedRobot() {
             "ScoreState/TagOfSelectedScorePose",
             selectedScorePose.second
         )
-        Logger.recordOutput("ScoreState/SelectedFeeder", selectedFeeder.invoke())
+        Logger.recordOutput(
+            "ScoreState/SelectedFeeder",
+            selectedFeeder.invoke()
+        )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
         Logger.recordOutput(
