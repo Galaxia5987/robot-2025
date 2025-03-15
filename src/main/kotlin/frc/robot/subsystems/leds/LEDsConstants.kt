@@ -14,8 +14,8 @@ val SCROLLING_SPEED_TEAM_PATTERN: LinearVelocity = Units.MetersPerSecond.of(0.2)
 
 val BLINKING_OFF_TIME: Time = Units.Second.of(0.5)
 val BLINKING_ON_TIME: Time = Units.Second.of(1.0)
-val PATH_FIND_BLINKING_ON_TIME: Time = Units.Second.of(0.1)
-val PATH_FIND_BLINKING_OFF_TIME: Time = Units.Second.of(0.1)
+val PATH_FIND_BLINKING_ON_TIME: Time = Units.Second.of(0.03)
+val PATH_FIND_BLINKING_OFF_TIME: Time = Units.Second.of(0.03)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 41
 const val LED_STRIP_PORT = 1
