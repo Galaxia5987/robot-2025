@@ -236,7 +236,7 @@ object RobotContainer {
             .leftBumper()
             .whileTrue(wrist.setVoltage(-WRIST_MANUAL_CONTROL_VOLTAGE))
 
-        disableAlignment.onTrue(wrist.l1())
+        disableAlignment.onTrue(wrist.retract())
 
         // test controller
         testController.a().whileTrue(runAllBits())
