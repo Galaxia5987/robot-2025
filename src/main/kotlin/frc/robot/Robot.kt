@@ -153,6 +153,7 @@ object Robot : LoggedRobot() {
         )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
+        Logger.recordOutput("disablePathFinding", RobotContainer.disablePathFinding)
     }
 
     /**

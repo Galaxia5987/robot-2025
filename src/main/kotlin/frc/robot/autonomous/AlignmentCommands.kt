@@ -1,16 +1,21 @@
 package frc.robot.autonomous
 
+import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
+import frc.robot.RobotContainer
 import frc.robot.extender
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
+import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
+import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
@@ -26,6 +31,18 @@ import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
 
 var isAligning: Trigger = Trigger { alignCommand().isScheduled }
+
+private fun pathFindToPose(pose: Pose2d): Command =
+    AutoBuilder.pathfindToPose(pose, TunerConstants.PATH_CONSTRAINTS)
+
+private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
+    return swerveDrive.defer {
+        pathFindToPose(
+            if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)).moveTowards(swerveDrive.pose, Units.Meters.of(0.3))
+            else selectedScorePose.first.invoke()
+        )
+    }
+}
 
 private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
     return swerveDrive
@@ -91,17 +108,31 @@ fun alignScoreL1(): Command =
         .andThen(outtakeL1())
 
 fun alignScoreL2(): Command =
-    alignPrep(l2()).andThen(alignCommand(false)).andThen(outtakeL2())
+    Commands.sequence(
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disableAlignment.negate()),
+        alignPrep(l2()),
+        alignCommand(false),
+        outtakeL2()
+    )
 
 fun alignScoreL3(): Command =
-    alignPrep(l3())
-        .andThen(alignCommand())
-        .andThen(outtakeCoralAndDriveBack(false))
+    Commands.sequence(
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        alignPrep(l3()),
+        alignCommand(),
+        outtakeCoralAndDriveBack(false)
+    )
 
 fun alignScoreL4(): Command =
-    alignPrep(alignmentSetpointL4())
-        .andThen(alignCommand())
-        .andThen(outtakeCoralAndDriveBack(true))
+    Commands.sequence(
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        alignPrep(alignmentSetpointL4()),
+        alignCommand(),
+        outtakeCoralAndDriveBack(true)
+    )
 
 fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
 

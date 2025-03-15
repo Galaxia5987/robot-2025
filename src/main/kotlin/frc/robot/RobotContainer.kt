@@ -64,6 +64,7 @@ object RobotContainer {
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
     val disableAlignment = heightController.button(12)
+    val disablePathFinding = heightController.button(11)
 
     val autoChooser = AutoBuilder.buildAutoChooser()
 
