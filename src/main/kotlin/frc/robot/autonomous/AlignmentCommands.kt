@@ -37,6 +37,7 @@ private fun pathFindToPose(pose: Pose2d): Command =
 
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
+        Logger.recordOutput("pathFindSetpoint", selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)).moveTowards(swerveDrive.pose, Units.Meters.of(0.55)))
         pathFindToPose(
             if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)).moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
             else selectedScorePose.first.invoke()
