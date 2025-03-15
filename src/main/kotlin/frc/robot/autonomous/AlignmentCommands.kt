@@ -21,6 +21,7 @@ import frc.robot.subsystems.l2
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.leds.alignPattern
 import frc.robot.subsystems.leds.blueTeamPattern
+import frc.robot.subsystems.leds.pathFindPattern
 import frc.robot.subsystems.leds.redTeamPattern
 import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAndDriveBack
@@ -37,11 +38,23 @@ private fun pathFindToPose(pose: Pose2d): Command =
 
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
-        Logger.recordOutput("pathFindSetpoint", selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)).moveTowards(swerveDrive.pose, Units.Meters.of(0.55)))
-        pathFindToPose(
-            if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)).moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
+        val targetPose =
+            if (moveBack) selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3))
+                .moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
             else selectedScorePose.first.invoke()
-        )
+
+        Logger.recordOutput("pathFindSetpoint", targetPose)
+        leds.setPattern(all = pathFindPattern).schedule()
+        pathFindToPose(targetPose)
+            .finallyDo(
+                Runnable {
+                    leds
+                        .setPattern(
+                            all = if (IS_RED) redTeamPattern else blueTeamPattern
+                        )
+                        .schedule()
+                }
+            )
     }
 }
 
