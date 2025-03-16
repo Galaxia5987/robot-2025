@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger
 var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
     Pair({ swerveDrive.pose }, { 0 })
 
-var selectedFeeder: () -> Pose2d = { swerveDrive.pose }
+var selectedFeeder: () -> Pose2d = { FeederRight.flipIfNeeded() }
 
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
