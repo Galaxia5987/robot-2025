@@ -81,8 +81,8 @@ val Reef3Left: Pose2d =
 val Reef3Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
 
-val FeederRight: Pose2d = Pose2d(1.75, 0.9, Rotation2d.fromDegrees(-125.0))
-val FeederLeft: Pose2d = Pose2d(1.75, 7.200, Rotation2d.fromDegrees(125.0))
+val FeederRight: Pose2d = Pose2d(1.55, 0.85, Rotation2d.fromDegrees(-125.0))
+val FeederLeft: Pose2d = Pose2d(1.55, 7.15, Rotation2d.fromDegrees(125.0))
 
 val buttonToPoseAndTagMap =
     mapOf(
