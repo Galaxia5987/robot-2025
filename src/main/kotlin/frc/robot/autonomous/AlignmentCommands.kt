@@ -14,6 +14,7 @@ import frc.robot.extender
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
+import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.l1
@@ -67,11 +68,25 @@ fun pathFindToSelectedFeeder(): Command =
             )
     }
 
+fun getPathfindPoseToScore(): Pose2d {
+    if (
+        (swerveDrive.pose - selectedScorePose.first.invoke()).translation.x > 0
+    ) {
+        return selectedScorePose.first
+            .invoke()
+            .moveBack(Units.Meters.of(0.5))
+    }
+    return selectedScorePose.first
+        .invoke()
+        .moveBack(Units.Meters.of(0.4))
+        .moveTowards(swerveDrive.pose, Units.Meters.of(0.4))
+}
+
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
         val targetPose =
             if (moveBack)
-                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3))
+                getPathfindPoseToScore()
             else selectedScorePose.first.invoke()
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
