@@ -27,7 +27,7 @@ class GripperIOReal : GripperIO {
                 MotorOutput =
                     MotorOutputConfigs().apply {
                         NeutralMode = NeutralModeValue.Coast
-                        Inverted = InvertedValue.Clockwise_Positive
+                        Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
