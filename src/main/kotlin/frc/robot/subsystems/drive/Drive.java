@@ -346,6 +346,10 @@ public class Drive extends SubsystemBase {
                         isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation()));
     }
 
+    public void robotRelativeRunVelocity(ChassisSpeeds speeds, Boolean isFlipped){
+        fieldOrientedRunVelocity(ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getPose().getRotation()), isFlipped);
+    }
+
     public void limitlessRunVelocity(ChassisSpeeds speeds) {
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
