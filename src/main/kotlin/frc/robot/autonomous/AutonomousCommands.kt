@@ -130,11 +130,11 @@ fun pathFindC6L5LR(): Command =
         alignScoreL4(),
         Commands.runOnce({ selectedFeeder = { FeederRight.flipIfNeeded() } }),
         pathFindToSelectedFeeder()
-            .raceWith(feeder(Trigger{true}, {false})),
+            .withDeadline(feeder(Trigger{true}, {false})),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         alignScoreL4(),
         pathFindToSelectedFeeder()
-            .raceWith(feeder(Trigger{true}, {false})),
+            .withDeadline(feeder(Trigger{true}, {false})),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         alignScoreL4()
     )
