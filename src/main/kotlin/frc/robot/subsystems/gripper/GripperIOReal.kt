@@ -26,7 +26,7 @@ class GripperIOReal : GripperIO {
             TalonFXConfiguration().apply {
                 MotorOutput =
                     MotorOutputConfigs().apply {
-                        NeutralMode = NeutralModeValue.Coast
+                        NeutralMode = NeutralModeValue.Brake
                         Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 CurrentLimits =
