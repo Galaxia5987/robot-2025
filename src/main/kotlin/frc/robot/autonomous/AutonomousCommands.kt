@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
+import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
@@ -121,6 +122,21 @@ fun C6L5LR(): Command =
             Commands.none(),
             gripper.hasCoral
         ),
+    )
+
+fun pathFindC6L5LR(): Command =
+    Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        alignScoreL4(),
+        Commands.runOnce({ selectedFeeder = { FeederRight.flipIfNeeded() } }),
+        pathFindToSelectedFeeder()
+            .raceWith(feeder(Trigger{true}, {false})),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        alignScoreL4(),
+        pathFindToSelectedFeeder()
+            .raceWith(feeder(Trigger{true}, {false})),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        alignScoreL4()
     )
 
 fun A2R3RL(): Command =
