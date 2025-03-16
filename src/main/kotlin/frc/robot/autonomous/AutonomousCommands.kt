@@ -44,9 +44,8 @@ fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        Commands.repeatingSequence(
-            alignScoreL4().onlyIf(gripper.hasCoral)
-        ).until(gripper.hasCoral.negate())
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 private fun S5L(): Command =
@@ -124,11 +123,11 @@ fun pathFindC6L5LR(): Command =
         alignScoreL4(),
         Commands.runOnce({ selectedFeeder = { FeederRight.flipIfNeeded() } }),
         pathFindToSelectedFeeder()
-            .withDeadline(feeder(Trigger{true}, {false})),
+            .withDeadline(feeder(Trigger { true }, { false })),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         alignScoreL4(),
         pathFindToSelectedFeeder()
-            .withDeadline(feeder(Trigger{true}, {false})),
+            .withDeadline(feeder(Trigger { true }, { false })),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         alignScoreL4()
     )

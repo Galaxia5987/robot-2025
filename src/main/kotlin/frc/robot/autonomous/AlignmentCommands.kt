@@ -72,9 +72,7 @@ fun getPathfindPoseToScore(): Pose2d {
     if (
         (swerveDrive.pose - selectedScorePose.first.invoke()).translation.x > 0
     ) {
-        return selectedScorePose.first
-            .invoke()
-            .moveBack(Units.Meters.of(0.5))
+        return selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.5))
     }
     return selectedScorePose.first
         .invoke()
@@ -85,8 +83,7 @@ fun getPathfindPoseToScore(): Pose2d {
 private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
     return swerveDrive.defer {
         val targetPose =
-            if (moveBack)
-                getPathfindPoseToScore()
+            if (moveBack) getPathfindPoseToScore()
             else selectedScorePose.first.invoke()
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
@@ -120,7 +117,8 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
             swerveDrive
                 .run {
                     swerveDrive.fieldOrientedRunVelocity(
-                        getSpeed(swerveDrive.localEstimatedPose).invoke(), IS_RED
+                        getSpeed(swerveDrive.localEstimatedPose).invoke(),
+                        IS_RED
                     )
                 }
                 .alongWith(extender.retractTime(0.3))
