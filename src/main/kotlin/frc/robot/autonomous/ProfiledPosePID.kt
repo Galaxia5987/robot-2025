@@ -82,6 +82,10 @@ fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     )
 }
 
+/**
+ * Returns field relative chassis speeds to the selected goal.
+ * @botPose the current pose of the robot
+ */
 fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     val fieldRelativeSpeeds =
         ChassisSpeeds(
@@ -110,12 +114,6 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
     ) {
         fieldRelativeSpeeds.omegaRadiansPerSecond = 0.0
     }
-
-    val robotRelativeSpeeds =
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            fieldRelativeSpeeds,
-            botPose.rotation
-        )
 
     mapOf(
             "XError" to xController.positionError,
@@ -151,5 +149,5 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
         )
     )
 
-    return { robotRelativeSpeeds }
+    return { fieldRelativeSpeeds }
 }

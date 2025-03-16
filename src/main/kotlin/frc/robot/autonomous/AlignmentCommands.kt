@@ -119,7 +119,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
         .andThen(
             swerveDrive
                 .run {
-                    swerveDrive.robotRelativeRunVelocity(
+                    swerveDrive.fieldOrientedRunVelocity(
                         getSpeed(swerveDrive.localEstimatedPose).invoke(), IS_RED
                     )
                 }
