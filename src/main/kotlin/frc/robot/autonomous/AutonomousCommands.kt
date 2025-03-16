@@ -44,7 +44,9 @@ fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        alignScoreL4()
+        Commands.repeatingSequence(
+            alignScoreL4().onlyIf(gripper.hasCoral)
+        ).until(gripper.hasCoral.negate())
     )
 
 private fun S5L(): Command =
@@ -91,15 +93,7 @@ private fun S3L(): Command =
 fun C6L5LR(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        C6L(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        C6L().until(gripper.hasCoral.negate()),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         feederPath("6LS"),
         S5L(),
