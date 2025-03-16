@@ -38,6 +38,9 @@ public class TunerConstants {
     public static AngularVelocity kMaxOmegaVelocity;
     public static LinearAcceleration kMaxAcceleration;
     public static AngularAcceleration kMaxAngularAcceleration;
+    public static AngularVelocity kPathFindOmegaVelocity;
+    public static LinearAcceleration kPathFindAcceleration;
+    public static AngularAcceleration kPathFindAngularAcceleration;
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
@@ -169,6 +172,8 @@ public class TunerConstants {
             kSlipCurrent = Amps.of(70.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(7);
             kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
+            kPathFindOmegaVelocity = DegreesPerSecond.of(350);
+            kPathFindAngularAcceleration = DegreesPerSecondPerSecond.of(485);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -183,6 +188,7 @@ public class TunerConstants {
 
             kSpeedAt12Volts = MetersPerSecond.of(4.0);
             kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
+            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.5);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -282,6 +288,8 @@ public class TunerConstants {
             kSlipCurrent = Amps.of(120.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(10.85);
             kMaxAngularAcceleration = RadiansPerSecondPerSecond.of(8.6);
+            kPathFindOmegaVelocity = DegreesPerSecond.of(350);
+            kPathFindAngularAcceleration = DegreesPerSecondPerSecond.of(485);
 
             driveInitialConfigs =
                     new TalonFXConfiguration()
@@ -301,6 +309,7 @@ public class TunerConstants {
 
             kSpeedAt12Volts = MetersPerSecond.of(3.7);
             kMaxAcceleration = MetersPerSecondPerSecond.of(4.0);
+            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.5);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -371,9 +380,9 @@ public class TunerConstants {
         PATH_CONSTRAINTS =
                 new PathConstraints(
                         kSpeedAt12Volts.in(MetersPerSecond),
-                        kMaxAcceleration.in(MetersPerSecondPerSecond),
-                        kMaxOmegaVelocity.in(RadiansPerSecond),
-                        kMaxAngularAcceleration.in(RadiansPerSecondPerSecond));
+                        kPathFindAcceleration.in(MetersPerSecondPerSecond),
+                        kPathFindOmegaVelocity.in(RadiansPerSecond),
+                        kPathFindAngularAcceleration.in(RadiansPerSecondPerSecond));
 
         DrivetrainConstants = new SwerveDrivetrainConstants().withCANBusName(kCANBus.getName());
 

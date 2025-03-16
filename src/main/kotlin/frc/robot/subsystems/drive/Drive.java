@@ -91,9 +91,9 @@ public class Drive extends SubsystemBase {
                                     TunerConstants.BackRight.LocationY)));
 
     // PathPlanner config constants
-    private static final Mass ROBOT_MASS_KG = Kilograms.of(52.757);
-    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(5.095);
-    private static final double WHEEL_COF = 1.542;
+    private static final Mass ROBOT_MASS_KG = Kilograms.of(58.5);
+    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(3.0);
+    private static final double WHEEL_COF = 1.2;
     private static final RobotConfig PP_CONFIG =
             new RobotConfig(
                     ROBOT_MASS_KG,
@@ -203,7 +203,7 @@ public class Drive extends SubsystemBase {
                 this::getChassisSpeeds,
                 this::limitlessRunVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.5, 0.0, 0.0)),
+                        new PIDConstants(5.5, 0.0, 0.0), new PIDConstants(5.5, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
