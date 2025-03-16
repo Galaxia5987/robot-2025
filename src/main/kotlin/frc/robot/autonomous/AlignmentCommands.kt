@@ -75,7 +75,6 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
                 selectedScorePose.first
                     .invoke()
                     .moveBack(Units.Meters.of(0.3))
-                    .moveTowards(swerveDrive.pose, Units.Meters.of(0.55))
             else selectedScorePose.first.invoke()
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
