@@ -90,8 +90,9 @@ fun outtakeCoralAndDriveBack(
             .run {
                 swerveDrive.fieldOrientedRunVelocity(
                     ChassisSpeeds.fromRobotRelativeSpeeds(
-                        ChassisSpeeds(-0.8, 0.0, 0.0)
-                        , swerveDrive.pose.rotation),
+                        ChassisSpeeds(-0.8, 0.0, 0.0),
+                        swerveDrive.pose.rotation
+                    ),
                     IS_RED
                 )
             }
