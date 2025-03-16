@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
+import frc.robot.IS_RED
 import frc.robot.Mode
 import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
@@ -87,7 +88,12 @@ fun outtakeCoralAndDriveBack(
         gripper.slowOuttake(!isReverse).withTimeout(0.15),
         swerveDrive
             .run {
-                swerveDrive.limitlessRunVelocity(ChassisSpeeds(-0.8, 0.0, 0.0))
+                swerveDrive.fieldOrientedRunVelocity(
+                    ChassisSpeeds.fromRobotRelativeSpeeds(
+                        ChassisSpeeds(-0.8, 0.0, 0.0)
+                        , swerveDrive.pose.rotation),
+                    IS_RED
+                )
             }
             .withTimeout(0.3),
         swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25),
