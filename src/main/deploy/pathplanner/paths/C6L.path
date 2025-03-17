@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.454405737704918,
-        "y": 2.5325307377049184
+        "x": 5.544204545454546,
+        "y": 2.384673295454545
       },
       "prevControl": {
-        "x": 5.70413442616989,
-        "y": 2.5441747128665613
+        "x": 5.793933233919518,
+        "y": 2.396317270616188
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0.49833887043189745,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.8,
+        "maxVelocity": 2.0,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 200.0,
         "maxAngularAcceleration": 300.0,
@@ -61,12 +61,7 @@
       "name": "MoveL4",
       "waypointRelativePos": 0.5309336332958409,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "MoveL4"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
