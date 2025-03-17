@@ -70,6 +70,9 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
 
+    fun net(): Command =
+        setHeight(Positions.NET).withName("Elevator/Net")
+
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
 

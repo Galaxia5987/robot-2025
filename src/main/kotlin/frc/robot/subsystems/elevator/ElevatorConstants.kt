@@ -35,6 +35,7 @@ enum class Positions(val value: Distance) {
     ALIGN_L4(Units.Centimeters.of(95.0)),
     L2_ALGAE(Units.Centimeters.of(0.0)),
     L3_ALGAE(Units.Centimeters.of(0.0)),
+    NET(Units.Centimeters.of(107.0)),
     FEEDER(Units.Centimeters.of(20.0)),
     BLOCKED_FEEDER(Units.Centimeters.of(10.0)),
     ZERO(Units.Centimeters.zero());

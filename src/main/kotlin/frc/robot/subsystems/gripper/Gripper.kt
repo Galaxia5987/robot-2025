@@ -59,6 +59,9 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
         Commands.runOnce({ io.setVoltage(INTAKE_ALGAE_VOLTAGE) })
             .withName("Gripper/IntakeAlgae")
 
+    fun outtakeAlgae(): Command =
+        setVoltage(OUTTAKE_ALGAE_VOLTAGE).withName("Gripper/OuttakeAlgae")
+
     override fun periodic() {
         rollerAngle += Units.Rotations.of(getVoltage() * kV * 0.02)
         io.updateInputs()
