@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.feeder
-import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
 
 fun feederPath(pathName: String, mirror: Boolean = false): Command =
@@ -67,7 +66,9 @@ private fun S5R(): Command =
 fun A2R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L").mirrorPath()),
+        AutoBuilder.followPath(
+            PathPlannerPath.fromPathFile("C6L").mirrorPath()
+        ),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
             .until(gripper.hasCoral.negate())
     )
@@ -75,7 +76,9 @@ fun A2R(): Command =
 private fun S3R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath()),
+        AutoBuilder.followPath(
+            PathPlannerPath.fromPathFile("S5L").mirrorPath()
+        ),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
             .until(gripper.hasCoral.negate())
     )
@@ -83,7 +86,9 @@ private fun S3R(): Command =
 private fun S3L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath()),
+        AutoBuilder.followPath(
+            PathPlannerPath.fromPathFile("S5R").mirrorPath()
+        ),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
             .until(gripper.hasCoral.negate())
     )

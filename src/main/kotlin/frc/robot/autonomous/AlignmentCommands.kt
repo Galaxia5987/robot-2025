@@ -46,28 +46,31 @@ private fun pathFindToPose(
     )
 
 fun pathFindToSelectedFeeder(): Command =
-    swerveDrive.defer {
-        leds.setPattern(all = pathFindPattern).schedule()
-        pathFindToPose(selectedFeeder.invoke())
-            .andThen(
-                Commands.run({
-                        swerveDrive.limitlessRunVelocity(
-                            ChassisSpeeds(0.8, 0.0, 0.0)
-                        )
-                    })
-                    .withTimeout(1.0)
-            )
-            .finallyDo(
-                Runnable {
-                    leds
-                        .setPattern(
-                            all =
-                                if (IS_RED) redTeamPattern else blueTeamPattern
-                        )
-                        .schedule()
-                }
-            )
-    }.until(gripper.hasCoral)
+    swerveDrive
+        .defer {
+            leds.setPattern(all = pathFindPattern).schedule()
+            pathFindToPose(selectedFeeder.invoke())
+                .andThen(
+                    Commands.run({
+                            swerveDrive.limitlessRunVelocity(
+                                ChassisSpeeds(0.8, 0.0, 0.0)
+                            )
+                        })
+                        .withTimeout(1.0)
+                )
+                .finallyDo(
+                    Runnable {
+                        leds
+                            .setPattern(
+                                all =
+                                    if (IS_RED) redTeamPattern
+                                    else blueTeamPattern
+                            )
+                            .schedule()
+                    }
+                )
+        }
+        .until(gripper.hasCoral)
 
 fun getPathfindPoseToScore(): Pose2d {
     if (
