@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.*
 import frc.robot.lib.getTranslation2d
 
 val INTAKE_VOLTAGE: Voltage = Units.Volts.of(-0.7 * 12.0)
+val SLOW_INTAKE_VOLTAGE: Voltage = Units.Volts.of(-0.3 * 12.0)
 val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(0.8 * 12.0)
 val CORAL_OUTTAKE_TRANSLATION: Translation2d =
     getTranslation2d(Units.Meters.of(0.3))

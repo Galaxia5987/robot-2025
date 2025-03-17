@@ -18,9 +18,13 @@ import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
 import frc.robot.driveSimulation
 import frc.robot.elevator
+import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
+import frc.robot.subsystems.intake.intakeAlgae
+import frc.robot.subsystems.intake.intakeToGripper
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE
 import frc.robot.swerveDrive
 import frc.robot.wrist
 import java.util.function.BooleanSupplier
@@ -261,3 +265,12 @@ fun blockedFeeder(
         .withName("Reef/Blocked Feeder")
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())
+
+fun intakeAlgaeToGripper(gripperTrigger: Trigger): Command =
+    parallel(wrist.floorAlgae(), intakeAlgae()).until(gripperTrigger)
+        .andThen((gripper.intakeAlgae().alongWith(intakeToGripper())).withTimeout(2.0))
+        .andThen(
+            wrist.setVoltage(MANUAL_CONTROL_VOLTAGE).withTimeout(1.0),
+            wrist.net().until(wrist.atSetpoint),
+            extender.retract()
+        )

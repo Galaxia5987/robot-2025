@@ -5,6 +5,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
@@ -53,6 +54,9 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
 
     fun removeAlgae(): Command =
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
+
+    fun intakeAlgae(): Command =
+        Commands.runOnce({io.setVoltage(INTAKE_ALGAE_VOLTAGE)}).withName("Gripper/IntakeAlgae")
 
     override fun periodic() {
         rollerAngle += Units.Rotations.of(getVoltage() * kV * 0.02)
