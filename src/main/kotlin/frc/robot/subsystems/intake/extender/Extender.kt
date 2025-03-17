@@ -68,7 +68,8 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
         setPosition(Positions.RETRACTED).withName("Extender/retract")
 
     fun passToGripper() =
-        setPosition(Positions.PASS_TO_GRIPPER).withName("Extender/passToGripper")
+        setPosition(Positions.PASS_TO_GRIPPER)
+            .withName("Extender/passToGripper")
 
     fun reset(resetTrigger: Trigger): Command =
         sequence(

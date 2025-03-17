@@ -267,8 +267,13 @@ fun blockedFeeder(
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())
 
 fun intakeAlgaeToGripper(gripperTrigger: Trigger): Command =
-    parallel(wrist.floorAlgae(), intakeAlgae()).until(gripperTrigger)
-        .andThen((gripper.intakeAlgae().alongWith(intakeToGripper())).withTimeout(2.0))
+    parallel(wrist.floorAlgae(), intakeAlgae())
+        .until(gripperTrigger)
+        .andThen(
+            (gripper.intakeAlgae().alongWith(intakeToGripper())).withTimeout(
+                2.0
+            )
+        )
         .andThen(
             wrist.setVoltage(MANUAL_CONTROL_VOLTAGE).withTimeout(1.0),
             wrist.net().until(wrist.atSetpoint),
