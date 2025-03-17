@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
 import frc.robot.extender
+import frc.robot.gripper
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
 import frc.robot.lib.moveBack
@@ -66,7 +67,7 @@ fun pathFindToSelectedFeeder(): Command =
                         .schedule()
                 }
             )
-    }
+    }.until(gripper.hasCoral)
 
 fun getPathfindPoseToScore(): Pose2d {
     if (
