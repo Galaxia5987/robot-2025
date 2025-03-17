@@ -122,12 +122,12 @@ fun pathFindC6L5LR(): Command =
 
 fun A2R3RL(): Command =
     Commands.sequence(
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
         A2R().until(gripper.hasCoral.negate()),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
         feederPath("6LS", true),
         S3R().until(gripper.hasCoral.negate()),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
         feederPath("5LS", true),
         S3L().until(gripper.hasCoral.negate())
     )
