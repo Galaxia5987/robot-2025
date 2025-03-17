@@ -52,14 +52,16 @@ private fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
-        autoScoreL4()
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 private fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
-        autoScoreL4()
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 fun A2R(): Command =
@@ -95,26 +97,10 @@ fun C6L5LR(): Command =
         C6L().until(gripper.hasCoral.negate()),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         feederPath("6LS"),
-        S5L(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        S5L().until(gripper.hasCoral.negate()),
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         feederPath("5LS"),
-        S5R(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        S5R().until(gripper.hasCoral.negate())
     )
 
 fun pathFindC6L5LR(): Command =
