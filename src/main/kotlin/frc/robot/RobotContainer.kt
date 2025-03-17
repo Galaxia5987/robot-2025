@@ -132,8 +132,8 @@ object RobotContainer {
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
             .onFalse(
-                moveDefaultPosition(true, { false }).onlyIf {
-                    moveDefaultPosition(true, { false }).isScheduled.not()
+                moveDefaultPosition(false, { false }).onlyIf {
+                    moveDefaultPosition(false, { false }).isScheduled.not()
                 }
             )
         driverController
