@@ -66,29 +66,26 @@ private fun S5R(): Command =
 
 fun A2R(): Command =
     Commands.sequence(
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("C6L").mirrorPath()
-        ),
-        alignScoreL4()
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L").mirrorPath()),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 private fun S3R(): Command =
     Commands.sequence(
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5L").mirrorPath()
-        ),
-        autoScoreL4()
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath()),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 private fun S3L(): Command =
     Commands.sequence(
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5R").mirrorPath()
-        ),
-        autoScoreL4()
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath()),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.hasCoral))
+            .until(gripper.hasCoral.negate())
     )
 
 fun C6L5LR(): Command =
@@ -120,12 +117,12 @@ fun pathFindC6L5LR(): Command =
 
 fun A2R3RL(): Command =
     Commands.sequence(
-        A2R(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        A2R().until(gripper.hasCoral.negate()),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         feederPath("6LS", true),
-        S3R(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        S3R().until(gripper.hasCoral.negate()),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         feederPath("5LS", true),
-        S3L(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        S3L().until(gripper.hasCoral.negate())
     )
