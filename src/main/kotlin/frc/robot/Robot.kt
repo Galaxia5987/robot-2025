@@ -162,6 +162,7 @@ object Robot : LoggedRobot() {
             "disablePathFinding",
             RobotContainer.disablePathFinding
         )
+        Logger.recordOutput("shouldNet", RobotContainer.shouldNet)
     }
 
     /**

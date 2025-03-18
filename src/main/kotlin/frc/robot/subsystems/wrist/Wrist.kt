@@ -69,6 +69,8 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun l2algaePickup(): Command = setAngle(Angles.L2_ALGAE_PICKUP)
     fun l2algaePickupEnd(): Command = setAngle(Angles.L2_ALGAE_PICKUP_END)
     fun l3algae(): Command = setAngle(Angles.L3_ALGAE)
+    fun l3algaePickup(): Command = setAngle(Angles.L3_ALGAE_PICKUP)
+    fun l3algaePickupEnd(): Command = setAngle(Angles.L3_ALGAE_PICKUP_END)
     fun floorAlgae(): Command = setAngle(Angles.FLOOR_ALGAE)
     fun net(): Command = setAngle(Angles.NET)
     fun feeder(): Command = setAngle(Angles.FEEDER)

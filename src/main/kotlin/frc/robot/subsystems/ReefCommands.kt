@@ -230,13 +230,22 @@ fun l2algae(retractTrigger: Trigger): Command =
         .andThen(moveDefaultPosition(false))
         .withName("Reef/L2 Algae")
 
-fun l2AlgaePickup(): Command =
+fun l2algaePickup(): Command =
     sequence(
-        elevator.zero(),
+        elevator.l2AlgaePickup(),
         wrist.l2algaePickup(),
         gripper.intakeAlgae(),
         waitUntil(gripper.hasAlgae),
         wrist.l2algaePickupEnd(),
+    )
+
+fun l3algaePickup(): Command =
+    sequence(
+        elevator.l3AlgaePickup(),
+        wrist.l3algaePickup(),
+        gripper.intakeAlgae(),
+        waitUntil(gripper.hasAlgae),
+        wrist.l3algaePickupEnd()
     )
 
 fun l3algae(retractTrigger: Trigger): Command =
