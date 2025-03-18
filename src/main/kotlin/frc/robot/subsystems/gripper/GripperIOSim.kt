@@ -32,6 +32,7 @@ class GripperIOSim : GripperIO {
         inputs.sensorDistance.mut_replace(
             Units.Centimeters.of(sensorDistance.get())
         )
+        inputs.current.mut_replace(motor.appliedCurrent)
         inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
     }
 }
