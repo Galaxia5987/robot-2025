@@ -271,8 +271,7 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                    feeder(Trigger { true }, { false })
-                        .andThen(gripper.intake().withTimeout(0.25)),
+                        (wrist.feeder().alongWith(gripper.intake())).withTimeout(0.25)
             )
 
         NamedCommands.registerCommands(namedCommands)
