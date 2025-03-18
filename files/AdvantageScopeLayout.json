@@ -7,7 +7,7 @@
       "height": 768,
       "state": {
         "sidebar": {
-          "width": 222,
+          "width": 285,
           "expanded": [
             "/RealOutputs/SubsystemPoses/6",
             "/RealOutputs/SubsystemPoses/3/translation",
@@ -28,7 +28,6 @@
             "/RealOutputs/Odometry/Robot/rotation",
             "/Intake/Extender",
             "/NetworkInputs/Tuning/Extender",
-            "/Drive/Gyro/YawPosition",
             "/RealOutputs/Drive/DesiredHeading",
             "/Vision/Camera0/LatestTargetObservation/tx",
             "/Vision/Camera0/LatestTargetObservation/ty",
@@ -80,11 +79,17 @@
             "/Drive/Module1/TurnPosition",
             "/RealOutputs/Vision/TxToCam1",
             "/RealOutputs/Vision/TyToCam1",
-            "/RealOutputs/SwerveChassisSpeeds"
+            "/RealOutputs/SwerveChassisSpeeds",
+            "/Tuning",
+            "/Tuning/Elevator",
+            "/Tuning/Wrist",
+            "/Drive",
+            "/Drive/Gyro",
+            "/RealOutputs/Odometry"
           ]
         },
         "tabs": {
-          "selected": 7,
+          "selected": 2,
           "tabs": [
             {
               "type": 0,
@@ -199,6 +204,73 @@
                 "rightFilter": 0
               },
               "controllerUUID": "qx7xl3pfov4jswrqr43xjfaz5m8e3zms",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Gyro",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Drive/Gyro/YawPosition/value",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Drive/Gyro/RollPosition/value",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Drive/Gyro/PitchPosition/value",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#80588e",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/Drive/Gyro/Connected",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2"
+                    }
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "type": "angle",
+                  "factor": 1,
+                  "from": "radians",
+                  "to": "degrees"
+                },
+                "rightUnitConversion": {
+                  "type": null,
+                  "factor": 1
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "x16gvcjd2eqpfwiwppv2hn533kxf0yqj",
               "renderer": null,
               "controlsHeight": 200
             },
@@ -806,7 +878,7 @@
                     "type": "ghost",
                     "logKey": "/RealOutputs/pathFindSetpoint",
                     "logType": "Pose2d[]",
-                    "visible": true,
+                    "visible": false,
                     "options": {
                       "color": "#ff8c00"
                     }
@@ -818,6 +890,16 @@
                     "visible": true,
                     "options": {
                       "color": "#ffff00"
+                    }
+                  },
+                  {
+                    "type": "trajectory",
+                    "logKey": "/RealOutputs/Odometry/Trajectory",
+                    "logType": "Pose2d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
                     }
                   }
                 ],
