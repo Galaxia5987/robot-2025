@@ -216,7 +216,7 @@
                     "type": "stepped",
                     "logKey": "/Drive/Gyro/YawPosition/value",
                     "logType": "Number",
-                    "visible": false,
+                    "visible": true,
                     "options": {
                       "color": "#e5b31b",
                       "size": "normal"
@@ -986,5 +986,5 @@
     }
   ],
   "satellites": [],
-  "version": "4.1.4"
+  "version": "4.1.5"
 }
