@@ -8,37 +8,42 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0007188693287397,
-        "y": 2.851035023260194
+        "x": 2.628547297297297,
+        "y": 1.8905405405405395
       },
       "isLocked": false,
       "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 3.488260135135135,
-        "y": 2.5822635135135137
+        "x": 3.63,
+        "y": 2.9
       },
       "prevControl": {
-        "x": 2.8685822802278023,
-        "y": 1.32008042684355
+        "x": 3.116148648648649,
+        "y": 2.2478040540540527
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "5L"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.41052631578947507,
+      "rotationDegrees": 117.04002620549663
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.41196013289036926,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 300.0,
-        "maxAngularAcceleration": 400.0,
+        "maxVelocity": 3.8,
+        "maxAcceleration": 1.8,
+        "maxAngularVelocity": 350.0,
+        "maxAngularAcceleration": 180.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -48,7 +53,7 @@
   "eventMarkers": [
     {
       "name": "MoveL4",
-      "waypointRelativePos": 0.7264673311184809,
+      "waypointRelativePos": 0.491694352159466,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -67,7 +72,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 59.99999999999999
   },
   "reversed": false,
