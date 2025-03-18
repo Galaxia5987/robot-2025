@@ -27,8 +27,8 @@ import frc.robot.subsystems.intake.outtakeAlgae
 import frc.robot.subsystems.intakeAlgaeToGripper
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
-import frc.robot.subsystems.l2algaePickup
 import frc.robot.subsystems.l2algae
+import frc.robot.subsystems.l2algaePickup
 import frc.robot.subsystems.l3Manual
 import frc.robot.subsystems.l3algae
 import frc.robot.subsystems.l3algaePickup
@@ -169,7 +169,10 @@ object RobotContainer {
 
         // intake buttons
         driverController.R1().and(shouldNet.negate()).whileTrue(intakeAlgae())
-        driverController.R1().and(shouldNet).onTrue(intakeAlgaeToGripper(driverController.R1().negate()))
+        driverController
+            .R1()
+            .and(shouldNet)
+            .onTrue(intakeAlgaeToGripper(driverController.R1().negate()))
         driverController
             .L1()
             .onTrue(outtakeAlgae(driverController.L1().negate()))
@@ -179,24 +182,46 @@ object RobotContainer {
         driverController.L2().whileTrue(gripper.outtake(true))
 
         // remove algae
-        operatorController.x().and(shouldNet.negate()).onTrue(l2algae(operatorController.x().negate()))
-        operatorController.b().and(shouldNet.negate()).onTrue(l3algae(operatorController.b().negate()))
-        heightController.button(2).and(shouldNet.negate()).onTrue(l2algae(heightController.button(2).negate()))
+        operatorController
+            .x()
+            .and(shouldNet.negate())
+            .onTrue(l2algae(operatorController.x().negate()))
+        operatorController
+            .b()
+            .and(shouldNet.negate())
+            .onTrue(l3algae(operatorController.b().negate()))
         heightController
-            .button(3).and(shouldNet.negate())
+            .button(2)
+            .and(shouldNet.negate())
+            .onTrue(l2algae(heightController.button(2).negate()))
+        heightController
+            .button(3)
+            .and(shouldNet.negate())
             .onTrue(l3algae(heightController.button(3).negate()))
 
         // pick algae from reef
-        operatorController.x().and(shouldNet).onTrue(l2algaePickup())
+        operatorController
+            .x()
+            .and(shouldNet)
+            .onTrue(l2algaePickup())
             .onFalse(wrist.max())
-        operatorController.b().and(shouldNet).onTrue(l3algaePickup())
+        operatorController
+            .b()
+            .and(shouldNet)
+            .onTrue(l3algaePickup())
             .onFalse(wrist.max())
-        heightController.button(2).and(shouldNet).onTrue(l2algaePickup())
+        heightController
+            .button(2)
+            .and(shouldNet)
+            .onTrue(l2algaePickup())
             .onFalse(wrist.max())
-        heightController.button(3).and(shouldNet).onTrue(l3algaePickup())
+        heightController
+            .button(3)
+            .and(shouldNet)
+            .onTrue(l3algaePickup())
             .onFalse(wrist.max())
 
-        //net
+        // net
         poseController
             .axisGreaterThan(0, 0.0)
             .onTrue(netAlgae(poseController.axisGreaterThan(0, 0.0).negate()))
@@ -290,7 +315,9 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                        (wrist.feeder().alongWith(gripper.intake())).withTimeout(0.25)
+                    (wrist.feeder().alongWith(gripper.intake())).withTimeout(
+                        0.25
+                    )
             )
 
         NamedCommands.registerCommands(namedCommands)

@@ -68,13 +68,15 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
 
     fun l2AlgaePickup(): Command =
-        setHeight(Positions.L2_ALGAE_PICKUP).withName("Elevator/L2 Algae Pickup")
+        setHeight(Positions.L2_ALGAE_PICKUP)
+            .withName("Elevator/L2 Algae Pickup")
 
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
 
     fun l3AlgaePickup(): Command =
-        setHeight(Positions.L3_ALGAE_PICKUP).withName("Elevator/L3 Algae Pickup")
+        setHeight(Positions.L3_ALGAE_PICKUP)
+            .withName("Elevator/L3 Algae Pickup")
 
     fun net(): Command = setHeight(Positions.NET).withName("Elevator/Net")
 

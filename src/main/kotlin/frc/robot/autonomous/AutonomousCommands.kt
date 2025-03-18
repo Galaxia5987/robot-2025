@@ -22,7 +22,7 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
                         ChassisSpeeds(0.8, 0.0, 0.0)
                     )
                 })
-                .raceWith(feeder(Trigger { true }, {false}))
+                .raceWith(feeder(Trigger { true }, { false }))
         )
 
 fun B1L(): Command =
