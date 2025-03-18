@@ -28,7 +28,7 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
 
     @AutoLogOutput
     val hasAlgae: Trigger =
-        Trigger { io.inputs.current > ALGAE_CURRENT}
+        Trigger { io.inputs.current > ALGAE_CURRENT }
             .debounce(
                 DEBOUNCE_TIME.`in`(Units.Seconds),
                 Debouncer.DebounceType.kBoth

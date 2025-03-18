@@ -1,7 +1,6 @@
 package frc.robot.subsystems.gripper
 
 import edu.wpi.first.units.Units
-import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.MutCurrent
 import edu.wpi.first.units.measure.MutDistance
 import edu.wpi.first.units.measure.MutVoltage
