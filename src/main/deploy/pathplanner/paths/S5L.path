@@ -28,22 +28,17 @@
       "linkedName": "5L"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.41052631578947507,
-      "rotationDegrees": 117.04002620549663
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.41196013289036926,
+      "minWaypointRelativePos": 0.2613510520487309,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.8,
-        "maxAcceleration": 1.8,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 350.0,
-        "maxAngularAcceleration": 180.0,
+        "maxAngularAcceleration": 140.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }

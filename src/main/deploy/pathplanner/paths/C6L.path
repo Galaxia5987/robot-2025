@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.49833887043189745,
+      "minWaypointRelativePos": 0.5382059800664452,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.8,
-        "maxAcceleration": 1.8,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 350.0,
         "maxAngularAcceleration": 180.0,
         "nominalVoltage": 12.0,
@@ -59,7 +59,7 @@
     },
     {
       "name": "MoveL4",
-      "waypointRelativePos": 0.5094130675525985,
+      "waypointRelativePos": 0.27685492801771466,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

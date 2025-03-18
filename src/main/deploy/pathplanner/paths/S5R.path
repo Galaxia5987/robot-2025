@@ -28,12 +28,7 @@
       "linkedName": "5R"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.42631578947368287,
-      "rotationDegrees": 97.94799619041719
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -41,7 +36,7 @@
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.8,
-        "maxAcceleration": 1.8,
+        "maxAcceleration": 1.5,
         "maxAngularVelocity": 350.0,
         "maxAngularAcceleration": 180.0,
         "nominalVoltage": 12.0,
