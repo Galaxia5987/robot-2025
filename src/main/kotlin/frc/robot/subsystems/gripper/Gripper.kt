@@ -27,8 +27,9 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
             )
 
     @AutoLogOutput
-    val autoHasCoral: Trigger =
-        Trigger { io.inputs.sensorDistance < DISTANCE_THRESHOLD }
+    val autoHasCoral: Trigger = Trigger {
+        io.inputs.sensorDistance < DISTANCE_THRESHOLD
+    }
 
     @AutoLogOutput
     val hasAlgae: Trigger =

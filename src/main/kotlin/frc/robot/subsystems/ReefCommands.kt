@@ -270,12 +270,12 @@ fun feeder(
 
 fun autonomousFeeder(): Command =
     sequence(
-        parallel(elevator.feeder(), wrist.feeder()),
-        gripper
-            .intake()
-            .until(gripper.autoHasCoral)
-            .andThen(moveDefaultPosition(false, {false}))
-    )
+            parallel(elevator.feeder(), wrist.feeder()),
+            gripper
+                .intake()
+                .until(gripper.autoHasCoral)
+                .andThen(moveDefaultPosition(false, { false }))
+        )
         .withName("Reef/Feeder")
 
 fun blockedFeeder(
