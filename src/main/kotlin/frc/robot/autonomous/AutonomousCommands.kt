@@ -47,7 +47,7 @@ fun C6L(): Command =
             .until(gripper.hasCoral.negate())
     )
 
-private fun S5L(): Command =
+fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
@@ -55,7 +55,7 @@ private fun S5L(): Command =
             .until(gripper.hasCoral.negate())
     )
 
-private fun S5R(): Command =
+fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),

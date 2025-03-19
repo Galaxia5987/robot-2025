@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -72,7 +73,7 @@ object RobotContainer {
     val disablePathFinding = heightController.button(11)
     val disableFeederAlign = heightController.button(10)
     val shouldNet = heightController.button(8)
-    val userButton = Trigger{HALUtil.getFPGAButton()}
+    val userButton = Trigger { RobotController.getUserButton() }
 
     val autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -111,17 +112,19 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        userButton.and(RobotModeTriggers.disabled()).onTrue(
-            Commands.runOnce(
-                {
-                    swerveDrive.resetGyroBasedOnAlliance(
-                        Rotation2d.kZero
+        userButton
+            .and(RobotModeTriggers.disabled())
+            .onTrue(
+                Commands.runOnce(
+                        {
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
+                        },
+                        swerveDrive
                     )
-                },
-                swerveDrive
+                    .ignoringDisable(true)
             )
-                .ignoringDisable(true)
-        )
 
         // reset swerve
         driverController
@@ -352,6 +355,8 @@ object RobotContainer {
         )
         autoChooser.addOption("B1R", B1R())
         autoChooser.addOption("C6L", C6L())
+        autoChooser.addOption("S5L", S5L())
+        autoChooser.addOption("S5R", S5R())
         autoChooser.addOption("C6L5LR", C6L5LR())
         autoChooser.addOption("A2R", A2R())
         autoChooser.addOption("A2R3RL", A2R3RL())
