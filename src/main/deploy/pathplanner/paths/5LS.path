@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9461933124274213,
-        "y": 3.4833337350307647
+        "x": 3.607448856208775,
+        "y": 3.148980814348631
       },
       "isLocked": false,
       "linkedName": "5L"
@@ -20,8 +20,8 @@
         "y": 0.8
       },
       "prevControl": {
-        "x": 2.475529507924537,
-        "y": 2.3651377106716662
+        "x": 3.534886641936046,
+        "y": 1.8541547042056605
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,7 +36,7 @@
       "maxWaypointRelativePos": 0.3521594684385461,
       "constraints": {
         "maxVelocity": 3.8,
-        "maxAcceleration": 1.5,
+        "maxAcceleration": 2.3,
         "maxAngularVelocity": 350.0,
         "maxAngularAcceleration": 180.0,
         "nominalVoltage": 12.0,

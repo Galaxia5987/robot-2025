@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7273648648648647,
-        "y": 1.8114864864864852
+        "x": 2.425792198364853,
+        "y": 2.2757997951535645
       },
       "isLocked": false,
       "linkedName": "S2"
@@ -20,8 +20,8 @@
         "y": 2.72
       },
       "prevControl": {
-        "x": 3.47543918918919,
-        "y": 2.2753209459459462
+        "x": 3.8629044958279906,
+        "y": 2.05601595818966
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,7 +36,7 @@
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.8,
-        "maxAcceleration": 1.5,
+        "maxAcceleration": 2.3,
         "maxAngularVelocity": 350.0,
         "maxAngularAcceleration": 180.0,
         "nominalVoltage": 12.0,
