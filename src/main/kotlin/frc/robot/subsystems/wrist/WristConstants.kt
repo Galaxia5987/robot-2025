@@ -37,7 +37,7 @@ enum class Angles(val angle: Angle) {
     NET(Units.Degrees.of(210.0)),
     FEEDER(Units.Degrees.of(17.0)),
     BLOCKED_FEEDER(Units.Degrees.of(25.0)),
-    MAX(Units.Degrees.of(247.3)),
+    MAX(Units.Degrees.of(245.0)),
     ZERO(Units.Degrees.zero());
 
     fun getLoggingName() =
