@@ -2,6 +2,8 @@ package frc.robot.subsystems
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Centimeters
+import edu.wpi.first.units.Units.Degrees
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.IS_RED
 import frc.robot.Mode
+import frc.robot.RobotContainer.visualizer
 import frc.robot.autonomous.isL4
 import frc.robot.autonomous.shouldOpenElevator
 import frc.robot.driveSimulation
@@ -22,8 +25,6 @@ import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
-import frc.robot.swerveDrive
-import frc.robot.wrist
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.intakeToGripper
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE
@@ -33,16 +34,12 @@ import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 
-private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
-private val CORAL_SHOOT_OFFSET =
-    getTranslation2d(Units.Meters.of(0.60), Units.Meters.of(0.0))
-private val GRIPPER_HEIGHT = Units.Meters.of(0.90)
-private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(1.0)
-private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
-private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
+private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(-4.0)
+private val L2_CORAL_HEIGHT_OFFSET = Centimeters.of(10.0)
+private val L2_CORAL_ANGLE_OFFSET = Degrees.of(10.0)
 
-private fun visualizeCoralOuttake(): Command =
+private fun visualizeCoralOuttake(isReverse: Boolean): Command =
     runOnce({
         if (!gripper.hasCoral.asBoolean) return@runOnce
 
@@ -51,47 +48,44 @@ private fun visualizeCoralOuttake(): Command =
         val velocity =
             driveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative
         val rotation = driveSimulation.simulatedDriveTrainPose.rotation
-        val height = elevator.height.invoke() + GRIPPER_HEIGHT
-        val angle =
-            if (elevator.setpointName == Positions.L4) {
-                CORAL_L4_SHOOT_ANGLE
-            } else {
-                wrist.angle.invoke() - WRIST_ANGLE_OFFSET
-            }
+        var angle = wrist.angle.invoke()
+        val pose = visualizer.getCoralPoseRelativeToRobot()
+        var height = pose.measureZ
+        val coralShootVelocity = if (isReverse) -CORAL_SHOOT_SPEED else CORAL_SHOOT_SPEED
+
+        if (wrist.setpointName.contains("2")) {
+            angle = angle.minus(L2_CORAL_ANGLE_OFFSET)
+            height = height.plus(L2_CORAL_HEIGHT_OFFSET)
+        }
 
         arena.addGamePieceProjectile(
             ReefscapeCoralOnFly(
                 translation,
-                CORAL_SHOOT_OFFSET,
+                pose.translation.toTranslation2d(),
                 velocity,
                 rotation,
                 height,
-                CORAL_SHOOT_SPEED,
+                coralShootVelocity,
                 angle
             )
         )
     })
 
-fun visualizeCoralOuttakeIfNeeded(): Command =
-    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+fun visualizeCoralOuttakeIfNeeded(isReverse: Boolean = false): Command =
+    visualizeCoralOuttake(isReverse).onlyIf { CURRENT_MODE != Mode.REAL }
 
 fun outtakeCoralAndDriveBack(
     moveWristUp: Boolean,
     isReverse: Boolean = false
 ): Command =
     sequence(
-        (gripper
-                .outtake(isReverse)
+        ((gripper
+                .outtake(isReverse).alongWith(visualizeCoralOuttakeIfNeeded(isReverse)))
                 .withTimeout(0.3)
                 .andThen(
                     gripper
                         .outtake(isReverse)
                         .until(gripper.hasCoral.negate())
-                        .alongWith(
-                            visualizeCoralOuttake().onlyIf {
-                                CURRENT_MODE != Mode.REAL
-                            }
-                        )
                 ))
             .withTimeout(0.5),
         gripper.slowOuttake(!isReverse).withTimeout(0.15),
@@ -117,7 +111,7 @@ fun outtakeCoral(): Command =
                 .outtake()
                 .until(gripper.hasCoral.negate())
                 .alongWith(
-                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                    visualizeCoralOuttakeIfNeeded()
                 ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.15),
@@ -133,7 +127,7 @@ fun outtakeL1(): Command =
             .slowOuttake(true)
             .until(gripper.hasCoral.negate())
             .alongWith(
-                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+                visualizeCoralOuttakeIfNeeded(true)
             )),
         moveDefaultPosition(false)
             .onlyIf(
@@ -151,9 +145,7 @@ fun outtakeL2(): Command =
                         .outtake(true)
                         .until(gripper.hasCoral.negate())
                         .alongWith(
-                            visualizeCoralOuttake().onlyIf {
-                                CURRENT_MODE != Mode.REAL
-                            }
+                            visualizeCoralOuttakeIfNeeded(true)
                         )
                 ))
             .withTimeout(0.5),
@@ -167,8 +159,6 @@ fun outtakeL2(): Command =
             .withTimeout(0.3),
         swerveDrive.run { swerveDrive.stop() }.withTimeout(0.25)
     )
-
-// TODO: Add Coral Simulation
 
 fun moveDefaultPosition(
     moveWristUp: Boolean,

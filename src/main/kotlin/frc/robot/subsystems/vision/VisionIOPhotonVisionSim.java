@@ -18,12 +18,17 @@ import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+
 import java.util.function.Supplier;
+
+import frc.robot.ConstantsKt;
 import org.photonvision.simulation.PhotonCameraSim;
 import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 
-/** IO implementation for physics sim using PhotonVision simulator. */
+/**
+ * IO implementation for physics sim using PhotonVision simulator.
+ */
 public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
     private static VisionSystemSim visionSim;
 
@@ -33,7 +38,7 @@ public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
     /**
      * Creates a new VisionIOPhotonVisionSim.
      *
-     * @param name The name of the camera.
+     * @param name         The name of the camera.
      * @param poseSupplier Supplier for the robot pose to use in simulation.
      */
     public VisionIOPhotonVisionSim(

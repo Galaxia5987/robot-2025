@@ -23,7 +23,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         root.append(LoggedMechanismLigament2d("WristLigament", 1.2, 0.0))
 
     @AutoLogOutput
-    private var setpointName: String = Angles.ZERO.getLoggingName()
+    var setpointName: String = Angles.ZERO.getLoggingName()
 
     @AutoLogOutput private var setpointValue: Angle = Angles.ZERO.angle
 
