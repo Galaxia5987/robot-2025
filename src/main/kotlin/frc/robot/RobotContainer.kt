@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.hal.HALUtil
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.enableAutoLogOutputFor
@@ -70,6 +72,7 @@ object RobotContainer {
     val disablePathFinding = heightController.button(11)
     val disableFeederAlign = heightController.button(10)
     val shouldNet = heightController.button(8)
+    val userButton = Trigger{HALUtil.getFPGAButton()}
 
     val autoChooser = AutoBuilder.buildAutoChooser()
 
@@ -108,6 +111,18 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        userButton.and(RobotModeTriggers.disabled()).onTrue(
+            Commands.runOnce(
+                {
+                    swerveDrive.resetGyroBasedOnAlliance(
+                        Rotation2d.kZero
+                    )
+                },
+                swerveDrive
+            )
+                .ignoringDisable(true)
+        )
+
         // reset swerve
         driverController
             .create()
