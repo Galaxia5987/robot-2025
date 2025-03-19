@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
+import static frc.robot.InitializerKt.getDriveSimulation;
 
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -112,6 +113,7 @@ public class Drive extends SubsystemBase {
             DriveTrainSimulationConfig.Default()
                     .withRobotMass(ROBOT_MASS_KG)
                     .withCustomModuleTranslations(getModuleTranslations())
+                    .withBumperSize(Meters.of(0.851), Meters.of(0.851))
                     .withGyro(COTS.ofNav2X())
                     .withSwerveModule(
                             new SwerveModuleSimulationConfig(
@@ -560,6 +562,10 @@ public class Drive extends SubsystemBase {
         localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
+    public void resetGyroSim(Rotation2d offset, SwerveDriveSimulation driveSimulation) {
+        driveSimulation.getGyroSimulation().setRotation(offset);
+    }
+
     public void resetGyro(Rotation2d offset) {
         gyroIO.zeroGyro();
         gyroOffset = offset;
@@ -572,6 +578,9 @@ public class Drive extends SubsystemBase {
 
     public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {
         resetGyro(ConstantsKt.getIS_RED() ? gyroOffset : gyroOffset.minus(Rotation2d.k180deg));
+        if (ConstantsKt.getUSE_MAPLE_SIM() && getDriveSimulation() != null) {
+            resetGyroSim(Rotation2d.kZero, getDriveSimulation());
+        }
     }
 
     /** Adds a new timestamped vision measurement. */

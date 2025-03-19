@@ -85,8 +85,7 @@ public class VisionIOPhotonVision implements VisionIO {
                 var estimatedPose = localPoseEstimator.update(filteredResult);
 
                 // Update PhotonPoseEstimator based on gyro readings
-                localPoseEstimator.addHeadingData(
-                        result.getTimestampSeconds(), botRotation.get().plus(Rotation2d.k180deg));
+                localPoseEstimator.addHeadingData(result.getTimestampSeconds(), botRotation.get());
                 estimatedPose.ifPresent(
                         estimatedRobotPose ->
                                 inputs.localEstimatedPose =

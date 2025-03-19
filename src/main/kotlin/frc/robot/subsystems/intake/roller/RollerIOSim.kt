@@ -4,11 +4,30 @@ import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Timer
+import frc.robot.driveSimulation
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
+import org.ironmaple.simulation.IntakeSimulation
+import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.drivesims.AbstractDriveTrainSimulation
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeAlgaeOnFly
 
-class RollerIOSim() : RollerIO {
+class RollerIOSim(driveTrainSimulation: AbstractDriveTrainSimulation) :
+    RollerIO {
     override val inputs = LoggedRollerInputs()
+    private val intakeSimulation =
+        IntakeSimulation.OverTheBumperIntake(
+            "Algae",
+            driveTrainSimulation,
+            INTAKE_WIDTH,
+            INTAKE_LENGTH_EXTENDED,
+            IntakeSimulation.IntakeSide.FRONT,
+            1
+        )
+
+    override fun getIntakeSimulation(): IntakeSimulation? {
+        return intakeSimulation
+    }
 
     private val motor =
         TalonFXSim(
@@ -20,8 +39,33 @@ class RollerIOSim() : RollerIO {
         )
     private val controlRequest = VoltageOut(0.0)
 
+    private fun visualizeOuttakeGamePieceIfNeeded() {
+        if (!intakeSimulation.obtainGamePieceFromIntake()) {
+            return
+        }
+        SimulatedArena.getInstance()
+            .addGamePieceProjectile(
+                ReefscapeAlgaeOnFly(
+                    driveSimulation!!.simulatedDriveTrainPose.translation,
+                    CORAL_OUTTAKE_TRANSLATION,
+                    driveSimulation
+                        .driveTrainSimulatedChassisSpeedsFieldRelative,
+                    driveSimulation.simulatedDriveTrainPose.rotation,
+                    ALGAE_OUTTAKE_HEIGHT,
+                    ALGAE_OUTTAKE_VELOCITY,
+                    ALGAE_OUTTAKE_ANGLE
+                )
+            )
+    }
+
     override fun setVoltage(voltage: Voltage) {
         motor.setControl(controlRequest.withOutput(voltage))
+        if (voltage < Units.Volts.zero()) {
+            intakeSimulation.startIntake()
+        } else if (voltage > Units.Volts.zero()) {
+            intakeSimulation.stopIntake()
+            visualizeOuttakeGamePieceIfNeeded()
+        }
     }
 
     override fun updateInputs() {

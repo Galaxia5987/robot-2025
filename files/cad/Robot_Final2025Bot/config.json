@@ -1,7 +1,7 @@
 {
   "name": "Neptune",
   "sourceUrl": "https://cad.onshape.com/documents/9e305a824e87fdd775b1f389",
-  "disableSimplification": true,
+  "disableSimplification": false,
   "rotations": [
     {
       "axis": "x",
@@ -350,7 +350,7 @@
       "zeroedRotations": [
         {
           "axis": "x",
-          "degrees": 63
+          "degrees": 90
         },
         {
           "axis": "z",

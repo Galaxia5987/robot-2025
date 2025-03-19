@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.Voltage
 
 const val GEAR_RATIO = 1.0
 
+val DEFAULT_SENSOR_SIMULATION_DISTANCE: Distance = Units.Centimeters.of(20.0)
 val DISTANCE_THRESHOLD: Distance = Units.Centimeters.of(14.2)
 val INTAKE_VOLTAGE: Voltage = Units.Volts.of(7.5)
 val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(12.0)

@@ -26,6 +26,8 @@ fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
 
 fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
 
+fun Pose2d.toPose3d(): Pose3d = Pose3d(this)
+
 fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
 
 fun Pose2d.withTranslation(translation: Translation2d): Pose2d =

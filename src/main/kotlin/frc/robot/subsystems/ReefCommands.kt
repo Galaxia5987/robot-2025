@@ -22,6 +22,8 @@ import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.elevator.Positions
+import frc.robot.swerveDrive
+import frc.robot.wrist
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.intakeToGripper
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE
@@ -34,9 +36,9 @@ import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
 private val CORAL_SHOOT_OFFSET =
-    getTranslation2d(Units.Meters.of(0.40), Units.Meters.of(0.0))
-private val GRIPPER_HEIGHT = Units.Meters.of(0.50)
-private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(3.0)
+    getTranslation2d(Units.Meters.of(0.60), Units.Meters.of(0.0))
+private val GRIPPER_HEIGHT = Units.Meters.of(0.90)
+private val CORAL_SHOOT_SPEED = Units.MetersPerSecond.of(1.0)
 private val CORAL_L4_SHOOT_ANGLE = Units.Degrees.of(-80.0)
 private val WRIST_ANGLE_OFFSET = Units.Degrees.of(35.0)
 
@@ -69,6 +71,9 @@ private fun visualizeCoralOuttake(): Command =
             )
         )
     })
+
+fun visualizeCoralOuttakeIfNeeded(): Command =
+    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
 
 fun outtakeCoralAndDriveBack(
     moveWristUp: Boolean,
