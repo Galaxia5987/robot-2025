@@ -75,4 +75,6 @@ fun Rotation2d.toPose(): Pose2d = Pose2d(Translation2d(), this)
 
 fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
+operator fun Transform2d.unaryMinus(): Transform2d = this.inverse()
+
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
