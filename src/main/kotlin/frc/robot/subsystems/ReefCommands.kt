@@ -309,8 +309,12 @@ fun intakeAlgaeToGripper(gripperTrigger: Trigger): Command =
 
 fun netAlgae(outtakeTrigger: Trigger): Command =
     sequence(
-        (elevator.net().alongWith(wrist.net())).until(elevator.atSetpoint),
+        elevator.zero(),
         waitUntil(outtakeTrigger),
-        (gripper.outtakeAlgae().alongWith(wrist.l4())).until(wrist.atSetpoint),
+        elevator.net(),
+        WaitCommand(0.4),
+        wrist.l4(),
+        WaitCommand(0.0314),
+        gripper.outtakeAlgae().withTimeout(0.2),
         moveDefaultPosition(true)
     )
