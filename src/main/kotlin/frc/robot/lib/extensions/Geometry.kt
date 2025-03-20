@@ -1,4 +1,4 @@
-package frc.robot.lib
+package frc.robot.lib.extensions
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.*
@@ -6,7 +6,7 @@ import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
-import frc.robot.lib.extensions.m
+import frc.robot.lib.getTransform2d
 
 fun Pose2d.moveBack(distance: Distance): Pose2d = this + getTransform2d(x = -distance)
 
