@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator
 
+import com.ctre.phoenix6.Orchestra
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
@@ -47,6 +48,8 @@ class ElevatorIOReal : ElevatorIO {
             ForwardSoftLimitThreshold = MAX_HEIGHT_LIMIT.`in`(Units.Rotations)
             ReverseSoftLimitThreshold = MIN_HEIGHT_LIMIT.`in`(Units.Rotations)
         }
+
+    val orchestra = Orchestra(setOf(mainMotor, auxMotor))
 
     @AutoLogOutput
     private val kgTrigger =
@@ -110,6 +113,15 @@ class ElevatorIOReal : ElevatorIO {
         softLimitsConfig
             .withForwardSoftLimitEnable(value)
             .withReverseSoftLimitEnable(value)
+    }
+
+    override fun play(filePath: String) {
+        orchestra.loadMusic(filePath)
+        orchestra.play()
+    }
+
+    override fun stopMusic() {
+        orchestra.stop()
     }
 
     override fun updateInputs() {

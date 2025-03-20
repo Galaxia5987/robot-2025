@@ -175,6 +175,12 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
             .withName("Elevator/characterize")
     }
 
+    fun play(filePath: String): Command =
+        runOnce{io.play(filePath)}
+
+    fun stopMusic(): Command =
+        runOnce{io.stopMusic()}
+
     override fun periodic() {
         io.updateInputs()
         Logger.processInputs(this.name, io.inputs)

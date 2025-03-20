@@ -18,6 +18,10 @@ interface ElevatorIO {
 
     fun setSoftLimits(value: Boolean) {}
 
+    fun play(filePath: String) {}
+
+    fun stopMusic() {}
+
     fun updateInputs() {}
 
     @Logged
