@@ -25,15 +25,13 @@ private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
 private val LINEAR_CONSTRAINTS =
     Constraints(
         TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond),
-        TunerConstants.kMaxAcceleration.`in`(Units.MetersPerSecondPerSecond)
+        Units.MetersPerSecondPerSecond.of(2.8).`in`(Units.MetersPerSecondPerSecond)
     )
 
 private val ROTATIONAL_CONSTRAINTS =
     Constraints(
         TunerConstants.kMaxOmegaVelocity.`in`(Units.RadiansPerSecond),
-        TunerConstants.kMaxAngularAcceleration.`in`(
-            Units.RadiansPerSecondPerSecond
-        )
+        Units.DegreesPerSecondPerSecond.of(360.0).`in`(Units.RadiansPerSecondPerSecond)
     )
 
 val xController =
