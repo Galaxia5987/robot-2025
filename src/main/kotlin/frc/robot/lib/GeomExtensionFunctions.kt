@@ -9,8 +9,7 @@ import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
 import frc.robot.lib.extensions.m
 
-fun Pose2d.moveBack(distance: Distance): Pose2d =
-    this + Transform2d(-distance, Units.Meters.zero(), Rotation2d.kZero)
+fun Pose2d.moveBack(distance: Distance): Pose2d = this + getTransform2d(x = -distance)
 
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
     (this - other).angle
