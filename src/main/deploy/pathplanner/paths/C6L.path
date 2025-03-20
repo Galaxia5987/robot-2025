@@ -59,7 +59,7 @@
     },
     {
       "name": "MoveL4",
-      "waypointRelativePos": 0.27685492801771466,
+      "waypointRelativePos": 0.5492801771871476,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
