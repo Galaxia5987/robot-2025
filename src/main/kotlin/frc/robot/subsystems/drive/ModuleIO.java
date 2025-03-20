@@ -53,4 +53,8 @@ public interface ModuleIO {
 
     /** Run the turn motor to the specified rotation. */
     public default void setTurnPosition(Rotation2d rotation) {}
+
+    public default void play(String filePath) {}
+
+    public default void stopMusic() {}
 }

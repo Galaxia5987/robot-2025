@@ -57,6 +57,7 @@ import frc.robot.InitializerKt;
 import frc.robot.Mode;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.math.GalacticSlewRateLimiter;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -612,5 +613,13 @@ public class Drive extends SubsystemBase {
             new Translation2d(
                     TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
+    }
+
+    public Command play(String filePath) {
+        return runOnce(() -> Arrays.stream(modules).forEach((module -> play(filePath))));
+    }
+
+    public Command stopMusic() {
+        return runOnce(() -> Arrays.stream(modules).forEach((module -> stopMusic())));
     }
 }

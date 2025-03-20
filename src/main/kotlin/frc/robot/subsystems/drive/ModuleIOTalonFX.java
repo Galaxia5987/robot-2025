@@ -16,6 +16,7 @@ package frc.robot.subsystems.drive;
 import static frc.robot.lib.PhoenixUtil.tryUntilOk;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -35,6 +36,10 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Queue;
 
 /**
@@ -87,6 +92,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final Debouncer driveConnectedDebounce = new Debouncer(0.5);
     private final Debouncer turnConnectedDebounce = new Debouncer(0.5);
     private final Debouncer turnEncoderConnectedDebounce = new Debouncer(0.5);
+
+    private final Orchestra orchestra;
 
     public ModuleIOTalonFX(
             SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
@@ -182,6 +189,8 @@ public class ModuleIOTalonFX implements ModuleIO {
                 turnAppliedVolts,
                 turnCurrent);
         ParentDevice.optimizeBusUtilizationForAll(driveTalon, turnTalon);
+
+        orchestra = new Orchestra(Arrays.asList(driveTalon, turnTalon));
     }
 
     @Override
@@ -267,5 +276,16 @@ public class ModuleIOTalonFX implements ModuleIO {
                     case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
                             rotation.getRotations());
                 });
+    }
+
+    @Override
+    public void play(String filePath) {
+        orchestra.loadMusic(filePath);
+        orchestra.play();
+    }
+
+    @Override
+    public void stopMusic() {
+        orchestra.stop();
     }
 }
