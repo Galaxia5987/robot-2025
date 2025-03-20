@@ -14,7 +14,7 @@ import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
-import frc.robot.lib.flip
+import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.moveBack
 import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
@@ -218,8 +218,7 @@ val shouldOpenElevator = Trigger {
 }
 
 val ableToNet = Trigger {
-    ((swerveDrive.pose.x > MAX_NET_DISTANCE.flip().x && swerveDrive.pose.x < MIN_NET_DISTANCE.flip().x).and(IS_RED))
-        .or((swerveDrive.pose.x < MAX_NET_DISTANCE.x && swerveDrive.pose.x > MIN_NET_DISTANCE.x).and(!IS_RED))
+    NET_ZONE.intersects(swerveDrive.pose.translation.flipIfNeeded())
 }
 
 var isL4 = Trigger { false }

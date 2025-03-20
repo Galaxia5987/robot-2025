@@ -2,6 +2,7 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -181,5 +182,4 @@ val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
 val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
 val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
-val MIN_NET_DISTANCE: Translation2d = Translation2d(8.0, 0.0)
-val MAX_NET_DISTANCE: Translation2d = Translation2d(7.0, 0.0)
+val NET_ZONE: Rectangle2d = Rectangle2d(Translation2d(7.6,8.4),Translation2d(8.2,4.06))
