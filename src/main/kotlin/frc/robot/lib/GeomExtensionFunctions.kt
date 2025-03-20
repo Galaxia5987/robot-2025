@@ -19,6 +19,10 @@ fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
 
 fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
 
+fun Pose2d.mirror(): Pose2d = Pose2d(Translation2d(translation.x, FlippingUtil.fieldSizeY - translation.y), -rotation)
+
+fun Pose2d.mirrorIfNeeded(): Pose2d = if (IS_RED) this.mirror() else this
+
 fun Pose2d.withTranslation(translation: Translation2d): Pose2d =
     Pose2d(translation, this.rotation)
 
