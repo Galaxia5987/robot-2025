@@ -14,6 +14,7 @@ import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
 import frc.robot.lib.distanceFromPoint
+import frc.robot.lib.flip
 import frc.robot.lib.moveBack
 import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
@@ -216,6 +217,11 @@ val shouldOpenElevator = Trigger {
     isWithinDistance.asBoolean && isAligning.asBoolean
 }
 
+val ableToNet = Trigger {
+    ((swerveDrive.pose.x > MAX_NET_DISTANCE.flip().x && swerveDrive.pose.x < MIN_NET_DISTANCE.flip().x).and(IS_RED))
+        .or((swerveDrive.pose.x < MAX_NET_DISTANCE.x && swerveDrive.pose.x > MIN_NET_DISTANCE.x).and(!IS_RED))
+}
+
 var isL4 = Trigger { false }
 
 fun logTriggers() {
@@ -224,6 +230,7 @@ fun logTriggers() {
         "AtAlignmentSetpoint" to atAlignmentSetpoint,
         "IsWithinDistance" to isWithinDistance,
         "ShouldOpenElevator" to shouldOpenElevator,
+        "ableToNet" to ableToNet,
         "isL4" to isL4
     )
         .forEach { (key, value) ->

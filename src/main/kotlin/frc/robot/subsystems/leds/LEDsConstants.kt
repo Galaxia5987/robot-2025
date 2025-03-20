@@ -26,6 +26,7 @@ val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val ALIGN_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val PATH_FIND_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
+val NET_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val GRADIENT_PINK: Color = Color(255, 0, 148)
 val blueTeamPattern: LEDPattern =
     LEDPattern.gradient(
@@ -62,3 +63,7 @@ val gripperPattern: LEDPattern =
     LEDPattern.solid(Color.kWhiteSmoke)
         .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
         .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
+
+val ableToNetPattern: LEDPattern =
+    LEDPattern.solid(Color.kPurple)
+        .atBrightness(NET_BRIGHTNESS)

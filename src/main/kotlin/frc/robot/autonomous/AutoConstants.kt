@@ -4,6 +4,7 @@ import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
@@ -180,3 +181,5 @@ val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
 val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
 val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.8)
+val MIN_NET_DISTANCE: Translation2d = Translation2d(8.0, 0.0)
+val MAX_NET_DISTANCE: Translation2d = Translation2d(7.0, 0.0)
