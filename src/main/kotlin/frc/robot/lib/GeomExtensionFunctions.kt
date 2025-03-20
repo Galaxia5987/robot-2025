@@ -2,7 +2,6 @@ package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.*
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
@@ -11,73 +10,65 @@ import frc.robot.lib.extensions.m
 
 fun Pose2d.moveBack(distance: Distance): Pose2d = this + getTransform2d(x = -distance)
 
-fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
-    (this - other).angle
+fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d = (this - other).angle
 
 fun Pose2d.flip(): Pose2d = FlippingUtil.flipFieldPose(this)
 
-fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) this.flip() else this
+fun Pose2d.flipIfNeeded(): Pose2d = if (IS_RED) flip() else this
 
 fun Pose2d.mirror(): Pose2d = Pose2d(Translation2d(translation.x, FlippingUtil.fieldSizeY - translation.y), -rotation)
 
-fun Pose2d.mirrorIfNeeded(): Pose2d = if (IS_RED) this.mirror() else this
+fun Pose2d.mirrorIfNeeded(): Pose2d = if (IS_RED) mirror() else this
 
-fun Pose2d.withTranslation(translation: Translation2d): Pose2d =
-    Pose2d(translation, this.rotation)
+fun Pose2d.withTranslation(translation: Translation2d): Pose2d = Pose2d(translation, rotation)
 
-fun Pose2d.withRotation(rotation: Rotation2d): Pose2d =
-    Pose2d(this.translation, rotation)
+fun Pose2d.withRotation(rotation: Rotation2d): Pose2d = Pose2d(translation, rotation)
 
-fun Pose3d.withRotation(rotation: Rotation3d): Pose3d =
-    Pose3d(this.translation, rotation)
+fun Pose3d.withRotation(rotation: Rotation3d): Pose3d = Pose3d(translation, rotation)
 
 fun Pose3d.withRotation(
     roll: Double = 0.0,
     pitch: Double = 0.0,
-    yaw: Double = 0.0
-): Pose3d = Pose3d(this.translation, Rotation3d(roll, pitch, yaw))
+    yaw: Double = 0.0,
+): Pose3d = Pose3d(translation, Rotation3d(roll, pitch, yaw))
 
 fun Pose3d.withRotation(
     roll: Angle = Rotations.zero(),
     pitch: Angle = Rotations.zero(),
     yaw: Angle = Rotations.zero(),
-): Pose3d = Pose3d(this.translation, Rotation3d(roll, pitch, yaw))
+): Pose3d = Pose3d(translation, Rotation3d(roll, pitch, yaw))
 
-fun Pose2d.toTransform(): Transform2d =
-    Transform2d(this.translation, this.rotation)
+fun Pose2d.toTransform(): Transform2d = Transform2d(translation, rotation)
 
-fun Pose2d.distanceFromPoint(translationMeters: Translation2d): Distance =
-    this.translation.getDistance(translationMeters).m
+fun Pose2d.distanceFromPoint(translationMeters: Translation2d): Distance = translation.getDistance(translationMeters).m
 
 operator fun Pose2d.minus(transform: Transform2d): Pose2d = this + transform.inverse()
 
-fun Pose3d.toTransform(): Transform3d =
-    Transform3d(this.translation, this.rotation)
+fun Pose3d.toTransform(): Transform3d = Transform3d(translation, rotation)
 
 fun Translation2d.flip(): Translation2d = FlippingUtil.flipFieldPosition(this)
 
-fun Translation2d.flipIfNeeded(): Translation2d =
-    if (IS_RED) this.flip() else this
+fun Translation2d.flipIfNeeded(): Translation2d = if (IS_RED) flip() else this
 
 fun Translation2d.toTransform(): Transform2d = Transform2d(this, Rotation2d())
 
 fun Translation2d.toPose(): Pose2d = Pose2d(this, Rotation2d())
 
 fun Translation2d.rotationToPoint(targetPoint: Translation2d): Rotation2d =
-    Rotation2d(targetPoint.x - this.x, targetPoint.y - this.y)
+    Rotation2d(targetPoint.x - x, targetPoint.y - y)
 
 operator fun Translation2d.div(scalar: Number): Translation2d = this / scalar.toDouble()
 
 fun Rotation2d.flip(): Rotation2d = FlippingUtil.flipFieldRotation(this)
 
-fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) this.flip() else this
+fun Rotation2d.flipIfNeeded(): Rotation2d = if (IS_RED) flip() else this
 
 fun Rotation2d.toTransform(): Transform2d = Transform2d(Translation2d(), this)
 
-fun Rotation2d.toPose(): Pose2d = Pose2d(Translation2d(), this)
+fun Rotation2d.toPose(): Pose2d = this.toPose()
 
-fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
+fun Transform2d.toPose(): Pose2d = Pose2d(translation, rotation)
 
-operator fun Transform2d.unaryMinus(): Transform2d = this.inverse()
+operator fun Transform2d.unaryMinus(): Transform2d = inverse()
 
-fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
+fun Transform3d.toPose(): Pose3d = Pose3d(translation, rotation)

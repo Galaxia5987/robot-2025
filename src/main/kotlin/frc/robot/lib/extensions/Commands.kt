@@ -26,7 +26,7 @@ infix fun Command.withTimeout(seconds: Double): Command = withTimeout(seconds)
  */
 infix fun Command.withName(commandName: String): Command {
     val prefix = if (requirements.count() == 1) requirements.first().name else ""
-    return this.withName(name)
+    return withName(name)
 }
 
 

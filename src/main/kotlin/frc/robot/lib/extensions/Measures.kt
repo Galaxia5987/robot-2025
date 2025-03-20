@@ -1,5 +1,6 @@
 package frc.robot.lib.extensions
 
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.TimeUnit
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.VoltageUnit
@@ -10,19 +11,19 @@ fun LinearVelocity.toAngular(
     radius: Distance,
     gearRatio: Double,
 ): AngularVelocity =
-    this.timesConversionFactor(
+    timesConversionFactor(
         Units.RotationsPerSecond.per(Units.MetersPerSecond)
             .of(1.0 / (radius.`in`(Units.Meters) * gearRatio * 2.0 * PI))
     )
 
 fun Distance.toAngle(radius: Distance, gearRatio: Double): Angle =
-    this.timesConversionFactor(
+    timesConversionFactor(
         Units.Rotations.per(Units.Meters)
             .of(1.0 / (radius.`in`(Units.Meters) * gearRatio * 2.0 * PI))
     )
 
 fun Angle.toDistance(radius: Distance, gearRatio: Double): Distance =
-    this.timesConversionFactor(
+    timesConversionFactor(
         Units.Meters.per(Units.Rotations)
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
@@ -31,7 +32,7 @@ fun AngularVelocity.toLinear(
     radius: Distance,
     gearRatio: Double,
 ): LinearVelocity =
-    this.timesConversionFactor(
+    timesConversionFactor(
         Units.MetersPerSecond.per(Units.RotationsPerSecond)
             .of(radius.`in`(Units.Meters) * gearRatio * 2.0 * PI)
     )
@@ -45,7 +46,7 @@ operator fun Voltage.div(time: TimeUnit): Velocity<VoltageUnit> = this / time.on
 // Factories
 
 // Helper function for conversion
-inline fun <N : Number, R> N.toUnit(converter: (Double) -> R) = converter(this.toDouble())
+inline fun <N : Number, R> N.toUnit(converter: (Double) -> R) = converter(toDouble())
 
 // Distance
 val Number.m: Distance get() = toUnit(Units.Meters::of)
@@ -59,6 +60,7 @@ val Number.mps: LinearVelocity get() = toUnit(Units.MetersPerSecond::of)
 val Number.deg: Angle get() = toUnit(Units.Degrees::of)
 val Number.rotations: Angle get() = toUnit(Units.Rotations::of)
 val Number.rad: Angle get() = toUnit(Units.Radians::of)
+fun Angle.toRotation2d(): Rotation2d = Rotation2d(`in`(Units.Radians))
 
 // Angular velocity
 val Number.deg_ps: AngularVelocity get() = toUnit(Units.DegreesPerSecond::of)

@@ -10,15 +10,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.LogTable
 
 fun List<Any>.toDoubleArray(): DoubleArray {
-    return this.map { it as Double }.toTypedArray().toDoubleArray()
+    return map { it as Double }.toTypedArray().toDoubleArray()
 }
 
 fun List<Any>.toIntArray(): IntArray {
-    return this.map { it as Int }.toTypedArray().toIntArray()
+    return map { it as Int }.toTypedArray().toIntArray()
 }
 
 fun List<Any>.toBooleanArray(): BooleanArray {
-    return this.map { it as Boolean }.toTypedArray().toBooleanArray()
+    return map { it as Boolean }.toTypedArray().toBooleanArray()
 }
 
 fun LogTable.put(key: String, defaultValue: List<Any>) {
