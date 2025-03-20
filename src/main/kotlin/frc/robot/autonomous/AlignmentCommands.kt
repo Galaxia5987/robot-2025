@@ -43,7 +43,10 @@ private fun pathFindToPose(
         pose,
         TunerConstants.PATH_CONSTRAINTS,
         goalEndVelocity
-    )
+    ).apply {
+        addRequirements(swerveDrive)
+    }
+
 
 fun pathFindToSelectedFeeder(): Command =
     swerveDrive
@@ -52,10 +55,10 @@ fun pathFindToSelectedFeeder(): Command =
             pathFindToPose(selectedFeeder.invoke())
                 .andThen(
                     Commands.run({
-                            swerveDrive.limitlessRunVelocity(
-                                ChassisSpeeds(0.8, 0.0, 0.0)
-                            )
-                        })
+                        swerveDrive.limitlessRunVelocity(
+                            ChassisSpeeds(0.8, 0.0, 0.0)
+                        )
+                    })
                         .withTimeout(1.0)
                 )
                 .finallyDo(
@@ -63,8 +66,8 @@ fun pathFindToSelectedFeeder(): Command =
                         leds
                             .setPattern(
                                 all =
-                                    if (IS_RED) redTeamPattern
-                                    else blueTeamPattern
+                                if (IS_RED) redTeamPattern
+                                else blueTeamPattern
                             )
                             .schedule()
                     }
@@ -98,7 +101,7 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
                     leds
                         .setPattern(
                             all =
-                                if (IS_RED) redTeamPattern else blueTeamPattern
+                            if (IS_RED) redTeamPattern else blueTeamPattern
                         )
                         .schedule()
                 }
@@ -217,12 +220,12 @@ var isL4 = Trigger { false }
 
 fun logTriggers() {
     mapOf(
-            "IsAligning" to isAligning,
-            "AtAlignmentSetpoint" to atAlignmentSetpoint,
-            "IsWithinDistance" to isWithinDistance,
-            "ShouldOpenElevator" to shouldOpenElevator,
-            "isL4" to isL4
-        )
+        "IsAligning" to isAligning,
+        "AtAlignmentSetpoint" to atAlignmentSetpoint,
+        "IsWithinDistance" to isWithinDistance,
+        "ShouldOpenElevator" to shouldOpenElevator,
+        "isL4" to isL4
+    )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
