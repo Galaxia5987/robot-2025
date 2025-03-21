@@ -56,6 +56,17 @@
           "name": "MoveFeeder"
         }
       }
+    },
+    {
+      "name": "DisableLocalEstimation",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DisableLocalEstimation"
+        }
+      }
     }
   ],
   "globalConstraints": {
