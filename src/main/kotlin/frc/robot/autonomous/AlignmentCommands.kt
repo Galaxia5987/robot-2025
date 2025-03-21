@@ -218,7 +218,7 @@ val shouldOpenElevator = Trigger {
 }
 
 val ableToNet = Trigger {
-    NET_ZONE.intersects(swerveDrive.pose.translation.flipIfNeeded())
+    NET_ZONE.flipIfNeeded().contains(swerveDrive.pose.translation)
 }
 
 var isL4 = Trigger { false }

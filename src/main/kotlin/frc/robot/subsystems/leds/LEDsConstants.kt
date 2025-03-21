@@ -65,5 +65,5 @@ val gripperPattern: LEDPattern =
         .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
 
 val ableToNetPattern: LEDPattern =
-    LEDPattern.solid(Color.kPurple)
+    LEDPattern.solid(Color.kOrange)
         .atBrightness(NET_BRIGHTNESS)
