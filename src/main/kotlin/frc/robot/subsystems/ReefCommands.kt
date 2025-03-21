@@ -27,9 +27,9 @@ import frc.robot.subsystems.intake.intakeToGripper
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE
 import frc.robot.swerveDrive
 import frc.robot.wrist
-import java.util.function.BooleanSupplier
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
+import java.util.function.BooleanSupplier
 
 private val CORAL_OUTTAKE_TIMEOUT = Units.Seconds.of(0.5)
 
@@ -76,18 +76,18 @@ fun outtakeCoralAndDriveBack(
 ): Command =
     sequence(
         (gripper
-                .outtake(isReverse)
-                .withTimeout(0.3)
-                .andThen(
-                    gripper
-                        .outtake(isReverse)
-                        .until(gripper.hasCoral.negate())
-                        .alongWith(
-                            visualizeCoralOuttake().onlyIf {
-                                CURRENT_MODE != Mode.REAL
-                            }
-                        )
-                ))
+            .outtake(isReverse)
+            .withTimeout(0.3)
+            .andThen(
+                gripper
+                    .outtake(isReverse)
+                    .until(gripper.hasCoral.negate())
+                    .alongWith(
+                        visualizeCoralOuttake().onlyIf {
+                            CURRENT_MODE != Mode.REAL
+                        }
+                    )
+            ))
             .withTimeout(0.5),
         gripper.slowOuttake(!isReverse).withTimeout(0.15),
         swerveDrive
@@ -108,11 +108,11 @@ fun outtakeCoralAndDriveBack(
 fun outtakeCoral(): Command =
     sequence(
         (gripper
-                .outtake()
-                .until(gripper.hasCoral.negate())
-                .alongWith(
-                    visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
-                ))
+            .outtake()
+            .until(gripper.hasCoral.negate())
+            .alongWith(
+                visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
+            ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.15),
         moveDefaultPosition(false)
@@ -138,18 +138,18 @@ fun outtakeL1(): Command =
 fun outtakeL2(): Command =
     sequence(
         (gripper
-                .outtake(true)
-                .withTimeout(0.3)
-                .andThen(
-                    gripper
-                        .outtake(true)
-                        .until(gripper.hasCoral.negate())
-                        .alongWith(
-                            visualizeCoralOuttake().onlyIf {
-                                CURRENT_MODE != Mode.REAL
-                            }
-                        )
-                ))
+            .outtake(true)
+            .withTimeout(0.3)
+            .andThen(
+                gripper
+                    .outtake(true)
+                    .until(gripper.hasCoral.negate())
+                    .alongWith(
+                        visualizeCoralOuttake().onlyIf {
+                            CURRENT_MODE != Mode.REAL
+                        }
+                    )
+            ))
             .withTimeout(0.5),
         gripper.slowOuttake(false).withTimeout(0.15),
         moveDefaultPosition(false, { false }),
@@ -169,16 +169,16 @@ fun moveDefaultPosition(
     zeroWrist: BooleanSupplier = BooleanSupplier { true }
 ): Command =
     Commands.defer(
-            {
-                sequence(
-                    wrist.max().onlyIf { moveWristUp },
-                    elevator.feeder(),
-                    waitUntil(wrist.atSetpoint),
-                    if (zeroWrist.asBoolean) wrist.retract() else wrist.feeder()
-                )
-            },
-            setOf(elevator, wrist)
-        )
+        {
+            sequence(
+                wrist.max().onlyIf { moveWristUp },
+                elevator.feeder(),
+                waitUntil(wrist.atSetpoint),
+                if (zeroWrist.asBoolean) wrist.retract() else wrist.feeder()
+            )
+        },
+        setOf(elevator, wrist)
+    )
         .withName("Reef/Move default position")
 
 fun l1(): Command =
@@ -202,25 +202,26 @@ fun l4(): Command =
 
 fun alignL2(): Command =
     parallel(
-            elevator.alignL2(),
-            wrist.alignL2(),
-            runOnce({ isL4 = Trigger { true } })
-        )
+        elevator.alignL2(),
+        wrist.alignL2(),
+        runOnce({ isL4 = Trigger { true } })
+    )
         .withName("Reef/Auto L2")
 
 fun alignmentSetpointL4(): Command =
     parallel(
-            elevator.alignL4(),
-            wrist.alignL4(),
-            runOnce({ isL4 = Trigger { true } })
-        )
+        elevator.alignL4(),
+        wrist.alignL4(),
+        runOnce({ isL4 = Trigger { true } })
+    )
         .withName("Reef/Auto L4")
 
 fun raiseElevatorAtDistance(elevatorCommand: Command): Command =
-    waitUntil(shouldOpenElevator)
-        .andThen(
-            elevatorCommand.until(elevator.atSetpoint.and(wrist.atSetpoint))
-        )
+    sequence(
+        waitUntil(shouldOpenElevator),
+        elevatorCommand,
+        waitUntil(elevator.almostAtSetpoint.and(wrist.almostAtSetpoint))
+    )
         .withName("Reef/raiseElevatorAtDistance")
 
 fun l2algae(retractTrigger: Trigger): Command =
@@ -258,23 +259,23 @@ fun feeder(
     zeroWrist: BooleanSupplier = BooleanSupplier { true }
 ): Command =
     sequence(
-            parallel(elevator.feeder(), wrist.feeder()),
-            waitUntil(intakeTrigger),
-            gripper
-                .intake()
-                .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition(false, zeroWrist))
-        )
+        parallel(elevator.feeder(), wrist.feeder()),
+        waitUntil(intakeTrigger),
+        gripper
+            .intake()
+            .until(gripper.hasCoral)
+            .andThen(moveDefaultPosition(false, zeroWrist))
+    )
         .withName("Reef/Feeder")
 
 fun autonomousFeeder(): Command =
     sequence(
-            parallel(elevator.feeder(), wrist.feeder()),
-            gripper
-                .intake()
-                .until(gripper.autoHasCoral)
-                .andThen(moveDefaultPosition(false, { false }))
-        )
+        parallel(elevator.feeder(), wrist.feeder()),
+        gripper
+            .intake()
+            .until(gripper.autoHasCoral)
+            .andThen(moveDefaultPosition(false, { false }))
+    )
         .withName("Reef/Feeder")
 
 fun blockedFeeder(
@@ -282,13 +283,13 @@ fun blockedFeeder(
     zeroWrist: BooleanSupplier = BooleanSupplier { true }
 ): Command =
     sequence(
-            parallel(elevator.blockedFeeder(), wrist.blockedFeeder()),
-            waitUntil(intakeTrigger),
-            gripper
-                .intake()
-                .until(gripper.hasCoral)
-                .andThen(moveDefaultPosition(false, zeroWrist))
-        )
+        parallel(elevator.blockedFeeder(), wrist.blockedFeeder()),
+        waitUntil(intakeTrigger),
+        gripper
+            .intake()
+            .until(gripper.hasCoral)
+            .andThen(moveDefaultPosition(false, zeroWrist))
+    )
         .withName("Reef/Blocked Feeder")
 
 fun retract(): Command = parallel(elevator.zero(), wrist.retract())

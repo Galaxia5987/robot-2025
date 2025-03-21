@@ -7,9 +7,11 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
+import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
@@ -32,6 +34,7 @@ import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.outtakeL2
 import frc.robot.subsystems.raiseElevatorAtDistance
 import frc.robot.swerveDrive
+import frc.robot.wrist
 import org.littletonrobotics.junction.Logger
 
 var isAligning: Trigger = Trigger { alignCommand().isScheduled }
@@ -160,14 +163,14 @@ fun alignCommand(moveBack: Boolean = true): Command =
     }
 
 private fun alignPrep(reefMasterCommand: Command): Command =
+    raiseElevatorAtDistance(reefMasterCommand).raceWith(
     swerveDrive
         .defer {
             alignToPose(
                 selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
                 Trigger { false }
             )
-        }
-        .raceWith(raiseElevatorAtDistance(reefMasterCommand))
+        })
 
 fun alignScoreL1(): Command =
     alignCommand(false)

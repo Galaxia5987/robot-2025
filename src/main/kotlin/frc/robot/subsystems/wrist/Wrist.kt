@@ -32,6 +32,11 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
+    @AutoLogOutput
+    var almostAtSetpoint: Trigger = Trigger {
+        setpointValue.isNear(io.inputs.angle, ALMOST_AT_SETPOINT_TOLERANCE)
+    }
+
     private val tuningAngleDegrees =
         LoggedNetworkNumber("/Tuning/Wrist/Angle", 0.0)
 
