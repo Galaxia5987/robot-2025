@@ -165,6 +165,16 @@ public class Drive extends SubsystemBase {
     private static final GalacticSlewRateLimiter slewRateLimiterY =
             new GalacticSlewRateLimiter(1.5);
 
+    private boolean useLocalInAuto = false;
+
+    public boolean getUseLocalInAuto() {
+        return useLocalInAuto;
+    }
+
+    public void setUseLocalInAuto(boolean useLocalInAuto) {
+        this.useLocalInAuto = useLocalInAuto;
+    }
+
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
         this(gyroIO, moduleIOS[0], moduleIOS[1], moduleIOS[2], moduleIOS[3], driveSimulation);
@@ -198,7 +208,7 @@ public class Drive extends SubsystemBase {
         var scale = 3;
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
-                this::getPose,
+                this::getPoseForAuto,
                 this::resetOdometry,
                 this::getChassisSpeeds,
                 this::limitlessRunVelocity,
@@ -505,6 +515,11 @@ public class Drive extends SubsystemBase {
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
         return globalPoseEstimator.getEstimatedPosition();
+    }
+
+    @AutoLogOutput(key = "Odometry/AutoPose")
+    public Pose2d getPoseForAuto() {
+        return useLocalInAuto ? localPoseEstimator.getEstimatedPosition() : globalPoseEstimator.getEstimatedPosition();
     }
 
     /** Returns the local estimated pose. */

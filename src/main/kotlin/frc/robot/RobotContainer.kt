@@ -16,13 +16,26 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.autonomous.*
+import frc.robot.autonomous.A2R
+import frc.robot.autonomous.A2R3RL
+import frc.robot.autonomous.B1L
+import frc.robot.autonomous.B1R
+import frc.robot.autonomous.C6L
+import frc.robot.autonomous.C6L5LR
+import frc.robot.autonomous.S5L
+import frc.robot.autonomous.S5R
+import frc.robot.autonomous.alignScoreL2
+import frc.robot.autonomous.alignScoreL3
+import frc.robot.autonomous.alignScoreL4
+import frc.robot.autonomous.pathFindC6L5LR
+import frc.robot.autonomous.pathFindToSelectedFeeder
+import frc.robot.autonomous.setFeederBasedOnAxis
+import frc.robot.autonomous.setPoseBasedOnButton
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
@@ -39,9 +52,10 @@ import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.netAlgae
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.outtakeL1
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -115,13 +129,13 @@ object RobotContainer {
             .and(RobotModeTriggers.disabled())
             .onTrue(
                 Commands.runOnce(
-                        {
-                            swerveDrive.resetGyroBasedOnAlliance(
-                                Rotation2d.kZero
-                            )
-                        },
-                        swerveDrive
-                    )
+                    {
+                        swerveDrive.resetGyroBasedOnAlliance(
+                            Rotation2d.kZero
+                        )
+                    },
+                    swerveDrive
+                )
                     .ignoringDisable(true)
             )
 
@@ -130,13 +144,13 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                        {
-                            swerveDrive.resetGyroBasedOnAlliance(
-                                Rotation2d.kZero
-                            )
-                        },
-                        swerveDrive
-                    )
+                    {
+                        swerveDrive.resetGyroBasedOnAlliance(
+                            Rotation2d.kZero
+                        )
+                    },
+                    swerveDrive
+                )
                     .ignoringDisable(true)
             )
 
@@ -332,9 +346,11 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                    (wrist.feeder().alongWith(gripper.intake())).withTimeout(
-                        0.25
-                    )
+                        (wrist.feeder().alongWith(gripper.intake())).withTimeout(
+                            0.25
+                        ),
+                "UseLocalEstimation" to Commands.runOnce({ swerveDrive.useLocalInAuto = true }),
+                "DisableLocalEstimation" to Commands.runOnce({ swerveDrive.useLocalInAuto = false})
             )
 
         NamedCommands.registerCommands(namedCommands)

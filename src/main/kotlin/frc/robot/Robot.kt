@@ -198,6 +198,7 @@ object Robot : LoggedRobot() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
         }
+        swerveDrive.useLocalInAuto = false
     }
 
     override fun simulationPeriodic() {
