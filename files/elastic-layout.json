@@ -75,23 +75,6 @@
             }
           },
           {
-            "title": "Back Left Camera",
-            "x": 816.0,
-            "y": 304.0,
-            "width": 152.0,
-            "height": 128.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/Vision/backLeft/Connected",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
-            }
-          },
-          {
             "title": "FL",
             "x": 0.0,
             "y": 216.0,
@@ -211,6 +194,23 @@
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/Vision/frontRight/Connected",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Feeder Camera",
+            "x": 816.0,
+            "y": 304.0,
+            "width": 152.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/CameraPublisher/feeder/connected",
               "period": 0.06,
               "data_type": "boolean",
               "true_color": 4283215696,
