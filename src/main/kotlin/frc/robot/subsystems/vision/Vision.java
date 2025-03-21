@@ -182,7 +182,7 @@ public class Vision extends SubsystemBase {
             }
 
             if (isObservationValid(inputs[cameraIndex].localEstimatedPose)
-                    && !io[cameraIndex].getName().equals(BackOVName)) {
+                    && !io[cameraIndex].getName().equals(FeederOVName)) {
                 var stddevs =
                         calculateStddev(
                                 inputs[cameraIndex].localEstimatedPose.averageTagDistance(),
