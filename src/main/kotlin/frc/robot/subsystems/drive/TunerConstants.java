@@ -309,7 +309,7 @@ public class TunerConstants {
 
             kSpeedAt12Volts = MetersPerSecond.of(3.7);
             kMaxAcceleration = MetersPerSecondPerSecond.of(4.0);
-            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.1);
+            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;

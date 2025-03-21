@@ -162,17 +162,9 @@ fun alignCommand(moveBack: Boolean = true): Command =
 private fun alignPrep(reefMasterCommand: Command): Command =
     swerveDrive
         .defer {
-            Commands.either(
-                alignToPose(
-                    selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
-                    Trigger { false }
-                ),
-                pathFindToSelectedScorePose().andThen(
-                    alignToPose(
-                    selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
-                    Trigger { false }
-                )),
-                { getPathfindPoseToScore().distanceFromPoint(swerveDrive.pose.translation) <= Units.Meters.of(0.5) || RobotContainer.disablePathFinding.asBoolean }
+            alignToPose(
+                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
+                Trigger { false }
             )
         }
         .raceWith(raiseElevatorAtDistance(reefMasterCommand))
