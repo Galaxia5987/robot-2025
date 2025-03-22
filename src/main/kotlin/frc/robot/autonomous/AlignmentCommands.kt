@@ -268,6 +268,7 @@ private val shouldCloseWrist =
     gripper.hasAlgae
         .negate()
         .and(isOutOfReef).and(gripper.hasAlgae.negate())
+        .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
         .and(RobotModeTriggers.teleop())
         .onTrue(wrist.feeder().alongWith(elevator.feeder()))
