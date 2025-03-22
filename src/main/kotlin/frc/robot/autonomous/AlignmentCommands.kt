@@ -11,6 +11,7 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
@@ -241,9 +242,14 @@ fun getPoseLookaheadTime(): Pose2d {
     return swerveDrive.pose.plus(transform)
 }
 
-private var isInRadiusOfReef =
+private val isInRadiusOfReef =
     Trigger {
         getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) < MOVE_WRIST_UP_RADIUS
+    }
+
+private val isOutOfReef =
+    Trigger {
+        getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) > MOVE_WRIST_DOWN_RADIUS
     }
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
@@ -254,14 +260,15 @@ private val shouldMoveWristUp =
         .and(wristCurrentCommandIsNull)
         .and(
             CommandGenericHID(3).button(12).negate()
-        ))
+        )).and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
     gripper.hasAlgae
         .negate()
-        .and(isInRadiusOfReef.negate()).and(gripper.hasAlgae.negate())
+        .and(isOutOfReef).and(gripper.hasAlgae.negate())
         .and(CommandGenericHID(3).button(12).negate())
+        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.feeder().alongWith(elevator.feeder()))
 
 var isL4 = Trigger { false }

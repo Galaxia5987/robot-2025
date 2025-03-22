@@ -185,3 +185,4 @@ val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val NET_ZONE: Rectangle2d =
     Rectangle2d(Translation2d(7.0, 8.0), Translation2d(8.0, 4.4))
 val MOVE_WRIST_UP_RADIUS: Distance = Units.Meters.of(2.0)
+val MOVE_WRIST_DOWN_RADIUS: Distance = Units.Meters.of(2.2)
