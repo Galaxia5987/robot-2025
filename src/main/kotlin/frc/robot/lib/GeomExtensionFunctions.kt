@@ -82,6 +82,9 @@ fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
 
-fun Rectangle2d.flip(): Rectangle2d = Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
+fun Rectangle2d.flip(): Rectangle2d =
+    Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
 
-fun Rectangle2d.flipIfNeeded(): Rectangle2d = if (IS_RED) Rectangle2d(this.center.flip(), this.xWidth, this.yWidth) else this
+fun Rectangle2d.flipIfNeeded(): Rectangle2d =
+    if (IS_RED) Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
+    else this

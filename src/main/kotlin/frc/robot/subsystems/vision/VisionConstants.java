@@ -40,10 +40,7 @@ public class VisionConstants {
                     0.24886, 0.11411, 0.59876, new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
     public static Transform3d robotToFeederOV =
             new Transform3d(
-                    0.22306,
-                    0.21289,
-                    0.76926,
-                    new Rotation3d(0.0, Math.toRadians(-40.0), 0.0));
+                    0.22306, 0.21289, 0.76926, new Rotation3d(0.0, Math.toRadians(-40.0), 0.0));
 
     public static Map<String, Transform3d> OVNameToTransform =
             new HashMap<>() {

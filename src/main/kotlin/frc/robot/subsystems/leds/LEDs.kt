@@ -66,9 +66,12 @@ class LEDs : SubsystemBase() {
             .onTrue(setPattern(all = gripperPattern))
 
     private val netLEDs: Trigger =
-        ableToNet.and(isAligning.negate())
+        ableToNet
+            .and(isAligning.negate())
             .onTrue(setPattern(all = ableToNetPattern))
-            .onFalse(setPattern(if (IS_RED) redTeamPattern else blueTeamPattern))
+            .onFalse(
+                setPattern(if (IS_RED) redTeamPattern else blueTeamPattern)
+            )
 
     val blueDefaultPattern: Trigger =
         isEndGame
