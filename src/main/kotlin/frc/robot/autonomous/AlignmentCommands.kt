@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
+import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
@@ -261,7 +262,7 @@ private val shouldCloseWrist =
         .negate()
         .and(isInRadiusOfReef.negate()).and(gripper.hasAlgae.negate())
         .and(CommandGenericHID(3).button(12).negate())
-        .onTrue(wrist.feeder())
+        .onTrue(wrist.feeder().alongWith(elevator.feeder()))
 
 var isL4 = Trigger { false }
 
