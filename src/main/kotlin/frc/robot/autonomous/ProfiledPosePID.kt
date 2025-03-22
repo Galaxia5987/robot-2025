@@ -12,12 +12,12 @@ import kotlin.math.abs
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
-private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 12.0)
-private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.1)
-private val xKD = LoggedNetworkNumber("/Tuning/AutoAlign/xKD", 4.0)
-private val yKP = LoggedNetworkNumber("/Tuning/AutoAlign/yKP", 12.0)
-private val yKI = LoggedNetworkNumber("/Tuning/AutoAlign/yKI", 0.1)
-private val yKD = LoggedNetworkNumber("/Tuning/AutoAlign/yKD", 4.0)
+private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 4.0)
+private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
+private val xKD = LoggedNetworkNumber("/Tuning/AutoAlign/xKD", 0.0)
+private val yKP = LoggedNetworkNumber("/Tuning/AutoAlign/yKP", 4.0)
+private val yKI = LoggedNetworkNumber("/Tuning/AutoAlign/yKI", 0.0)
+private val yKD = LoggedNetworkNumber("/Tuning/AutoAlign/yKD", 0.0)
 private val thetaKP = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKP", 6.0)
 private val thetaKI = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKI", 0.0)
 private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
@@ -25,7 +25,7 @@ private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
 private val LINEAR_CONSTRAINTS =
     Constraints(
         TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond),
-        Units.MetersPerSecondPerSecond.of(2.8)
+        Units.MetersPerSecondPerSecond.of(2.0)
             .`in`(Units.MetersPerSecondPerSecond)
     )
 
