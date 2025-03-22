@@ -58,7 +58,7 @@ class LEDs : SubsystemBase() {
                     DriverStation.getMatchTime() > -1
             }
             .and(RobotModeTriggers.teleop())
-            .onTrue(setPattern(climbPattern))
+            .onTrue(setPattern(all = climbPattern))
 
     private val gripperTrigger: Trigger =
         gripper.hasCoral
@@ -70,7 +70,7 @@ class LEDs : SubsystemBase() {
             .and(isAligning.negate())
             .onTrue(setPattern(all = ableToNetPattern))
             .onFalse(
-                setPattern(if (IS_RED) redTeamPattern else blueTeamPattern)
+                setPattern(all = redTeamPattern)
             )
 
     val blueDefaultPattern: Trigger =
