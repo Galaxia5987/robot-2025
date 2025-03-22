@@ -7,11 +7,9 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
-import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
@@ -70,8 +68,8 @@ fun pathFindToSelectedFeeder(): Command =
                         leds
                             .setPattern(
                                 all =
-                                if (IS_RED) redTeamPattern
-                                else blueTeamPattern
+                                    if (IS_RED) redTeamPattern
+                                    else blueTeamPattern
                             )
                             .schedule()
                     }
@@ -105,7 +103,7 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
                     leds
                         .setPattern(
                             all =
-                            if (IS_RED) redTeamPattern else blueTeamPattern
+                                if (IS_RED) redTeamPattern else blueTeamPattern
                         )
                         .schedule()
                 }
@@ -164,13 +162,13 @@ fun alignCommand(moveBack: Boolean = true): Command =
 
 private fun alignPrep(reefMasterCommand: Command): Command =
     raiseElevatorAtDistance(reefMasterCommand).raceWith(
-    swerveDrive
-        .defer {
-            alignToPose(
-                selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
-                Trigger { false }
-            )
-        })
+        swerveDrive
+            .defer {
+                alignToPose(
+                    selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
+                    Trigger { false }
+                )
+            })
 
 fun alignScoreL1(): Command =
     alignCommand(false)
@@ -199,8 +197,7 @@ fun alignScoreL4(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrep(alignmentSetpointL4()),
-        alignCommand(),
+        (alignCommand().alongWith(alignmentSetpointL4())),
         outtakeCoralAndDriveBack(true)
     )
 
@@ -224,6 +221,15 @@ val ableToNet = Trigger {
     NET_ZONE.flipIfNeeded().contains(swerveDrive.pose.translation)
 }
 
+private var isInRadiusOfReef =
+    Trigger { swerveDrive.pose.distanceFromPoint(ReefCenter.flipIfNeeded()) < MOVE_WRIST_UP_RADIUS }
+
+private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
+
+private val shouldMoveWristUp = (gripper.hasCoral.and(isInRadiusOfReef).and(wristCurrentCommandIsNull).and(RobotContainer.disableAlignment.negate())).onTrue(
+    wrist.skyward()
+)
+
 var isL4 = Trigger { false }
 
 fun logTriggers() {
@@ -232,6 +238,8 @@ fun logTriggers() {
         "AtAlignmentSetpoint" to atAlignmentSetpoint,
         "IsWithinDistance" to isWithinDistance,
         "ShouldOpenElevator" to shouldOpenElevator,
+        "IsInRadiusOfReef" to isInRadiusOfReef,
+        "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
         "ableToNet" to ableToNet,
         "isL4" to isL4
     )
