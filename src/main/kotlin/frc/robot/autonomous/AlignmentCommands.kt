@@ -5,8 +5,11 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.LinearVelocity
+import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj.event.EventLoop
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
@@ -178,7 +181,7 @@ fun alignScoreL1(): Command =
 fun alignScoreL2(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
-            .onlyIf(RobotContainer.disableAlignment.negate()),
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignPrep(l2()),
         alignCommand(false),
         outtakeL2()
@@ -188,8 +191,7 @@ fun alignScoreL3(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrep(l3()),
-        alignCommand(),
+        alignCommand().alongWith(l3()),
         outtakeCoralAndDriveBack(false)
     )
 
@@ -226,9 +228,20 @@ private var isInRadiusOfReef =
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 
-private val shouldMoveWristUp = (gripper.hasCoral.and(isInRadiusOfReef).and(wristCurrentCommandIsNull).and(RobotContainer.disableAlignment.negate())).onTrue(
-    wrist.skyward()
-)
+private val shouldMoveWristUp =
+    (gripper.hasCoral
+        .and(isInRadiusOfReef)
+        .and(wristCurrentCommandIsNull)
+        .and(
+            CommandGenericHID(3).button(12).negate()
+        ))
+        .onTrue(wrist.skyward())
+
+private val shouldCloseWrist =
+    gripper.hasAlgae
+        .negate()
+        .and(isInRadiusOfReef.negate()).and(gripper.hasAlgae.negate())
+        .onTrue(wrist.feeder())
 
 var isL4 = Trigger { false }
 

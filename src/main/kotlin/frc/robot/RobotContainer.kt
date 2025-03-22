@@ -36,6 +36,7 @@ import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
@@ -52,10 +53,9 @@ import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.netAlgae
 import frc.robot.subsystems.outtakeCoralAndDriveBack
 import frc.robot.subsystems.outtakeL1
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -82,7 +82,7 @@ object RobotContainer {
     private val wrist = frc.robot.wrist
     val visualizer: Visualizer
     val voltage = Units.Volts.of(1.0)
-    val disableAlignment = heightController.button(12)
+    val disableAlignment: Trigger? = heightController.button(12)
     val disablePathFinding = heightController.button(11)
     val disableFeederAlign = heightController.button(10)
     val shouldNet = heightController.button(8)
@@ -129,13 +129,13 @@ object RobotContainer {
             .and(RobotModeTriggers.disabled())
             .onTrue(
                 Commands.runOnce(
-                    {
-                        swerveDrive.resetGyroBasedOnAlliance(
-                            Rotation2d.kZero
-                        )
-                    },
-                    swerveDrive
-                )
+                        {
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
@@ -144,20 +144,20 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                    {
-                        swerveDrive.resetGyroBasedOnAlliance(
-                            Rotation2d.kZero
-                        )
-                    },
-                    swerveDrive
-                )
+                        {
+                            swerveDrive.resetGyroBasedOnAlliance(
+                                Rotation2d.kZero
+                            )
+                        },
+                        swerveDrive
+                    )
                     .ignoringDisable(true)
             )
 
         // align score
         driverController
             .square()
-            .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
+            .whileTrue(alignScoreL2().onlyIf(disableAlignment!!.negate()))
             .onFalse(
                 moveDefaultPosition(false, { false }).onlyIf {
                     moveDefaultPosition(false, { false }).isScheduled.not()
@@ -166,19 +166,9 @@ object RobotContainer {
         driverController
             .circle()
             .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-            .onFalse(
-                moveDefaultPosition(false, { false }).onlyIf {
-                    moveDefaultPosition(false, { false }).isScheduled.not()
-                }
-            )
         driverController
             .triangle()
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-            .onFalse(
-                moveDefaultPosition(true, { false }).onlyIf {
-                    moveDefaultPosition(true, { false }).isScheduled.not()
-                }
-            )
 
         // manual score
         driverController.cross().onTrue(l1()).onFalse(outtakeL1())
@@ -346,11 +336,13 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                        (wrist.feeder().alongWith(gripper.intake())).withTimeout(
-                            0.25
-                        ),
-                "UseLocalEstimation" to Commands.runOnce({ swerveDrive.useLocalInAuto = true }),
-                "DisableLocalEstimation" to Commands.runOnce({ swerveDrive.useLocalInAuto = false})
+                    (wrist.feeder().alongWith(gripper.intake())).withTimeout(
+                        0.25
+                    ),
+                "UseLocalEstimation" to
+                    Commands.runOnce({ swerveDrive.useLocalInAuto = true }),
+                "DisableLocalEstimation" to
+                    Commands.runOnce({ swerveDrive.useLocalInAuto = false })
             )
 
         NamedCommands.registerCommands(namedCommands)
