@@ -257,6 +257,7 @@ private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 private val shouldMoveWristUp =
     (gripper.hasCoral
         .and(isInRadiusOfReef)
+        .and(gripper.hasAlgae.negate())
         .and(wristCurrentCommandIsNull)
         .and(
             CommandGenericHID(3).button(12).negate()
