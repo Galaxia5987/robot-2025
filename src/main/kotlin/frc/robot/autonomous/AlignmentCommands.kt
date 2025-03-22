@@ -183,8 +183,8 @@ fun alignScoreL2(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrep(l2()),
-        alignCommand(false),
+        alignPrep(Commands.none()),
+        alignCommand(false).alongWith(l2()),
         outtakeL2()
     )
 
