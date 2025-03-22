@@ -69,8 +69,7 @@ private fun visualizeCoralOuttake(): Command =
         )
     })
 
-fun outtakeCoralAndDriveBack(
-    moveWristUp: Boolean,
+fun outtakeCoralAlignment(
     isReverse: Boolean = false
 ): Command =
     sequence(
@@ -91,6 +90,27 @@ fun outtakeCoralAndDriveBack(
         gripper.slowOuttake(!isReverse).withTimeout(0.15),
         wrist.skyward().alongWith(elevator.zero())
     )
+
+fun outtakeCoralManual(isReverse: Boolean = false): Command =  sequence(
+    (gripper
+        .outtake(isReverse)
+        .withTimeout(0.3)
+        .andThen(
+            gripper
+                .outtake(isReverse)
+                .until(gripper.hasCoral.negate())
+                .alongWith(
+                    visualizeCoralOuttake().onlyIf {
+                        CURRENT_MODE != Mode.REAL
+                    }
+                )
+        ))
+        .withTimeout(0.5),
+    gripper.slowOuttake(!isReverse).withTimeout(0.15),
+    wrist.skyward(),
+    WaitCommand(0.2),
+    elevator.zero()
+)
 
 fun outtakeCoral(): Command =
     sequence(

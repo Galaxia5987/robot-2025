@@ -2,11 +2,12 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Seconds
 import edu.wpi.first.units.measure.LinearVelocity
-import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj.event.EventLoop
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
@@ -30,7 +31,7 @@ import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.pathFindPattern
 import frc.robot.subsystems.leds.redTeamPattern
 import frc.robot.subsystems.outtakeCoral
-import frc.robot.subsystems.outtakeCoralAndDriveBack
+import frc.robot.subsystems.outtakeCoralAlignment
 import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.outtakeL2
 import frc.robot.subsystems.raiseElevatorAtDistance
@@ -192,7 +193,7 @@ fun alignScoreL3(): Command =
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignCommand().alongWith(l3()),
-        outtakeCoralAndDriveBack(false)
+        outtakeCoralAlignment(false)
     )
 
 fun alignScoreL4(): Command =
@@ -200,7 +201,7 @@ fun alignScoreL4(): Command =
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         (alignCommand().alongWith(alignmentSetpointL4())),
-        outtakeCoralAndDriveBack(true)
+        outtakeCoralAlignment(false)
     )
 
 fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
@@ -223,8 +224,26 @@ val ableToNet = Trigger {
     NET_ZONE.flipIfNeeded().contains(swerveDrive.pose.translation)
 }
 
+val RADIUS_LOOKAHEAD_TIME = Seconds.of(0.5)
+
+fun getPoseLookaheadTime(): Pose2d {
+    val transform = Transform2d(
+        swerveDrive.fieldOrientedSpeeds.vxMetersPerSecond * RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+        swerveDrive.fieldOrientedSpeeds.vyMetersPerSecond * RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+        Rotation2d.kZero
+    )
+
+    if (IS_RED) {
+        transform.times(-1.0)
+    }
+
+    return swerveDrive.pose.plus(transform)
+}
+
 private var isInRadiusOfReef =
-    Trigger { swerveDrive.pose.distanceFromPoint(ReefCenter.flipIfNeeded()) < MOVE_WRIST_UP_RADIUS }
+    Trigger {
+        getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) < MOVE_WRIST_UP_RADIUS
+    }
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 
@@ -241,6 +260,7 @@ private val shouldCloseWrist =
     gripper.hasAlgae
         .negate()
         .and(isInRadiusOfReef.negate()).and(gripper.hasAlgae.negate())
+        .and(CommandGenericHID(3).button(12).negate())
         .onTrue(wrist.feeder())
 
 var isL4 = Trigger { false }

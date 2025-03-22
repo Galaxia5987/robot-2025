@@ -51,7 +51,8 @@ import frc.robot.subsystems.l3algaePickup
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.subsystems.netAlgae
-import frc.robot.subsystems.outtakeCoralAndDriveBack
+import frc.robot.subsystems.outtakeCoralAlignment
+import frc.robot.subsystems.outtakeCoralManual
 import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
@@ -176,17 +177,17 @@ object RobotContainer {
             .square()
             .and(disableAlignment)
             .onTrue(l2())
-            .onFalse(outtakeCoralAndDriveBack(false, isReverse = true))
+            .onFalse(outtakeCoralAlignment(true))
         driverController
             .circle()
             .and(disableAlignment)
             .onTrue(l3Manual())
-            .onFalse(outtakeCoralAndDriveBack(true))
+            .onFalse(outtakeCoralAlignment(true))
         driverController
             .triangle()
             .and(disableAlignment)
             .onTrue(l4())
-            .onFalse(outtakeCoralAndDriveBack(true))
+            .onFalse(outtakeCoralManual(true))
 
         // intake buttons
         driverController.R1().and(shouldNet.negate()).whileTrue(intakeAlgae())
