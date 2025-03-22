@@ -34,11 +34,12 @@ enum class Angles(val angle: Angle) {
     L3_ALGAE(Units.Degrees.of(130.0)),
     L3_ALGAE_PICKUP(Units.Degrees.of(120.0)),
     L3_ALGAE_PICKUP_END(Units.Degrees.of(140.0)),
-    FLOOR_ALGAE(Units.Degrees.of(70.0)),
+    FLOOR_ALGAE(Units.Degrees.of(55.0)),
     NET(Units.Degrees.of(210.0)),
     FEEDER(Units.Degrees.of(17.0)),
     BLOCKED_FEEDER(Units.Degrees.of(25.0)),
     MAX(Units.Degrees.of(245.0)),
+    SKYWARD(Units.Degrees.of(200.0)),
     ZERO(Units.Degrees.zero());
 
     fun getLoggingName() =

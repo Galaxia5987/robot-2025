@@ -81,6 +81,7 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun blockedFeeder(): Command = setAngle(Angles.BLOCKED_FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
+    fun skyward(): Command = setAngle(Angles.SKYWARD)
     fun max(): Command = setAngle(Angles.MAX)
     fun tuningAngle(): Command =
         run {
