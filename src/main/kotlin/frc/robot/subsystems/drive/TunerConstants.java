@@ -166,7 +166,7 @@ public class TunerConstants {
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-            kSlipCurrent = Amps.of(120.0);
+            kSlipCurrent = Amps.of(70.0);
             kMaxOmegaVelocity = RadiansPerSecond.of(17.76);
             kMaxAngularAcceleration = RadiansPerSecondPerSecond.of(16.15);
 
