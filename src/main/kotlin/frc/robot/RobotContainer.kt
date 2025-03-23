@@ -182,12 +182,12 @@ object RobotContainer {
             .circle()
             .and(disableAlignment)
             .onTrue(l3Manual())
-            .onFalse(outtakeCoralAlignment(false))
+            .onFalse(outtakeCoralAlignment())
         driverController
             .triangle()
             .and(disableAlignment)
             .onTrue(l4())
-            .onFalse(outtakeCoralManual(false))
+            .onFalse(outtakeCoralManual())
 
         // intake buttons
         driverController.R1().and(shouldNet.negate()).whileTrue(intakeAlgae())
