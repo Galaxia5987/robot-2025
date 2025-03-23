@@ -48,6 +48,8 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -55,6 +57,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.Mode;
+import frc.robot.autonomous.ScoreStateKt;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.math.GalacticSlewRateLimiter;
 import java.util.Optional;
@@ -143,6 +146,8 @@ public class Drive extends SubsystemBase {
     @AutoLogOutput private Rotation2d desiredHeading;
 
     private Rotation2d gyroOffset = Rotation2d.kZero;
+
+    private Field2d field = new Field2d();
 
     public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
@@ -330,6 +335,11 @@ public class Drive extends SubsystemBase {
         // Update gyro alert
         gyroDisconnectedAlert.set(
                 !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
+
+        field.setRobotPose(getPose());
+        field.getObject("selectedPose").setPose(ScoreStateKt.getSelectedScorePose().component1().invoke());
+        field.getObject("selectedFeeder").setPose(ScoreStateKt.getSelectedFeeder().invoke());
+        SmartDashboard.putData(field);
     }
 
     /**
