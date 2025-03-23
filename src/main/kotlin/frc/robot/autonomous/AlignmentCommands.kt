@@ -196,7 +196,8 @@ fun alignScoreL3(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignCommand().alongWith(l3()),
+        wrist.skyward(),
+        alignCommand().alongWith(raiseElevatorAtDistance(l3())),
         outtakeCoralAlignment(false)
     )
 
@@ -204,7 +205,8 @@ fun alignScoreL4(): Command =
     Commands.sequence(
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        (alignCommand().alongWith(alignmentSetpointL4())),
+        wrist.skyward(),
+        (alignCommand().alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
         outtakeCoralAlignment(false)
     )
 
