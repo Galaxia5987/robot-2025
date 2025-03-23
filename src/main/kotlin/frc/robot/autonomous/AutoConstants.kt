@@ -183,6 +183,6 @@ val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
 val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
 val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val NET_ZONE: Rectangle2d =
-    Rectangle2d(Translation2d(7.0, 8.0), Translation2d(8.0, 4.4))
+    Rectangle2d(Translation2d(7.3, 8.0), Translation2d(7.73, 4.4))
 val MOVE_WRIST_UP_RADIUS: Distance = Units.Meters.of(2.0)
 val MOVE_WRIST_DOWN_RADIUS: Distance = Units.Meters.of(2.2)
