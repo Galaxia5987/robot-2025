@@ -9,8 +9,7 @@ fun intakeAlgae(): Command =
     extender.extend().alongWith(roller.intake()).withName("Intake/Intake Algae")
 
 fun outtakeAlgae(retractTrigger: BooleanSupplier): Command =
-    (roller
-        .outtake().alongWith(extender.extend()))
+    (roller.outtake().alongWith(extender.extend()))
         .until(retractTrigger)
         .andThen(extender.retract())
         .withName("Intake/Outtake Algae")

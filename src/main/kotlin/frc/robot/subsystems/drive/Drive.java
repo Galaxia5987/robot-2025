@@ -519,7 +519,9 @@ public class Drive extends SubsystemBase {
 
     @AutoLogOutput(key = "Odometry/AutoPose")
     public Pose2d getPoseForAuto() {
-        return useLocalInAuto ? localPoseEstimator.getEstimatedPosition() : globalPoseEstimator.getEstimatedPosition();
+        return useLocalInAuto
+                ? localPoseEstimator.getEstimatedPosition()
+                : globalPoseEstimator.getEstimatedPosition();
     }
 
     /** Returns the local estimated pose. */
@@ -534,8 +536,8 @@ public class Drive extends SubsystemBase {
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.connected ?
-                gyroInputs.yawPosition.plus(gyroOffset)
+        return gyroInputs.connected
+                ? gyroInputs.yawPosition.plus(gyroOffset)
                 : getPose().getRotation().plus(Rotation2d.k180deg);
     }
 

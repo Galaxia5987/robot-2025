@@ -50,13 +50,11 @@ private fun pathFindToPose(
     goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()
 ): Command =
     AutoBuilder.pathfindToPose(
-        pose,
-        TunerConstants.PATH_CONSTRAINTS,
-        goalEndVelocity
-    ).apply {
-        addRequirements(swerveDrive)
-    }
-
+            pose,
+            TunerConstants.PATH_CONSTRAINTS,
+            goalEndVelocity
+        )
+        .apply { addRequirements(swerveDrive) }
 
 fun pathFindToSelectedFeeder(): Command =
     swerveDrive
@@ -65,10 +63,10 @@ fun pathFindToSelectedFeeder(): Command =
             pathFindToPose(selectedFeeder.invoke())
                 .andThen(
                     Commands.run({
-                        swerveDrive.limitlessRunVelocity(
-                            ChassisSpeeds(0.8, 0.0, 0.0)
-                        )
-                    })
+                            swerveDrive.limitlessRunVelocity(
+                                ChassisSpeeds(0.8, 0.0, 0.0)
+                            )
+                        })
                         .withTimeout(1.0)
                 )
                 .finallyDo(
@@ -169,14 +167,17 @@ fun alignCommand(moveBack: Boolean = true): Command =
     }
 
 private fun alignPrep(reefMasterCommand: Command): Command =
-    raiseElevatorAtDistance(reefMasterCommand).raceWith(
-        swerveDrive
-            .defer {
+    raiseElevatorAtDistance(reefMasterCommand)
+        .raceWith(
+            swerveDrive.defer {
                 alignToPose(
-                    selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.3)),
+                    selectedScorePose.first
+                        .invoke()
+                        .moveBack(Units.Meters.of(0.3)),
                     Trigger { false }
                 )
-            })
+            }
+        )
 
 fun alignScoreL1(): Command =
     alignCommand(false)
@@ -206,7 +207,8 @@ fun alignScoreL4(): Command =
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         wrist.skyward(),
-        (alignCommand().alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
+        (alignCommand()
+            .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
         outtakeCoralAlignment(false)
     )
 
@@ -233,11 +235,14 @@ val ableToNet = Trigger {
 val RADIUS_LOOKAHEAD_TIME = Seconds.of(0.5)
 
 fun getPoseLookaheadTime(): Pose2d {
-    val transform = Transform2d(
-        swerveDrive.fieldOrientedSpeeds.vxMetersPerSecond * RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
-        swerveDrive.fieldOrientedSpeeds.vyMetersPerSecond * RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
-        Rotation2d.kZero
-    )
+    val transform =
+        Transform2d(
+            swerveDrive.fieldOrientedSpeeds.vxMetersPerSecond *
+                RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+            swerveDrive.fieldOrientedSpeeds.vyMetersPerSecond *
+                RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+            Rotation2d.kZero
+        )
 
     if (IS_RED) {
         transform.times(-1.0)
@@ -246,35 +251,36 @@ fun getPoseLookaheadTime(): Pose2d {
     return swerveDrive.pose.plus(transform)
 }
 
-private val isInRadiusOfReef =
-    Trigger {
-        getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) < MOVE_WRIST_UP_RADIUS
-    }
+private val isInRadiusOfReef = Trigger {
+    getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) <
+        MOVE_WRIST_UP_RADIUS
+}
 
-private val isOutOfReef =
-    Trigger {
-        getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) > MOVE_WRIST_DOWN_RADIUS
-    }
+private val isOutOfReef = Trigger {
+    getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) >
+        MOVE_WRIST_DOWN_RADIUS
+}
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 
-private val justDidL2: Trigger = driverController.square().debounce(1.0, Debouncer.DebounceType.kFalling)
+private val justDidL2: Trigger =
+    driverController.square().debounce(1.0, Debouncer.DebounceType.kFalling)
 
 private val shouldMoveWristUp =
     (gripper.hasCoral
-        .and(isInRadiusOfReef)
-        .and(gripper.hasAlgae.negate())
-        .and(justDidL2.negate())
-        .and(wristCurrentCommandIsNull)
-        .and(
-            CommandGenericHID(3).button(12).negate()
-        )).and(RobotModeTriggers.teleop())
+            .and(isInRadiusOfReef)
+            .and(gripper.hasAlgae.negate())
+            .and(justDidL2.negate())
+            .and(wristCurrentCommandIsNull)
+            .and(CommandGenericHID(3).button(12).negate()))
+        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
     gripper.hasAlgae
         .negate()
-        .and(isOutOfReef).and(gripper.hasAlgae.negate())
+        .and(isOutOfReef)
+        .and(gripper.hasAlgae.negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
         .and(RobotModeTriggers.teleop())
@@ -284,16 +290,16 @@ var isL4 = Trigger { false }
 
 fun logTriggers() {
     mapOf(
-        "IsAligning" to isAligning,
-        "AtAlignmentSetpoint" to atAlignmentSetpoint,
-        "IsWithinDistance" to isWithinDistance,
-        "ShouldOpenElevator" to shouldOpenElevator,
-        "IsInRadiusOfReef" to isInRadiusOfReef,
-        "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
-        "ableToNet" to ableToNet,
-        "isL4" to isL4,
-        "justDidL2" to justDidL2
-    )
+            "IsAligning" to isAligning,
+            "AtAlignmentSetpoint" to atAlignmentSetpoint,
+            "IsWithinDistance" to isWithinDistance,
+            "ShouldOpenElevator" to shouldOpenElevator,
+            "IsInRadiusOfReef" to isInRadiusOfReef,
+            "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
+            "ableToNet" to ableToNet,
+            "isL4" to isL4,
+            "justDidL2" to justDidL2
+        )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
