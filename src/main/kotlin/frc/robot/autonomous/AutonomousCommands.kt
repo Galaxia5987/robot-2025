@@ -45,12 +45,12 @@ fun B1R(): Command =
 fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")).alongWith(
-            (wrist.feeder().alongWith(gripper.intake())).withTimeout(
-            0.25
-        ).andThen(
-            wrist.skyward()
-        )),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L"))
+            .alongWith(
+                (wrist.feeder().alongWith(gripper.intake()))
+                    .withTimeout(0.25)
+                    .andThen(wrist.skyward())
+            ),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -58,7 +58,8 @@ fun C6L(): Command =
 fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")).alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L"))
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -66,7 +67,8 @@ fun S5L(): Command =
 fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")).alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R"))
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
