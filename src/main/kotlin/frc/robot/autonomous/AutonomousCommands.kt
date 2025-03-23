@@ -5,12 +5,14 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.autonomousFeeder
 import frc.robot.subsystems.feeder
 import frc.robot.swerveDrive
+import frc.robot.wrist
 
 fun feederPath(pathName: String, mirror: Boolean = false): Command =
     AutoBuilder.followPath(
@@ -43,7 +45,12 @@ fun B1R(): Command =
 fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")).alongWith(
+            (wrist.feeder().alongWith(gripper.intake())).withTimeout(
+            0.25
+        ).andThen(
+            wrist.skyward()
+        )),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -51,7 +58,7 @@ fun C6L(): Command =
 fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")).alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -59,7 +66,7 @@ fun S5L(): Command =
 fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")).alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )

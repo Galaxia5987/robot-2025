@@ -47,17 +47,6 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ResetCoral",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 0.2967884828349932,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ResetCoral"
-        }
-      }
-    },
-    {
       "name": "UseLocalEstimation",
       "waypointRelativePos": 0.5646794150731237,
       "endWaypointRelativePos": null,
