@@ -348,7 +348,7 @@ public class Drive extends SubsystemBase {
      *
      * @param fieldSpeeds Speeds in meters/sec
      */
-    public void fieldOrientedRunVelocity(ChassisSpeeds fieldSpeeds, Boolean isFlipped) {
+    public void fieldOrientedRunVelocity(ChassisSpeeds fieldSpeeds) {
         double elevatorHeight = InitializerKt.getElevator().getHeight().invoke().in(Meters);
 
         // Accel limits
@@ -364,13 +364,12 @@ public class Drive extends SubsystemBase {
         limitlessRunVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         fieldSpeeds,
-                        isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation()));
+                        getRotation().plus(new Rotation2d(Math.PI))));
     }
 
     public void robotOrientedRunVelocity(ChassisSpeeds speeds) {
         fieldOrientedRunVelocity(
-                ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getPose().getRotation()),
-                ConstantsKt.getIS_RED());
+                ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getPose().getRotation()));
     }
 
     public void limitlessRunVelocity(ChassisSpeeds speeds) {
