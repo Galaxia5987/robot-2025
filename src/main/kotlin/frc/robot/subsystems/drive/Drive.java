@@ -363,8 +363,7 @@ public class Drive extends SubsystemBase {
 
         limitlessRunVelocity(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        fieldSpeeds,
-                        getRotation().plus(new Rotation2d(Math.PI))));
+                        fieldSpeeds, getRotation().plus(new Rotation2d(Math.PI))));
     }
 
     public void robotOrientedRunVelocity(ChassisSpeeds speeds) {
