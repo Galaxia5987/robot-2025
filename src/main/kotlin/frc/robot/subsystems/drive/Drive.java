@@ -534,9 +534,7 @@ public class Drive extends SubsystemBase {
 
     /** Returns the current gyro rotation or the estimated rotation if the gyro disconnects. */
     public Rotation2d getRotation() {
-        return gyroInputs.connected
-                ? gyroInputs.yawPosition.plus(gyroOffset)
-                : getPose().getRotation();
+        return gyroInputs.yawPosition.plus(gyroOffset);
     }
 
     public Rotation2d[] getGyroMeasurements() {
