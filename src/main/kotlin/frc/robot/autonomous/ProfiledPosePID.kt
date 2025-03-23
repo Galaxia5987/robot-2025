@@ -25,7 +25,7 @@ private val thetaKD = LoggedNetworkNumber("/Tuning/AutoAlign/thetaKD", 0.0)
 private val LINEAR_CONSTRAINTS =
     Constraints(
         TunerConstants.kSpeedAt12Volts.`in`(Units.MetersPerSecond),
-        Units.MetersPerSecondPerSecond.of(2.0)
+        Units.MetersPerSecondPerSecond.of(2.8)
             .`in`(Units.MetersPerSecondPerSecond)
     )
 
