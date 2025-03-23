@@ -114,8 +114,8 @@ object RobotContainer {
         swerveDrive.defaultCommand =
             DriveCommands.joystickDrive(
                 swerveDrive,
-                { driverController.leftY },
-                { driverController.leftX },
+                { driverController.leftY * if (IS_RED) 1.0 else -1.0 },
+                { driverController.leftX * if (IS_RED) 1.0 else -1.0 },
                 { -driverController.rightX * 0.8 }
             )
 
