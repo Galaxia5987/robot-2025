@@ -1,6 +1,7 @@
 package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
+import frc.robot.RobotContainer.driverController
 import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
@@ -254,10 +256,13 @@ private val isOutOfReef =
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 
+private val justDidL2: Trigger = driverController.square().debounce(1.0, Debouncer.DebounceType.kFalling)
+
 private val shouldMoveWristUp =
     (gripper.hasCoral
         .and(isInRadiusOfReef)
         .and(gripper.hasAlgae.negate())
+        .and(justDidL2.negate())
         .and(wristCurrentCommandIsNull)
         .and(
             CommandGenericHID(3).button(12).negate()
@@ -284,7 +289,8 @@ fun logTriggers() {
         "IsInRadiusOfReef" to isInRadiusOfReef,
         "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
         "ableToNet" to ableToNet,
-        "isL4" to isL4
+        "isL4" to isL4,
+        "justDidL2" to justDidL2
     )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
