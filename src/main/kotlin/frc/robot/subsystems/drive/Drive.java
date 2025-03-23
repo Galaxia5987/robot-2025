@@ -337,7 +337,8 @@ public class Drive extends SubsystemBase {
                 !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
 
         field.setRobotPose(getPose());
-        field.getObject("selectedPose").setPose(ScoreStateKt.getSelectedScorePose().component1().invoke());
+        field.getObject("selectedPose")
+                .setPose(ScoreStateKt.getSelectedScorePose().component1().invoke());
         field.getObject("selectedFeeder").setPose(ScoreStateKt.getSelectedFeeder().invoke());
         SmartDashboard.putData(field);
     }
