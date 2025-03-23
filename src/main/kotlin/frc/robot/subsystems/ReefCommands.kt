@@ -218,7 +218,7 @@ fun alignL2(): Command =
 fun alignmentSetpointL4(): Command =
     parallel(
             elevator.alignL4(),
-            wrist.alignL4(),
+            WaitCommand(0.18).andThen(wrist.alignL4()),
             runOnce({ isL4 = Trigger { true } })
         )
         .withName("Reef/Auto L4")
