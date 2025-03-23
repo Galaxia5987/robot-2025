@@ -209,7 +209,7 @@ fun alignScoreL4(): Command =
         (alignCommand()
             .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
         outtakeCoralAlignment(false)
-    )
+    ).withName("alignScoreL4")
 
 fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
 
@@ -272,7 +272,7 @@ private val shouldMoveWristUp =
             .and(justDidL2.negate())
             .and(wristCurrentCommandIsNull)
             .and(CommandGenericHID(3).button(12).negate()))
-        .and(RobotModeTriggers.teleop())
+//        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
@@ -282,7 +282,7 @@ private val shouldCloseWrist =
         .and(gripper.hasAlgae.negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
-        .and(RobotModeTriggers.teleop())
+//        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.feeder().alongWith(elevator.feeder()))
 
 var isL4 = Trigger { false }

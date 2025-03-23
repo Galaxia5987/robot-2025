@@ -180,7 +180,7 @@ val X_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
 val Y_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
-val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.18)
+val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.0)
 val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val NET_ZONE: Rectangle2d =
     Rectangle2d(Translation2d(7.3, 8.0), Translation2d(7.73, 4.4))

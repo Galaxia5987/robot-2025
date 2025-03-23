@@ -58,17 +58,6 @@
       }
     },
     {
-      "name": "MoveL4",
-      "waypointRelativePos": 0.5492801771871476,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "MoveL4"
-        }
-      }
-    },
-    {
       "name": "UseLocalEstimation",
       "waypointRelativePos": 0.5646794150731237,
       "endWaypointRelativePos": null,

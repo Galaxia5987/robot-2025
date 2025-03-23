@@ -44,7 +44,7 @@ fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
@@ -52,7 +52,7 @@ fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
@@ -60,7 +60,7 @@ fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
@@ -70,7 +70,7 @@ fun A2R(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("C6L").mirrorPath()
         ),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
@@ -80,7 +80,7 @@ private fun S3R(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5L").mirrorPath()
         ),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
@@ -90,7 +90,7 @@ private fun S3L(): Command =
         AutoBuilder.followPath(
             PathPlannerPath.fromPathFile("S5R").mirrorPath()
         ),
-        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
