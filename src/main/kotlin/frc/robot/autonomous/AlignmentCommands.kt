@@ -12,6 +12,7 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
 import frc.robot.RobotContainer
@@ -265,14 +266,18 @@ private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 private val justDidL2: Trigger =
     driverController.square().debounce(1.0, Debouncer.DebounceType.kFalling)
 
+private val doingL1: Trigger =
+    driverController.cross().debounce(1.0, Debouncer.DebounceType.kFalling)
+
 private val shouldMoveWristUp =
     (gripper.hasCoral
             .and(isInRadiusOfReef)
             .and(gripper.hasAlgae.negate())
             .and(justDidL2.negate())
+            .and(doingL1.negate())
             .and(wristCurrentCommandIsNull)
             .and(CommandGenericHID(3).button(12).negate()))
-        //        .and(RobotModeTriggers.teleop())
+                .and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
@@ -282,7 +287,7 @@ private val shouldCloseWrist =
         .and(gripper.hasAlgae.negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
-        //        .and(RobotModeTriggers.teleop())
+                .and(RobotModeTriggers.teleop())
         .onTrue(wrist.feeder().alongWith(elevator.feeder()))
 
 var isL4 = Trigger { false }
