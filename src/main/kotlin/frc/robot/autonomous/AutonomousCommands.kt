@@ -52,7 +52,7 @@ fun C6L(): Command =
                     .withTimeout(0.25)
                     .andThen(WaitCommand(0.75).andThen(elevator.alignL4().alongWith(wrist.alignL4())))
             ),
-        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 

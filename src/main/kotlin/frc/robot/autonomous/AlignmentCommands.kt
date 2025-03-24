@@ -212,7 +212,15 @@ fun alignScoreL4(): Command =
         )
         .withName("alignScoreL4")
 
-fun autoScoreL4(): Command = alignCommand().andThen(outtakeCoral())
+fun autoScoreL4(): Command =
+    Commands.sequence(
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        (alignCommand()
+            .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
+        outtakeCoralAlignment(false)
+    )
+        .withName("alignScoreL4")
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean
