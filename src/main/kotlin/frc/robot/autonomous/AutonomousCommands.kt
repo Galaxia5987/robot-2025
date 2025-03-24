@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.autonomousFeeder
@@ -49,7 +50,7 @@ fun C6L(): Command =
             .alongWith(
                 (wrist.feeder().alongWith(gripper.intake()))
                     .withTimeout(0.25)
-                    .andThen(wrist.skyward())
+                    .andThen(WaitCommand(0.75).andThen(elevator.alignL4().alongWith(wrist.alignL4())))
             ),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
