@@ -110,7 +110,8 @@ fun C6L5LR(): Command =
         feederPath("6LS"),
         S5L().until(gripper.autoHasCoral.negate()),
         feederPath("5LS"),
-        S5R().until(gripper.autoHasCoral.negate())
+        S5R().until(gripper.autoHasCoral.negate()),
+        feederPath("5RS")
     )
 
 fun pathFindC6L5LR(): Command =
@@ -134,5 +135,6 @@ fun A2R3RL(): Command =
         feederPath("6LS", true),
         S3R().until(gripper.autoHasCoral.negate()),
         feederPath("5LS", true),
-        S3L().until(gripper.autoHasCoral.negate())
+        S3L().until(gripper.autoHasCoral.negate()),
+        feederPath("5RS")
     )
