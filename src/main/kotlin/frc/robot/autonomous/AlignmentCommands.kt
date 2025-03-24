@@ -34,7 +34,6 @@ import frc.robot.subsystems.leds.alignPattern
 import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.pathFindPattern
 import frc.robot.subsystems.leds.redTeamPattern
-import frc.robot.subsystems.outtakeCoral
 import frc.robot.subsystems.outtakeCoralAlignment
 import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.outtakeL2
@@ -214,12 +213,12 @@ fun alignScoreL4(): Command =
 
 fun autoScoreL4(): Command =
     Commands.sequence(
-        pathFindToSelectedScorePose()
-            .onlyIf(RobotContainer.disablePathFinding.negate()),
-        (alignCommand()
-            .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
-        outtakeCoralAlignment(false)
-    )
+            pathFindToSelectedScorePose()
+                .onlyIf(RobotContainer.disablePathFinding.negate()),
+            (alignCommand()
+                .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
+            outtakeCoralAlignment(false)
+        )
         .withName("alignScoreL4")
 
 private val atAlignmentSetpoint = Trigger {
@@ -285,7 +284,7 @@ private val shouldMoveWristUp =
             .and(doingL1.negate())
             .and(wristCurrentCommandIsNull)
             .and(CommandGenericHID(3).button(12).negate()))
-                .and(RobotModeTriggers.teleop())
+        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
@@ -295,7 +294,7 @@ private val shouldCloseWrist =
         .and(gripper.hasAlgae.negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
-                .and(RobotModeTriggers.teleop())
+        .and(RobotModeTriggers.teleop())
         .onTrue(wrist.feeder().alongWith(elevator.feeder()))
 
 var isL4 = Trigger { false }

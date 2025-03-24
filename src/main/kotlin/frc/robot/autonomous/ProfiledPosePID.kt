@@ -11,9 +11,9 @@ import frc.robot.lib.getSpeed
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.swerveDrive
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
-import kotlin.math.absoluteValue
 
 private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 4.0)
 private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
@@ -74,7 +74,7 @@ val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
         .and(thetaController::atGoal)
-        .and{swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03}
+        .and { swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 }
         .debounce(0.05)
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {

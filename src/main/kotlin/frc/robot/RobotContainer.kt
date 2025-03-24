@@ -272,8 +272,8 @@ object RobotContainer {
             .onTrue(blockedFeeder(Trigger { true }, disableAlignment))
 
         // auto lower climb
-        Trigger {DriverStation.getMatchTime() <= 20}
-            .onTrue(climber.powerControl{1.0}.withTimeout(2.3))
+        Trigger { DriverStation.getMatchTime() <= 20 }
+            .onTrue(climber.powerControl { 1.0 }.withTimeout(2.3))
 
         // overrides and resets
         operatorController

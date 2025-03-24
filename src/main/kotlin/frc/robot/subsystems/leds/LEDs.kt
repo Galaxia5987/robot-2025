@@ -52,8 +52,9 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
-    fun setLedsBasedOnAlliance(): Command =
-        defer{setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)}
+    fun setLedsBasedOnAlliance(): Command = defer {
+        setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+    }
 
     private val isEndGame =
         Trigger {
