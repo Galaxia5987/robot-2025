@@ -7,10 +7,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.getSpeed
 import frc.robot.subsystems.drive.TunerConstants
+import frc.robot.swerveDrive
 import kotlin.math.abs
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+import kotlin.math.absoluteValue
 
 private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 4.0)
 private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)
@@ -71,7 +74,8 @@ val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
         .and(thetaController::atGoal)
-        .debounce(0.15)
+        .and{swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03}
+        .debounce(0.05)
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     xController.reset(botPose.x, -botSpeeds.vxMetersPerSecond)
