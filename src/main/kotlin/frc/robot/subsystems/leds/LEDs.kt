@@ -52,6 +52,9 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
+    fun setLedsBasedOnAlliance(): Command =
+        defer{setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)}
+
     private val isEndGame =
         Trigger {
                 DriverStation.getMatchTime() < 20 &&
@@ -69,7 +72,7 @@ class LEDs : SubsystemBase() {
         ableToNet
             .and(isAligning.negate())
             .onTrue(setPattern(all = ableToNetPattern))
-            .onFalse(setPattern(all = redTeamPattern))
+            .onFalse(setLedsBasedOnAlliance())
 
     val blueDefaultPattern: Trigger =
         isEndGame
