@@ -68,4 +68,10 @@ fun climbBit(): Command =
     )
 
 fun runAllBits(): Command =
-    sequence(driveBit(), intakeBit(), elevatorWristBit(), algaeBit(), climbBit())
+    sequence(
+        driveBit(),
+        intakeBit(),
+        elevatorWristBit(),
+        algaeBit(),
+        climbBit()
+    )
