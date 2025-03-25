@@ -9,6 +9,7 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
+import frc.robot.subsystems.l2algaePickup
 import frc.robot.subsystems.l3
 import frc.robot.subsystems.l4
 import frc.robot.subsystems.moveDefaultPosition
@@ -53,6 +54,13 @@ fun elevatorWristBit(): Command =
         moveDefaultPosition(true)
     )
 
+fun algaeBit(): Command =
+    sequence(
+        l2algaePickup(),
+        WaitCommand(2.5),
+        gripper.outtake().withTimeout(0.2)
+    )
+
 fun climbBit(): Command =
     sequence(
         climber.powerControl { 1.0 }.withTimeout(1.5),
@@ -60,4 +68,4 @@ fun climbBit(): Command =
     )
 
 fun runAllBits(): Command =
-    sequence(driveBit(), intakeBit(), elevatorWristBit(), climbBit())
+    sequence(driveBit(), intakeBit(), elevatorWristBit(), algaeBit(), climbBit())
