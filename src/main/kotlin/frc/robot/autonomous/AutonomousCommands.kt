@@ -82,19 +82,26 @@ fun S5R(): Command =
 fun A2R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("C6L").mirrorPath()
-        ),
-        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L").mirrorPath())
+            .alongWith(
+                (wrist.feeder().alongWith(gripper.intake()))
+                    .withTimeout(0.25)
+                    .andThen(
+                        WaitCommand(0.75)
+                            .andThen(
+                                elevator.alignL4().alongWith(wrist.alignL4())
+                            )
+                    )
+            ),
+        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
 
 private fun S3R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5L").mirrorPath()
-        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath())
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -102,9 +109,8 @@ private fun S3R(): Command =
 private fun S3L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5R").mirrorPath()
-        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath())
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
     )
@@ -141,5 +147,5 @@ fun A2R3RL(): Command =
         S3R().until(gripper.autoHasCoral.negate()),
         feederPath("5LS", true),
         S3L().until(gripper.autoHasCoral.negate()),
-        feederPath("5RS")
+        feederPath("5RS", true)
     )
