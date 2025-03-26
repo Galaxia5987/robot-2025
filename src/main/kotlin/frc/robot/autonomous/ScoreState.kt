@@ -28,7 +28,7 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                     "ScoreState/SelectedScorePose",
                     selectedScorePose.first.invoke()
                 )
-                
+
                 resetProfiledPID(
                     swerveDrive.localEstimatedPose,
                     swerveDrive.fieldOrientedSpeeds
