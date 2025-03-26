@@ -89,11 +89,13 @@ fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
 
-fun Translation2d.mirror(): Translation2d = Translation2d(this.x, FlippingUtil.fieldSizeY - this.y)
+fun Translation2d.mirror(): Translation2d =
+    Translation2d(this.x, FlippingUtil.fieldSizeY - this.y)
 
 fun Pose2d.mirror(): Pose2d = Pose2d(this.translation.mirror(), this.rotation)
 
-fun Rectangle2d.mirror(): Rectangle2d = Rectangle2d(this.center.mirror(), this.xWidth, this.yWidth)
+fun Rectangle2d.mirror(): Rectangle2d =
+    Rectangle2d(this.center.mirror(), this.xWidth, this.yWidth)
 
 fun Rectangle2d.flip(): Rectangle2d =
     Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)

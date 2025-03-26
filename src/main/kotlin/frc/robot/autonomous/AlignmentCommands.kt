@@ -236,7 +236,7 @@ val shouldOpenElevator = Trigger {
 }
 
 val ableToNet = Trigger {
-    NET_ZONES.any {it.flipIfNeeded().contains(swerveDrive.pose.translation)}
+    NET_ZONES.any { it.flipIfNeeded().contains(swerveDrive.pose.translation) }
 }
 
 val RADIUS_LOOKAHEAD_TIME = Seconds.of(0.5)

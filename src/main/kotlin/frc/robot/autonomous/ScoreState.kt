@@ -34,7 +34,11 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                     swerveDrive.fieldOrientedSpeeds
                 )
                 if (elevator.setpointName.name in listOf("L3", "L4")) {
-                    setGoal(selectedScorePose.first.invoke().moveBack(Units.Meters.of(0.1)))
+                    setGoal(
+                        selectedScorePose.first
+                            .invoke()
+                            .moveBack(Units.Meters.of(0.1))
+                    )
                 } else {
                     setGoal(selectedScorePose.first.invoke())
                 }

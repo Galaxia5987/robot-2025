@@ -17,6 +17,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,4 +77,6 @@ public class VisionConstants {
             Double.POSITIVE_INFINITY; // No rotation data available
 
     public static int frontCameraIndex = 1;
+
+    public static Distance MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL = Units.Meters.of(1.0);
 }
