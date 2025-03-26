@@ -270,7 +270,7 @@ private val isOutOfReef = Trigger {
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
 
-private val justDidL2: Trigger =
+val justDidL2: Trigger =
     driverController.square().debounce(1.0, Debouncer.DebounceType.kFalling)
 
 private val doingL1: Trigger =
