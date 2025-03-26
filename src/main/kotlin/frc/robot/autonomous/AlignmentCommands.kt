@@ -35,6 +35,7 @@ import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.pathFindPattern
 import frc.robot.subsystems.leds.redTeamPattern
 import frc.robot.subsystems.outtakeCoralAlignment
+import frc.robot.subsystems.outtakeCoralL3Alignment
 import frc.robot.subsystems.outtakeL1
 import frc.robot.subsystems.outtakeL2
 import frc.robot.subsystems.raiseElevatorAtDistance
@@ -197,7 +198,7 @@ fun alignScoreL3(): Command =
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         wrist.skyward(),
         alignCommand().alongWith(raiseElevatorAtDistance(l3())),
-        outtakeCoralAlignment(false)
+        outtakeCoralL3Alignment()
     )
 
 fun alignScoreL4(): Command =
