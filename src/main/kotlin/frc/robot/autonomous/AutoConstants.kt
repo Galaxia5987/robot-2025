@@ -15,6 +15,7 @@ import frc.robot.IS_RED
 import frc.robot.lib.flip
 import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.getTranslation2d
+import frc.robot.lib.mirror
 import java.io.File
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -184,5 +185,7 @@ val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.0)
 val PATH_FIND_END_VELOCITY: LinearVelocity = Units.MetersPerSecond.of(0.5)
 val NET_ZONE: Rectangle2d =
     Rectangle2d(Translation2d(7.3, 8.0), Translation2d(7.73, 4.4))
+val OPPOSING_NET_ZONE = NET_ZONE.mirror()
+val NET_ZONES = listOf(NET_ZONE, OPPOSING_NET_ZONE)
 val MOVE_WRIST_UP_RADIUS: Distance = Units.Meters.of(2.0)
 val MOVE_WRIST_DOWN_RADIUS: Distance = Units.Meters.of(2.2)
