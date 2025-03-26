@@ -11,6 +11,7 @@ const val GEAR_RATIO = 1.0
 
 val DISTANCE_THRESHOLD: Distance = Units.Centimeters.of(14.2)
 val INTAKE_VOLTAGE: Voltage = Units.Volts.of(7.5)
+val OUTTAKE_L3: Voltage = Units.Volts.of(6.0)
 val OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(12.0)
 val SLOW_OUTTAKE_VOLTAGE: Voltage = Units.Volts.of(3.5)
 val FAST_OUTTAKE_VOLTAGE = Units.Volts.of(10.0)
