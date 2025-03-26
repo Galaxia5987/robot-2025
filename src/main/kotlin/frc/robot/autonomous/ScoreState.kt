@@ -21,7 +21,7 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
         {
             runOnce({
-                val newSelectedScorePose =
+                selectedScorePose =
                     buttonToPoseAndTagMap[buttonID]
                         ?: throw Exception("No pose for button $buttonID!!!")
                 Logger.recordOutput(
@@ -29,23 +29,19 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                     selectedScorePose.first.invoke()
                 )
 
-                if (newSelectedScorePose.first.invoke().translation != selectedScorePose.first.invoke().translation) {
-                    resetProfiledPID(
-                        swerveDrive.localEstimatedPose,
-                        swerveDrive.fieldOrientedSpeeds
+                resetProfiledPID(
+                    swerveDrive.localEstimatedPose,
+                    swerveDrive.fieldOrientedSpeeds
+                )
+                if (justDidL2.negate().asBoolean) {
+                    setGoal(
+                        selectedScorePose.first
+                            .invoke()
+                            .moveBack(Units.Meters.of(0.1))
                     )
-                    if (justDidL2.negate().asBoolean) {
-                        setGoal(
-                            selectedScorePose.first
-                                .invoke()
-                                .moveBack(Units.Meters.of(0.1))
-                        )
-                    } else {
-                        setGoal(selectedScorePose.first.invoke())
-                    }
+                } else {
+                    setGoal(selectedScorePose.first.invoke())
                 }
-
-                selectedScorePose = newSelectedScorePose
             })
         },
         setOf()

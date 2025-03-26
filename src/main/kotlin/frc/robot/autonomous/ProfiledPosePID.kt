@@ -86,12 +86,6 @@ fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     )
 }
 
-fun getGoalPose() = Pose2d(
-    xController.goal.position,
-    yController.goal.position,
-    Rotation2d.fromRadians(thetaController.goal.position)
-)
-
 /**
  * Returns field relative chassis speeds to the selected goal.
  * @botPose the current pose of the robot
@@ -152,7 +146,11 @@ fun getSpeed(botPose: Pose2d): () -> ChassisSpeeds {
 
     Logger.recordOutput(
         "AutoAlignment/GoalPose",
-        getGoalPose()
+        Pose2d(
+            xController.goal.position,
+            yController.goal.position,
+            Rotation2d.fromRadians(thetaController.goal.position)
+        )
     )
 
     return { fieldRelativeSpeeds }
