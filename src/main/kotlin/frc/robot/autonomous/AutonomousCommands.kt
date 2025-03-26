@@ -64,6 +64,7 @@ fun C6L(): Command =
 fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("S5L").startingHolonomicPose.get()),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L"))
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
@@ -73,6 +74,7 @@ fun S5L(): Command =
 fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("S5R").startingHolonomicPose.get()),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R"))
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
@@ -100,6 +102,7 @@ fun A2R(): Command =
 private fun S3R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
+        AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("S5L").mirrorPath().startingHolonomicPose.get()),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath())
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
@@ -109,6 +112,7 @@ private fun S3R(): Command =
 private fun S3L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
+        AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("S5R").mirrorPath().startingHolonomicPose.get()),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath())
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
