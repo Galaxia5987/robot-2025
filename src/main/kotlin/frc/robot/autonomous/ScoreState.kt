@@ -24,10 +24,6 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                 val newSelectedScorePose =
                     buttonToPoseAndTagMap[buttonID]
                         ?: throw Exception("No pose for button $buttonID!!!")
-                Logger.recordOutput(
-                    "ScoreState/SelectedScorePose",
-                    selectedScorePose.first.invoke()
-                )
 
                 if (newSelectedScorePose.first.invoke().translation != selectedScorePose.first.invoke().translation) {
                     resetProfiledPID(
@@ -46,6 +42,11 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                 }
 
                 selectedScorePose = newSelectedScorePose
+
+                Logger.recordOutput(
+                    "ScoreState/SelectedScorePose",
+                    selectedScorePose.first.invoke()
+                )
             })
         },
         setOf()
