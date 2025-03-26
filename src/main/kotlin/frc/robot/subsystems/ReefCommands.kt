@@ -72,23 +72,22 @@ private fun visualizeCoralOuttake(): Command =
 fun outtakeCoralL3Alignment(): Command =
     sequence(
         (gripper
-            .outtakeL3()
-            .withTimeout(0.3)
-            .andThen(
-                gripper
-                    .outtakeL3()
-                    .until(gripper.hasCoral.negate())
-                    .alongWith(
-                        visualizeCoralOuttake().onlyIf {
-                            CURRENT_MODE != Mode.REAL
-                        }
-                    )
-            ))
+                .outtakeL3()
+                .withTimeout(0.3)
+                .andThen(
+                    gripper
+                        .outtakeL3()
+                        .until(gripper.hasCoral.negate())
+                        .alongWith(
+                            visualizeCoralOuttake().onlyIf {
+                                CURRENT_MODE != Mode.REAL
+                            }
+                        )
+                ))
             .withTimeout(0.5),
         gripper.slowOuttake(true).withTimeout(0.15),
         wrist.skyward().alongWith(elevator.zero())
     )
-
 
 fun outtakeCoralAlignment(isReverse: Boolean = false): Command =
     sequence(
