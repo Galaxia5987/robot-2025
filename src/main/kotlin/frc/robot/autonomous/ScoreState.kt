@@ -17,10 +17,16 @@ var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
 
 var selectedFeeder: () -> Pose2d = { FeederRight.flipIfNeeded() }
 
+private var lastButtonID = -1
+
 fun setPoseBasedOnButton(buttonID: Int): Command {
     return Commands.defer(
         {
             runOnce({
+                if (buttonID == lastButtonID) {
+                    return@runOnce
+                }
+
                 selectedScorePose =
                     buttonToPoseAndTagMap[buttonID]
                         ?: throw Exception("No pose for button $buttonID!!!")
@@ -42,6 +48,8 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                 } else {
                     setGoal(selectedScorePose.first.invoke())
                 }
+
+                lastButtonID = buttonID
             })
         },
         setOf()
