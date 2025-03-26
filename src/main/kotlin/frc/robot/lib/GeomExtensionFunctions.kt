@@ -1,7 +1,14 @@
 package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.*
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rectangle2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Transform3d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
@@ -81,6 +88,12 @@ fun Rotation2d.toPose(): Pose2d = Pose2d(Translation2d(), this)
 fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
+
+fun Translation2d.mirror(): Translation2d = Translation2d(this.x, FlippingUtil.fieldSizeY - this.y)
+
+fun Pose2d.mirror(): Pose2d = Pose2d(this.translation.mirror(), this.rotation)
+
+fun Rectangle2d.mirror(): Rectangle2d = Rectangle2d(this.center.mirror(), this.xWidth, this.yWidth)
 
 fun Rectangle2d.flip(): Rectangle2d =
     Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
