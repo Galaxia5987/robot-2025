@@ -78,5 +78,5 @@ public class VisionConstants {
 
     public static int frontCameraIndex = 1;
 
-    public static Distance MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL = Units.Meters.of(1.0);
+    public static Distance MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL = Units.Meters.of(1.5);
 }
