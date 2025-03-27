@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.gripper
+import frc.robot.lib.extensions.then
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
@@ -15,7 +16,7 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
     AutoBuilder.followPath(
             if (mirror) PathPlannerPath.fromPathFile(pathName).mirrorPath()
             else PathPlannerPath.fromPathFile(pathName)
-        ) then
+    ) then
             Commands.run({
                     swerveDrive.runVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
                 })

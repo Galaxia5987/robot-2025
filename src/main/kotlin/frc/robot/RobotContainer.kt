@@ -15,28 +15,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
-import frc.robot.lib.enableAutoLogOutputFor
-import frc.robot.lib.extensions.volts
-import frc.robot.subsystems.Visualizer
-import frc.robot.subsystems.alignmentSetpointL4
-import frc.robot.subsystems.blockedFeeder
+import frc.robot.compositions.autonomous.selectedScorePose
+import frc.robot.compositions.autonomous.setPoseBasedOnButton
+import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.then
+import frc.robot.subsystems.*
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
-import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
-import frc.robot.subsystems.l1
-import frc.robot.subsystems.l2
-import frc.robot.subsystems.l2algae
-import frc.robot.subsystems.l3Manual
-import frc.robot.subsystems.l3algae
-import frc.robot.subsystems.l4
-import frc.robot.subsystems.moveDefaultPosition
-import frc.robot.subsystems.outtakeCoralAndDriveBack
-import frc.robot.subsystems.outtakeL1
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -51,7 +41,6 @@ object RobotContainer {
     private val operatorController = CommandXboxController(1)
     private val testController = CommandXboxController(2)
     private val heightController = CommandGenericHID(3)
-    private val poseController = CommandGenericHID(4)
 
     val visualizer: Visualizer
     val disableAlignment = heightController.button(12)
@@ -71,6 +60,13 @@ object RobotContainer {
             SimulatedArena.getInstance().resetFieldForAuto()
 
         enableAutoLogOutputFor(this)
+    }
+
+    private fun configureButtonBox() {
+        val buttonBox = CommandGenericHID(4)
+        (1..12).zip('A'..'L').forEach { (buttonNumber, location) ->
+            buttonBox.button(buttonNumber).onTrue( { selectedScorePose = location } )
+        }
     }
 
     @AutoLogOutput(key = "MapleSimPose")
@@ -256,9 +252,9 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                    feeder(Trigger { true }, { false })
-                        .andThen(WaitCommand(0.4))
-                        .andThen(gripper.intake().withTimeout(0.25)),
+                        (feeder(Trigger { true }, { false })
+                                then WaitCommand(0.4)
+                                then gripper.intake().withTimeout(0.25)),
             )
 
         NamedCommands.registerCommands(namedCommands)
@@ -279,3 +275,5 @@ object RobotContainer {
         autoChooser.addOption("A2R3RL", A2R3RL())
     }
 }
+
+private fun Trigger.onTrue(function: () -> Unit) = onTrue(Commands.runOnce(function))

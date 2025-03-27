@@ -8,9 +8,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.subsystems.drive.TunerConstants
-import kotlin.math.abs
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
+import kotlin.math.abs
 
 private val xKP = LoggedNetworkNumber("/Tuning/AutoAlign/xKP", 7.0)
 private val xKI = LoggedNetworkNumber("/Tuning/AutoAlign/xKI", 0.0)

@@ -1,18 +1,16 @@
 package frc.robot.compositions.autonomous
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands.defer
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
-import frc.robot.swerveDrive
-import org.littletonrobotics.junction.AutoLogOutput
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID
+import frc.robot.lib.extensions.onTrue
 import org.littletonrobotics.junction.Logger
 
 // Alignment target pose, if never set, supplies the current robot position
-var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
-    Pair({ swerveDrive.pose }, { 0 })
-@AutoLogOutput(key = "Auto Alignment/Selected score pose")
-var selectedScorePose = Reef1
-@AutoLogOutput(key = "Auto Alignment/Is left")
-var isLeft = false
+var selectedScorePose: Pose2d = Pose2d()
+var selectedScorePoseTagId: Int = 0
 
 data class ScoreLocation(val name: String, val pose: Pose2d, val tagId: Int) {
     companion object {
@@ -20,8 +18,19 @@ data class ScoreLocation(val name: String, val pose: Pose2d, val tagId: Int) {
     }
 }
 
+private fun configureButtonBox() {
+    val buttonBox = CommandGenericHID(4)
+    (1..12).zip('A'..'L').forEach { (buttonNumber, location) ->
+        val side = if (buttonNumber % 2 == 0) "L" else "R"
+        buttonBox.button(buttonNumber).onTrue({ selectedScorePose = location })
+    }
+}
+
+
 fun setPoseBasedOnButton(buttonID: Int): Command {
-    return Commands.defer(
+    val s = ScoreLocation("2L", Pose2d(), 3)
+    val a = s.copy(tagId = 3)
+    return defer(
         {
             runOnce({
                 selectedScorePose =
@@ -29,21 +38,10 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                         ?: throw Exception("No pose for button $buttonID!!!")
                 Logger.recordOutput(
                     "ScoreState/SelectedScorePose",
-                    selectedScorePose.first.invoke()
+                    selectedScorePose
                 )
             })
         },
         setOf()
     )
-    return runOnce({
-        selectedScorePose = buttonToPoseMap[buttonID]?.first ?: throw Exception("No pose for button $buttonID!")
-
-        isLeft = buttonToPoseMap[buttonID]?.second ?: throw Exception(
-            "isLeft not configured for $buttonID!"
-        )
-
-        Logger.recordOutput(
-            "ScoreState/SelectedScorePose", selectedScorePose.flipIfNeeded()
-        )
-    })
 }

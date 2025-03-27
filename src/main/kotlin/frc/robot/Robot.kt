@@ -12,12 +12,11 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.Mode.REAL
-import frc.robot.Mode.REPLAY
-import frc.robot.Mode.SIM
+import frc.robot.Mode.*
 import frc.robot.autonomous.logTriggers
-import frc.robot.autonomous.selectedScorePose
-import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.compositions.autonomous.selectedScorePose
+import frc.robot.compositions.autonomous.selectedScorePoseTagId
+import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.redTeamPattern
@@ -145,11 +144,11 @@ object Robot : LoggedRobot() {
         logTriggers()
         Logger.recordOutput(
             "ScoreState/SelectedScorePose",
-            selectedScorePose.first.invoke()
+            selectedScorePose
         )
         Logger.recordOutput(
             "ScoreState/TagOfSelectedScorePose",
-            selectedScorePose.second
+            selectedScorePoseTagId
         )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
