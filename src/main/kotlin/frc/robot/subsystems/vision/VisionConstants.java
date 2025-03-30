@@ -17,6 +17,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class VisionConstants {
     // Camera names, must match names configured on coprocessor
     public static String FrontRightOVName = "frontRight";
     public static String FrontLeftOVName = "frontLeft";
-    public static String BackOVName = "backLeft";
+    public static String FeederOVName = "feeder";
 
     // Robot to camera transforms
     // (Not used by Limelight, configure in web UI instead)
@@ -38,19 +40,16 @@ public class VisionConstants {
     public static Transform3d robotToFrontLeftOV =
             new Transform3d(
                     0.24886, 0.11411, 0.59876, new Rotation3d(0.0, Math.toRadians(35.0), 0.0));
-    public static Transform3d robotToBackOV =
+    public static Transform3d robotToFeederOV =
             new Transform3d(
-                    -0.12635,
-                    0.23345,
-                    0.55208,
-                    new Rotation3d(0.0, Math.toRadians(-15.0), Math.toRadians(155.0)));
+                    0.22306, 0.21289, 0.76926, new Rotation3d(0.0, Math.toRadians(-40.0), 0.0));
 
     public static Map<String, Transform3d> OVNameToTransform =
             new HashMap<>() {
                 {
                     put(FrontRightOVName, robotToFrontRightOV);
                     put(FrontLeftOVName, robotToFrontLeftOV);
-                    put(BackOVName, robotToBackOV);
+                    put(FeederOVName, robotToFeederOV);
                 }
             };
 
@@ -78,4 +77,6 @@ public class VisionConstants {
             Double.POSITIVE_INFINITY; // No rotation data available
 
     public static int frontCameraIndex = 1;
+
+    public static Distance MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL = Units.Meters.of(1.5);
 }

@@ -1,7 +1,14 @@
 package frc.robot.lib
 
 import com.pathplanner.lib.util.FlippingUtil
-import edu.wpi.first.math.geometry.*
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rectangle2d
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Transform3d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
@@ -10,6 +17,16 @@ import frc.robot.IS_RED
 
 fun Pose2d.moveBack(distance: Distance): Pose2d =
     this + Transform2d(-distance, Units.Meters.zero(), Rotation2d.kZero)
+
+fun Pose2d.moveTowards(target: Pose2d, distance: Distance): Pose2d {
+    val direction = this - target.withRotation(Rotation2d.kZero)
+    if (direction.translation.norm < (distance.`in`(Units.Meters)))
+        return target.withRotation(this.rotation)
+    return (this.withRotation(Rotation2d.kZero) +
+            (direction) / direction.translation.norm *
+                (-distance.`in`(Units.Meters)))
+        .withRotation(this.rotation)
+}
 
 fun Translation2d.getRotationToTranslation(other: Translation2d): Rotation2d =
     (this - other).angle
@@ -71,3 +88,18 @@ fun Rotation2d.toPose(): Pose2d = Pose2d(Translation2d(), this)
 fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)
+
+fun Translation2d.mirror(): Translation2d =
+    Translation2d(this.x, FlippingUtil.fieldSizeY - this.y)
+
+fun Pose2d.mirror(): Pose2d = Pose2d(this.translation.mirror(), this.rotation)
+
+fun Rectangle2d.mirror(): Rectangle2d =
+    Rectangle2d(this.center.mirror(), this.xWidth, this.yWidth)
+
+fun Rectangle2d.flip(): Rectangle2d =
+    Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
+
+fun Rectangle2d.flipIfNeeded(): Rectangle2d =
+    if (IS_RED) Rectangle2d(this.center.flip(), this.xWidth, this.yWidth)
+    else this

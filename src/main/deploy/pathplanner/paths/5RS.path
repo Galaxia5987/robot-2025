@@ -1,0 +1,80 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7056587837837838,
+        "y": 2.394510135135134
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.162162162162162,
+        "y": 1.8114864864864852
+      },
+      "isLocked": false,
+      "linkedName": "5R"
+    },
+    {
+      "anchor": {
+        "x": 1.455852272727273,
+        "y": 0.9088778409090901
+      },
+      "prevControl": {
+        "x": 2.3770002457002457,
+        "y": 1.3768677057739547
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.3477297895902529,
+      "constraints": {
+        "maxVelocity": 3.8,
+        "maxAcceleration": 2.3,
+        "maxAngularVelocity": 350.0,
+        "maxAngularAcceleration": 180.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "MoveFeeder",
+      "waypointRelativePos": 0.11446409989594164,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "MoveFeeder"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.8,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 350.0,
+    "maxAngularAcceleration": 485.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": -125.00000000000001
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": true
+}

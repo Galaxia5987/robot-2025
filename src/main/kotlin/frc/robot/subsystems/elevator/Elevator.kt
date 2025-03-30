@@ -33,6 +33,11 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
+    var almostAtSetpoint = Trigger {
+        io.inputs.height.isNear(setpointValue, ALMOST_AT_SETPOINT_TOLERANCE)
+    }
+
+    @AutoLogOutput
     private val isStuck = Trigger {
         maxOf(
             io.inputs.mainMotorCurrent.abs(Units.Amps),
@@ -67,8 +72,18 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
     fun l2Algae(): Command =
         setHeight(Positions.L2_ALGAE).withName("Elevator/L2 Algae")
 
+    fun l2AlgaePickup(): Command =
+        setHeight(Positions.L2_ALGAE_PICKUP)
+            .withName("Elevator/L2 Algae Pickup")
+
     fun l3Algae(): Command =
         setHeight(Positions.L3_ALGAE).withName("Elevator/L3 Algae")
+
+    fun l3AlgaePickup(): Command =
+        setHeight(Positions.L3_ALGAE_PICKUP)
+            .withName("Elevator/L3 Algae Pickup")
+
+    fun net(): Command = setHeight(Positions.NET).withName("Elevator/Net")
 
     fun feeder(): Command =
         setHeight(Positions.FEEDER).withName("Elevator/Feeder")
@@ -128,7 +143,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                     Units.Volt.of(6.0),
                     Units.Second.of(1.5),
                     { state: State ->
-                        Logger.recordOutput("Elevator/state", state)
+                        Logger.recordOutput("Elevator/state", state.toString())
                     }
                 ),
                 SysIdRoutine.Mechanism(
@@ -144,7 +159,7 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
                     Units.Volt.of(4.0),
                     Units.Second.of(1.5),
                     { state: State ->
-                        Logger.recordOutput("Elevator/state", state)
+                        Logger.recordOutput("Elevator/state", state.toString())
                     }
                 ),
                 SysIdRoutine.Mechanism(

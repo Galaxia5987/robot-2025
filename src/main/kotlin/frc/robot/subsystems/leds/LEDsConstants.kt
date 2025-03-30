@@ -14,6 +14,8 @@ val SCROLLING_SPEED_TEAM_PATTERN: LinearVelocity = Units.MetersPerSecond.of(0.2)
 
 val BLINKING_OFF_TIME: Time = Units.Second.of(0.5)
 val BLINKING_ON_TIME: Time = Units.Second.of(1.0)
+val PATH_FIND_BLINKING_ON_TIME: Time = Units.Second.of(0.03)
+val PATH_FIND_BLINKING_OFF_TIME: Time = Units.Second.of(0.03)
 val LED_SPACING: Distance = Meters.of(1 / 120.0)
 const val STRIP_LENGTH = 41
 const val LED_STRIP_PORT = 1
@@ -23,6 +25,8 @@ val CLIMBER_PATTERN_BRIGHTNESS: Dimensionless = Units.Percent.of(50.0)
 val BLUE_BRIGHTNESS: Dimensionless = Units.Percent.of(20.0)
 val RED_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val ALIGN_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
+val PATH_FIND_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
+val NET_BRIGHTNESS: Dimensionless = Units.Percent.of(40.0)
 val GRADIENT_PINK: Color = Color(255, 0, 148)
 val blueTeamPattern: LEDPattern =
     LEDPattern.gradient(
@@ -45,6 +49,11 @@ val redTeamPattern: LEDPattern =
 val alignPattern: LEDPattern =
     LEDPattern.solid(Color.kGreen).atBrightness(ALIGN_BRIGHTNESS)
 
+val pathFindPattern: LEDPattern =
+    LEDPattern.solid(Color.kYellow)
+        .atBrightness(PATH_FIND_BRIGHTNESS)
+        .blink(PATH_FIND_BLINKING_ON_TIME, PATH_FIND_BLINKING_OFF_TIME)
+
 val climbPattern: LEDPattern =
     LEDPattern.rainbow(255, 128)
         .scrollAtAbsoluteSpeed(SCROLLING_SPEED_RAINBOW, LED_SPACING)
@@ -54,3 +63,6 @@ val gripperPattern: LEDPattern =
     LEDPattern.solid(Color.kWhiteSmoke)
         .blink(BLINKING_ON_TIME, BLINKING_OFF_TIME)
         .atBrightness(GRIPPER_PATTERN_BRIGHTNESS)
+
+val ableToNetPattern: LEDPattern =
+    LEDPattern.solid(Color.kOrange).atBrightness(NET_BRIGHTNESS)

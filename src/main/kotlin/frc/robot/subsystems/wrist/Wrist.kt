@@ -32,6 +32,11 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
         setpointValue.isNear(io.inputs.angle, AT_SETPOINT_TOLERANCE)
     }
 
+    @AutoLogOutput
+    var almostAtSetpoint: Trigger = Trigger {
+        setpointValue.isNear(io.inputs.angle, ALMOST_AT_SETPOINT_TOLERANCE)
+    }
+
     private val tuningAngleDegrees =
         LoggedNetworkNumber("/Tuning/Wrist/Angle", 0.0)
 
@@ -66,10 +71,17 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
     fun alignL2(): Command = setAngle(Angles.ALIGN_L2)
     fun alignL4(): Command = setAngle(Angles.ALIGN_L4)
     fun l2algae(): Command = setAngle(Angles.L2_ALGAE)
+    fun l2algaePickup(): Command = setAngle(Angles.L2_ALGAE_PICKUP)
+    fun l2algaePickupEnd(): Command = setAngle(Angles.L2_ALGAE_PICKUP_END)
     fun l3algae(): Command = setAngle(Angles.L3_ALGAE)
+    fun l3algaePickup(): Command = setAngle(Angles.L3_ALGAE_PICKUP)
+    fun l3algaePickupEnd(): Command = setAngle(Angles.L3_ALGAE_PICKUP_END)
+    fun floorAlgae(): Command = setAngle(Angles.FLOOR_ALGAE)
+    fun net(): Command = setAngle(Angles.NET)
     fun feeder(): Command = setAngle(Angles.FEEDER)
     fun blockedFeeder(): Command = setAngle(Angles.BLOCKED_FEEDER)
     fun retract(): Command = setAngle(Angles.ZERO)
+    fun skyward(): Command = setAngle(Angles.SKYWARD)
     fun max(): Command = setAngle(Angles.MAX)
     fun tuningAngle(): Command =
         run {

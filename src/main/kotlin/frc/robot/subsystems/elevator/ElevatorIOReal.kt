@@ -38,7 +38,7 @@ class ElevatorIOReal : ElevatorIO {
             kP = GAINS.kP
             kI = GAINS.kI
             kD = GAINS.kD
-            kG = 0.0
+            kG = GAINS.kG
         }
     private val softLimitsConfig =
         SoftwareLimitSwitchConfigs().apply {

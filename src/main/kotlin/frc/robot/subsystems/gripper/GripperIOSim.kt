@@ -29,9 +29,9 @@ class GripperIOSim : GripperIO {
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
-        inputs.sensorDistance.mut_replace(
-            Units.Centimeters.of(sensorDistance.get())
-        )
-        inputs.appliedVoltage.mut_replace(motor.appliedVoltage)
+        inputs.sensorDistance = Units.Centimeters.of(sensorDistance.get())
+
+        inputs.current = motor.appliedCurrent
+        inputs.appliedVoltage = motor.appliedVoltage
     }
 }
