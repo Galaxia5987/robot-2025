@@ -1,0 +1,185 @@
+{
+  "name": "ButtonBox5987Reef",
+  "components": [
+    {
+      "_comment": "1L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        333,
+        577
+      ],
+      "sizePx": [
+        65,
+        65
+      ],
+      "sourceIndex": 9
+    },
+    {
+      "_comment": "1R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        434,
+        577
+      ],
+      "sizePx": [
+        65,
+        65
+      ],
+      "sourceIndex": 10
+    },
+    {
+      "_comment": "2R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        567,
+        504
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 11
+    },
+    {
+      "_comment": "3R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        618,
+        417
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 12
+    },
+    {
+      "_comment": "4R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        616,
+        272
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 1
+    },
+    {
+      "_comment": "5R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        566,
+        185
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 2
+    },
+    {
+      "_comment": "6R",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        440,
+        114
+      ],
+      "sizePx": [
+        61,
+        61
+      ],
+      "sourceIndex": 3
+    },
+    {
+      "_comment": "6L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        338,
+        114
+      ],
+      "sizePx": [
+        61,
+        61
+      ],
+      "sourceIndex": 5
+    },
+    {
+      "_comment": "5L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        210,
+        185
+      ],
+      "sizePx": [
+        65,
+        65
+      ],
+      "sourceIndex": 6
+    },
+    {
+      "_comment": "4L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        157,
+        270
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 7
+    },
+    {
+      "_comment": "3L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        155,
+        415
+      ],
+      "sizePx": [
+        64,
+        64
+      ],
+      "sourceIndex": 4
+    },
+    {
+      "_comment": "2L",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        205,
+        503
+      ],
+      "sizePx": [
+        63,
+        63
+      ],
+      "sourceIndex": 8
+    }
+  ]
+}

@@ -26,15 +26,15 @@ class GripperIOReal : GripperIO {
             TalonFXConfiguration().apply {
                 MotorOutput =
                     MotorOutputConfigs().apply {
-                        NeutralMode = NeutralModeValue.Coast
-                        Inverted = InvertedValue.Clockwise_Positive
+                        NeutralMode = NeutralModeValue.Brake
+                        Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 CurrentLimits =
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
                         SupplyCurrentLimitEnable = true
-                        StatorCurrentLimit = 40.0
-                        SupplyCurrentLimit = 20.0
+                        StatorCurrentLimit = 80.0
+                        SupplyCurrentLimit = 40.0
                     }
             }
         )
@@ -51,9 +51,9 @@ class GripperIOReal : GripperIO {
             calculatedDistance = 80.0
         }
 
-        inputs.sensorDistance.mut_replace(
-            Units.Centimeters.of(calculatedDistance)
-        )
-        inputs.appliedVoltage.mut_replace(motor.motorVoltage.value)
+        inputs.sensorDistance = Units.Centimeters.of(calculatedDistance)
+
+        inputs.current = motor.statorCurrent.value
+        inputs.appliedVoltage = motor.motorVoltage.value
     }
 }

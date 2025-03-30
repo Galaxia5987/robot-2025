@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
+import frc.robot.autonomous.ableToNet
 import frc.robot.autonomous.isAligning
 import frc.robot.gripper
 
@@ -51,18 +52,28 @@ class LEDs : SubsystemBase() {
         ledStrip.setData(ledBuffer)
     }
 
+    fun setLedsBasedOnAlliance(): Command = defer {
+        setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
+    }
+
     private val isEndGame =
         Trigger {
                 DriverStation.getMatchTime() < 20 &&
                     DriverStation.getMatchTime() > -1
             }
             .and(RobotModeTriggers.teleop())
-            .onTrue(setPattern(climbPattern))
+            .onTrue(setPattern(all = climbPattern))
 
     private val gripperTrigger: Trigger =
         gripper.hasCoral
             .and(isEndGame.negate())
             .onTrue(setPattern(all = gripperPattern))
+
+    private val netLEDs: Trigger =
+        ableToNet
+            .and(isAligning.negate())
+            .onTrue(setPattern(all = ableToNetPattern))
+            .onFalse(setLedsBasedOnAlliance())
 
     val blueDefaultPattern: Trigger =
         isEndGame

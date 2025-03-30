@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3905737704918033,
-        "y": 1.2498463114754088
+        "x": 1.455852272727273,
+        "y": 0.9088778409090901
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.003573956780923,
-        "y": 3.073257963859909
+        "x": 2.297946191646192,
+        "y": 2.2464623003685484
       },
       "isLocked": false,
       "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 3.629659090909091,
-        "y": 2.9131676136363636
+        "x": 3.3597972972972974,
+        "y": 2.4340371621621615
       },
       "prevControl": {
-        "x": 3.069866430422806,
-        "y": 1.7628755374509464
+        "x": 3.009307432761065,
+        "y": 1.757621522939722
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,45 +29,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6866002214839426,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 450.0,
-        "maxAngularAcceleration": 600.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "MoveL4",
-      "waypointRelativePos": 0.7264673311184809,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "MoveL4"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 3.8,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 650.0,
-    "maxAngularAcceleration": 715.0,
+    "maxAngularVelocity": 350.0,
+    "maxAngularAcceleration": 485.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.8,
     "rotation": 59.99999999999999
   },
   "reversed": false,

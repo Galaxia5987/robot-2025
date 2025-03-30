@@ -21,9 +21,12 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.InitializerKt;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -145,7 +148,9 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                boolean rejectPose = !isObservationValid(observation);
+                boolean shouldIgnoreFeederInAuto =
+                        io[cameraIndex].getName().equals(FeederOVName) && RobotState.isAutonomous();
+                boolean rejectPose = !isObservationValid(observation) || shouldIgnoreFeederInAuto;
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -181,8 +186,16 @@ public class Vision extends SubsystemBase {
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
             }
 
+            boolean isWithinMaxDistanceFromGlobal =
+                    InitializerKt.getSwerveDrive()
+                                    .getPose()
+                                    .minus(inputs[cameraIndex].localEstimatedPose.pose().toPose2d())
+                                    .getTranslation()
+                                    .getNorm()
+                            < MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL.in(Units.Meters);
             if (isObservationValid(inputs[cameraIndex].localEstimatedPose)
-                    && !io[cameraIndex].getName().equals(BackOVName)) {
+                    && !io[cameraIndex].getName().equals(FeederOVName)
+                    && isWithinMaxDistanceFromGlobal) {
                 var stddevs =
                         calculateStddev(
                                 inputs[cameraIndex].localEstimatedPose.averageTagDistance(),

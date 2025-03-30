@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
+import frc.robot.autonomous.getPoseLookaheadTime
 import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.selectedFeeder
 import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
@@ -151,8 +153,18 @@ object Robot : LoggedRobot() {
             "ScoreState/TagOfSelectedScorePose",
             selectedScorePose.second
         )
+        Logger.recordOutput(
+            "ScoreState/SelectedFeeder",
+            selectedFeeder.invoke()
+        )
 
         Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
+        Logger.recordOutput(
+            "disablePathFinding",
+            RobotContainer.disablePathFinding
+        )
+        Logger.recordOutput("shouldNet", RobotContainer.shouldNet)
+        Logger.recordOutput("LookaheadPose", getPoseLookaheadTime())
     }
 
     /**
@@ -168,7 +180,7 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        swerveDrive.resetGyro(
+        swerveDrive.setGyroOffset(
             if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
         )
         swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
@@ -188,6 +200,7 @@ object Robot : LoggedRobot() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
         }
+        swerveDrive.useLocalInAuto = false
     }
 
     override fun simulationPeriodic() {

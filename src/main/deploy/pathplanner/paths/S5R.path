@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3905737704918033,
-        "y": 1.2498463114754088
+        "x": 1.455852272727273,
+        "y": 0.9088778409090901
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.750001224555681,
-        "y": 3.1501591276100864
+        "x": 2.1991286240786243,
+        "y": 2.117999462530711
       },
       "isLocked": false,
       "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 3.9188352272727274,
-        "y": 2.6738494318181822
+        "x": 3.7056587837837838,
+        "y": 2.394510135135134
       },
       "prevControl": {
-        "x": 3.0740629457029063,
-        "y": 1.6681810074533465
+        "x": 3.1226351351351345,
+        "y": 1.4755067567567561
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,45 +29,19 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7862679955703215,
-      "maxWaypointRelativePos": 0.9944629014396453,
-      "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 450.0,
-        "maxAngularAcceleration": 600.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "MoveL4",
-      "waypointRelativePos": 0.8283499446290032,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "MoveL4"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 3.8,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 650.0,
-    "maxAngularAcceleration": 715.0,
+    "maxAngularVelocity": 350.0,
+    "maxAngularAcceleration": 485.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.8,
     "rotation": 59.99999999999999
   },
   "reversed": false,

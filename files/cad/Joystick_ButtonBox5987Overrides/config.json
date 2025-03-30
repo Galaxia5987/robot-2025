@@ -1,0 +1,145 @@
+{
+  "name": "ButtonBox5987Overrides",
+  "components": [
+    {
+      "_comment": "Align",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        2019,
+        392
+      ],
+      "sizePx": [
+        140,
+        140
+      ],
+      "sourceIndex": 12
+    },
+    {
+      "_comment": "Pathfinding",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        1637,
+        396
+      ],
+      "sizePx": [
+        130,
+        130
+      ],
+      "sourceIndex": 11
+    },
+    {
+      "_comment": "Feeder",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        1243,
+        396
+      ],
+      "sizePx": [
+        130,
+        130
+      ],
+      "sourceIndex": 10
+    },
+    {
+      "_comment": "Nothing",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        865,
+        385
+      ],
+      "sizePx": [
+        130,
+        130
+      ],
+      "sourceIndex": 9
+    },
+    {
+      "_comment": "NetProccesor",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        483,
+        361
+      ],
+      "sizePx": [
+        130,
+        130
+      ],
+      "sourceIndex": 8
+    },
+    {
+      "_comment": "4",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        2955,
+        934
+      ],
+      "sizePx": [
+        250,
+        250
+      ],
+      "sourceIndex": 9
+    },
+    {
+      "_comment": "3",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        2955,
+        1330
+      ],
+      "sizePx": [
+        250,
+        250
+      ],
+      "sourceIndex": 9
+    },
+    {
+      "_comment": "2",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        2955,
+        1725
+      ],
+      "sizePx": [
+        250,
+        250
+      ],
+      "sourceIndex": 9
+    },
+    {
+      "_comment": "1",
+      "type": "button",
+      "isYellow": true,
+      "isEllipse": true,
+      "centerPx": [
+        2955,
+        2119
+      ],
+      "sizePx": [
+        250,
+        250
+      ],
+      "sourceIndex": 9
+    }
+
+
+
+
+
+  ]
+}

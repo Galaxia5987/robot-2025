@@ -5,6 +5,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
@@ -20,6 +21,19 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
     @AutoLogOutput
     val hasCoral: Trigger =
         Trigger { io.inputs.sensorDistance < DISTANCE_THRESHOLD }
+            .debounce(
+                DEBOUNCE_TIME.`in`(Units.Seconds),
+                Debouncer.DebounceType.kBoth
+            )
+
+    @AutoLogOutput
+    val autoHasCoral: Trigger = Trigger {
+        io.inputs.sensorDistance < DISTANCE_THRESHOLD
+    }
+
+    @AutoLogOutput
+    val hasAlgae: Trigger =
+        Trigger { io.inputs.current > ALGAE_CURRENT }
             .debounce(
                 DEBOUNCE_TIME.`in`(Units.Seconds),
                 Debouncer.DebounceType.kBoth
@@ -48,11 +62,21 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
         setVoltage(if (reversed) -OUTTAKE_VOLTAGE else OUTTAKE_VOLTAGE)
             .withName("Gripper/Outtake")
 
+    fun outtakeL3(): Command =
+        setVoltage(OUTTAKE_L3).withName("Gripper/L3Outtake")
+
     fun fastOuttake(): Command =
         setVoltage(FAST_OUTTAKE_VOLTAGE).withName("Gripper/FastOuttake")
 
     fun removeAlgae(): Command =
         setVoltage(REMOVE_ALGAE_VOLTAGE).withName("Gripper/RemoveAlgae")
+
+    fun intakeAlgae(): Command =
+        Commands.runOnce({ io.setVoltage(INTAKE_ALGAE_VOLTAGE) })
+            .withName("Gripper/IntakeAlgae")
+
+    fun outtakeAlgae(): Command =
+        setVoltage(OUTTAKE_ALGAE_VOLTAGE).withName("Gripper/OuttakeAlgae")
 
     override fun periodic() {
         rollerAngle += Units.Rotations.of(getVoltage() * kV * 0.02)

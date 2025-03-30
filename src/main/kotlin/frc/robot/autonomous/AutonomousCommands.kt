@@ -5,11 +5,15 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.elevator
 import frc.robot.gripper
+import frc.robot.lib.flipIfNeeded
+import frc.robot.subsystems.autonomousFeeder
 import frc.robot.subsystems.feeder
-import frc.robot.subsystems.moveDefaultPosition
 import frc.robot.swerveDrive
+import frc.robot.wrist
 
 fun feederPath(pathName: String, mirror: Boolean = false): Command =
     AutoBuilder.followPath(
@@ -18,9 +22,11 @@ fun feederPath(pathName: String, mirror: Boolean = false): Command =
         )
         .andThen(
             Commands.run({
-                    swerveDrive.runVelocity(ChassisSpeeds(0.8, 0.0, 0.0))
+                    swerveDrive.limitlessRunVelocity(
+                        ChassisSpeeds(0.8, 0.0, 0.0)
+                    )
                 })
-                .raceWith(feeder(Trigger { true }))
+                .raceWith(autonomousFeeder())
         )
 
 fun B1L(): Command =
@@ -40,95 +46,124 @@ fun B1R(): Command =
 fun C6L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L")),
-        alignScoreL4()
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L"))
+            .alongWith(
+                (wrist.feeder().alongWith(gripper.intake()))
+                    .withTimeout(0.25)
+                    .andThen(
+                        WaitCommand(0.75)
+                            .andThen(
+                                elevator.alignL4().alongWith(wrist.alignL4())
+                            )
+                    )
+            ),
+        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
-private fun S5L(): Command =
+fun S5L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L")),
-        autoScoreL4()
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("S5L").startingHolonomicPose.get()
+        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L"))
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
-private fun S5R(): Command =
+fun S5R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R")),
-        autoScoreL4()
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("S5R").startingHolonomicPose.get()
+        ),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R"))
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
 fun A2R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[7]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("C6L").mirrorPath()
-        ),
-        alignScoreL4()
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("C6L").mirrorPath())
+            .alongWith(
+                (wrist.feeder().alongWith(gripper.intake()))
+                    .withTimeout(0.25)
+                    .andThen(
+                        WaitCommand(0.75)
+                            .andThen(
+                                elevator.alignL4().alongWith(wrist.alignL4())
+                            )
+                    )
+            ),
+        Commands.repeatingSequence(autoScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
 private fun S3R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[8]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5L").mirrorPath()
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("S5L")
+                .mirrorPath()
+                .startingHolonomicPose
+                .get()
         ),
-        autoScoreL4()
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5L").mirrorPath())
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
 private fun S3L(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[4]!! }),
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("S5R").mirrorPath()
+        AutoBuilder.resetOdom(
+            PathPlannerPath.fromPathFile("S5R")
+                .mirrorPath()
+                .startingHolonomicPose
+                .get()
         ),
-        autoScoreL4()
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R").mirrorPath())
+            .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
+        Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
+            .until(gripper.autoHasCoral.negate())
     )
 
 fun C6L5LR(): Command =
     Commands.sequence(
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
-        C6L(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        C6L().until(gripper.autoHasCoral.negate()),
         feederPath("6LS"),
-        S5L(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
-        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        S5L().until(gripper.autoHasCoral.negate()),
         feederPath("5LS"),
-        S5R(),
-        Commands.either(
-            alignScoreL4()
-                .andThen(
-                    moveDefaultPosition(true).onlyIf(gripper.hasCoral.negate())
-                ),
-            Commands.none(),
-            gripper.hasCoral
-        ),
+        S5R().until(gripper.autoHasCoral.negate()),
+        feederPath("5RS")
+    )
+
+fun pathFindC6L5LR(): Command =
+    Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[1]!! }),
+        alignScoreL4(),
+        Commands.runOnce({ selectedFeeder = { FeederRight.flipIfNeeded() } }),
+        pathFindToSelectedFeeder()
+            .withDeadline(feeder(Trigger { true }, { false })),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[11]!! }),
+        alignScoreL4(),
+        pathFindToSelectedFeeder()
+            .withDeadline(feeder(Trigger { true }, { false })),
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[12]!! }),
+        alignScoreL4()
     )
 
 fun A2R3RL(): Command =
     Commands.sequence(
-        A2R(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        A2R().until(gripper.autoHasCoral.negate()),
         feederPath("6LS", true),
-        S3R(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        S3R().until(gripper.autoHasCoral.negate()),
         feederPath("5LS", true),
-        S3L(),
-        Commands.either(alignScoreL4(), Commands.none(), gripper.hasCoral),
+        S3L().until(gripper.autoHasCoral.negate()),
+        feederPath("5RS", true)
     )
