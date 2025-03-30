@@ -1,6 +1,7 @@
 package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -26,6 +27,7 @@ import frc.robot.lib.flipIfNeeded
 import frc.robot.lib.moveBack
 import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
@@ -36,6 +38,7 @@ import frc.robot.subsystems.leds.alignPattern
 import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.pathFindPattern
 import frc.robot.subsystems.leds.redTeamPattern
+import frc.robot.subsystems.netAlgae
 import frc.robot.subsystems.outtakeCoralAlignment
 import frc.robot.subsystems.outtakeCoralL3Alignment
 import frc.robot.subsystems.outtakeL1
@@ -277,6 +280,23 @@ fun alignToReefAlgae3(): Command =
         }).withTimeout(0.3),
         wrist.max()
     )
+
+fun alignAlgaeToNet(): Command {
+    var isOnOtherSide: Boolean
+    return swerveDrive.defer{
+        isOnOtherSide = swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
+        val driveAngle = { Rotation2d.fromDegrees(if (isOnOtherSide) 180.0 else 0.0) }
+        val drivePower = { if (isOnOtherSide) 0.7 else -0.7 }
+        Logger.recordOutput("AutoAlignment/isOnOtherSide", isOnOtherSide)
+        Commands.sequence(
+            elevator.zero(),
+            DriveCommands.joystickDriveAtAngle(swerveDrive, drivePower, { 0.0 }, driveAngle)
+                .until(ableToNet),
+            netAlgae(Trigger { true })
+                .alongWith(Commands.runOnce(swerveDrive::stop))
+        )
+    }
+}
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean

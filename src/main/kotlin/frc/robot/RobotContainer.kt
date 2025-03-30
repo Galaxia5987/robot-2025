@@ -25,6 +25,7 @@ import frc.robot.autonomous.C6L
 import frc.robot.autonomous.C6L5LR
 import frc.robot.autonomous.S5L
 import frc.robot.autonomous.S5R
+import frc.robot.autonomous.alignAlgaeToNet
 import frc.robot.autonomous.alignScoreL1
 import frc.robot.autonomous.alignScoreL2
 import frc.robot.autonomous.alignScoreL3
@@ -266,10 +267,16 @@ object RobotContainer {
             .onTrue(l3algaePickup())
             .onFalse(wrist.max())
 
-        // net
+        // manual net
         poseController
             .axisGreaterThan(0, 0.0)
+            .and(disableAlignment)
             .onTrue(netAlgae(poseController.axisGreaterThan(0, 0.0).negate()))
+
+        // align net
+        poseController.axisGreaterThan(0, 0.0)
+            .and(disableAlignment.negate())
+            .whileTrue(alignAlgaeToNet())
 
         // feeder auto
         (operatorController.start().or(operatorController.back()))
