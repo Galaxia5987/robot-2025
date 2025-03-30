@@ -75,9 +75,7 @@ fun pathFindToSelectedFeeder(): Command =
                         .withTimeout(1.0)
                 )
                 .finallyDo(
-                    Runnable {
-                        leds.setLedsBasedOnAlliance().schedule()
-                    }
+                    Runnable { leds.setLedsBasedOnAlliance().schedule() }
                 )
         }
         .until(gripper.hasCoral)
@@ -103,26 +101,19 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
         Logger.recordOutput("pathFindSetpoint", targetPose)
         leds.setPattern(all = pathFindPattern).schedule()
         pathFindToPose(targetPose, PATH_FIND_END_VELOCITY)
-            .finallyDo(
-                Runnable {
-                    leds.setLedsBasedOnAlliance().schedule()
-                }
-            )
+            .finallyDo(Runnable { leds.setLedsBasedOnAlliance().schedule() })
     }
 }
 
 private fun pathFindToSelectedMiddlePose(): Command {
     return swerveDrive.defer {
-        val targetPose = selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.5))
+        val targetPose =
+            selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.5))
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
         leds.setPattern(all = pathFindPattern).schedule()
         pathFindToPose(targetPose, PATH_FIND_END_VELOCITY)
-            .finallyDo(
-                Runnable {
-                    leds.setLedsBasedOnAlliance().schedule()
-                }
-            )
+            .finallyDo(Runnable { leds.setLedsBasedOnAlliance().schedule() })
     }
 }
 
@@ -175,12 +166,7 @@ fun alignCommand(moveBack: Boolean = true): Command =
     }
 
 private fun alignToMid(): Command =
-    swerveDrive.defer {
-        alignToPose(
-            selectedScorePose.third.invoke(),
-            atGoal
-        )
-    }
+    swerveDrive.defer { alignToPose(selectedScorePose.third.invoke(), atGoal) }
 
 private fun alignPrep(reefMasterCommand: Command): Command =
     raiseElevatorAtDistance(reefMasterCommand)
@@ -196,17 +182,14 @@ private fun alignPrep(reefMasterCommand: Command): Command =
         )
 
 private fun alignPrepToMid(reefMasterCommand: Command): Command =
-    reefMasterCommand
-        .withDeadline(
-            swerveDrive.defer {
-                alignToPose(
-                    selectedScorePose.third
-                        .invoke()
-                        .moveBack(Units.Meters.of(0.3)),
-                    elevator.atSetpoint.and(wrist.atSetpoint)
-                )
-            }
-        )
+    reefMasterCommand.withDeadline(
+        swerveDrive.defer {
+            alignToPose(
+                selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3)),
+                elevator.atSetpoint.and(wrist.atSetpoint)
+            )
+        }
+    )
 
 fun alignScoreL1(): Command =
     Commands.sequence(
@@ -263,10 +246,11 @@ fun alignToReefAlgae2(): Command =
         alignPrepToMid(l2algaePickup()),
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
-            swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.5, 0.0, 0.0)
-            )
-        }).withTimeout(0.5),
+                swerveDrive.robotOrientedRunVelocity(
+                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                )
+            })
+            .withTimeout(0.5),
         wrist.max()
     )
 
@@ -277,28 +261,42 @@ fun alignToReefAlgae3(): Command =
         alignPrepToMid(l3algaePickup()),
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
-            swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.5, 0.0, 0.0)
-            )
-        }).withTimeout(0.5),
+                swerveDrive.robotOrientedRunVelocity(
+                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                )
+            })
+            .withTimeout(0.5),
         wrist.max()
     )
 
 fun alignAlgaeToNet(): Command {
     var isOnOtherSide: Boolean
-    return swerveDrive.defer{
+    return swerveDrive.defer {
         isOnOtherSide = swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
-        val driveAngle = { Rotation2d.fromDegrees(if (isOnOtherSide) 180.0 else 0.0) }
+        val driveAngle = {
+            Rotation2d.fromDegrees(if (isOnOtherSide) 180.0 else 0.0)
+        }
         val drivePower = { if (isOnOtherSide) 0.7 else -0.7 }
         Logger.recordOutput("AutoAlignment/isOnOtherSide", isOnOtherSide)
         Commands.sequence(
             elevator.zero(),
             wrist.max(),
-            DriveCommands.joystickDriveAtAngle(swerveDrive, drivePower, { 0.0 }, driveAngle)
+            DriveCommands.joystickDriveAtAngle(
+                    swerveDrive,
+                    drivePower,
+                    { 0.0 },
+                    driveAngle
+                )
                 .until(ableToNet),
             netAlgae(Trigger { true })
                 .alongWith(
-                    DriveCommands.joystickDriveAtAngle(swerveDrive, {drivePower.invoke()/2}, { 0.0 }, driveAngle))
+                    DriveCommands.joystickDriveAtAngle(
+                        swerveDrive,
+                        { drivePower.invoke() / 2 },
+                        { 0.0 },
+                        driveAngle
+                    )
+                )
         )
     }
 }

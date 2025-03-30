@@ -180,7 +180,11 @@ object RobotContainer {
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
 
         // manual score
-        driverController.cross().and(disableAlignment).onTrue(l1()).onFalse(outtakeL1())
+        driverController
+            .cross()
+            .and(disableAlignment)
+            .onTrue(l1())
+            .onFalse(outtakeL1())
         driverController
             .square()
             .and(disableAlignment)
@@ -230,9 +234,11 @@ object RobotContainer {
             .onTrue(l3algae(heightController.button(3).negate()))
 
         // align pick algae from reef
-        operatorController.x()
+        operatorController
+            .x()
             .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate()))
-        operatorController.b()
+        operatorController
+            .b()
             .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate()))
         heightController
             .button(2)
@@ -274,7 +280,8 @@ object RobotContainer {
             .onTrue(netAlgae(poseController.axisGreaterThan(0, 0.0).negate()))
 
         // align net
-        poseController.axisGreaterThan(0, 0.0)
+        poseController
+            .axisGreaterThan(0, 0.0)
             .and(disableAlignment.negate())
             .whileTrue(alignAlgaeToNet())
 

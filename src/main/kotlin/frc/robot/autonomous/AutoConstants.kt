@@ -102,7 +102,11 @@ val FeederLeft: Pose2d = Pose2d(1.5, 7.1, Rotation2d.fromDegrees(125.0))
 val buttonToPoseAndTagMap =
     mapOf(
         9 to
-            Triple({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }, { Reef4Middle.flipIfNeeded() }), // L1
+            Triple(
+                { Reef4Left.flipIfNeeded() },
+                { if (IS_RED) 7 else 18 },
+                { Reef4Middle.flipIfNeeded() }
+            ), // L1
         10 to
             Triple(
                 { Reef4Right.flipIfNeeded() },
@@ -116,9 +120,17 @@ val buttonToPoseAndTagMap =
                 { Reef3Middle.flipIfNeeded() }
             ), // L2
         11 to
-            Triple({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }, { Reef5Middle.flipIfNeeded() }), // R2
+            Triple(
+                { Reef5Left.flipIfNeeded() },
+                { if (IS_RED) 8 else 17 },
+                { Reef5Middle.flipIfNeeded() }
+            ), // R2
         4 to
-            Triple({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }, { Reef3Middle.flipIfNeeded() }), // L3
+            Triple(
+                { Reef3Left.flipIfNeeded() },
+                { if (IS_RED) 6 else 19 },
+                { Reef3Middle.flipIfNeeded() }
+            ), // L3
         12 to
             Triple(
                 { Reef5Right.flipIfNeeded() },
@@ -132,7 +144,11 @@ val buttonToPoseAndTagMap =
                 { Reef2Middle.flipIfNeeded() }
             ), // L4
         1 to
-            Triple({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }, { Reef6Middle.flipIfNeeded() }), // R4
+            Triple(
+                { Reef6Left.flipIfNeeded() },
+                { if (IS_RED) 9 else 22 },
+                { Reef6Middle.flipIfNeeded() }
+            ), // R4
         6 to
             Triple(
                 { Reef2Left.flipIfNeeded() },
@@ -152,7 +168,11 @@ val buttonToPoseAndTagMap =
                 { Reef1Middle.flipIfNeeded() }
             ), // L6
         3 to
-            Triple({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }, { Reef1Middle.flipIfNeeded() }) // R6
+            Triple(
+                { Reef1Left.flipIfNeeded() },
+                { if (IS_RED) 10 else 21 },
+                { Reef1Middle.flipIfNeeded() }
+            ) // R6
     )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
