@@ -25,9 +25,12 @@ import frc.robot.autonomous.C6L
 import frc.robot.autonomous.C6L5LR
 import frc.robot.autonomous.S5L
 import frc.robot.autonomous.S5R
+import frc.robot.autonomous.alignScoreL1
 import frc.robot.autonomous.alignScoreL2
 import frc.robot.autonomous.alignScoreL3
 import frc.robot.autonomous.alignScoreL4
+import frc.robot.autonomous.alignToReefAlgae2
+import frc.robot.autonomous.alignToReefAlgae3
 import frc.robot.autonomous.pathFindC6L5LR
 import frc.robot.autonomous.pathFindToSelectedFeeder
 import frc.robot.autonomous.setFeederBasedOnAxis
@@ -158,8 +161,11 @@ object RobotContainer {
 
         // align score
         driverController
+            .cross()
+            .whileTrue(alignScoreL1().onlyIf(disableAlignment!!.negate()))
+        driverController
             .square()
-            .whileTrue(alignScoreL2().onlyIf(disableAlignment!!.negate()))
+            .whileTrue(alignScoreL2().onlyIf(disableAlignment.negate()))
             .onFalse(
                 moveDefaultPosition(false, { false }).onlyIf {
                     moveDefaultPosition(false, { false }).isScheduled.not()
@@ -173,7 +179,7 @@ object RobotContainer {
             .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
 
         // manual score
-        driverController.cross().onTrue(l1()).onFalse(outtakeL1())
+        driverController.cross().and(disableAlignment).onTrue(l1()).onFalse(outtakeL1())
         driverController
             .square()
             .and(disableAlignment)
@@ -222,24 +228,40 @@ object RobotContainer {
             .and(shouldNet.negate())
             .onTrue(l3algae(heightController.button(3).negate()))
 
-        // pick algae from reef
+        // align pick algae from reef
+        operatorController.x()
+            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate()))
+        operatorController.b()
+            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate()))
+        heightController
+            .button(2)
+            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate()))
+        heightController
+            .button(3)
+            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate()))
+
+        // manual pick algae from reef
         operatorController
             .x()
+            .and(disableAlignment)
             .and(shouldNet)
             .onTrue(l2algaePickup())
             .onFalse(wrist.max())
         operatorController
             .b()
+            .and(disableAlignment)
             .and(shouldNet)
             .onTrue(l3algaePickup())
             .onFalse(wrist.max())
         heightController
             .button(2)
+            .and(disableAlignment)
             .and(shouldNet)
             .onTrue(l2algaePickup())
             .onFalse(wrist.max())
         heightController
             .button(3)
+            .and(disableAlignment)
             .and(shouldNet)
             .onTrue(l3algaePickup())
             .onFalse(wrist.max())

@@ -11,8 +11,8 @@ import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
 
 // Alignment target pose, if never set, supplies the current robot position
-var selectedScorePose: Pair<() -> Pose2d, () -> Int> =
-    Pair({ swerveDrive.pose }, { 0 })
+var selectedScorePose: Triple<() -> Pose2d, () -> Int, () -> Pose2d> =
+    Triple({ swerveDrive.pose }, { 0 }, { swerveDrive.pose })
 
 var selectedFeeder: () -> Pose2d = { FeederRight.flipIfNeeded() }
 

@@ -29,7 +29,9 @@ import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
+import frc.robot.subsystems.l2algaePickup
 import frc.robot.subsystems.l3
+import frc.robot.subsystems.l3algaePickup
 import frc.robot.subsystems.leds.alignPattern
 import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.pathFindPattern
@@ -71,13 +73,7 @@ fun pathFindToSelectedFeeder(): Command =
                 )
                 .finallyDo(
                     Runnable {
-                        leds
-                            .setPattern(
-                                all =
-                                    if (IS_RED) redTeamPattern
-                                    else blueTeamPattern
-                            )
-                            .schedule()
+                        leds.setLedsBasedOnAlliance().schedule()
                     }
                 )
         }
@@ -106,12 +102,22 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
         pathFindToPose(targetPose, PATH_FIND_END_VELOCITY)
             .finallyDo(
                 Runnable {
-                    leds
-                        .setPattern(
-                            all =
-                                if (IS_RED) redTeamPattern else blueTeamPattern
-                        )
-                        .schedule()
+                    leds.setLedsBasedOnAlliance().schedule()
+                }
+            )
+    }
+}
+
+private fun pathFindToSelectedMiddlePose(): Command {
+    return swerveDrive.defer {
+        val targetPose = selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.5))
+
+        Logger.recordOutput("pathFindSetpoint", targetPose)
+        leds.setPattern(all = pathFindPattern).schedule()
+        pathFindToPose(targetPose, PATH_FIND_END_VELOCITY)
+            .finallyDo(
+                Runnable {
+                    leds.setLedsBasedOnAlliance().schedule()
                 }
             )
     }
@@ -165,6 +171,14 @@ fun alignCommand(moveBack: Boolean = true): Command =
         )
     }
 
+private fun alignToMid(): Command =
+    swerveDrive.defer {
+        alignToPose(
+            selectedScorePose.third.invoke(),
+            atGoal
+        )
+    }
+
 private fun alignPrep(reefMasterCommand: Command): Command =
     raiseElevatorAtDistance(reefMasterCommand)
         .raceWith(
@@ -178,10 +192,24 @@ private fun alignPrep(reefMasterCommand: Command): Command =
             }
         )
 
+private fun alignPrepToMid(): Command =
+    swerveDrive.defer {
+        alignToPose(
+            selectedScorePose.third
+                .invoke()
+                .moveBack(Units.Meters.of(0.3)),
+            elevator.almostAtSetpoint.and(wrist.almostAtSetpoint)
+        )
+    }
+
 fun alignScoreL1(): Command =
-    alignCommand(false)
-        .alongWith(raiseElevatorAtDistance(l1()))
-        .andThen(outtakeL1())
+    Commands.sequence(
+        pathFindToSelectedMiddlePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        alignPrepToMid(),
+        alignToMid().alongWith(l1()),
+        outtakeL1()
+    )
 
 fun alignScoreL2(): Command =
     Commands.sequence(
@@ -221,6 +249,34 @@ fun autoScoreL4(): Command =
             outtakeCoralAlignment(false)
         )
         .withName("alignScoreL4")
+
+fun alignToReefAlgae2(): Command =
+    Commands.sequence(
+        pathFindToSelectedMiddlePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        alignPrepToMid(),
+        alignToMid().withDeadline(l2algaePickup()),
+        Commands.run({
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.8, 0.0, 0.0)
+            )
+        }).withTimeout(0.3),
+        wrist.max()
+    )
+
+fun alignToReefAlgae3(): Command =
+    Commands.sequence(
+        pathFindToSelectedMiddlePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        alignPrepToMid(),
+        alignToMid().withDeadline(l3algaePickup()),
+        Commands.run({
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.8, 0.0, 0.0)
+            )
+        }).withTimeout(0.3),
+        wrist.max()
+    )
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean

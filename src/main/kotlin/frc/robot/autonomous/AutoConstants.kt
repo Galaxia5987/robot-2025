@@ -31,6 +31,7 @@ val ROBOT_SIDE_LENGTH = Units.Meters.of(0.825)
 // Two field measurements for finding the reef center. The robot should touch the reef.
 val ReefFaceLeft: Pose2d = Pose2d(14.32, 3.86, Rotation2d.k180deg).flip()
 val ReefFaceRight: Pose2d = Pose2d(14.32, 4.20, Rotation2d.k180deg).flip()
+val ReefFaceMiddle: Pose2d = Pose2d(14.32, 3.98, Rotation2d.k180deg).flip()
 
 // 4.48945, FIELD_WIDTH / 2
 // The calculated center of the reef, used for calculating all other scoring positions.
@@ -58,31 +59,42 @@ val Reef4Right: Pose2d =
             Rotation2d.kZero
         )
     )
+val Reef4Middle: Pose2d = ReefFaceMiddle
 
 val Reef5Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 val Reef5Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
+val Reef5Middle: Pose2d =
+    Reef4Middle.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 
 val Reef6Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
 val Reef6Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
+val Reef6Middle: Pose2d =
+    Reef4Middle.rotateAround(ReefCenter, Rotation2d.fromDegrees(120.0))
 
 val Reef1Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
 val Reef1Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
+val Reef1Middle: Pose2d =
+    Reef4Middle.rotateAround(ReefCenter, Rotation2d.fromDegrees(180.0))
 
 val Reef2Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
 val Reef2Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
+val Reef2Middle: Pose2d =
+    Reef4Middle.rotateAround(ReefCenter, Rotation2d.fromDegrees(240.0))
 
 val Reef3Left: Pose2d =
     Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
 val Reef3Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
+val Reef3Middle: Pose2d =
+    Reef4Middle.rotateAround(ReefCenter, Rotation2d.fromDegrees(300.0))
 
 val FeederRight: Pose2d = Pose2d(1.5, 0.9, Rotation2d.fromDegrees(-125.0))
 val FeederLeft: Pose2d = Pose2d(1.5, 7.1, Rotation2d.fromDegrees(125.0))
@@ -90,50 +102,57 @@ val FeederLeft: Pose2d = Pose2d(1.5, 7.1, Rotation2d.fromDegrees(125.0))
 val buttonToPoseAndTagMap =
     mapOf(
         9 to
-            Pair({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }), // L1
+            Triple({ Reef4Left.flipIfNeeded() }, { if (IS_RED) 7 else 18 }, { Reef4Middle.flipIfNeeded() }), // L1
         10 to
-            Pair(
+            Triple(
                 { Reef4Right.flipIfNeeded() },
-                { if (IS_RED) 7 else 18 }
+                { if (IS_RED) 7 else 18 },
+                { Reef4Middle.flipIfNeeded() }
             ), // R1
         8 to
-            Pair(
+            Triple(
                 { Reef3Right.flipIfNeeded() },
-                { if (IS_RED) 6 else 19 }
+                { if (IS_RED) 6 else 19 },
+                { Reef3Middle.flipIfNeeded() }
             ), // L2
         11 to
-            Pair({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }), // R2
+            Triple({ Reef5Left.flipIfNeeded() }, { if (IS_RED) 8 else 17 }, { Reef5Middle.flipIfNeeded() }), // R2
         4 to
-            Pair({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }), // L3
+            Triple({ Reef3Left.flipIfNeeded() }, { if (IS_RED) 6 else 19 }, { Reef3Middle.flipIfNeeded() }), // L3
         12 to
-            Pair(
+            Triple(
                 { Reef5Right.flipIfNeeded() },
-                { if (IS_RED) 8 else 17 }
+                { if (IS_RED) 8 else 17 },
+                { Reef5Middle.flipIfNeeded() }
             ), // R3
         7 to
-            Pair(
+            Triple(
                 { Reef2Right.flipIfNeeded() },
-                { if (IS_RED) 11 else 20 }
+                { if (IS_RED) 11 else 20 },
+                { Reef2Middle.flipIfNeeded() }
             ), // L4
         1 to
-            Pair({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }), // R4
+            Triple({ Reef6Left.flipIfNeeded() }, { if (IS_RED) 9 else 22 }, { Reef6Middle.flipIfNeeded() }), // R4
         6 to
-            Pair(
+            Triple(
                 { Reef2Left.flipIfNeeded() },
-                { if (IS_RED) 11 else 20 }
+                { if (IS_RED) 11 else 20 },
+                { Reef2Middle.flipIfNeeded() }
             ), // L5
         2 to
-            Pair(
+            Triple(
                 { Reef6Right.flipIfNeeded() },
-                { if (IS_RED) 9 else 22 }
+                { if (IS_RED) 9 else 22 },
+                { Reef6Middle.flipIfNeeded() }
             ), // R5
         5 to
-            Pair(
+            Triple(
                 { Reef1Right.flipIfNeeded() },
-                { if (IS_RED) 10 else 21 }
+                { if (IS_RED) 10 else 21 },
+                { Reef1Middle.flipIfNeeded() }
             ), // L6
         3 to
-            Pair({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }) // R6
+            Triple({ Reef1Left.flipIfNeeded() }, { if (IS_RED) 10 else 21 }, { Reef1Middle.flipIfNeeded() }) // R6
     )
 
 private fun getValueFromJson(element: JsonElement, valName: String): Double =
