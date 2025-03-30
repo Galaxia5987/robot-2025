@@ -293,10 +293,12 @@ fun alignAlgaeToNet(): Command {
         Logger.recordOutput("AutoAlignment/isOnOtherSide", isOnOtherSide)
         Commands.sequence(
             elevator.zero(),
+            wrist.max(),
             DriveCommands.joystickDriveAtAngle(swerveDrive, drivePower, { 0.0 }, driveAngle)
                 .until(ableToNet),
             netAlgae(Trigger { true })
-                .alongWith(Commands.runOnce(swerveDrive::stop))
+                .alongWith(
+                    DriveCommands.joystickDriveAtAngle(swerveDrive, {drivePower.invoke()/2}, { 0.0 }, driveAngle))
         )
     }
 }
