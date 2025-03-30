@@ -261,9 +261,9 @@ fun alignToReefAlgae2(): Command =
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
             swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.8, 0.0, 0.0)
+                ChassisSpeeds(-0.5, 0.0, 0.0)
             )
-        }).withTimeout(0.3),
+        }).withTimeout(0.5),
         wrist.max()
     )
 
@@ -275,9 +275,9 @@ fun alignToReefAlgae3(): Command =
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
             swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.8, 0.0, 0.0)
+                ChassisSpeeds(-0.5, 0.0, 0.0)
             )
-        }).withTimeout(0.3),
+        }).withTimeout(0.5),
         wrist.max()
     )
 
