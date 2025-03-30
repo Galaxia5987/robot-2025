@@ -195,21 +195,24 @@ private fun alignPrep(reefMasterCommand: Command): Command =
             }
         )
 
-private fun alignPrepToMid(): Command =
-    swerveDrive.defer {
-        alignToPose(
-            selectedScorePose.third
-                .invoke()
-                .moveBack(Units.Meters.of(0.3)),
-            elevator.almostAtSetpoint.and(wrist.almostAtSetpoint)
+private fun alignPrepToMid(reefMasterCommand: Command): Command =
+    reefMasterCommand
+        .withDeadline(
+            swerveDrive.defer {
+                alignToPose(
+                    selectedScorePose.third
+                        .invoke()
+                        .moveBack(Units.Meters.of(0.3)),
+                    elevator.atSetpoint.and(wrist.atSetpoint)
+                )
+            }
         )
-    }
 
 fun alignScoreL1(): Command =
     Commands.sequence(
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrepToMid(),
+        alignPrepToMid(Commands.none()),
         alignToMid().alongWith(l1()),
         outtakeL1()
     )
@@ -257,7 +260,7 @@ fun alignToReefAlgae2(): Command =
     Commands.sequence(
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrepToMid(),
+        alignPrepToMid(l2algaePickup()),
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
             swerveDrive.robotOrientedRunVelocity(
@@ -271,7 +274,7 @@ fun alignToReefAlgae3(): Command =
     Commands.sequence(
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
-        alignPrepToMid(),
+        alignPrepToMid(l3algaePickup()),
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
             swerveDrive.robotOrientedRunVelocity(
