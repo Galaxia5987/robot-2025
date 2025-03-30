@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.InitializerKt;
 import java.util.LinkedList;
 import java.util.List;
@@ -149,7 +148,8 @@ public class Vision extends SubsystemBase {
 
             // Loop over pose observations
             for (var observation : inputs[cameraIndex].poseObservations) {
-                boolean shouldIgnoreFeederInAuto = io[cameraIndex].getName().equals(FeederOVName) && RobotState.isAutonomous();
+                boolean shouldIgnoreFeederInAuto =
+                        io[cameraIndex].getName().equals(FeederOVName) && RobotState.isAutonomous();
                 boolean rejectPose = !isObservationValid(observation) || shouldIgnoreFeederInAuto;
 
                 // Add pose to log
