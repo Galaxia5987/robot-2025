@@ -118,7 +118,11 @@ private fun pathFindToSelectedMiddlePose(): Command {
     }
 }
 
-private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger, isLenient: Boolean = false): Command {
+private fun alignToPose(
+    targetPose: Pose2d,
+    endTrigger: Trigger,
+    isLenient: Boolean = false
+): Command {
     return swerveDrive
         .runOnce {
             isAligning = Trigger { true }
@@ -127,7 +131,8 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger, isLenient: Bool
                 swerveDrive.localEstimatedPose,
                 swerveDrive.localPoseSpeeds
             )
-            if (isLenient) setAlignLenientTolerance() else setAlignDefaultTolerance()
+            if (isLenient) setAlignLenientTolerance()
+            else setAlignDefaultTolerance()
             setGoal(targetPose)
         }
         .andThen(

@@ -79,17 +79,30 @@ val atGoal: Trigger =
         .and { swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 }
         .debounce(0.05)
 
-private fun setTolerance(xThreshold:Distance,yThreshold:Distance,angleThreshold:Angle){
+private fun setTolerance(
+    xThreshold: Distance,
+    yThreshold: Distance,
+    angleThreshold: Angle
+) {
     xController.setTolerance(xThreshold.`in`(Units.Meters))
     yController.setTolerance(yThreshold.`in`(Units.Meters))
     thetaController.setTolerance(angleThreshold.`in`(Units.Degree))
 }
-fun setAlignDefaultTolerance(){
-    setTolerance(X_ALIGNMENT_TOLERANCE, Y_ALIGNMENT_TOLERANCE, ROTATIONAL_ALIGNMENT_TOLERANCE)
+
+fun setAlignDefaultTolerance() {
+    setTolerance(
+        X_ALIGNMENT_TOLERANCE,
+        Y_ALIGNMENT_TOLERANCE,
+        ROTATIONAL_ALIGNMENT_TOLERANCE
+    )
 }
 
-fun setAlignLenientTolerance(){
-    setTolerance(X_LENIENT_TOLERANCE,Y_LENIENT_TOLERANCE,ROTATIONAL_ALIGNMENT_TOLERANCE )
+fun setAlignLenientTolerance() {
+    setTolerance(
+        X_LENIENT_TOLERANCE,
+        Y_LENIENT_TOLERANCE,
+        ROTATIONAL_ALIGNMENT_TOLERANCE
+    )
 }
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
