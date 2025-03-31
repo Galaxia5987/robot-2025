@@ -78,8 +78,8 @@ val atGoal: Trigger =
         .debounce(0.05)
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
-    xController.reset(botPose.x, -botSpeeds.vxMetersPerSecond)
-    yController.reset(botPose.y, -botSpeeds.vyMetersPerSecond)
+    xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)
+    yController.reset(botPose.y, botSpeeds.vyMetersPerSecond)
     thetaController.reset(
         botPose.rotation.radians,
         botSpeeds.omegaRadiansPerSecond

@@ -36,7 +36,7 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
 
                 resetProfiledPID(
                     swerveDrive.localEstimatedPose,
-                    swerveDrive.fieldOrientedSpeeds
+                    swerveDrive.localPoseSpeeds
                 )
                 if (justDidL2.negate().asBoolean) {
                     setGoal(

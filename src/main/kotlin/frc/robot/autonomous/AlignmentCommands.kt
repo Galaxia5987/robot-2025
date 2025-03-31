@@ -124,7 +124,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
             leds.setPattern(all = alignPattern).schedule()
             resetProfiledPID(
                 swerveDrive.localEstimatedPose,
-                swerveDrive.fieldOrientedSpeeds
+                swerveDrive.localPoseSpeeds
             )
             setGoal(targetPose)
         }

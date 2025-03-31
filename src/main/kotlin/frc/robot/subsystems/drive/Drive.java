@@ -502,6 +502,13 @@ public class Drive extends SubsystemBase {
                 kinematics.toChassisSpeeds(getModuleStates()), getRotation());
     }
 
+    @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredLocalPoseSpeeds")
+    public ChassisSpeeds getLocalPoseSpeeds() {
+        return ChassisSpeeds.fromRobotRelativeSpeeds(
+                kinematics.toChassisSpeeds(getModuleStates()), getLocalEstimatedPose().getRotation()
+        );
+    }
+
     /** Returns the position of each module in radians. */
     public double[] getWheelRadiusCharacterizationPositions() {
         double[] values = new double[4];
