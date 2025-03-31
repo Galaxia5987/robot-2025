@@ -30,7 +30,6 @@ import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.elevator.POST_L3_ALGAE_VOLTAGE
-import frc.robot.subsystems.gripper.CLOSE_WRIST_DEBOUNCE_TIME
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algaePickup
@@ -279,8 +278,7 @@ fun alignToReefAlgae3(): Command =
             })
             .withTimeout(0.5),
         wrist.max(),
-        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE)
-            .withTimeout(0.8)
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
     )
 
 fun alignAlgaeToNet(): Command {
@@ -382,7 +380,7 @@ private val shouldMoveWristUp =
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
-        isOutOfReef
+    isOutOfReef
         .and(gripper.hasAlgaeDebounce.negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())

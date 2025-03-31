@@ -343,7 +343,9 @@ fun netAlgae(outtakeTrigger: Trigger): Command =
         elevator.net(),
         WaitCommand(0.4),
         wrist.l4(),
-        WaitUntilCommand{ wrist.angle.invoke().isNear(Units.Degrees.of(155.0), 2.0)},
+        WaitUntilCommand {
+            wrist.angle.invoke().isNear(Units.Degrees.of(155.0), 2.0)
+        },
         gripper.outtakeAlgae().withTimeout(0.2),
         moveDefaultPosition(true)
     )
