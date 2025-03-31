@@ -341,7 +341,7 @@ fun netAlgae(outtakeTrigger: Trigger): Command =
         elevator.zero(),
         waitUntil(outtakeTrigger),
         elevator.net(),
-        WaitCommand(0.4),
+        WaitUntilCommand{elevator.height.invoke().isNear(Units.Meters.of(0.75), 0.02)},
         wrist.l4(),
         WaitUntilCommand {
             wrist.angle.invoke().isNear(Units.Degrees.of(155.0), 2.0)
