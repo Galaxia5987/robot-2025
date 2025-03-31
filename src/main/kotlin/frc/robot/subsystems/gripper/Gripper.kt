@@ -39,6 +39,9 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
                 Debouncer.DebounceType.kBoth
             )
 
+    @AutoLogOutput
+    val hasAlgaeDebounce: Trigger= hasAlgae.debounce(CLOSE_WRIST_DEBOUNCE_TIME.`in`(Units.Seconds), Debouncer.DebounceType.kFalling)
+
     private fun setVoltage(voltage: Voltage): Command =
         startEnd({ io.setVoltage(voltage) }, { io.setVoltage(STOP_VOLTAGE) })
 
