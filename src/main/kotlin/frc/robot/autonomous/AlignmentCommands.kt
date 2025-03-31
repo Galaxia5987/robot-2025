@@ -369,7 +369,7 @@ private val doingL1: Trigger =
 private val shouldMoveWristUp =
     (gripper.hasCoral
             .and(isInRadiusOfReef)
-            .and(gripper.hasAlgae.negate())
+            .and(gripper.hasAlgae.debounce(CLOSE_WRIST_DEBOUNCE_TIME.`in`(Seconds)).negate())
             .and(justDidL2.negate())
             .and(doingL1.negate())
             .and(wristCurrentCommandIsNull)
@@ -378,10 +378,8 @@ private val shouldMoveWristUp =
         .onTrue(wrist.skyward())
 
 private val shouldCloseWrist =
-    gripper.hasAlgae
-        .negate()
-        .and(isOutOfReef)
-        .and(gripper.hasAlgae.negate())
+        isOutOfReef
+        .and(gripper.hasAlgae.debounce(CLOSE_WRIST_DEBOUNCE_TIME.`in`(Seconds)).negate())
         .and(wristCurrentCommandIsNull)
         .and(CommandGenericHID(3).button(12).negate())
         .and(RobotModeTriggers.teleop())
@@ -399,7 +397,8 @@ fun logTriggers() {
             "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
             "ableToNet" to ableToNet,
             "isL4" to isL4,
-            "justDidL2" to justDidL2
+            "justDidL2" to justDidL2,
+             "hasAlgaeDebounce" to gripper.hasAlgae.debounce(CLOSE_WRIST_DEBOUNCE_TIME.`in`(Seconds))
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
