@@ -310,7 +310,7 @@ fun alignAlgaeToNet(): Command {
                 )
                 .until(ableToNet),
             netAlgae(Trigger { true })
-                .alongWith(
+                .raceWith( //The drive command doesn't end
                     DriveCommands.joystickDriveAtAngle(
                         swerveDrive,
                         { drivePower.invoke() / 2 },
