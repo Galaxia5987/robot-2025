@@ -21,6 +21,7 @@ import frc.robot.autonomous.A2R
 import frc.robot.autonomous.A2R3RL
 import frc.robot.autonomous.B1L
 import frc.robot.autonomous.B1R
+import frc.robot.autonomous.B1RN2N
 import frc.robot.autonomous.C6L
 import frc.robot.autonomous.C6L5LR
 import frc.robot.autonomous.S5L
@@ -403,6 +404,7 @@ object RobotContainer {
         )
         autoChooser.addOption("B1L", B1L())
         autoChooser.addOption("B1R", B1R())
+        autoChooser.addOption("B1RN2N", B1RN2N())
         autoChooser.addOption("C6L", C6L())
         autoChooser.addOption("S5L", S5L())
         autoChooser.addOption("S5R", S5R())

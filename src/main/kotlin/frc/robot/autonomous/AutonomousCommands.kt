@@ -2,6 +2,7 @@ package frc.robot.autonomous
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -11,6 +12,7 @@ import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
 import frc.robot.subsystems.autonomousFeeder
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
 import frc.robot.swerveDrive
 import frc.robot.wrist
@@ -39,8 +41,32 @@ fun B1L(): Command =
 fun B1R(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
+        wrist.skyward(),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1R")),
         alignScoreL4()
+    )
+
+fun `1RN`(): Command =
+    Commands.sequence(
+        alignToReefAlgae2(),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("1RN")),
+        alignAlgaeToNet()
+    )
+
+fun N2algae(): Command =
+    Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[6]!! }),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2")),
+        alignToReefAlgae3()
+    )
+
+fun `2LN`(): Command =
+    Commands.sequence(
+        alignAlgaeToNet(),
+        DriveCommands.joystickDriveAtAngle(
+            swerveDrive, {0.7}, {0.0}, {Rotation2d.k180deg}
+        )
+            .withTimeout(1.8)
     )
 
 fun C6L(): Command =
@@ -131,6 +157,14 @@ private fun S3L(): Command =
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until(gripper.autoHasCoral.negate())
+    )
+
+fun B1RN2N(): Command =
+    Commands.sequence(
+        B1R(),
+        `1RN`(),
+        N2algae(),
+        `2LN`()
     )
 
 fun C6L5LR(): Command =
