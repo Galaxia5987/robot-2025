@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.Commands.sequence
 import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.WaitCommand
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.CURRENT_MODE
 import frc.robot.Mode
@@ -342,7 +343,7 @@ fun netAlgae(outtakeTrigger: Trigger): Command =
         elevator.net(),
         WaitCommand(0.4),
         wrist.l4(),
-        WaitCommand(0.0314),
+        WaitUntilCommand{ wrist.angle.invoke().isNear(Units.Degrees.of(155.0), 2.0)},
         gripper.outtakeAlgae().withTimeout(0.2),
         moveDefaultPosition(true)
     )
