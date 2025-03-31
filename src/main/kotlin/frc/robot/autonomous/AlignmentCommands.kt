@@ -29,6 +29,8 @@ import frc.robot.lib.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants
+import frc.robot.subsystems.elevator.POST_L3_ALGAE_VOLTAGE
+import frc.robot.subsystems.gripper.CLOSE_WRIST_DEBOUNCE_TIME
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
 import frc.robot.subsystems.l2algaePickup
@@ -276,7 +278,9 @@ fun alignToReefAlgae3(): Command =
                 )
             })
             .withTimeout(0.5),
-        wrist.max()
+        wrist.max(),
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE)
+            .withTimeout(0.8)
     )
 
 fun alignAlgaeToNet(): Command {
