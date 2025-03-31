@@ -33,7 +33,7 @@ fun setPoseBasedOnButton(buttonID: Int): Command {
                     "ScoreState/SelectedScorePose",
                     selectedScorePose.first.invoke()
                 )
-
+                setAlignDefaultTolerance()
                 resetProfiledPID(
                     swerveDrive.localEstimatedPose,
                     swerveDrive.localPoseSpeeds

@@ -6,6 +6,8 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.getSpeed
 import frc.robot.subsystems.drive.TunerConstants
@@ -76,6 +78,19 @@ val atGoal: Trigger =
         .and(thetaController::atGoal)
         .and { swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 }
         .debounce(0.05)
+
+private fun setTolerance(xThreshold:Distance,yThreshold:Distance,angleThreshold:Angle){
+    xController.setTolerance(xThreshold.`in`(Units.Meters))
+    yController.setTolerance(yThreshold.`in`(Units.Meters))
+    thetaController.setTolerance(angleThreshold.`in`(Units.Degree))
+}
+fun setAlignDefaultTolerance(){
+    setTolerance(X_ALIGNMENT_TOLERANCE, Y_ALIGNMENT_TOLERANCE, ROTATIONAL_ALIGNMENT_TOLERANCE)
+}
+
+fun setAlignLenientTolerance(){
+    setTolerance(X_LENIENT_TOLERANCE,Y_LENIENT_TOLERANCE,ROTATIONAL_ALIGNMENT_TOLERANCE )
+}
 
 fun resetProfiledPID(botPose: Pose2d, botSpeeds: ChassisSpeeds) {
     xController.reset(botPose.x, botSpeeds.vxMetersPerSecond)

@@ -118,7 +118,7 @@ private fun pathFindToSelectedMiddlePose(): Command {
     }
 }
 
-private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
+private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger, isLenient: Boolean = false): Command {
     return swerveDrive
         .runOnce {
             isAligning = Trigger { true }
@@ -127,6 +127,7 @@ private fun alignToPose(targetPose: Pose2d, endTrigger: Trigger): Command {
                 swerveDrive.localEstimatedPose,
                 swerveDrive.localPoseSpeeds
             )
+            if (isLenient) setAlignLenientTolerance() else setAlignDefaultTolerance()
             setGoal(targetPose)
         }
         .andThen(
@@ -177,7 +178,8 @@ private fun alignPrep(reefMasterCommand: Command): Command =
                     selectedScorePose.first
                         .invoke()
                         .moveBack(Units.Meters.of(0.3)),
-                    Trigger { false }
+                    Trigger { false },
+                    true
                 )
             }
         )
@@ -187,7 +189,8 @@ private fun alignPrepToMid(reefMasterCommand: Command): Command =
         swerveDrive.defer {
             alignToPose(
                 selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3)),
-                elevator.atSetpoint.and(wrist.atSetpoint)
+                elevator.atSetpoint.and(wrist.atSetpoint),
+                true
             )
         }
     )
@@ -197,7 +200,8 @@ private fun alignPrepToAlgae(reefMasterCommand: Command): Command =
         swerveDrive.defer {
             alignToPose(
                 selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3)),
-                elevator.atSetpoint.and(wrist.atSetpoint).and(atGoal)
+                elevator.atSetpoint.and(wrist.atSetpoint).and(atGoal),
+                true
             )
         }
     )
