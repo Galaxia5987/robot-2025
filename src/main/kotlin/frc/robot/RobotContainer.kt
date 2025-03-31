@@ -391,7 +391,6 @@ object RobotContainer {
 
         autoChooser.setDefaultOption("B1L", B1L())
         autoChooser.addOption("None", Commands.none())
-        autoChooser.addOption("B1L", B1L())
         autoChooser.addOption(
             "CalibrationPath",
             AutoBuilder.followPath(
@@ -402,6 +401,7 @@ object RobotContainer {
             "No spin calibration",
             AutoBuilder.followPath(PathPlannerPath.fromPathFile("noSpin"))
         )
+        autoChooser.addOption("B1L", B1L())
         autoChooser.addOption("B1R", B1R())
         autoChooser.addOption("C6L", C6L())
         autoChooser.addOption("S5L", S5L())
