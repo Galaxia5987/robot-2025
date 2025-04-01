@@ -33,8 +33,8 @@ class GripperIOReal : GripperIO {
                     CurrentLimitsConfigs().apply {
                         StatorCurrentLimitEnable = true
                         SupplyCurrentLimitEnable = true
-                        StatorCurrentLimit = 80.0
-                        SupplyCurrentLimit = 40.0
+                        StatorCurrentLimit = STATOR_CURRENT_LIMIT.`in`(Units.Amps)
+                        SupplyCurrentLimit = STATOR_CURRENT_LIMIT.`in`(Units.Amps)/2
                     }
             }
         )
