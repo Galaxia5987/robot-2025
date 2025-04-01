@@ -218,8 +218,8 @@ val ALIGNMENT_POSES
 
 val X_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
 val Y_ALIGNMENT_TOLERANCE: Distance = Units.Centimeters.of(2.75)
-val X_LENIENT_TOLERANCE: Distance = Units.Centimeters.of(5.5)
-val Y_LENIENT_TOLERANCE: Distance = Units.Centimeters.of(5.5)
+val X_LENIENT_TOLERANCE: Distance = Units.Centimeters.of(20.0)
+val Y_LENIENT_TOLERANCE: Distance = Units.Centimeters.of(20.0)
 val ROTATIONAL_ALIGNMENT_TOLERANCE: Angle = Units.Degrees.of(1.0)
 val ALIGNMENT_ELEVATOR_MAX_DISTANCE: Distance = Units.Meters.of(0.4)
 val ALIGNMENT_ELEVATOR_MIN_DISTANCE: Distance = Units.Meters.of(0.0)
