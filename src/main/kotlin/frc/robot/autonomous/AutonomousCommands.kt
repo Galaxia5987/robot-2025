@@ -170,12 +170,7 @@ private fun S3L(): Command =
             .until(gripper.autoHasCoral.negate())
     )
 
-fun B1RN2N(): Command = Commands.sequence(
-    B1R(),
-    `1RN`(),
-    N2algae(),
-    `2LN`()
-)
+fun B1RN2N(): Command = Commands.sequence(B1R(), `1RN`(), N2algae(), `2LN`())
 
 fun C6L5LR(): Command =
     Commands.sequence(

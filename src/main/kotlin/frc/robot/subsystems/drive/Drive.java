@@ -145,8 +145,7 @@ public class Drive extends SubsystemBase {
             new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
     @AutoLogOutput private Rotation2d desiredHeading;
 
-    @AutoLogOutput
-    private Rotation2d gyroOffset = Rotation2d.kZero;
+    @AutoLogOutput private Rotation2d gyroOffset = Rotation2d.kZero;
 
     private Field2d field = new Field2d();
 
