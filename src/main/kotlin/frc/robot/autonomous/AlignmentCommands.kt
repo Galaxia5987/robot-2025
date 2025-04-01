@@ -109,7 +109,9 @@ private fun pathFindToSelectedScorePose(moveBack: Boolean = true): Command {
 private fun pathFindToSelectedMiddlePose(): Command {
     return swerveDrive.defer {
         val targetPose =
-            selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.5))
+            moveSetpointIfOnOtherSide(
+                selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.5))
+            )
 
         Logger.recordOutput("pathFindSetpoint", targetPose)
         leds.setPattern(all = pathFindPattern).schedule()
@@ -173,7 +175,13 @@ fun alignCommand(moveBack: Boolean = true): Command =
     }
 
 private fun alignToMid(): Command =
-    swerveDrive.defer { alignToPose(selectedScorePose.third.invoke(), atGoal) }
+    swerveDrive.defer {
+        val targetPose =
+            moveSetpointIfOnOtherSide(
+                selectedScorePose.third.invoke()
+            )
+        alignToPose(targetPose, atGoal)
+    }
 
 private fun alignPrep(reefMasterCommand: Command): Command =
     raiseElevatorAtDistance(reefMasterCommand)
@@ -203,8 +211,13 @@ private fun alignPrepToMid(reefMasterCommand: Command): Command =
 private fun alignPrepToAlgae(reefMasterCommand: Command): Command =
     reefMasterCommand.withDeadline(
         swerveDrive.defer {
+            val targetPose =
+                moveSetpointIfOnOtherSide(
+                    selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3))
+                )
+
             alignToPose(
-                selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3)),
+                targetPose,
                 elevator.atSetpoint.and(wrist.atSetpoint).and(atGoal),
                 true
             )
@@ -291,14 +304,11 @@ fun alignToReefAlgae3(): Command =
     )
 
 fun alignAlgaeToNet(): Command {
-    var isOnOtherSide: Boolean
     return swerveDrive.defer {
-        isOnOtherSide = swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
         val driveAngle = {
-            Rotation2d.fromDegrees(if (isOnOtherSide) 180.0 else 0.0)
+            Rotation2d.fromDegrees(if (isOnOtherSide.asBoolean) 180.0 else 0.0)
         }
-        val drivePower = { if (isOnOtherSide) 0.7 else -0.7 }
-        Logger.recordOutput("AutoAlignment/isOnOtherSide", isOnOtherSide)
+        val drivePower = { if (isOnOtherSide.asBoolean) 0.7 else -0.7 }
         Commands.sequence(
             elevator.zero(),
             wrist.max(),
@@ -321,6 +331,22 @@ fun alignAlgaeToNet(): Command {
         )
     }
 }
+
+private fun moveSetpointIfOnOtherSide(targetPose: Pose2d): Pose2d {
+    if (isOnOtherSide.asBoolean) {
+        return Pose2d(
+            targetPose.x.plus(
+                if (IS_RED) -ALGAE_STEAL_POSE_X_DISPLACEMENT.`in`(Units.Meters)
+                else ALGAE_STEAL_POSE_X_DISPLACEMENT.`in`(Units.Meters)
+            ),
+            targetPose.y,
+            targetPose.rotation
+        )
+    }
+    return targetPose
+}
+
+val isOnOtherSide: Trigger = Trigger {swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2}
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean
@@ -408,7 +434,8 @@ fun logTriggers() {
             "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
             "ableToNet" to ableToNet,
             "isL4" to isL4,
-            "justDidL2" to justDidL2
+            "justDidL2" to justDidL2,
+            "isOnOtherSide" to isOnOtherSide
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
