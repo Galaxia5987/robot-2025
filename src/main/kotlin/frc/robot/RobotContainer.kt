@@ -209,9 +209,13 @@ object RobotContainer {
             .R1()
             .and(shouldNet)
             .onTrue(intakeAlgaeToGripper(driverController.R1().negate()))
-        driverController.L1().and(shouldNet).onTrue(outtakeAlgaeNetMode(driverController.L1().negate()))
         driverController
-            .L1().and(shouldNet.negate())
+            .L1()
+            .and(shouldNet)
+            .onTrue(outtakeAlgaeNetMode(driverController.L1().negate()))
+        driverController
+            .L1()
+            .and(shouldNet.negate())
             .onTrue(outtakeAlgae(driverController.L1().negate()))
 
         // gripper control
