@@ -31,6 +31,8 @@ class Roller(private val io: RollerIO) : SubsystemBase() {
 
     fun outtake() = setVoltage(OUTTAKE_VOLTAGE).withName("Roller/outtake")
 
+    fun slowOuttake() = setVoltage(SLOW_OUTTAKE_VOLTAGE).withName("Roller/slowOuttake")
+
     fun slowIntake() =
         setVoltage(SLOW_INTAKE_VOLTAGE).withName("Roller/slowIntake")
 

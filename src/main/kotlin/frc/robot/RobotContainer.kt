@@ -46,6 +46,7 @@ import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_C
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
+import frc.robot.subsystems.intake.outtakeAlgaeNetMode
 import frc.robot.subsystems.intakeAlgaeToGripper
 import frc.robot.subsystems.l1
 import frc.robot.subsystems.l2
@@ -208,8 +209,9 @@ object RobotContainer {
             .R1()
             .and(shouldNet)
             .onTrue(intakeAlgaeToGripper(driverController.R1().negate()))
+        driverController.L1().and(shouldNet).onTrue(outtakeAlgaeNetMode(driverController.L1().negate()))
         driverController
-            .L1()
+            .L1().and(shouldNet.negate())
             .onTrue(outtakeAlgae(driverController.L1().negate()))
 
         // gripper control

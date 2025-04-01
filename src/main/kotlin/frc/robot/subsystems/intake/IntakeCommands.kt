@@ -16,5 +16,11 @@ fun outtakeAlgae(retractTrigger: BooleanSupplier): Command =
         .andThen(extender.retract())
         .withName("Intake/Outtake Algae")
 
+fun outtakeAlgaeNetMode(retractTrigger: BooleanSupplier): Command =
+    (roller.slowOuttake().alongWith(extender.extend()))
+        .until(retractTrigger)
+        .andThen(extender.retract())
+        .withName("Intake/Outtake Algae")
+
 fun intakeToGripper(): Command =
     (extender.passToGripper()).alongWith(roller.slowIntake())
