@@ -177,9 +177,7 @@ fun alignCommand(moveBack: Boolean = true): Command =
 private fun alignToMid(): Command =
     swerveDrive.defer {
         val targetPose =
-            moveSetpointIfOnOtherSide(
-                selectedScorePose.third.invoke()
-            )
+            moveSetpointIfOnOtherSide(selectedScorePose.third.invoke())
         alignToPose(targetPose, atGoal)
     }
 
@@ -213,7 +211,9 @@ private fun alignPrepToAlgae(reefMasterCommand: Command): Command =
         swerveDrive.defer {
             val targetPose =
                 moveSetpointIfOnOtherSide(
-                    selectedScorePose.third.invoke().moveBack(Units.Meters.of(0.3))
+                    selectedScorePose.third
+                        .invoke()
+                        .moveBack(Units.Meters.of(0.3))
                 )
 
             alignToPose(
@@ -346,7 +346,9 @@ private fun moveSetpointIfOnOtherSide(targetPose: Pose2d): Pose2d {
     return targetPose
 }
 
-val isOnOtherSide: Trigger = Trigger {swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2}
+val isOnOtherSide: Trigger = Trigger {
+    swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
+}
 
 private val atAlignmentSetpoint = Trigger {
     atGoal.asBoolean && isAligning.asBoolean
