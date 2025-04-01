@@ -6,17 +6,17 @@ import frc.robot.roller
 import java.util.function.BooleanSupplier
 
 fun intakeAlgae(): Command =
-    (extender.extend().until(extender.atSetpoint))
+    (extender.extend())
         .alongWith(roller.intake())
         .withName("Intake/Intake Algae")
 
 fun outtakeAlgae(retractTrigger: BooleanSupplier): Command =
     (roller.outtake().alongWith(extender.extend()))
         .until(retractTrigger)
-        .andThen(extender.retract().until(extender.atSetpoint))
+        .andThen(extender.retract())
         .withName("Intake/Outtake Algae")
 
 fun intakeToGripper(): Command =
-    (extender.passToGripper().until(extender.atSetpoint)).alongWith(
+    (extender.passToGripper()).alongWith(
         roller.slowIntake()
     )

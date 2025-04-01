@@ -35,15 +35,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     private var finishedResettingFlag = false
 
     private fun setPosition(position: () -> Distance): Command =
-        sequence(
-                runOnce {
-                    setpoint = position.invoke()
-                    io.setPosition(setpoint)
-                },
-                waitUntil(atSetpoint),
-                setVoltage(Units.Volts.zero())
-            )
-            .withName("Extender/setPosition")
+        runOnce {
+            setpoint = position.invoke()
+            io.setPosition(setpoint)
+        }.withName("Extender/setPosition")
 
     private fun setPosition(position: Positions): Command =
         runOnce { setpointName = position.getLoggingName() }
