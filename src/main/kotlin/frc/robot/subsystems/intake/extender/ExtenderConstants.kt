@@ -18,7 +18,7 @@ const val SAFETY_DEBOUNCE = 1.0
 val GAINS = selectGainsBasedOnMode(Gains(2.0), Gains(kP = 0.5, kD = 0.2))
 
 enum class Positions(val position: Distance) {
-    EXTENDED(Units.Meters.of(0.40)),
+    EXTENDED(Units.Meters.of(0.36)),
     RETRACTED(Units.Meters.of(0.0)),
     PASS_TO_GRIPPER(Units.Meters.of(0.20)),
     L4(Units.Meters.of(0.36));
