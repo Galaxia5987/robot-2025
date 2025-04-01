@@ -50,7 +50,7 @@ fun `1RN`(): Command =
     Commands.sequence(
         alignToReefAlgae2(),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("1RN")),
-        alignAlgaeToNet()
+        alignAlgaeToNet().until(gripper.hasAlgae.negate())
     )
 
 fun N2algae(): Command =
@@ -62,7 +62,7 @@ fun N2algae(): Command =
 
 fun `2LN`(): Command =
     Commands.sequence(
-        alignAlgaeToNet(),
+        alignAlgaeToNet().until(gripper.hasAlgae.negate()),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
                 { 0.7 },
@@ -162,7 +162,12 @@ private fun S3L(): Command =
             .until(gripper.autoHasCoral.negate())
     )
 
-fun B1RN2N(): Command = Commands.sequence(B1R(), `1RN`(), N2algae(), `2LN`())
+fun B1RN2N(): Command = Commands.sequence(
+    B1R(),
+    `1RN`(),
+    N2algae(),
+    `2LN`()
+)
 
 fun C6L5LR(): Command =
     Commands.sequence(
