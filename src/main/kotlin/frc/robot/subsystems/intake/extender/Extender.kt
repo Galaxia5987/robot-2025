@@ -163,7 +163,7 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
     }
 
     @AutoLogOutput
-    private var atSetpoint = Trigger {
+    val atSetpoint = Trigger {
         io.inputs.position.isNear(setpoint, POSITION_TOLERANCE)
     }
 
