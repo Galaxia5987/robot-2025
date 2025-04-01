@@ -46,6 +46,14 @@ fun B1R(): Command =
         alignScoreL4()
     )
 
+fun B1RX(): Command =
+    Commands.sequence(
+        Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
+        wrist.skyward(),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1RX")),
+        alignScoreL4()
+    )
+
 fun `1RN`(): Command =
     Commands.sequence(
         alignToReefAlgae2(),
