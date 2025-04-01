@@ -260,6 +260,7 @@ fun l2algae(retractTrigger: Trigger): Command =
 fun l2algaePickup(): Command =
     sequence(
         elevator.l2AlgaePickup(),
+        WaitCommand(0.2),
         wrist.l2algaePickup(),
         gripper.intakeAlgae(),
         waitUntil(gripper.hasAlgae),
@@ -269,6 +270,7 @@ fun l2algaePickup(): Command =
 fun l3algaePickup(): Command =
     sequence(
         elevator.l3AlgaePickup(),
+        WaitCommand(0.2),
         wrist.l3algaePickup(),
         gripper.intakeAlgae(),
         waitUntil(gripper.hasAlgae),
