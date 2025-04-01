@@ -329,12 +329,15 @@ fun intakeAlgaeToGripper(gripperTrigger: Trigger): Command =
             gripper.intakeAlgae()
         )
         .until(gripperTrigger)
-        .andThen(intakeToGripper().withTimeout(0.8).alongWith(wrist.floorAlgaeEnd()))
+        .andThen(
+            intakeToGripper().withTimeout(0.8).alongWith(wrist.floorAlgaeEnd())
+        )
         .andThen(
             wrist.setVoltage(MANUAL_CONTROL_VOLTAGE).withTimeout(1.0),
             wrist.max().until(wrist.atSetpoint),
             extender.retract()
-        ).withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf)
+        )
+        .withInterruptBehavior(Command.InterruptionBehavior.kCancelSelf)
 
 fun netAlgae(outtakeTrigger: Trigger): Command =
     sequence(

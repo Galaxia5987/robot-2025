@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.State
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.sequence
-import edu.wpi.first.wpilibj2.command.Commands.waitUntil
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
@@ -36,9 +35,10 @@ class Extender(private val io: ExtenderIO) : SubsystemBase() {
 
     private fun setPosition(position: () -> Distance): Command =
         runOnce {
-            setpoint = position.invoke()
-            io.setPosition(setpoint)
-        }.withName("Extender/setPosition")
+                setpoint = position.invoke()
+                io.setPosition(setpoint)
+            }
+            .withName("Extender/setPosition")
 
     private fun setPosition(position: Positions): Command =
         runOnce { setpointName = position.getLoggingName() }
