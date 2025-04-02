@@ -68,7 +68,8 @@ fun `1RN`(): Command =
 fun N2algae(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[6]!! }),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2")),
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2"))
+            .alongWith(wrist.l3algaePickup()),
         autoAlignToReefAlgae3()
     )
 
