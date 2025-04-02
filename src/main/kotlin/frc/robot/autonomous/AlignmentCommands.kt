@@ -225,22 +225,24 @@ private fun alignPrepToAlgae(reefMasterCommand: Command): Command =
     )
 
 private fun autoAlignPrepToAlgae(reefMasterCommand: Command): Command =
-    reefMasterCommand.withDeadline(
-        swerveDrive.defer {
-            val targetPose =
-                moveSetpointIfOnOtherSide(
-                    selectedScorePose.third
-                        .invoke()
-                        .moveBack(Units.Meters.of(0.3))
-                )
+    reefMasterCommand
+        .withDeadline(
+            swerveDrive.defer {
+                val targetPose =
+                    moveSetpointIfOnOtherSide(
+                        selectedScorePose.third
+                            .invoke()
+                            .moveBack(Units.Meters.of(0.3))
+                    )
 
-            alignToPose(
-                targetPose,
-                elevator.atSetpoint.and(wrist.atSetpoint).and(atGoal),
-                true
-            )
-        }
-    ).withTimeout(0.4)
+                alignToPose(
+                    targetPose,
+                    elevator.atSetpoint.and(wrist.atSetpoint).and(atGoal),
+                    true
+                )
+            }
+        )
+        .withTimeout(0.4)
 
 fun alignScoreL1(): Command =
     Commands.sequence(
@@ -328,10 +330,10 @@ fun autoAlignToReefAlgae2(): Command =
         autoAlignPrepToAlgae(l2algaePickup()),
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
-            swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.5, 0.0, 0.0)
-            )
-        })
+                swerveDrive.robotOrientedRunVelocity(
+                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                )
+            })
             .withTimeout(0.18),
         wrist.max()
     )
@@ -343,10 +345,10 @@ fun autoAlignToReefAlgae3(): Command =
         autoAlignPrepToAlgae(l3algaePickup()),
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
-            swerveDrive.robotOrientedRunVelocity(
-                ChassisSpeeds(-0.5, 0.0, 0.0)
-            )
-        })
+                swerveDrive.robotOrientedRunVelocity(
+                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                )
+            })
             .withTimeout(0.18),
         wrist.max(),
         elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)

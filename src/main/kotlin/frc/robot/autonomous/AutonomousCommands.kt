@@ -53,7 +53,9 @@ fun B1RX(): Command =
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1RX"))
             .alongWith(wrist.skyward()),
         autoScoreL4().until(gripper.autoHasCoral.negate()),
-        wrist.skyward(), WaitCommand(0.1), elevator.feeder()
+        wrist.skyward(),
+        WaitCommand(0.1),
+        elevator.feeder()
     )
 
 fun `1RN`(): Command =
@@ -74,7 +76,9 @@ fun `2LN`(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("2N")),
         alignAlgaeToNet().until(gripper.hasAlgae.negate()),
-        Commands.runOnce({swerveDrive.setNeutralMode(NeutralModeValue.Coast)}),
+        Commands.runOnce({
+            swerveDrive.setNeutralMode(NeutralModeValue.Coast)
+        }),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
                 { 0.7 },
@@ -174,10 +178,7 @@ private fun S3L(): Command =
             .until(gripper.autoHasCoral.negate())
     )
 
-fun B1RN2N(): Command =
-    Commands.sequence(
-        B1RX(), `1RN`(), N2algae(), `2LN`()
-    )
+fun B1RN2N(): Command = Commands.sequence(B1RX(), `1RN`(), N2algae(), `2LN`())
 
 fun C6L5LR(): Command =
     Commands.sequence(
