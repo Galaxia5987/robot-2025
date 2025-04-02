@@ -5,8 +5,11 @@ import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.units.Units
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.ConditionalCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.elevator
@@ -179,7 +182,18 @@ private fun S3L(): Command =
             .until(gripper.autoHasCoral.negate())
     )
 
-fun B1RN2N(): Command = Commands.sequence(B1RX(), `1RN`(), N2algae(), `2LN`())
+fun B1RN2N(): Command =
+    Commands.sequence(
+        B1RX(),
+        `1RN`(),
+        ConditionalCommand(
+            N2algae()
+                .andThen(`2LN`()),
+            AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2"))
+                .alongWith(wrist.l3algaePickup()),
+            {DriverStation.getMatchTime() > MINIMUM_2_ALGAE_MATCH_TIME.`in`(Units.Seconds)}
+        )
+    )
 
 fun C6L5LR(): Command =
     Commands.sequence(

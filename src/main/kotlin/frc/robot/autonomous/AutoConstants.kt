@@ -10,6 +10,7 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.LinearVelocity
+import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.IS_RED
 import frc.robot.lib.flip
@@ -231,3 +232,4 @@ val NET_ZONES = listOf(NET_ZONE, OPPOSING_NET_ZONE)
 val MOVE_WRIST_UP_RADIUS: Distance = Units.Meters.of(2.0)
 val MOVE_WRIST_DOWN_RADIUS: Distance = Units.Meters.of(2.2)
 val ALGAE_STEAL_POSE_X_DISPLACEMENT: Distance = Units.Meters.of(8.57)
+val  MINIMUM_2_ALGAE_MATCH_TIME: Time = Units.Seconds.of(7.7)
