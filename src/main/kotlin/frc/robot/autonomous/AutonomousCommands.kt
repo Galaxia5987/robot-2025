@@ -187,11 +187,13 @@ fun B1RN2N(): Command =
         B1RX(),
         `1RN`(),
         ConditionalCommand(
-            N2algae()
-                .andThen(`2LN`()),
+            N2algae().andThen(`2LN`()),
             AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2"))
                 .alongWith(wrist.l3algaePickup()),
-            {DriverStation.getMatchTime() > MINIMUM_2_ALGAE_MATCH_TIME.`in`(Units.Seconds)}
+            {
+                DriverStation.getMatchTime() >
+                    MINIMUM_2_ALGAE_MATCH_TIME.`in`(Units.Seconds)
+            }
         )
     )
 
