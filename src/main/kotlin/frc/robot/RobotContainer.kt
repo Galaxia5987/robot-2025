@@ -291,6 +291,7 @@ object RobotContainer {
             .axisGreaterThan(0, 0.0)
             .and(disableAlignment.negate())
             .whileTrue(alignAlgaeToNet())
+            .onFalse(elevator.feeder())
 
         // feeder auto
         (operatorController.start().or(operatorController.back()))
