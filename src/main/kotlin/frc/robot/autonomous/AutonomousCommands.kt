@@ -1,5 +1,6 @@
 package frc.robot.autonomous
 
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Rotation2d
@@ -49,14 +50,15 @@ fun B1R(): Command =
 fun B1RX(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[5]!! }),
-        wrist.skyward(),
-        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1RX")),
-        alignScoreL4()
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("B1RX"))
+            .alongWith(wrist.skyward()),
+        autoScoreL4().until(gripper.autoHasCoral.negate()),
+        wrist.skyward(), WaitCommand(0.1), elevator.feeder()
     )
 
 fun `1RN`(): Command =
     Commands.sequence(
-        alignToReefAlgae2(),
+        autoAlignToReefAlgae2(),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("1RN")),
         alignAlgaeToNet().until(gripper.hasAlgae.negate())
     )
@@ -65,17 +67,19 @@ fun N2algae(): Command =
     Commands.sequence(
         Commands.runOnce({ selectedScorePose = buttonToPoseAndTagMap[6]!! }),
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("N2")),
-        alignToReefAlgae3()
+        autoAlignToReefAlgae3()
     )
 
 fun `2LN`(): Command =
     Commands.sequence(
+        AutoBuilder.followPath(PathPlannerPath.fromPathFile("2N")),
         alignAlgaeToNet().until(gripper.hasAlgae.negate()),
+        Commands.runOnce({swerveDrive.setNeutralMode(NeutralModeValue.Coast)}),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
                 { 0.7 },
                 { 0.0 },
-                { Rotation2d.k180deg }
+                { Rotation2d.kZero }
             )
             .withTimeout(1.8)
     )
@@ -170,7 +174,10 @@ private fun S3L(): Command =
             .until(gripper.autoHasCoral.negate())
     )
 
-fun B1RN2N(): Command = Commands.sequence(B1R(), `1RN`(), N2algae(), `2LN`())
+fun B1RN2N(): Command =
+    Commands.sequence(
+        B1RX(), `1RN`(), N2algae(), `2LN`()
+    )
 
 fun C6L5LR(): Command =
     Commands.sequence(

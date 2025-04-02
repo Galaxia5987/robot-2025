@@ -17,6 +17,7 @@ import static edu.wpi.first.units.Units.*;
 import static frc.robot.ConstantsKt.LOOP_TIME;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -60,6 +61,8 @@ import frc.robot.Mode;
 import frc.robot.autonomous.ScoreStateKt;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.math.GalacticSlewRateLimiter;
+
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -645,5 +648,9 @@ public class Drive extends SubsystemBase {
             new Translation2d(
                     TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
+    }
+
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        Arrays.stream(modules).forEach((module -> module.setNeutralMode(neutralMode)));
     }
 }

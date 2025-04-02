@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.ctre.phoenix6.signals.NeutralModeValue
 import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
@@ -201,6 +202,7 @@ object Robot : LoggedRobot() {
             autonomousCommand.cancel()
         }
         swerveDrive.useLocalInAuto = false
+        swerveDrive.setNeutralMode(NeutralModeValue.Brake)
     }
 
     override fun simulationPeriodic() {
