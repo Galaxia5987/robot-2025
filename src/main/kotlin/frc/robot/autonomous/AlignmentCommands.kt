@@ -303,7 +303,7 @@ fun alignToReefAlgae2(): Command =
                     ChassisSpeeds(-0.5, 0.0, 0.0)
                 )
             })
-            .withTimeout(0.18),
+            .withTimeout(0.22),
         wrist.max()
     )
 
@@ -318,7 +318,7 @@ fun alignToReefAlgae3(): Command =
                     ChassisSpeeds(-0.5, 0.0, 0.0)
                 )
             })
-            .withTimeout(0.18),
+            .withTimeout(0.22),
         wrist.max(),
         elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
     )
