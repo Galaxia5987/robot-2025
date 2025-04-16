@@ -357,7 +357,7 @@ fun autoAlignToReefAlgae3(): Command =
 fun alignAlgaeToNet(): Command {
     return swerveDrive.defer {
         val driveAngle = {
-            Rotation2d.fromDegrees(if (isOnOtherSide.asBoolean) 180.0 else 0.0)
+            Rotation2d.fromDegrees(if (isOnOtherSide.asBoolean) 0.0 else 180.0).flipIfNeeded()
         }
         val drivePower = { if (isOnOtherSide.asBoolean) 0.7 else -0.7 }
         Commands.sequence(
