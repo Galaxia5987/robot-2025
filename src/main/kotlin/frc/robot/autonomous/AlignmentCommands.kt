@@ -398,7 +398,7 @@ private fun moveSetpointIfOnOtherSide(targetPose: Pose2d): Pose2d {
 }
 
 val isOnOtherSide: Trigger = Trigger {
-    swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
+    swerveDrive.pose.x > FlippingUtil.fieldSizeX / 2
 }
 
 private val atAlignmentSetpoint = Trigger {
