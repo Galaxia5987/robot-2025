@@ -294,6 +294,7 @@ fun autoScoreL4(): Command =
 
 fun alignToReefAlgae2(): Command =
     Commands.sequence(
+        Commands.runOnce({ aligningToAlgae = true}),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignPrepToAlgae(l2algaePickup()),
@@ -304,11 +305,13 @@ fun alignToReefAlgae2(): Command =
                 )
             })
             .withTimeout(0.22),
-        wrist.max()
+        wrist.max(),
+        Commands.runOnce({ aligningToAlgae = false})
     )
 
 fun alignToReefAlgae3(): Command =
     Commands.sequence(
+        Commands.runOnce({ aligningToAlgae = true}),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignPrepToAlgae(l3algaePickup()),
@@ -320,11 +323,13 @@ fun alignToReefAlgae3(): Command =
             })
             .withTimeout(0.22),
         wrist.max(),
-        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8),
+        Commands.runOnce({ aligningToAlgae = false})
     )
 
 fun autoAlignToReefAlgae2(): Command =
     Commands.sequence(
+        Commands.runOnce({ aligningToAlgae = true}),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         autoAlignPrepToAlgae(l2algaePickup()),
@@ -335,11 +340,13 @@ fun autoAlignToReefAlgae2(): Command =
                 )
             })
             .withTimeout(0.18),
-        wrist.max()
+        wrist.max(),
+        Commands.runOnce({ aligningToAlgae = false})
     )
 
 fun autoAlignToReefAlgae3(): Command =
     Commands.sequence(
+        Commands.runOnce({ aligningToAlgae = true}),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         autoAlignPrepToAlgae(l3algaePickup()),
@@ -351,7 +358,8 @@ fun autoAlignToReefAlgae3(): Command =
             })
             .withTimeout(0.18),
         wrist.max(),
-        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8),
+        Commands.runOnce({ aligningToAlgae = false})
     )
 
 fun alignAlgaeToNet(): Command {
@@ -488,7 +496,8 @@ fun logTriggers() {
             "ableToNet" to ableToNet,
             "isL4" to isL4,
             "justDidL2" to justDidL2,
-            "isOnOtherSide" to isOnOtherSide
+            "isOnOtherSide" to isOnOtherSide,
+            "aligningToAlgae" to Trigger {aligningToAlgae}
         )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)

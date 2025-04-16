@@ -233,3 +233,5 @@ val MOVE_WRIST_UP_RADIUS: Distance = Units.Meters.of(2.0)
 val MOVE_WRIST_DOWN_RADIUS: Distance = Units.Meters.of(2.2)
 val ALGAE_STEAL_POSE_X_DISPLACEMENT: Distance = Units.Meters.of(8.57)
 val MINIMUM_2_ALGAE_MATCH_TIME: Time = Units.Seconds.of(7.7)
+
+var aligningToAlgae = false;

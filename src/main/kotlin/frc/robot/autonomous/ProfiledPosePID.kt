@@ -76,7 +76,7 @@ val atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)
         .and(thetaController::atGoal)
-//        .and { swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 }
+        .and { (swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 || aligningToAlgae) }
         .debounce(0.05)
 
 private fun setTolerance(
