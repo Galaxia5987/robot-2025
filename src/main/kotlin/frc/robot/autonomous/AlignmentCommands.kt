@@ -305,9 +305,8 @@ fun alignToReefAlgae2(): Command =
                 )
             })
             .withTimeout(0.22),
-        wrist.max(),
-        Commands.runOnce({ aligningToAlgae = false})
-    )
+        wrist.max()
+    ).finallyDo(Runnable { aligningToAlgae = false})
 
 fun alignToReefAlgae3(): Command =
     Commands.sequence(
@@ -323,9 +322,8 @@ fun alignToReefAlgae3(): Command =
             })
             .withTimeout(0.22),
         wrist.max(),
-        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8),
-        Commands.runOnce({ aligningToAlgae = false})
-    )
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
+    ).finallyDo(Runnable { aligningToAlgae = false})
 
 fun autoAlignToReefAlgae2(): Command =
     Commands.sequence(
@@ -340,9 +338,8 @@ fun autoAlignToReefAlgae2(): Command =
                 )
             })
             .withTimeout(0.18),
-        wrist.max(),
-        Commands.runOnce({ aligningToAlgae = false})
-    )
+        wrist.max()
+    ).finallyDo(Runnable { aligningToAlgae = false})
 
 fun autoAlignToReefAlgae3(): Command =
     Commands.sequence(
@@ -358,9 +355,8 @@ fun autoAlignToReefAlgae3(): Command =
             })
             .withTimeout(0.18),
         wrist.max(),
-        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8),
-        Commands.runOnce({ aligningToAlgae = false})
-    )
+        elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
+    ).finallyDo(Runnable { aligningToAlgae = false})
 
 fun alignAlgaeToNet(): Command {
     return swerveDrive.defer {
