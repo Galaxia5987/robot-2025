@@ -86,8 +86,8 @@ fun `2LN`(): Command =
         }),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
-                if (IS_RED) {{ 0.7 }} else {{-0.7}},
-                { 0.0 },
+                if (IS_RED) {{ 0.7 }} else {{ -0.7 }},
+                if (IS_RED) {{ -0.4 }} else {{ 0.4 }},
                 { Rotation2d.kZero }
             )
             .withTimeout(1.8)
