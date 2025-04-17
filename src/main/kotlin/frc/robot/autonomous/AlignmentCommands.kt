@@ -363,7 +363,7 @@ fun alignAlgaeToNet(): Command {
         val driveAngle = {
             Rotation2d.fromDegrees(if (isOnOtherSide.asBoolean) 0.0 else 180.0).flipIfNeeded()
         }
-        val drivePower = { if (isOnOtherSide.asBoolean) 0.7 else -0.7 }
+        val drivePower = { if (isOnOtherSide.asBoolean) -0.7 else 0.7 }
         Commands.sequence(
             elevator.zero(),
             wrist.max(),
