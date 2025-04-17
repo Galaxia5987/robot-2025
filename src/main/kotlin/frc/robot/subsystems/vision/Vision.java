@@ -30,6 +30,8 @@ import frc.robot.InitializerKt;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+
+import frc.robot.autonomous.AlignmentCommandsKt;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -184,6 +186,14 @@ public class Vision extends SubsystemBase {
                         observation.pose().toPose2d(),
                         observation.timestamp(),
                         VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+
+                if (AlignmentCommandsKt.isOnOtherSide().getAsBoolean()) {
+                    localConsumer.accept(
+                            observation.pose().toPose2d(),
+                            observation.timestamp(),
+                            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
+                    );
+                }
             }
 
             boolean isWithinMaxDistanceFromGlobal =
