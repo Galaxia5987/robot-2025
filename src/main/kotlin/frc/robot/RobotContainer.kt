@@ -238,16 +238,16 @@ object RobotContainer {
         // align pick algae from reef
         operatorController
             .x()
-            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate()))
+            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate().and(shouldNet)))
         operatorController
             .b()
-            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate()))
+            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate().and(shouldNet)))
         heightController
             .button(2)
-            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate()))
+            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate().and(shouldNet)))
         heightController
             .button(3)
-            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate()))
+            .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate().and(shouldNet)))
 
         // manual pick algae from reef
         operatorController
