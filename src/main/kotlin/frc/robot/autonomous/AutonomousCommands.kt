@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.ConditionalCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.IS_RED
 import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
@@ -85,7 +86,7 @@ fun `2LN`(): Command =
         }),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
-                { 0.7 },
+                if (IS_RED) {{ 0.7 }} else {{-0.7}},
                 { 0.0 },
                 { Rotation2d.kZero }
             )
