@@ -67,7 +67,7 @@ val Reef4Right: Pose2d =
 val Reef4Middle: Pose2d = ReefFaceMiddle
 
 val Reef5Left: Pose2d =
-    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0)).plus(Transform2d(0.0, 0.025, Rotation2d.kZero))
+    Reef4Left.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 val Reef5Right: Pose2d =
     Reef4Right.rotateAround(ReefCenter, Rotation2d.fromDegrees(60.0))
 val Reef5Middle: Pose2d =
