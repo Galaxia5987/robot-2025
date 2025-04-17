@@ -27,7 +27,6 @@ import frc.robot.autonomous.C6L5LR
 import frc.robot.autonomous.S5L
 import frc.robot.autonomous.S5R
 import frc.robot.autonomous.alignAlgaeToNet
-import frc.robot.autonomous.alignScoreL1
 import frc.robot.autonomous.alignScoreL2
 import frc.robot.autonomous.alignScoreL3
 import frc.robot.autonomous.alignScoreL4
@@ -42,7 +41,6 @@ import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
@@ -61,9 +59,10 @@ import frc.robot.subsystems.netAlgae
 import frc.robot.subsystems.outtakeCoralAlignment
 import frc.robot.subsystems.outtakeCoralManual
 import frc.robot.subsystems.outtakeL1
-import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
+import frc.robot.subsystems.elevator.MANUAL_CONTROL_VOLTAGE as ELEVATOR_MANUAL_CONTROL_VOLTAGE
+import frc.robot.subsystems.wrist.MANUAL_CONTROL_VOLTAGE as WRIST_MANUAL_CONTROL_VOLTAGE
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -137,13 +136,13 @@ object RobotContainer {
             .and(RobotModeTriggers.disabled())
             .onTrue(
                 Commands.runOnce(
-                        {
-                            swerveDrive.resetGyroBasedOnAlliance(
-                                Rotation2d.kZero
-                            )
-                        },
-                        swerveDrive
-                    )
+                    {
+                        swerveDrive.resetGyroBasedOnAlliance(
+                            Rotation2d.kZero
+                        )
+                    },
+                    swerveDrive
+                )
                     .ignoringDisable(true)
             )
 
@@ -152,13 +151,13 @@ object RobotContainer {
             .create()
             .onTrue(
                 Commands.runOnce(
-                        {
-                            swerveDrive.resetGyroBasedOnAlliance(
-                                Rotation2d.kZero
-                            )
-                        },
-                        swerveDrive
-                    )
+                    {
+                        swerveDrive.resetGyroBasedOnAlliance(
+                            Rotation2d.kZero
+                        )
+                    },
+                    swerveDrive
+                )
                     .ignoringDisable(true)
             )
 
@@ -342,6 +341,13 @@ object RobotContainer {
 
         // test controller
         testController.a().whileTrue(runAllBits())
+        testController.b().whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                swerveDrive,
+                { 0.7 },
+                { 0.0 },
+                { Rotation2d.kZero }
+            ))
 
         // tuning buttons
         driverController.povDown().onTrue(elevator.tuningPosition())
@@ -382,13 +388,13 @@ object RobotContainer {
                 "MoveL4" to alignmentSetpointL4(),
                 "MoveFeeder" to moveDefaultPosition(true, { false }),
                 "ResetCoral" to
-                    (wrist.feeder().alongWith(gripper.intake())).withTimeout(
-                        0.25
-                    ),
+                        (wrist.feeder().alongWith(gripper.intake())).withTimeout(
+                            0.25
+                        ),
                 "UseLocalEstimation" to
-                    Commands.runOnce({ swerveDrive.useLocalInAuto = true }),
+                        Commands.runOnce({ swerveDrive.useLocalInAuto = true }),
                 "DisableLocalEstimation" to
-                    Commands.runOnce({ swerveDrive.useLocalInAuto = false })
+                        Commands.runOnce({ swerveDrive.useLocalInAuto = false })
             )
 
         NamedCommands.registerCommands(namedCommands)
