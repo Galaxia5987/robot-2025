@@ -65,6 +65,8 @@ class Gripper(private val io: GripperIO) : SubsystemBase() {
             )
             .withName("Gripper/SlowOuttake")
 
+    fun outtakeL1(): Command = setVoltage(OUTTAKE_L1_VOLTAGE).withName("Gripper/L1Outtake")
+
     fun outtake(reversed: Boolean = false): Command =
         setVoltage(if (reversed) -OUTTAKE_VOLTAGE else OUTTAKE_VOLTAGE)
             .withName("Gripper/Outtake")

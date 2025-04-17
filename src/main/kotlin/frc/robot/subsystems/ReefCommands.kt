@@ -151,7 +151,7 @@ fun outtakeCoral(): Command =
 fun outtakeL1(): Command =
     sequence(
         (gripper
-            .slowOuttake(true)
+            .outtakeL1()
             .until(gripper.hasCoral.negate())
             .alongWith(
                 visualizeCoralOuttake().onlyIf { CURRENT_MODE != Mode.REAL }
