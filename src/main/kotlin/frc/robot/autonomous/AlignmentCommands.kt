@@ -362,8 +362,11 @@ fun alignAlgaeToNet(): Command {
     return swerveDrive.defer {
         val driveAngle = {
             Rotation2d.fromDegrees(if (isOnOtherSide.asBoolean) 0.0 else 180.0).flipIfNeeded()
+// essentially:  Rotation2d.fromDegrees(if (isOnBlueSide.asBoolean) 180.0 else 0.0)
         }
-        val drivePower = { if (isOnOtherSide.asBoolean) -0.7 else 0.7 }
+        val drivePower = { if (isOnBlueSide.asBoolean) 0.7 else -0.7 }
+
+
         Commands.sequence(
             elevator.zero(),
             wrist.max(),
@@ -403,6 +406,10 @@ private fun moveSetpointIfOnOtherSide(targetPose: Pose2d): Pose2d {
 
 val isOnOtherSide: Trigger = Trigger {
     swerveDrive.pose.flipIfNeeded().x > FlippingUtil.fieldSizeX / 2
+}
+
+val isOnBlueSide: Trigger = Trigger {
+    swerveDrive.pose.x < FlippingUtil.fieldSizeX / 2
 }
 
 private val atAlignmentSetpoint = Trigger {
