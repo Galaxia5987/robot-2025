@@ -27,7 +27,7 @@ enum class Angles(val angle: Angle) {
     L3_MANUAL(Units.Degrees.of(170.0)),
     L4(Units.Degrees.of(90.0)),
     ALIGN_L2(Units.Degrees.of(120.0)),
-    ALIGN_L4(Units.Degrees.of(123.0)),
+    ALIGN_L4(Units.Degrees.of(125.0)),
     L2_ALGAE(Units.Degrees.of(80.0)),
     L2_ALGAE_PICKUP(Units.Degrees.of(120.0)),
     L2_ALGAE_PICKUP_END(Units.Degrees.of(140.0)),
