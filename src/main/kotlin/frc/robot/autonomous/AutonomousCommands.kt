@@ -81,10 +81,10 @@ fun N2algae(): Command =
 fun `2LN`(): Command =
     Commands.sequence(
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("2N")),
-        alignAlgaeToNet().until(gripper.hasAlgae.negate()),
         Commands.runOnce({
             swerveDrive.setNeutralMode(NeutralModeValue.Coast)
         }),
+        alignAlgaeToNet().until(gripper.hasAlgae.negate()),
         DriveCommands.joystickDriveAtAngle(
                 swerveDrive,
                 {if (IS_RED) { 0.7 } else { -0.7 }},
