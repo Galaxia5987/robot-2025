@@ -11,6 +11,7 @@ import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
@@ -18,6 +19,7 @@ import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
 import frc.robot.autonomous.getPoseLookaheadTime
 import frc.robot.autonomous.logTriggers
+import frc.robot.autonomous.looseAtGoal
 import frc.robot.autonomous.selectedFeeder
 import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
@@ -42,6 +44,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  */
 object Robot : LoggedRobot() {
     private lateinit var autonomousCommand: Command
+    val autoTimer: Timer = Timer()
 
     /**
      * This function is run when the robot is first started up and should be
@@ -166,6 +169,9 @@ object Robot : LoggedRobot() {
         )
         Logger.recordOutput("shouldNet", RobotContainer.shouldNet)
         Logger.recordOutput("LookaheadPose", getPoseLookaheadTime())
+        Logger.recordOutput("Alignment/LooseAtGoal", looseAtGoal)
+        Logger.recordOutput("MatchTime", DriverStation.getMatchTime())
+        Logger.recordOutput("AutoTimer", autoTimer.get())
     }
 
     /**
@@ -189,6 +195,7 @@ object Robot : LoggedRobot() {
         // Make sure command is compiled beforehand, otherwise there will be a delay.
         autonomousCommand = RobotContainer.getAutonomousCommand()
 
+        autoTimer.restart()
         // Schedule the autonomous command
         autonomousCommand.schedule()
     }

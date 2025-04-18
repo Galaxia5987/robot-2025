@@ -79,6 +79,11 @@ val atGoal: Trigger =
         .and { (swerveDrive.chassisSpeeds.getSpeed().absoluteValue <= 0.03 || aligningToAlgae) }
         .debounce(0.05)
 
+val looseAtGoal: Trigger =
+    Trigger { abs(xController.goal.position - swerveDrive.localEstimatedPose.x) < 0.08 }
+        .and { abs(yController.goal.position - swerveDrive.localEstimatedPose.y) < 0.08 }
+        .and(thetaController::atGoal)
+
 private fun setTolerance(
     xThreshold: Distance,
     yThreshold: Distance,

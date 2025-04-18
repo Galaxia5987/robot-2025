@@ -132,7 +132,8 @@ fun S5R(): Command =
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R"))
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
-            .until(gripper.autoHasCoral.negate())
+            .until { (DriverStation.getMatchTime() <= 1.0 && looseAtGoal.asBoolean) || !gripper.autoHasCoral.asBoolean },
+        gripper.outtake(false)
     )
 
 fun A2R(): Command =

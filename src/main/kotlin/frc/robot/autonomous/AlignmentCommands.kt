@@ -334,10 +334,10 @@ fun autoAlignToReefAlgae2(): Command =
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
                 swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                    ChassisSpeeds(-0.6, 0.0, 0.0)
                 )
             })
-            .withTimeout(0.18),
+            .withTimeout(0.1),
         wrist.max()
     ).finallyDo(Runnable { aligningToAlgae = false})
 
@@ -350,10 +350,10 @@ fun autoAlignToReefAlgae3(): Command =
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
                 swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
+                    ChassisSpeeds(-0.6, 0.0, 0.0)
                 )
             })
-            .withTimeout(0.18),
+            .withTimeout(0.1),
         wrist.max(),
         elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
     ).finallyDo(Runnable { aligningToAlgae = false})
