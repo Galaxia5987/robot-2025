@@ -134,7 +134,7 @@ fun S5R(): Command =
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
             .until { (autoTimer.get() >= 14.5 && looseAtGoal.asBoolean) || !gripper.autoHasCoral.asBoolean },
-        gripper.outtake(false)
+        gripper.outtake(false).until(gripper.autoHasCoral.negate())
     )
 
 fun A2R(): Command =
