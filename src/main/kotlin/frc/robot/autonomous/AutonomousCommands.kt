@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand
 import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.IS_RED
+import frc.robot.Robot.autoTimer
 import frc.robot.elevator
 import frc.robot.gripper
 import frc.robot.lib.flipIfNeeded
@@ -132,7 +133,7 @@ fun S5R(): Command =
         AutoBuilder.followPath(PathPlannerPath.fromPathFile("S5R"))
             .alongWith(WaitCommand(0.5).andThen(wrist.skyward())),
         Commands.repeatingSequence(alignScoreL4().onlyIf(gripper.autoHasCoral))
-            .until { (DriverStation.getMatchTime() <= 1.0 && looseAtGoal.asBoolean) || !gripper.autoHasCoral.asBoolean },
+            .until { (autoTimer.get() >= 14.5 && looseAtGoal.asBoolean) || !gripper.autoHasCoral.asBoolean },
         gripper.outtake(false)
     )
 
