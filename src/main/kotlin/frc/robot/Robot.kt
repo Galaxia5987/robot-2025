@@ -15,14 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.Mode.REAL
 import frc.robot.Mode.REPLAY
 import frc.robot.Mode.SIM
-import frc.robot.autonomous.getPoseLookaheadTime
-import frc.robot.autonomous.logTriggers
-import frc.robot.autonomous.selectedFeeder
-import frc.robot.autonomous.selectedScorePose
 import frc.robot.lib.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
-import frc.robot.subsystems.leds.blueTeamPattern
-import frc.robot.subsystems.leds.redTeamPattern
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
@@ -102,10 +96,6 @@ object Robot : LoggedRobot() {
         DriverStation.silenceJoystickConnectionWarning(true)
         PathfindingCommand.warmupCommand().schedule()
 
-        leds
-            .setPattern(all = if (IS_RED) redTeamPattern else blueTeamPattern)
-            .schedule()
-
         val commandCounts = HashMap<String, Int>()
         val logCommandFunction =
             { command: Command, active: Boolean, verb: String ->
@@ -144,27 +134,6 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
-        logTriggers()
-        Logger.recordOutput(
-            "ScoreState/SelectedScorePose",
-            selectedScorePose.first.invoke()
-        )
-        Logger.recordOutput(
-            "ScoreState/TagOfSelectedScorePose",
-            selectedScorePose.second
-        )
-        Logger.recordOutput(
-            "ScoreState/SelectedFeeder",
-            selectedFeeder.invoke()
-        )
-
-        Logger.recordOutput("disableAlignment", RobotContainer.disableAlignment)
-        Logger.recordOutput(
-            "disablePathFinding",
-            RobotContainer.disablePathFinding
-        )
-        Logger.recordOutput("shouldNet", RobotContainer.shouldNet)
-        Logger.recordOutput("LookaheadPose", getPoseLookaheadTime())
     }
 
     /**
@@ -180,7 +149,7 @@ object Robot : LoggedRobot() {
      */
     override fun autonomousInit() {
 
-        swerveDrive.setGyroOffset(
+        swerveDrive.resetGyro(
             if (IS_RED) Rotation2d.k180deg else Rotation2d.kZero
         )
         swerveDrive.resetLocalPoseEstimatorBasedOnGlobal()
@@ -200,7 +169,6 @@ object Robot : LoggedRobot() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
         }
-        swerveDrive.useLocalInAuto = false
     }
 
     override fun simulationPeriodic() {

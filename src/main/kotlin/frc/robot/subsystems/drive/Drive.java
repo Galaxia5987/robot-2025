@@ -48,16 +48,12 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
-import frc.robot.InitializerKt;
 import frc.robot.Mode;
-import frc.robot.autonomous.ScoreStateKt;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.math.GalacticSlewRateLimiter;
 import java.util.Optional;
@@ -94,9 +90,9 @@ public class Drive extends SubsystemBase {
                                     TunerConstants.BackRight.LocationY)));
 
     // PathPlanner config constants
-    private static final Mass ROBOT_MASS_KG = Kilograms.of(58.5);
-    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(3.0);
-    private static final double WHEEL_COF = 1.2;
+    private static final Mass ROBOT_MASS_KG = Kilograms.of(52.757);
+    private static final MomentOfInertia ROBOT_MOI = KilogramSquareMeters.of(5.095);
+    private static final double WHEEL_COF = 1.542;
     private static final RobotConfig PP_CONFIG =
             new RobotConfig(
                     ROBOT_MASS_KG,
@@ -147,8 +143,6 @@ public class Drive extends SubsystemBase {
 
     private Rotation2d gyroOffset = Rotation2d.kZero;
 
-    private Field2d field = new Field2d();
-
     public SwerveDriveKinematics kinematics = new SwerveDriveKinematics(getModuleTranslations());
     private Rotation2d rawGyroRotation = new Rotation2d();
     public SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -169,16 +163,6 @@ public class Drive extends SubsystemBase {
             new GalacticSlewRateLimiter(1.5);
     private static final GalacticSlewRateLimiter slewRateLimiterY =
             new GalacticSlewRateLimiter(1.5);
-
-    private boolean useLocalInAuto = false;
-
-    public boolean getUseLocalInAuto() {
-        return useLocalInAuto;
-    }
-
-    public void setUseLocalInAuto(boolean useLocalInAuto) {
-        this.useLocalInAuto = useLocalInAuto;
-    }
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Optional<SwerveDriveSimulation> driveSimulation) {
@@ -213,12 +197,13 @@ public class Drive extends SubsystemBase {
         var scale = 3;
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configure(
-                this::getPoseForAuto,
+                this::getPose,
                 this::resetOdometry,
                 this::getChassisSpeeds,
                 this::limitlessRunVelocity,
                 new PPHolonomicDriveController(
-                        new PIDConstants(5.5, 0.0, 0.0), new PIDConstants(5.5, 0.0, 0.0)),
+                        new PIDConstants(3 * scale, 0.0, 0.0),
+                        new PIDConstants(0.8 * scale, 0.0, 0.0)),
                 PP_CONFIG,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
@@ -335,40 +320,32 @@ public class Drive extends SubsystemBase {
         // Update gyro alert
         gyroDisconnectedAlert.set(
                 !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
-
-        field.setRobotPose(getPose());
-        field.getObject("selectedPose")
-                .setPose(ScoreStateKt.getSelectedScorePose().component1().invoke());
-        field.getObject("selectedFeeder").setPose(ScoreStateKt.getSelectedFeeder().invoke());
-        SmartDashboard.putData(field);
     }
 
     /**
      * Runs the drive at the desired velocity.
      *
-     * @param fieldSpeeds Speeds in meters/sec
+     * @param speeds Speeds in meters/sec
      */
-    public void fieldOrientedRunVelocity(ChassisSpeeds fieldSpeeds) {
-        double elevatorHeight = InitializerKt.getElevator().getHeight().invoke().in(Meters);
+    public void runVelocity(ChassisSpeeds speeds) {
+        // Calculate module setpoints
+        ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
+        SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, TunerConstants.kSpeedAt12Volts);
 
-        // Accel limits
-        double limit =
-                TunerConstants.SLEW_LIMIT_A * elevatorHeight * elevatorHeight
-                        + TunerConstants.SLEW_LIMIT_B * elevatorHeight
-                        + TunerConstants.SLEW_LIMIT_C;
-        fieldSpeeds.vxMetersPerSecond =
-                slewRateLimiterX.withLimit(limit).calculate(fieldSpeeds.vxMetersPerSecond);
-        fieldSpeeds.vyMetersPerSecond =
-                slewRateLimiterY.withLimit(limit).calculate(fieldSpeeds.vyMetersPerSecond);
+        // Log unoptimized setpoints and setpoint speeds
+        Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+        Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
+        Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
-        limitlessRunVelocity(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        fieldSpeeds, getRotation().plus(new Rotation2d(Math.PI))));
-    }
+        // Send setpoints to modules
+        for (int i = 0; i < 4; i++) {
+            modules[i].runSetpoint(setpointStates[i]);
+        }
 
-    public void robotOrientedRunVelocity(ChassisSpeeds speeds) {
-        fieldOrientedRunVelocity(
-                ChassisSpeeds.fromRobotRelativeSpeeds(speeds, getPose().getRotation()));
+        // Log optimized setpoints (runSetpoint mutates each state)
+        Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
     }
 
     public void limitlessRunVelocity(ChassisSpeeds speeds) {
@@ -380,9 +357,6 @@ public class Drive extends SubsystemBase {
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints", discreteSpeeds);
-        Logger.recordOutput(
-                "SwerveChassisSpeeds/SetpointsFieldOriented",
-                ChassisSpeeds.fromRobotRelativeSpeeds(discreteSpeeds, getRotation()));
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds());
         Logger.recordOutput("Drive/DesiredHeading", getDesiredHeading());
 
@@ -417,7 +391,7 @@ public class Drive extends SubsystemBase {
 
     /** Stops the drive. */
     public void stop() {
-        limitlessRunVelocity(new ChassisSpeeds());
+        runVelocity(new ChassisSpeeds());
     }
 
     /**
@@ -526,13 +500,6 @@ public class Drive extends SubsystemBase {
         return globalPoseEstimator.getEstimatedPosition();
     }
 
-    @AutoLogOutput(key = "Odometry/AutoPose")
-    public Pose2d getPoseForAuto() {
-        return useLocalInAuto
-                ? localPoseEstimator.getEstimatedPosition()
-                : globalPoseEstimator.getEstimatedPosition();
-    }
-
     /** Returns the local estimated pose. */
     @AutoLogOutput(key = "Odometry/LocalEstimatedPose")
     public Pose2d getLocalEstimatedPose() {
@@ -547,7 +514,7 @@ public class Drive extends SubsystemBase {
     public Rotation2d getRotation() {
         return gyroInputs.connected
                 ? gyroInputs.yawPosition.plus(gyroOffset)
-                : getPose().getRotation().plus(Rotation2d.k180deg);
+                : getPose().getRotation();
     }
 
     public Rotation2d[] getGyroMeasurements() {
@@ -590,10 +557,6 @@ public class Drive extends SubsystemBase {
         gyroIO.zeroGyro();
         gyroOffset = offset;
         desiredHeading = new Rotation2d();
-    }
-
-    public void setGyroOffset(Rotation2d offset) {
-        gyroOffset = offset;
     }
 
     public void resetGyroBasedOnAlliance(Rotation2d gyroOffset) {

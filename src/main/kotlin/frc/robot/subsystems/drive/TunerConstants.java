@@ -38,9 +38,6 @@ public class TunerConstants {
     public static AngularVelocity kMaxOmegaVelocity;
     public static LinearAcceleration kMaxAcceleration;
     public static AngularAcceleration kMaxAngularAcceleration;
-    public static AngularVelocity kPathFindOmegaVelocity;
-    public static LinearAcceleration kPathFindAcceleration;
-    public static AngularAcceleration kPathFindAngularAcceleration;
 
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
@@ -60,9 +57,9 @@ public class TunerConstants {
     public static PathConstraints PATH_CONSTRAINTS;
 
     // These form the slew limit function
+    public static final double SLEW_LIMIT_C = 10.0;
     public static final double SLEW_LIMIT_A = 6.0;
-    public static final double SLEW_LIMIT_B = -10.0;
-    public static final double SLEW_LIMIT_C = 6.0;
+    public static final double SLEW_LIMIT_B = -13.0;
 
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -142,10 +139,10 @@ public class TunerConstants {
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
                     new double[] {
-                        1.9374177350995647,
-                        2.868544073346149,
-                        -0.2162912910918754,
-                        1.1244079175201749
+                        -1.064582666792635,
+                        -1.2640001692177683,
+                        0.13345632854605077,
+                        -3.0280780752862557
                     };
 
             steerGains =
@@ -170,10 +167,8 @@ public class TunerConstants {
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
             kSlipCurrent = Amps.of(70.0);
-            kMaxOmegaVelocity = RadiansPerSecond.of(7);
-            kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
-            kPathFindOmegaVelocity = DegreesPerSecond.of(350);
-            kPathFindAngularAcceleration = DegreesPerSecondPerSecond.of(485);
+            kMaxOmegaVelocity = RadiansPerSecond.of(17.76);
+            kMaxAngularAcceleration = RadiansPerSecondPerSecond.of(16.15);
 
             driveInitialConfigs = new TalonFXConfiguration();
             steerInitialConfigs =
@@ -186,9 +181,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(4.0);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(3.0);
-            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.5);
+            kSpeedAt12Volts = MetersPerSecond.of(6.14);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(7.2);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -257,17 +251,20 @@ public class TunerConstants {
         } else {
             offsets =
                     new double[] {
-                        2.5510100502538213, 2.377670221222744, 1.59073807703741, 1.1351457830353744
+                        -3.072563518134939,
+                        -0.5660389107298016,
+                        1.586136134673753,
+                        0.018407769454627694
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(40)
+                            .withKP(22.792)
                             .withKI(0)
-                            .withKD(0)
+                            .withKD(2.207)
                             .withKS(0)
-                            .withKV(0)
-                            .withKA(0)
+                            .withKV(0.22717)
+                            .withKA(0.1124)
                             .withStaticFeedforwardSign(
                                     StaticFeedforwardSignValue.UseClosedLoopSign);
 
@@ -282,11 +279,9 @@ public class TunerConstants {
             kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
             kDriveClosedLoopOutput = ClosedLoopOutputType.Voltage;
 
-            kSlipCurrent = Amps.of(120.0);
-            kMaxOmegaVelocity = RadiansPerSecond.of(10.85);
-            kMaxAngularAcceleration = RadiansPerSecondPerSecond.of(8.6);
-            kPathFindOmegaVelocity = DegreesPerSecond.of(350);
-            kPathFindAngularAcceleration = DegreesPerSecondPerSecond.of(485);
+            kSlipCurrent = Amps.of(78.0);
+            kMaxOmegaVelocity = RadiansPerSecond.of(7);
+            kMaxAngularAcceleration = RotationsPerSecondPerSecond.of(0.4);
 
             driveInitialConfigs =
                     new TalonFXConfiguration()
@@ -304,9 +299,8 @@ public class TunerConstants {
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.7);
-            kMaxAcceleration = MetersPerSecondPerSecond.of(4.0);
-            kPathFindAcceleration = MetersPerSecondPerSecond.of(3.0);
+            kSpeedAt12Volts = MetersPerSecond.of(5);
+            kMaxAcceleration = MetersPerSecondPerSecond.of(2.0);
 
             kDriveMotorType = SwerveModuleConstants.DriveMotorArrangement.TalonFX_Integrated;
             kSteerMotorType = SwerveModuleConstants.SteerMotorArrangement.TalonFX_Integrated;
@@ -315,7 +309,7 @@ public class TunerConstants {
 
             kDriveGearRatio = 1.0 / ((10.0 / 34.0) * (28.0 / 18.0) * (15.0 / 45.0));
             kSteerGearRatio = 11.3142;
-            kWheelRadius = Meters.of(0.046);
+            kWheelRadius = Centimeter.of(5.1);
 
             kInvertLeftSide = true;
             kInvertRightSide = true;
@@ -377,9 +371,9 @@ public class TunerConstants {
         PATH_CONSTRAINTS =
                 new PathConstraints(
                         kSpeedAt12Volts.in(MetersPerSecond),
-                        kPathFindAcceleration.in(MetersPerSecondPerSecond),
-                        kPathFindOmegaVelocity.in(RadiansPerSecond),
-                        kPathFindAngularAcceleration.in(RadiansPerSecondPerSecond));
+                        kMaxAcceleration.in(MetersPerSecondPerSecond),
+                        kMaxOmegaVelocity.in(RadiansPerSecond),
+                        kMaxAngularAcceleration.in(RadiansPerSecondPerSecond));
 
         DrivetrainConstants = new SwerveDrivetrainConstants().withCANBusName(kCANBus.getName());
 
