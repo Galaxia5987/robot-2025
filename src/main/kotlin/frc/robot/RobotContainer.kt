@@ -17,30 +17,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.autonomous.A2R
-import frc.robot.autonomous.A2R3RL
-import frc.robot.autonomous.B1L
-import frc.robot.autonomous.B1R
-import frc.robot.autonomous.B1RN2N
-import frc.robot.autonomous.C6L
-import frc.robot.autonomous.C6L5LR
-import frc.robot.autonomous.S5L
-import frc.robot.autonomous.S5R
-import frc.robot.autonomous.alignAlgaeToNet
-import frc.robot.autonomous.alignScoreL2
-import frc.robot.autonomous.alignScoreL3
-import frc.robot.autonomous.alignScoreL4
-import frc.robot.autonomous.alignToReefAlgae2
-import frc.robot.autonomous.alignToReefAlgae3
-import frc.robot.autonomous.pathFindC6L5LR
-import frc.robot.autonomous.pathFindToSelectedFeeder
-import frc.robot.autonomous.setFeederBasedOnAxis
-import frc.robot.autonomous.setPoseBasedOnButton
-import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.autonomous.*
+import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.drive.alignToPose
 import frc.robot.subsystems.feeder
 import frc.robot.subsystems.intake.intakeAlgae
 import frc.robot.subsystems.intake.outtakeAlgae
@@ -216,6 +199,9 @@ object RobotContainer {
         // gripper control
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
+        driverController.povDown().whileTrue(alignToPose(
+            ReefFaceMiddle
+        ))
 
         // remove algae
         operatorController

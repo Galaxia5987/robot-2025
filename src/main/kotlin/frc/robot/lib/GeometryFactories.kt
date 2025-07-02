@@ -5,6 +5,8 @@ import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.m
 
 fun getTranslation2d(x: Double = 0.0, y: Double = 0.0) = Translation2d(x, y)
 
@@ -14,7 +16,7 @@ fun getTranslation2d(x: Distance = Meters.zero(), y: Distance = Meters.zero()) =
 fun getRotation2d(x: Double = 0.0, y: Double = 0.0) = Rotation2d(x, y)
 
 fun getRotation2d(x: Distance = Meters.zero(), y: Distance = Meters.zero()) =
-    Rotation2d(x.`in`(Meters), y.`in`(Meters))
+    Rotation2d(x[m], y[m])
 
 fun getPose2d(
     translation: Translation2d = Translation2d(),

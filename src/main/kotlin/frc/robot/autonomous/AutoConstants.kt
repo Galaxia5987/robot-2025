@@ -13,10 +13,10 @@ import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.Filesystem
 import frc.robot.IS_RED
-import frc.robot.lib.flip
-import frc.robot.lib.flipIfNeeded
+import frc.robot.lib.extensions.flip
+import frc.robot.lib.extensions.flipIfNeeded
+import frc.robot.lib.extensions.mirror
 import frc.robot.lib.getTranslation2d
-import frc.robot.lib.mirror
 import java.io.File
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement

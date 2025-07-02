@@ -1,11 +1,12 @@
 package frc.robot.lib.motors
 
 import edu.wpi.first.math.MathUtil
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Servo
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.mm
 
 /**
  * Parameters for L16-R Actuonix Linear Actuators
@@ -39,7 +40,7 @@ class LinearServo(
     }
 
     fun setPosition(setpoint: Distance) {
-        setPosition(setpoint.`in`(Units.Millimeters))
+        setPosition(setpoint[mm])
     }
 
     init {

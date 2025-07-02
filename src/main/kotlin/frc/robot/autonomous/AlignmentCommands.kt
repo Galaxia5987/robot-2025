@@ -22,10 +22,10 @@ import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
-import frc.robot.lib.distanceFromPoint
-import frc.robot.lib.flipIfNeeded
-import frc.robot.lib.moveBack
-import frc.robot.lib.moveTowards
+import frc.robot.lib.extensions.distanceFromPoint
+import frc.robot.lib.extensions.flipIfNeeded
+import frc.robot.lib.extensions.moveBack
+import frc.robot.lib.extensions.moveTowards
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants

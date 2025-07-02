@@ -1,4 +1,4 @@
-package frc.robot.lib
+package frc.robot.lib.extensions
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
@@ -14,17 +14,17 @@ import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Distance
 import frc.robot.IS_RED
+import frc.robot.lib.extensions.get
 
 fun Pose2d.moveBack(distance: Distance): Pose2d =
     this + Transform2d(-distance, Units.Meters.zero(), Rotation2d.kZero)
 
 fun Pose2d.moveTowards(target: Pose2d, distance: Distance): Pose2d {
     val direction = this - target.withRotation(Rotation2d.kZero)
-    if (direction.translation.norm < (distance.`in`(Units.Meters)))
+    if (direction.translation.norm < (distance[m]))
         return target.withRotation(this.rotation)
     return (this.withRotation(Rotation2d.kZero) +
-            (direction) / direction.translation.norm *
-                (-distance.`in`(Units.Meters)))
+            (direction) / direction.translation.norm * (-distance[m]))
         .withRotation(this.rotation)
 }
 

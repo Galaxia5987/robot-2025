@@ -22,7 +22,7 @@ import frc.robot.autonomous.logTriggers
 import frc.robot.autonomous.looseAtGoal
 import frc.robot.autonomous.selectedFeeder
 import frc.robot.autonomous.selectedScorePose
-import frc.robot.lib.enableAutoLogOutputFor
+import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.leds.blueTeamPattern
 import frc.robot.subsystems.leds.redTeamPattern
