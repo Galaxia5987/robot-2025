@@ -16,7 +16,7 @@ import frc.robot.IS_RED
 import frc.robot.Robot.autoTimer
 import frc.robot.elevator
 import frc.robot.gripper
-import frc.robot.lib.flipIfNeeded
+import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.subsystems.autonomousFeeder
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.feeder
