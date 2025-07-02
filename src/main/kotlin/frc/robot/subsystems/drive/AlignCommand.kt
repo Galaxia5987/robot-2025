@@ -67,24 +67,24 @@ fun alignToPose(
     holonomicController: Pair<TunableHolonomicDriveController, String> =
         Pair(controller, DEFAULT_CONTROLLER_NAME),
 ): Command =
-    runOnce({
-            controller.setTolerance(tolerance)
-            Logger.recordOutput(
-                "Alignment/Controllers/CurrentRunningController",
-                holonomicController.second
-            )
-        })
+    swerveDrive.runOnce {
+        controller.setTolerance(tolerance)
+        Logger.recordOutput(
+            "Alignment/Controllers/CurrentRunningController",
+            holonomicController.second
+        )
+    }
         .andThen(
-            run({
-                    swerveDrive.limitlessRunVelocity(
-                        holonomicController.first.calculate(
-                            poseSupplier.invoke(),
-                            goalPose,
-                            linearVelocity.`in`(MetersPerSecond),
-                            goalPose.rotation
-                        )
+            swerveDrive.run {
+                swerveDrive.limitlessRunVelocity(
+                    holonomicController.first.calculate(
+                        poseSupplier.invoke(),
+                        goalPose,
+                        linearVelocity.`in`(MetersPerSecond),
+                        goalPose.rotation
                     )
-                })
+                )
+            }
                 .until(controller::atReference)
         )
         .withName("Drive/AlignToPose")
