@@ -26,4 +26,4 @@ val ANGULAR_CONSTRAINTS =
         MAX_ANGULAR_ACCELERATION.`in`(RadiansPerSecondPerSecond)
     )
 
-val TOLERANCE = Pose2d(0.01, 0.01, Rotation2d.fromDegrees(1.0))
+val TOLERANCE = Pose2d(0.03, 0.03, Rotation2d.fromDegrees(1.0))

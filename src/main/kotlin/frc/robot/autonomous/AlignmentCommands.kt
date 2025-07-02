@@ -22,10 +22,7 @@ import frc.robot.elevator
 import frc.robot.extender
 import frc.robot.gripper
 import frc.robot.leds
-import frc.robot.lib.extensions.distanceFromPoint
-import frc.robot.lib.extensions.flipIfNeeded
-import frc.robot.lib.extensions.moveBack
-import frc.robot.lib.extensions.moveTowards
+import frc.robot.lib.extensions.*
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.TunerConstants
@@ -56,10 +53,10 @@ private fun pathFindToPose(
     goalEndVelocity: LinearVelocity = Units.MetersPerSecond.zero()
 ): Command =
     AutoBuilder.pathfindToPose(
-            pose,
-            TunerConstants.PATH_CONSTRAINTS,
-            goalEndVelocity
-        )
+        pose,
+        TunerConstants.PATH_CONSTRAINTS,
+        goalEndVelocity
+    )
         .apply { addRequirements(swerveDrive) }
 
 fun pathFindToSelectedFeeder(): Command =
@@ -69,10 +66,10 @@ fun pathFindToSelectedFeeder(): Command =
             pathFindToPose(selectedFeeder.invoke())
                 .andThen(
                     Commands.run({
-                            swerveDrive.limitlessRunVelocity(
-                                ChassisSpeeds(0.8, 0.0, 0.0)
-                            )
-                        })
+                        swerveDrive.limitlessRunVelocity(
+                            ChassisSpeeds(0.8, 0.0, 0.0)
+                        )
+                    })
                         .withTimeout(1.0)
                 )
                 .finallyDo(
@@ -138,12 +135,9 @@ private fun alignToPose(
             setGoal(targetPose)
         }
         .andThen(
-            swerveDrive
-                .run {
-                    swerveDrive.fieldOrientedRunVelocity(
-                        getSpeed(swerveDrive.localEstimatedPose).invoke(),
-                    )
-                }
+            frc.robot.subsystems.drive.alignToPose(
+                goalPose = targetPose,
+                poseSupplier = { swerveDrive.localEstimatedPose }, tolerance = Pose2d(X_ALIGNMENT_TOLERANCE, Y_ALIGNMENT_TOLERANCE, ROTATIONAL_ALIGNMENT_TOLERANCE.toRotation2d()))
                 .alongWith(extender.retractTime(0.3))
         )
         .until(endTrigger)
@@ -273,90 +267,90 @@ fun alignScoreL3(): Command =
 
 fun alignScoreL4(): Command =
     Commands.sequence(
-            pathFindToSelectedScorePose()
-                .onlyIf(RobotContainer.disablePathFinding.negate()),
-            wrist.skyward(),
-            (alignCommand()
-                .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
-            outtakeCoralAlignment(false)
-        )
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        wrist.skyward(),
+        (alignCommand()
+            .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
+        outtakeCoralAlignment(false)
+    )
         .withName("alignScoreL4")
 
 fun autoScoreL4(): Command =
     Commands.sequence(
-            pathFindToSelectedScorePose()
-                .onlyIf(RobotContainer.disablePathFinding.negate()),
-            (alignCommand()
-                .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
-            outtakeCoralAlignment(false)
-        )
+        pathFindToSelectedScorePose()
+            .onlyIf(RobotContainer.disablePathFinding.negate()),
+        (alignCommand()
+            .alongWith(raiseElevatorAtDistance(alignmentSetpointL4()))),
+        outtakeCoralAlignment(false)
+    )
         .withName("alignScoreL4")
 
 fun alignToReefAlgae2(): Command =
     Commands.sequence(
-        Commands.runOnce({ aligningToAlgae = true}),
+        Commands.runOnce({ aligningToAlgae = true }),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignPrepToAlgae(l2algaePickup()),
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
-                swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
-                )
-            })
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.5, 0.0, 0.0)
+            )
+        })
             .withTimeout(0.22),
         wrist.max()
-    ).finallyDo(Runnable { aligningToAlgae = false})
+    ).finallyDo(Runnable { aligningToAlgae = false })
 
 fun alignToReefAlgae3(): Command =
     Commands.sequence(
-        Commands.runOnce({ aligningToAlgae = true}),
+        Commands.runOnce({ aligningToAlgae = true }),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         alignPrepToAlgae(l3algaePickup()),
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
-                swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
-                )
-            })
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.5, 0.0, 0.0)
+            )
+        })
             .withTimeout(0.22),
         wrist.max(),
         elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
-    ).finallyDo(Runnable { aligningToAlgae = false})
+    ).finallyDo(Runnable { aligningToAlgae = false })
 
 fun autoAlignToReefAlgae2(): Command =
     Commands.sequence(
-        Commands.runOnce({ aligningToAlgae = true}),
+        Commands.runOnce({ aligningToAlgae = true }),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         autoAlignPrepToAlgae(l2algaePickup()),
         alignToMid().withDeadline(l2algaePickup()),
         Commands.run({
-                swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
-                )
-            })
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.5, 0.0, 0.0)
+            )
+        })
             .withTimeout(0.18),
         wrist.max()
-    ).finallyDo(Runnable { aligningToAlgae = false})
+    ).finallyDo(Runnable { aligningToAlgae = false })
 
 fun autoAlignToReefAlgae3(): Command =
     Commands.sequence(
-        Commands.runOnce({ aligningToAlgae = true}),
+        Commands.runOnce({ aligningToAlgae = true }),
         pathFindToSelectedMiddlePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         autoAlignPrepToAlgae(l3algaePickup()),
         alignToMid().withDeadline(l3algaePickup()),
         Commands.run({
-                swerveDrive.robotOrientedRunVelocity(
-                    ChassisSpeeds(-0.5, 0.0, 0.0)
-                )
-            })
+            swerveDrive.robotOrientedRunVelocity(
+                ChassisSpeeds(-0.5, 0.0, 0.0)
+            )
+        })
             .withTimeout(0.18),
         wrist.max(),
         elevator.setVoltage(POST_L3_ALGAE_VOLTAGE).withTimeout(0.8)
-    ).finallyDo(Runnable { aligningToAlgae = false})
+    ).finallyDo(Runnable { aligningToAlgae = false })
 
 fun alignAlgaeToNet(): Command {
     return swerveDrive.defer {
@@ -371,11 +365,11 @@ fun alignAlgaeToNet(): Command {
             elevator.zero(),
             wrist.max(),
             DriveCommands.joystickDriveAtAngle(
-                    swerveDrive,
-                    drivePower,
-                    { 0.0 },
-                    driveAngle
-                )
+                swerveDrive,
+                drivePower,
+                { 0.0 },
+                driveAngle
+            )
                 .until(ableToNet),
             netAlgae(Trigger { true })
                 .raceWith( // The drive command doesn't end
@@ -436,9 +430,9 @@ fun getPoseLookaheadTime(): Pose2d {
     val transform =
         Transform2d(
             swerveDrive.fieldOrientedSpeeds.vxMetersPerSecond *
-                RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+                    RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
             swerveDrive.fieldOrientedSpeeds.vyMetersPerSecond *
-                RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
+                    RADIUS_LOOKAHEAD_TIME.`in`(Seconds),
             Rotation2d.kZero
         )
 
@@ -451,12 +445,12 @@ fun getPoseLookaheadTime(): Pose2d {
 
 private val isInRadiusOfReef = Trigger {
     getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) <
-        MOVE_WRIST_UP_RADIUS
+            MOVE_WRIST_UP_RADIUS
 }
 
 private val isOutOfReef = Trigger {
     getPoseLookaheadTime().distanceFromPoint(ReefCenter.flipIfNeeded()) >
-        MOVE_WRIST_DOWN_RADIUS
+            MOVE_WRIST_DOWN_RADIUS
 }
 
 private val wristCurrentCommandIsNull = Trigger { wrist.currentCommand == null }
@@ -469,12 +463,12 @@ private val doingL1: Trigger =
 
 private val shouldMoveWristUp =
     (gripper.hasCoral
-            .and(isInRadiusOfReef)
-            .and(gripper.hasAlgaeDebounce.negate())
-            .and(justDidL2.negate())
-            .and(doingL1.negate())
-            .and(wristCurrentCommandIsNull)
-            .and(CommandGenericHID(3).button(12).negate()))
+        .and(isInRadiusOfReef)
+        .and(gripper.hasAlgaeDebounce.negate())
+        .and(justDidL2.negate())
+        .and(doingL1.negate())
+        .and(wristCurrentCommandIsNull)
+        .and(CommandGenericHID(3).button(12).negate()))
         .and(RobotModeTriggers.teleop())
         .onTrue(wrist.skyward())
 
@@ -490,18 +484,18 @@ var isL4 = Trigger { false }
 
 fun logTriggers() {
     mapOf(
-            "IsAligning" to isAligning,
-            "AtAlignmentSetpoint" to atAlignmentSetpoint,
-            "IsWithinDistance" to isWithinDistance,
-            "ShouldOpenElevator" to shouldOpenElevator,
-            "IsInRadiusOfReef" to isInRadiusOfReef,
-            "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
-            "ableToNet" to ableToNet,
-            "isL4" to isL4,
-            "justDidL2" to justDidL2,
-            "isOnOtherSide" to isOnOtherSide,
-            "aligningToAlgae" to Trigger {aligningToAlgae}
-        )
+        "IsAligning" to isAligning,
+        "AtAlignmentSetpoint" to atAlignmentSetpoint,
+        "IsWithinDistance" to isWithinDistance,
+        "ShouldOpenElevator" to shouldOpenElevator,
+        "IsInRadiusOfReef" to isInRadiusOfReef,
+        "wristCurrentCommandIsNull" to wristCurrentCommandIsNull,
+        "ableToNet" to ableToNet,
+        "isL4" to isL4,
+        "justDidL2" to justDidL2,
+        "isOnOtherSide" to isOnOtherSide,
+        "aligningToAlgae" to Trigger { aligningToAlgae }
+    )
         .forEach { (key, value) ->
             Logger.recordOutput("AutoAlignment/$key", value)
         }
