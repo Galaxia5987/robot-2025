@@ -203,7 +203,8 @@ object RobotContainer {
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
         driverController.povDown().whileTrue(alignToPose(
-            ReefFaceMiddle.moveBack(Meters.of(0.2)).flipIfNeeded()
+            ReefFaceMiddle.moveBack(Meters.of(0.2)).flipIfNeeded(),
+            poseSupplier = { swerveDrive.localEstimatedPose }
         ))
 
         // remove algae
