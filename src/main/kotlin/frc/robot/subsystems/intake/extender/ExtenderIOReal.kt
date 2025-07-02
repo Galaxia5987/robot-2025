@@ -14,9 +14,9 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
-import frc.robot.lib.toAngle
-import frc.robot.lib.toDistance
-import frc.robot.lib.toLinear
+import frc.robot.lib.extensions.toAngle
+import frc.robot.lib.extensions.toDistance
+import frc.robot.lib.extensions.toLinear
 
 class ExtenderIOReal : ExtenderIO {
     override val inputs = LoggedExtenderInputs()
