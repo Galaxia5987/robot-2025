@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
+import frc.robot.lib.selectGainsBasedOnMode
 
 const val VOLTAGE_CONTROL_KG = 0.37
 val MAX_HEIGHT_LIMIT: Angle = Units.Rotations.of(27.5)
@@ -24,7 +25,8 @@ val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
 val POST_L3_ALGAE_VOLTAGE: Voltage = Units.Volts.of(-3.0)
 
-val GAINS = Gains(kP = 4.0, kD = 0.3, kG = 0.0)
+val GAINS =
+    selectGainsBasedOnMode(Gains(kP = 4.0, kD = 0.3, kG = 0.0), Gains(kP = 0.4))
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),
