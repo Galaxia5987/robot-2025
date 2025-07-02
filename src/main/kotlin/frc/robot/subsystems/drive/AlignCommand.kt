@@ -88,5 +88,5 @@ fun alignToPose(
             }
                 .until(
                     Trigger { controller.atReference() }.debounce(0.1)
-                )
+                ))
         .withName("Drive/AlignToPose")
