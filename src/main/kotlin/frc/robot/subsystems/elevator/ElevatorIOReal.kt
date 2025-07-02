@@ -21,9 +21,9 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.toAngle
-import frc.robot.lib.toDistance
-import frc.robot.lib.toLinear
+import frc.robot.lib.extensions.toAngle
+import frc.robot.lib.extensions.toDistance
+import frc.robot.lib.extensions.toLinear
 import frc.robot.subsystems.intake.extender.MOTOR_ID as EXTENDER_MOTOR_ID
 import org.littletonrobotics.junction.AutoLogOutput
 
