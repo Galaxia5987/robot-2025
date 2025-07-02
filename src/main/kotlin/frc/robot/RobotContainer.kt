@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Meters
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.flipIfNeeded
+import frc.robot.lib.extensions.moveBack
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
@@ -201,7 +203,7 @@ object RobotContainer {
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
         driverController.povDown().whileTrue(alignToPose(
-            ReefFaceMiddle.flipIfNeeded()
+            ReefFaceMiddle.moveBack(Meters.of(0.2)).flipIfNeeded()
         ))
 
         // remove algae
