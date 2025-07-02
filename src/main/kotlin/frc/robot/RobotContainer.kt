@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.autonomous.*
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.subsystems.Visualizer
 import frc.robot.subsystems.alignmentSetpointL4
 import frc.robot.subsystems.blockedFeeder
@@ -200,7 +201,7 @@ object RobotContainer {
         driverController.R2().whileTrue(gripper.intake())
         driverController.L2().whileTrue(gripper.outtake(true))
         driverController.povDown().whileTrue(alignToPose(
-            ReefFaceMiddle
+            ReefFaceMiddle.flipIfNeeded()
         ))
 
         // remove algae
