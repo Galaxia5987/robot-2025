@@ -261,7 +261,8 @@ fun alignScoreL3(): Command =
         pathFindToSelectedScorePose()
             .onlyIf(RobotContainer.disablePathFinding.negate()),
         wrist.skyward(),
-        alignCommand().alongWith(raiseElevatorAtDistance(l3())),
+        alignCommand(),
+//            .alongWith(raiseElevatorAtDistance(l3())),
         outtakeCoralL3Alignment()
     )
 
