@@ -336,7 +336,7 @@ object RobotContainer {
             ))
 
         // tuning buttons
-        driverController.povDown().onTrue(elevator.tuningPosition())
+//        driverController.povDown().onTrue(elevator.tuningPosition())
         driverController.povRight().onTrue(wrist.tuningAngle())
         driverController.povLeft().onTrue(gripper.slowOuttake(true))
 
