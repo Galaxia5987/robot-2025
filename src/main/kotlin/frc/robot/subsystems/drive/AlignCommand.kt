@@ -7,6 +7,7 @@ import edu.wpi.first.units.Units.MetersPerSecond
 import edu.wpi.first.units.measure.LinearVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.*
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.controllers.TunableHolonomicDriveController
 import frc.robot.swerveDrive
 import org.littletonrobotics.junction.Logger
@@ -85,6 +86,7 @@ fun alignToPose(
                     )
                 )
             }
-                .until(controller::atReference)
-        )
+                .until(
+                    Trigger { controller.atReference() }.debounce(0.1)
+                )
         .withName("Drive/AlignToPose")
