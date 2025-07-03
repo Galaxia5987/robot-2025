@@ -74,7 +74,7 @@ private val swerveModuleIOs =
 
 private val gyroIO =
     when (CURRENT_MODE) {
-        Mode.REAL -> GyroIONavX()
+        Mode.REAL -> GyroIOPigeon2()
         Mode.SIM ->
             if (USE_MAPLE_SIM)
                 GyroIOSim(

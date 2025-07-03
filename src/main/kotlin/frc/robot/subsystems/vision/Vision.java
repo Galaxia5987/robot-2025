@@ -27,11 +27,10 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.InitializerKt;
+import frc.robot.autonomous.AlignmentCommandsKt;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
-
-import frc.robot.autonomous.AlignmentCommandsKt;
 import org.littletonrobotics.junction.Logger;
 
 public class Vision extends SubsystemBase {
@@ -191,8 +190,7 @@ public class Vision extends SubsystemBase {
                     localConsumer.accept(
                             observation.pose().toPose2d(),
                             observation.timestamp(),
-                            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
-                    );
+                            VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
                 }
             }
 
