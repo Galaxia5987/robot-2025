@@ -39,11 +39,14 @@ public class Vision extends SubsystemBase {
     private final VisionIO[] io;
     private final VisionIOInputsAutoLogged[] inputs;
     private final Alert[] disconnectedAlerts;
+    private int[] stableMultiTagCounter;
 
     public Vision(VisionConsumer globalConsumer, VisionConsumer localConsumer, VisionIO... io) {
         this.globalConsumer = globalConsumer;
         this.localConsumer = localConsumer;
         this.io = io;
+
+        stableMultiTagCounter = new int[io.length];
 
         // Initialize inputs
         this.inputs = new VisionIOInputsAutoLogged[io.length];
@@ -97,9 +100,9 @@ public class Vision extends SubsystemBase {
         // Check whether to reject pose
         return !(observation.tagCount() == 0 // Must have at least one tag
                 || (observation.tagCount() == 1
-                        && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
+                && observation.ambiguity() > maxAmbiguity) // Cannot be high ambiguity
                 || Math.abs(observation.pose().getZ())
-                        > maxZError // Must have realistic Z coordinate
+                > maxZError // Must have realistic Z coordinate
 
                 // Must be within the field boundaries
                 || observation.pose().getX() < 0.0
@@ -112,7 +115,7 @@ public class Vision extends SubsystemBase {
         double stdFactor = Math.pow(avgTagDistance, 2.0) / tagCount;
         double linearStddev = linearStdDevBaseline * stdFactor;
         double angularStddev = angularStdDevBaseline * stdFactor;
-        return new Pair(linearStddev, angularStddev);
+        return new Pair<>(linearStddev, angularStddev);
     }
 
     @Override
@@ -151,7 +154,14 @@ public class Vision extends SubsystemBase {
             for (var observation : inputs[cameraIndex].poseObservations) {
                 boolean shouldIgnoreFeederInAuto =
                         io[cameraIndex].getName().equals(FeederOVName) && RobotState.isAutonomous();
-                boolean rejectPose = !isObservationValid(observation) || shouldIgnoreFeederInAuto;
+                if (observation.tagCount() >= 2) {
+                    stableMultiTagCounter[cameraIndex]++;
+                } else {
+                    stableMultiTagCounter[cameraIndex] = 0;
+                }
+
+                boolean isStableMultiTag = stableMultiTagCounter[cameraIndex] >= 4;
+                boolean rejectPose = !isObservationValid(observation) || shouldIgnoreFeederInAuto || (!isStableMultiTag && observation.tagCount() > 1);
 
                 // Add pose to log
                 robotPoses.add(observation.pose());
@@ -196,10 +206,10 @@ public class Vision extends SubsystemBase {
 
             boolean isWithinMaxDistanceFromGlobal =
                     InitializerKt.getSwerveDrive()
-                                    .getPose()
-                                    .minus(inputs[cameraIndex].localEstimatedPose.pose().toPose2d())
-                                    .getTranslation()
-                                    .getNorm()
+                            .getPose()
+                            .minus(inputs[cameraIndex].localEstimatedPose.pose().toPose2d())
+                            .getTranslation()
+                            .getNorm()
                             < MAX_DELTA_BETWEEN_LOCAL_AND_GLOBAL.in(Units.Meters);
             if (isObservationValid(inputs[cameraIndex].localEstimatedPose)
                     && !io[cameraIndex].getName().equals(FeederOVName)

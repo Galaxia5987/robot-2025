@@ -162,10 +162,11 @@ public class Drive extends SubsystemBase {
             };
     private final SwerveDrivePoseEstimator globalPoseEstimator =
             new SwerveDrivePoseEstimator(
-                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), TunerConstants.ODOMETRY_DEVS, TunerConstants.VISION_DEVS
+            );
     private final SwerveDrivePoseEstimator localPoseEstimator =
             new SwerveDrivePoseEstimator(
-                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d(), TunerConstants.ODOMETRY_DEVS, TunerConstants.VISION_DEVS);
 
     private static final GalacticSlewRateLimiter slewRateLimiterX =
             new GalacticSlewRateLimiter(1.5);
