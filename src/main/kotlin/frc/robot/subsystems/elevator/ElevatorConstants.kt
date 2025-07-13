@@ -25,8 +25,12 @@ val SPROCKET_RADIUS: Distance = Units.Millimeters.of(36.4 / 2)
 val MANUAL_CONTROL_VOLTAGE: Voltage = Units.Volts.of(6.0)
 val POST_L3_ALGAE_VOLTAGE: Voltage = Units.Volts.of(-3.0)
 
+val MOTION_MAGIC_CRUISE_VELOCITY = 60.0
+val MOTION_MAGIC_ACCELERATION = 90.0
+val MOTION_MAGIC_JERK = 2500.0
+
 val GAINS =
-    selectGainsBasedOnMode(Gains(kP = 4.0, kD = 0.3, kG = 0.0), Gains(kP = 0.4))
+    selectGainsBasedOnMode(Gains(kP = 6.0, kD = 0.3, kS = 0.005, kV = 1.1571, kA = 0.093387, kG = 0.39653, ), Gains(kP = 0.4))
 
 enum class Positions(val value: Distance) {
     L1(Units.Centimeters.of(0.0)),

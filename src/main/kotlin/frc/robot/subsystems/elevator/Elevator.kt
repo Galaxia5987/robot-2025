@@ -139,8 +139,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         val routineForwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
+                    Units.Volt.per(Units.Second).of(3.0),
+                    Units.Volt.of(2.5),
                     Units.Second.of(1.5),
                     { state: State ->
                         Logger.recordOutput("Elevator/state", state.toString())
@@ -155,8 +155,8 @@ class Elevator(private val io: ElevatorIO) : SubsystemBase() {
         val routineBackwards =
             SysIdRoutine(
                 SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(4.0),
+                    Units.Volt.per(Units.Second).of(1.4),
+                    Units.Volt.of(1.4),
                     Units.Second.of(1.5),
                     { state: State ->
                         Logger.recordOutput("Elevator/state", state.toString())

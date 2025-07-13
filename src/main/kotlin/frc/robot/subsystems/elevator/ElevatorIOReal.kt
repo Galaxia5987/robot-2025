@@ -1,12 +1,6 @@
 package frc.robot.subsystems.elevator
 
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs
-import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
-import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
@@ -78,6 +72,12 @@ class ElevatorIOReal : ElevatorIO {
                         SupplyCurrentLimitEnable = true
                         StatorCurrentLimit = 80.0
                         SupplyCurrentLimit = 40.0
+                    }
+                MotionMagic =
+                    MotionMagicConfigs().apply {
+                        MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY
+                        MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION
+                        MotionMagicJerk = MOTION_MAGIC_JERK
                     }
             }
 

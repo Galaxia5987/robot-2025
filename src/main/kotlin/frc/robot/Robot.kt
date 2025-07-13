@@ -77,6 +77,8 @@ object Robot : LoggedRobot() {
             }
         )
 
+        TunerConstants.init()
+
         when (CURRENT_MODE) {
             REAL -> {
                 LoggedPowerDistribution.getInstance(
