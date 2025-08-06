@@ -63,6 +63,50 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
             )
             .withName("Elevator/reset")
 
+    fun characterize(): Command {
+        val routineForwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(0.8),
+                    Units.Volt.of(2.0),
+                    Units.Second.of(4.0)
+                ) { state: State ->
+                    Logger.recordOutput("Elevator/state", state.toString())
+                },
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    null,
+                    this
+                )
+            )
+        val routineBackwards =
+            SysIdRoutine(
+                SysIdRoutine.Config(
+                    Units.Volt.per(Units.Second).of(0.8),
+                    Units.Volt.of(2.0),
+                    Units.Second.of(4.0)
+                ) { state: State ->
+                    Logger.recordOutput("Wrist/state", state.toString())
+                },
+                SysIdRoutine.Mechanism(
+                    { voltage: Voltage -> io.setVoltage(voltage) },
+                    null,
+                    this
+                )
+            )
+        return Commands.sequence(
+            routineForwards.dynamic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1.0),
+            routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
+            Commands.waitSeconds(1.0),
+            routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
+            Commands.waitSeconds(1.0),
+            routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
+        )
+            .withName("Wrist/characterize")
+    }
+
+
     fun l1(): Command = setAngle(Angles.L1)
     fun l2(): Command = setAngle(Angles.L2)
     fun l3(): Command = setAngle(Angles.L3)
@@ -91,51 +135,6 @@ class Wrist(private val io: WristIO) : SubsystemBase() {
                 setpointValue = Units.Degrees.of(tuningAngleDegrees.get())
             }
             .withName("Wrist/Tuning")
-
-    fun characterize(): Command {
-        val routineForwards =
-            SysIdRoutine(
-                SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
-                    { state: State ->
-                        Logger.recordOutput("Wrist/state", state)
-                    }
-                ),
-                SysIdRoutine.Mechanism(
-                    { voltage: Voltage -> io.setVoltage(voltage) },
-                    null,
-                    this
-                )
-            )
-        val routineBackwards =
-            SysIdRoutine(
-                SysIdRoutine.Config(
-                    Units.Volt.per(Units.Second).of(5.0),
-                    Units.Volt.of(6.0),
-                    Units.Second.of(1.5),
-                    { state: State ->
-                        Logger.recordOutput("Wrist/state", state)
-                    }
-                ),
-                SysIdRoutine.Mechanism(
-                    { voltage: Voltage -> io.setVoltage(voltage) },
-                    null,
-                    this
-                )
-            )
-        return Commands.sequence(
-                routineForwards.dynamic(SysIdRoutine.Direction.kForward),
-                Commands.waitSeconds(1.0),
-                routineBackwards.dynamic(SysIdRoutine.Direction.kReverse),
-                Commands.waitSeconds(1.0),
-                routineForwards.quasistatic(SysIdRoutine.Direction.kForward),
-                Commands.waitSeconds(1.0),
-                routineBackwards.quasistatic(SysIdRoutine.Direction.kReverse)
-            )
-            .withName("Wrist/characterize")
-    }
 
     override fun periodic() {
         io.updateInputs()

@@ -432,5 +432,6 @@ object RobotContainer {
             DriveCommands.feedforwardCharacterization(swerveDrive)
         )
         autoChooser.addOption("elevatorCharacterization", elevator.characterize())
+        autoChooser.addOption("wristCharacterization", wrist.characterize())
     }
 }

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.TorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import com.ctre.phoenix6.hardware.TalonFX
@@ -41,7 +42,7 @@ class WristIOReal : WristIO {
             TalonFXConfiguration().apply {
                 MotorOutput =
                     MotorOutputConfigs().apply {
-                        NeutralMode = NeutralModeValue.Brake
+                        NeutralMode = NeutralModeValue.Coast
                         Inverted = InvertedValue.CounterClockwise_Positive
                     }
                 Feedback =
