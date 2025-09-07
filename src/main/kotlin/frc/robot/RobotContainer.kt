@@ -161,62 +161,6 @@ object RobotContainer {
                     .ignoringDisable(true)
             )
 
-        // align score
-        driverController
-            .square()
-            .whileTrue(alignScoreL2().onlyIf(disableAlignment!!.negate()))
-            .onFalse(
-                moveDefaultPosition(false, { false }).onlyIf {
-                    moveDefaultPosition(false, { false }).isScheduled.not()
-                }
-            )
-        driverController
-            .circle()
-            .whileTrue(alignScoreL3().onlyIf(disableAlignment.negate()))
-        driverController
-            .triangle()
-            .whileTrue(alignScoreL4().onlyIf(disableAlignment.negate()))
-
-        // manual score
-        driverController
-            .cross()
-            .onTrue(l1())
-            .onFalse(outtakeL1())
-        driverController
-            .square()
-            .and(disableAlignment)
-            .onTrue(l2())
-            .onFalse(outtakeCoralAlignment(true))
-        driverController
-            .circle()
-            .and(disableAlignment)
-            .onTrue(l3Manual())
-            .onFalse(outtakeCoralAlignment())
-        driverController
-            .triangle()
-            .and(disableAlignment)
-            .onTrue(l4())
-            .onFalse(outtakeCoralManual())
-
-        // intake buttons
-        driverController.R1().and(shouldNet.negate()).whileTrue(intakeAlgae())
-        driverController
-            .R1()
-            .and(shouldNet)
-            .onTrue(intakeAlgaeToGripper(driverController.R1().negate()))
-        driverController
-            .L1()
-            .and(shouldNet)
-            .onTrue(outtakeAlgaeNetMode(driverController.L1().negate()))
-        driverController
-            .L1()
-            .and(shouldNet.negate())
-            .onTrue(outtakeAlgae(driverController.L1().negate()))
-
-        // gripper control
-        driverController.R2().whileTrue(gripper.intake())
-        driverController.L2().whileTrue(gripper.outtake(true))
-
         // remove algae
         operatorController
             .x()
@@ -238,7 +182,7 @@ object RobotContainer {
         // align pick algae from reef
         operatorController
             .x()
-            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment.negate().and(shouldNet)))
+            .whileTrue(alignToReefAlgae2().onlyIf(disableAlignment!!.negate().and(shouldNet)))
         operatorController
             .b()
             .whileTrue(alignToReefAlgae3().onlyIf(disableAlignment.negate().and(shouldNet)))

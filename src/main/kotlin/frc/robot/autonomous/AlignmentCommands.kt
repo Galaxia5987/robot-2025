@@ -467,25 +467,6 @@ val justDidL2: Trigger =
 private val doingL1: Trigger =
     driverController.cross().debounce(1.0, Debouncer.DebounceType.kFalling)
 
-private val shouldMoveWristUp =
-    (gripper.hasCoral
-            .and(isInRadiusOfReef)
-            .and(gripper.hasAlgaeDebounce.negate())
-            .and(justDidL2.negate())
-            .and(doingL1.negate())
-            .and(wristCurrentCommandIsNull)
-            .and(CommandGenericHID(3).button(12).negate()))
-        .and(RobotModeTriggers.teleop())
-        .onTrue(wrist.skyward())
-
-private val shouldCloseWrist =
-    isOutOfReef
-        .and(gripper.hasAlgaeDebounce.negate())
-        .and(wristCurrentCommandIsNull)
-        .and(CommandGenericHID(3).button(12).negate())
-        .and(RobotModeTriggers.teleop())
-        .onTrue(wrist.feeder().alongWith(elevator.feeder()))
-
 var isL4 = Trigger { false }
 
 fun logTriggers() {

@@ -51,16 +51,16 @@ public class TunerConstants {
     public static SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants();
 
     public static SwerveModuleConstants<
-                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             FrontLeft;
     public static SwerveModuleConstants<
-                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             FrontRight;
     public static SwerveModuleConstants<
-                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             BackLeft;
     public static SwerveModuleConstants<
-                    TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+            TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
             BackRight;
 
     public static PathConstraints PATH_CONSTRAINTS;
@@ -68,7 +68,7 @@ public class TunerConstants {
     // These form the slew limit function
     public static final double SLEW_LIMIT_A = 6.0;
     public static final double SLEW_LIMIT_B = -10.0;
-    public static final double SLEW_LIMIT_C = 6.0;
+    public static final double SLEW_LIMIT_C = 4.2;
 
     public static void init() {
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
@@ -147,11 +147,8 @@ public class TunerConstants {
         double[] offsets;
         if (ConstantsKt.getROBORIO_SERIAL_NUMBER().equals(ALT_ROBORIO_SERIAL)) {
             offsets =
-                    new double[] {
-                        1.9374177350995647,
-                        2.868544073346149,
-                        -0.2162912910918754,
-                        1.1244079175201749
+                    new double[]{
+                            0.0, 0.0, 0.0, 0.0
                     };
 
             steerGains =
@@ -262,13 +259,13 @@ public class TunerConstants {
             kBackRightYPos = Meters.of(-0.24);
         } else {
             offsets =
-                    new double[] {
-                        2.564815877344792, 2.377670221222744, 1.6014759425526093, 1.7932235410383146
+                    new double[]{
+                            -6.157398882572964,-7.623884515791636,-2.6261751088602177,-14.170914518487553
                     };
 
             steerGains =
                     new Slot0Configs()
-                            .withKP(40)
+                            .withKP(50)
                             .withKI(0)
                             .withKD(0)
                             .withKS(0)
@@ -298,19 +295,19 @@ public class TunerConstants {
                     new TalonFXConfiguration()
                             .withCurrentLimits(
                                     new CurrentLimitsConfigs()
-                                            .withStatorCurrentLimit(70)
+                                            .withStatorCurrentLimit(80)
                                             .withStatorCurrentLimitEnable(true));
             steerInitialConfigs =
                     new TalonFXConfiguration()
                             .withCurrentLimits(
                                     new CurrentLimitsConfigs()
-                                            .withStatorCurrentLimit(60)
+                                            .withStatorCurrentLimit(80)
                                             .withStatorCurrentLimitEnable(true));
             encoderInitialConfigs = new CANcoderConfiguration();
 
             kCANBus = new CANBus(SWERVE_CANBUS_NAME, "./logs/example.hoot");
 
-            kSpeedAt12Volts = MetersPerSecond.of(3.7);
+            kSpeedAt12Volts = MetersPerSecond.of(3.4);
             kMaxAcceleration = MetersPerSecondPerSecond.of(4.0);
             kPathFindAcceleration = MetersPerSecondPerSecond.of(3.0);
 
@@ -390,32 +387,32 @@ public class TunerConstants {
         DrivetrainConstants = new SwerveDrivetrainConstants().withCANBusName(kCANBus.getName());
 
         SwerveModuleConstantsFactory<
-                        TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
+                TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
                 ConstantCreator =
-                        new SwerveModuleConstantsFactory<
-                                        TalonFXConfiguration,
-                                        TalonFXConfiguration,
-                                        CANcoderConfiguration>()
-                                .withDriveMotorGearRatio(kDriveGearRatio)
-                                .withSteerMotorGearRatio(kSteerGearRatio)
-                                .withCouplingGearRatio(kCoupleRatio)
-                                .withWheelRadius(kWheelRadius)
-                                .withSteerMotorGains(steerGains)
-                                .withDriveMotorGains(driveGains)
-                                .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
-                                .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
-                                .withSlipCurrent(kSlipCurrent)
-                                .withSpeedAt12Volts(kSpeedAt12Volts)
-                                .withDriveMotorType(kDriveMotorType)
-                                .withSteerMotorType(kSteerMotorType)
-                                .withFeedbackSource(kSteerFeedbackType)
-                                .withDriveMotorInitialConfigs(driveInitialConfigs)
-                                .withSteerMotorInitialConfigs(steerInitialConfigs)
-                                .withEncoderInitialConfigs(encoderInitialConfigs)
-                                .withSteerInertia(kSteerInertia)
-                                .withDriveInertia(kDriveInertia)
-                                .withSteerFrictionVoltage(kSteerFrictionVoltage)
-                                .withDriveFrictionVoltage(kDriveFrictionVoltage);
+                new SwerveModuleConstantsFactory<
+                        TalonFXConfiguration,
+                        TalonFXConfiguration,
+                        CANcoderConfiguration>()
+                        .withDriveMotorGearRatio(kDriveGearRatio)
+                        .withSteerMotorGearRatio(kSteerGearRatio)
+                        .withCouplingGearRatio(kCoupleRatio)
+                        .withWheelRadius(kWheelRadius)
+                        .withSteerMotorGains(steerGains)
+                        .withDriveMotorGains(driveGains)
+                        .withSteerMotorClosedLoopOutput(kSteerClosedLoopOutput)
+                        .withDriveMotorClosedLoopOutput(kDriveClosedLoopOutput)
+                        .withSlipCurrent(kSlipCurrent)
+                        .withSpeedAt12Volts(kSpeedAt12Volts)
+                        .withDriveMotorType(kDriveMotorType)
+                        .withSteerMotorType(kSteerMotorType)
+                        .withFeedbackSource(kSteerFeedbackType)
+                        .withDriveMotorInitialConfigs(driveInitialConfigs)
+                        .withSteerMotorInitialConfigs(steerInitialConfigs)
+                        .withEncoderInitialConfigs(encoderInitialConfigs)
+                        .withSteerInertia(kSteerInertia)
+                        .withDriveInertia(kDriveInertia)
+                        .withSteerFrictionVoltage(kSteerFrictionVoltage)
+                        .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
         FrontLeft =
                 ConstantCreator.createModuleConstants(
